@@ -3,6 +3,7 @@
 <!-- Links will be automatically generated below this line -->
 
 - polyfills
+    - array
         - [array_at.md](polyfills/array/array_at.md)
         - [array_fill.md](polyfills/array/array_fill.md)
         - [array_filter.md](polyfills/array/array_filter.md)
