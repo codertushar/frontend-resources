@@ -28,7 +28,7 @@ function generateLinks() {
   folders.forEach(folder => {
     const folderPath = path.join(__dirname, folder);
     const files = getFiles(folderPath);
-    links += `- ${folder.charAt(0).toUpperCase() + folder.slice(1)}\n`;
+    links += `- ${folder.toLowerCase()}\n`;
     const folderHierarchy = {};
     files.forEach(file => {
       const relativePath = path.relative(__dirname, file).replace(/\\/g, '/');
@@ -40,13 +40,8 @@ function generateLinks() {
     });
     Object.keys(folderHierarchy).forEach(hierarchy => {
       const indentLevel = hierarchy.split('/').length;
-      if (indentLevel === 1) {
-        links += `${' '.repeat(indentLevel * 4)}- ${hierarchy.split('/').pop()}\n`;
-      } else if (indentLevel > 1) {
-        links += `${' '.repeat((indentLevel - 1) * 4)}- ${hierarchy.split('/').slice(-2, -1)[0]}\n`;
-      }
       folderHierarchy[hierarchy].forEach(file => {
-        links += `${' '.repeat((indentLevel + 1) * 4)}- [${file.name}](${file.path})\n`;
+        links += `${' '.repeat((indentLevel) * 4)}- [${file.name}](${file.path})\n`;
       });
     });
     links += '\n';
