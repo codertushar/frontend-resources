@@ -5,8 +5,20 @@ const folders = ['polyfills', 'utils'];
 const readmePath = path.join(__dirname, 'README.md');
 
 function getFiles(dir) {
-  const files = fs.readdirSync(dir);
-  return files.map(file => path.join(dir, file));
+  console.log(`Reading directory: ${dir}`);
+  let results = [];
+  const list = fs.readdirSync(dir);
+  list.forEach(file => {
+    file = path.join(dir, file);
+    const stat = fs.statSync(file);
+    if (stat && stat.isDirectory()) {
+      results = results.concat(getFiles(file));
+    } else {
+      results.push(file);
+    }
+  });
+  console.log(`Files found: ${results.join(', ')}`);
+  return results;
 }
 
 function generateLinks() {
@@ -25,10 +37,14 @@ function generateLinks() {
 }
 
 function updateReadme() {
+  console.log('Reading README.md file...');
   const readmeContent = fs.readFileSync(readmePath, 'utf-8');
+  console.log('Generating new links...');
   const newLinks = generateLinks();
-  const updatedContent = readmeContent.replace(/(## Files\n\n)[\s\S]*/, `$1${newLinks}`);
+  console.log('Updating README.md content...');
+  const updatedContent = readmeContent.replace(/(<!-- Links will be automatically generated below this line -->)[\s\S]*/, `$1\n\n${newLinks}`);
   fs.writeFileSync(readmePath, updatedContent, 'utf-8');
+  console.log('README.md updated successfully.');
 }
 
 updateReadme();
