@@ -40,9 +40,16 @@ function generateLinks() {
     });
     Object.keys(folderHierarchy).forEach(hierarchy => {
       const indentLevel = hierarchy.split('/').length;
-      folderHierarchy[hierarchy].forEach(file => {
-        links += `${' '.repeat((indentLevel) * 4)}- [${file.name}](${file.path})\n`;
-      });
+      if (indentLevel === 1) {
+        folderHierarchy[hierarchy].forEach(file => {
+          links += `    - [${file.name}](${file.path})\n`;
+        });
+      } else {
+        links += `${' '.repeat((indentLevel - 1) * 4)}- ${hierarchy.split('/').pop()}\n`;
+        folderHierarchy[hierarchy].forEach(file => {
+          links += `${' '.repeat(indentLevel * 4)}- [${file.name}](${file.path})\n`;
+        });
+      }
     });
     links += '\n';
   });
