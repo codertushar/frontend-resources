@@ -9,6 +9,8 @@
 - [array_filter.md](polyfills/array/array_filter.md)
 - [array_find.md](polyfills/array/array_find.md)
 - [array_findIndex.md](polyfills/array/array_findIndex.md)
+- [array_findLast.md](polyfills/array/array_findLast.md)
+- [array_findLastIndex.md](polyfills/array/array_findLastIndex.md)
 - [array_indexOf.md](polyfills/array/array_indexOf.md)
 - [array_isArray.md](polyfills/array/array_isArray.md)
 - [array_reverse.md](polyfills/array/array_reverse.md)
