@@ -226,4 +226,6 @@ CustomPromise.allSettled([
 
 🚀 **This implementation is fully functional and behaves like native JS Promises!**
 
-Would you like additional optimizations or explanations?
+Additional Resources:
+
+[Build Your Own Promise](https://www.youtube.com/watch?v=IxOJgcvlHHc)
