@@ -1,0 +1,104 @@
+Here’s an **interactive AOT debugger version** of the `reduce` polyfill. It logs each **Atom-of-Thought** (AOT) step with relevant state, making it easier to trace behavior on any input.
+
+---
+
+## 🧪 Spec-Compliant `reduce` with Debug Logs
+
+```js
+if (!Array.prototype.reduce) {
+  Array.prototype.reduce = function(callback, initialValue) {
+    console.log('🔧 AOT 1: Validate `this`');
+    if (this == null) throw new TypeError('Called on null or undefined');
+
+    console.log('🔧 AOT 2: Validate callback');
+    if (typeof callback !== 'function') throw new TypeError('Callback is not a function');
+
+    console.log('🔧 AOT 3: Normalize input');
+    const array = Object(this);
+    const length = array.length >>> 0;
+    console.log('Array:', array);
+    console.log('Length:', length);
+
+    let index = 0;
+    let accumulator;
+
+    if (arguments.length >= 2) {
+      console.log('🔧 AOT 4: Using provided initialValue:', initialValue);
+      accumulator = initialValue;
+    } else {
+      console.log('🔧 AOT 5: No initialValue, searching for first defined element...');
+      while (index < length && !(index in array)) {
+        console.log(` - Skipping hole at index ${index}`);
+        index++;
+      }
+      if (index >= length) {
+        console.log('❌ AOT ERROR: No elements to use as initial accumulator');
+        throw new TypeError('Reduce of empty array with no initial value');
+      }
+      accumulator = array[index];
+      console.log(`✅ Found initial value at index ${index}:`, accumulator);
+      index++;
+    }
+
+    console.log('🔧 AOT 6: Begin reduction loop');
+    for (; index < length; index++) {
+      if (index in array) {
+        console.log(`↪️  Applying callback at index ${index}:`, {
+          accumulator,
+          currentValue: array[index],
+        });
+        accumulator = callback(accumulator, array[index], index, array);
+        console.log('    -> New accumulator:', accumulator);
+      } else {
+        console.log(` - Skipping hole at index ${index}`);
+      }
+    }
+
+    console.log('✅ AOT 7: Returning final result:', accumulator);
+    return accumulator;
+  };
+}
+```
+
+---
+
+## ✅ How to Use
+
+```js
+[1, 2, 3, 4].reduce((a, b) => a + b);         // Normal reduce
+[1, 2, 3, 4].reduce((a, b) => a + b, 10);     // With initial value
+[,,3].reduce((a, b) => a + b, 1);             // Sparse array with initial
+[].reduce((a, b) => a + b);                   // ❌ Error
+```
+
+---
+
+## 🎯 Output Example
+
+Calling:
+
+```js
+[1, 2, 3].reduce((a, b) => a + b);
+```
+
+Logs:
+
+```
+🔧 AOT 1: Validate `this`
+🔧 AOT 2: Validate callback
+🔧 AOT 3: Normalize input
+Array: [1, 2, 3]
+Length: 3
+🔧 AOT 5: No initialValue, searching for first defined element...
+✅ Found initial value at index 0: 1
+🔧 AOT 6: Begin reduction loop
+↪️  Applying callback at index 1: { accumulator: 1, currentValue: 2 }
+    -> New accumulator: 3
+↪️  Applying callback at index 2: { accumulator: 3, currentValue: 3 }
+    -> New accumulator: 6
+✅ AOT 7: Returning final result: 6
+```
+
+---
+
+Let me know if you want to turn this into a visual debugger (e.g., with DOM rendering) or adapt it to support `reduceRight`.
