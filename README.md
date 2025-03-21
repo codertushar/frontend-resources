@@ -4,6 +4,7 @@
 
 - general-concepts
     - [js_constructor.md](general-concepts/js_constructor.md)
+    - [of_in.md](general-concepts/of_in.md)
     - [prototype.md](general-concepts/prototype.md)
     - [spread.md](general-concepts/spread.md)
 
@@ -20,12 +21,14 @@
         - [array_findIndex.md](polyfills/arrays/array_findIndex.md)
         - [array_findLast.md](polyfills/arrays/array_findLast.md)
         - [array_findLastIndex.md](polyfills/arrays/array_findLastIndex.md)
+        - [array_flat.md](polyfills/arrays/array_flat.md)
         - [array_includes.md](polyfills/arrays/array_includes.md)
         - [array_indexOf.md](polyfills/arrays/array_indexOf.md)
         - [array_isArray.md](polyfills/arrays/array_isArray.md)
         - [array_map.md](polyfills/arrays/array_map.md)
         - [array_pop.md](polyfills/arrays/array_pop.md)
         - [array_push.md](polyfills/arrays/array_push.md)
+        - [array_reduce.md](polyfills/arrays/array_reduce.md)
         - [array_reverse.md](polyfills/arrays/array_reverse.md)
         - [array_shift.md](polyfills/arrays/array_shift.md)
         - [array_some.md](polyfills/arrays/array_some.md)
@@ -41,5 +44,6 @@
 - utils
     - [chained_sum.md](utils/chained_sum.md)
     - [event_emitter.md](utils/event_emitter.md)
+    - [flatten_object.md](utils/flatten_object.md)
     - [undefined_to_null.md](utils/undefined_to_null.md)
 
