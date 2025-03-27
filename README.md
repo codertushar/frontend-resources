@@ -2,6 +2,9 @@
 
 <!-- Links will be automatically generated below this line -->
 
+- dsa
+    - [merge_two_sorted_arrays.md](dsa/merge_two_sorted_arrays.md)
+
 - general-concepts
     - [js_constructor.md](general-concepts/js_constructor.md)
     - [of_in.md](general-concepts/of_in.md)
@@ -13,27 +16,27 @@
 
 - polyfills
     - arrays
-        - [array_at.md](polyfills/arrays/array_at.md)
-        - [array_every.md](polyfills/arrays/array_every.md)
-        - [array_fill.md](polyfills/arrays/array_fill.md)
-        - [array_filter.md](polyfills/arrays/array_filter.md)
-        - [array_find.md](polyfills/arrays/array_find.md)
-        - [array_findIndex.md](polyfills/arrays/array_findIndex.md)
-        - [array_findLast.md](polyfills/arrays/array_findLast.md)
-        - [array_findLastIndex.md](polyfills/arrays/array_findLastIndex.md)
-        - [array_flat.md](polyfills/arrays/array_flat.md)
-        - [array_includes.md](polyfills/arrays/array_includes.md)
-        - [array_indexOf.md](polyfills/arrays/array_indexOf.md)
-        - [array_isArray.md](polyfills/arrays/array_isArray.md)
-        - [array_map.md](polyfills/arrays/array_map.md)
-        - [array_pop.md](polyfills/arrays/array_pop.md)
-        - [array_push.md](polyfills/arrays/array_push.md)
-        - [array_reduce.md](polyfills/arrays/array_reduce.md)
-        - [array_reverse.md](polyfills/arrays/array_reverse.md)
-        - [array_shift.md](polyfills/arrays/array_shift.md)
-        - [array_some.md](polyfills/arrays/array_some.md)
-        - [array_sort.md](polyfills/arrays/array_sort.md)
-        - [array_unshift.md](polyfills/arrays/array_unshift.md)
+        - [at.md](polyfills/arrays/at.md)
+        - [every.md](polyfills/arrays/every.md)
+        - [fill.md](polyfills/arrays/fill.md)
+        - [filter.md](polyfills/arrays/filter.md)
+        - [find.md](polyfills/arrays/find.md)
+        - [findIndex.md](polyfills/arrays/findIndex.md)
+        - [findLast.md](polyfills/arrays/findLast.md)
+        - [findLastIndex.md](polyfills/arrays/findLastIndex.md)
+        - [flat.md](polyfills/arrays/flat.md)
+        - [includes.md](polyfills/arrays/includes.md)
+        - [indexOf.md](polyfills/arrays/indexOf.md)
+        - [isArray.md](polyfills/arrays/isArray.md)
+        - [map.md](polyfills/arrays/map.md)
+        - [pop.md](polyfills/arrays/pop.md)
+        - [push.md](polyfills/arrays/push.md)
+        - [reduce.md](polyfills/arrays/reduce.md)
+        - [reverse.md](polyfills/arrays/reverse.md)
+        - [shift.md](polyfills/arrays/shift.md)
+        - [some.md](polyfills/arrays/some.md)
+        - [sort.md](polyfills/arrays/sort.md)
+        - [unshift.md](polyfills/arrays/unshift.md)
     - general
         - [apply.md](polyfills/general/apply.md)
         - [bind.md](polyfills/general/bind.md)
@@ -43,7 +46,10 @@
 
 - utils
     - [chained_sum.md](utils/chained_sum.md)
+    - [debounce.md](utils/debounce.md)
+    - [deep_clone.md](utils/deep_clone.md)
     - [event_emitter.md](utils/event_emitter.md)
     - [flatten_object.md](utils/flatten_object.md)
+    - [throttle.md](utils/throttle.md)
     - [undefined_to_null.md](utils/undefined_to_null.md)
 
