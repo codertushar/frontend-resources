@@ -104,6 +104,10 @@ function getDirStructure(rootDir) {
 // Generate GitHub-compatible markdown from directory structure
 function generateMarkdown(structure) {
   let result = '';
+  
+  // Add a note about opening links in new tabs
+  result += '> **Note:** To open links in a new tab, hold the Ctrl key (or Cmd on Mac) while clicking the link.\n\n';
+  
   const entries = Object.entries(structure);
   
   entries.forEach(([name, item], index) => {
@@ -148,9 +152,9 @@ function generateDirContents(dirContents, level, isLastItems = []) {
       );
       result += childrenMd;
     } else {
-      // It's a file - Use HTML link inside pre tag for GitHub compatibility with target="_blank" to open in new tab
+      // It's a file - Use HTML link inside pre tag for GitHub compatibility
       const icon = getFileIcon(name);
-      result += `${indent}${isLastEntry ? '└── ' : '├── '}${icon} <a href="${item.path}" target="_blank">${name}</a>\n`;
+      result += `${indent}${isLastEntry ? '└── ' : '├── '}${icon} <a href="${item.path}">${name}</a>\n`;
     }
   });
   
