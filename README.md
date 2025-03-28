@@ -12,6 +12,7 @@
         - [of_in.md](js/general-concepts/of_in.md)
         - [prototype.md](js/general-concepts/prototype.md)
         - [spread.md](js/general-concepts/spread.md)
+    - polyfills
         - arrays
             - [at.md](js/polyfills/arrays/at.md)
             - [every.md](js/polyfills/arrays/every.md)
