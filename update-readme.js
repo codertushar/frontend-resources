@@ -101,8 +101,8 @@ function getDirStructure(rootDir) {
   return structure;
 }
 
-// Generate markdown from directory structure
-function generateMarkdown(structure, level = 0) {
+// Generate GitHub-compatible markdown from directory structure
+function generateMarkdown(structure) {
   let result = '';
   const entries = Object.entries(structure);
   
@@ -111,19 +111,14 @@ function generateMarkdown(structure, level = 0) {
     
     if (item.type === 'dir') {
       // Add top-level directory
-      if (level === 0) {
-        const icon = getFolderIcon(name);
-        result += `${icon} **${name}**\n`;
-        
-        // Add its contents with proper indentation
-        const childrenMd = generateDirContents(item.children, 0, [isLastItem]);
-        result += childrenMd;
-        
-        // Add blank line between top-level directories
-        if (!isLastItem) {
-          result += '\n';
-        }
-      }
+      const icon = getFolderIcon(name);
+      result += `### ${icon} ${name}\n\n`;
+      
+      // Add its contents with proper indentation and HTML preformatting
+      const childrenMd = generateDirContents(item.children, 1, [isLastItem]);
+      result += `<pre>\n${childrenMd}</pre>\n\n`;
+      
+      // No need for blank line as the pre tag already adds spacing
     }
   });
   
@@ -143,7 +138,7 @@ function generateDirContents(dirContents, level, isLastItems = []) {
     if (item.type === 'dir') {
       // It's a directory
       const icon = getFolderIcon(name);
-      result += `${indent}${isLastEntry ? '└── ' : '├── '}${icon} **${name}**\n`;
+      result += `${indent}${isLastEntry ? '└── ' : '├── '}${icon} <b>${name}</b>\n`;
       
       // Process its contents recursively
       const childrenMd = generateDirContents(
@@ -153,9 +148,9 @@ function generateDirContents(dirContents, level, isLastItems = []) {
       );
       result += childrenMd;
     } else {
-      // It's a file
+      // It's a file - Use HTML link inside pre tag for GitHub compatibility
       const icon = getFileIcon(name);
-      result += `${indent}${isLastEntry ? '└── ' : '├── '}${icon} [${name}](${item.path})\n`;
+      result += `${indent}${isLastEntry ? '└── ' : '├── '}${icon} <a href="${item.path}">${name}</a>\n`;
     }
   });
   
@@ -166,7 +161,7 @@ function generateDirContents(dirContents, level, isLastItems = []) {
 function getIndent(level, isLastItems) {
   let result = '';
   
-  for (let i = 0; i < level; i++) {
+  for (let i = 0; i < level - 1; i++) {
     result += isLastItems[i] ? '    ' : '│   ';
   }
   
@@ -184,7 +179,7 @@ function updateReadme() {
   );
   
   fs.writeFileSync(readmePath, updatedContent);
-  console.log('README.md has been updated successfully with proper nesting and programming-themed icons!');
+  console.log('README.md has been updated successfully with HTML-based tree structure and working links!');
 }
 
 updateReadme();
