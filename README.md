@@ -40,13 +40,12 @@
             - [apply.md](js/polyfills/general/apply.md)
             - [bind.md](js/polyfills/general/bind.md)
             - [call.md](js/polyfills/general/call.md)
-        - promises
-            - [promise_all.md](js/polyfills/promises/promise_all.md)
     - promises
         - [all.md](js/promises/all.md)
         - [all_settled.md](js/promises/all_settled.md)
         - [any.md](js/promises/any.md)
         - [cancelable.md](js/promises/cancelable.md)
+        - [custom_promise_class.md](js/promises/custom_promise_class.md)
         - [race.md](js/promises/race.md)
         - [retry.md](js/promises/retry.md)
         - [sequential.md](js/promises/sequential.md)
@@ -58,4 +57,8 @@
         - [flatten_object.md](js/utils/flatten_object.md)
         - [throttle.md](js/utils/throttle.md)
         - [undefined_to_null.md](js/utils/undefined_to_null.md)
+
+- machine_coding
+    - [breadcrumb.md](machine_coding/breadcrumb.md)
+    - [progress_bar.md](machine_coding/progress_bar.md)
 
