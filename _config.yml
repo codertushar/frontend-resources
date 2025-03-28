@@ -1,0 +1,12 @@
+theme: jekyll-theme-minimal
+title: Frontend Resources
+description: A collection of JavaScript resources, polyfills, and examples
+show_downloads: true
+google_analytics:
+plugins:
+  - jekyll-relative-links
+relative_links:
+  enabled: true
+  collections: true
+include:
+  - README.md
