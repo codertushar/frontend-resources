@@ -7,6 +7,7 @@
 
 - js
     - general-concepts
+        - [abort_controller.md](js/general-concepts/abort_controller.md)
         - [js_constructor.md](js/general-concepts/js_constructor.md)
         - [of_in.md](js/general-concepts/of_in.md)
         - [prototype.md](js/general-concepts/prototype.md)
@@ -42,6 +43,12 @@
         - promises
             - [promise_all.md](js/polyfills/promises/promise_all.md)
     - promises
+        - [all.md](js/promises/all.md)
+        - [all_settled.md](js/promises/all_settled.md)
+        - [any.md](js/promises/any.md)
+        - [cancelable.md](js/promises/cancelable.md)
+        - [race.md](js/promises/race.md)
+        - [retry.md](js/promises/retry.md)
         - [sequential.md](js/promises/sequential.md)
     - utils
         - [chained_sum.md](js/utils/chained_sum.md)
