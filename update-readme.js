@@ -148,9 +148,9 @@ function generateDirContents(dirContents, level, isLastItems = []) {
       );
       result += childrenMd;
     } else {
-      // It's a file - Use HTML link inside pre tag for GitHub compatibility
+      // It's a file - Use HTML link inside pre tag for GitHub compatibility with target="_blank" to open in new tab
       const icon = getFileIcon(name);
-      result += `${indent}${isLastEntry ? '└── ' : '├── '}${icon} <a href="${item.path}">${name}</a>\n`;
+      result += `${indent}${isLastEntry ? '└── ' : '├── '}${icon} <a href="${item.path}" target="_blank">${name}</a>\n`;
     }
   });
   
