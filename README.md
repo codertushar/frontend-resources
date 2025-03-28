@@ -12,8 +12,6 @@
         - [of_in.md](js/general-concepts/of_in.md)
         - [prototype.md](js/general-concepts/prototype.md)
         - [spread.md](js/general-concepts/spread.md)
-    - machine-coding
-        - [chained_calculator.md](js/machine-coding/chained_calculator.md)
         - arrays
             - [at.md](js/polyfills/arrays/at.md)
             - [every.md](js/polyfills/arrays/every.md)
@@ -58,7 +56,8 @@
         - [throttle.md](js/utils/throttle.md)
         - [undefined_to_null.md](js/utils/undefined_to_null.md)
 
-- machine_coding
-    - [breadcrumb.md](machine_coding/breadcrumb.md)
-    - [progress_bar.md](machine_coding/progress_bar.md)
+- machine-coding
+    - [breadcrumb.md](machine-coding/breadcrumb.md)
+    - [chained_calculator.md](machine-coding/chained_calculator.md)
+    - [progress_bar.md](machine-coding/progress_bar.md)
 
