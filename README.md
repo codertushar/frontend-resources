@@ -10,6 +10,12 @@
 └── 📊 <a href="dsa/merge_two_sorted_arrays.md">merge_two_sorted_arrays.md</a>
 </pre>
 
+### 📝 general
+
+<pre>
+└── 📄 <a href="general/browser_rendering.md">browser_rendering.md</a>
+</pre>
+
 ### 📚 js
 
 <pre>
@@ -59,8 +65,10 @@
 │   ├── 📄 <a href="js/utils/chained_sum.md">chained_sum.md</a>
 │   ├── ⏱️ <a href="js/utils/debounce.md">debounce.md</a>
 │   ├── 🧬 <a href="js/utils/deep_clone.md">deep_clone.md</a>
+│   ├── 📄 <a href="js/utils/distinct_until_changed.md">distinct_until_changed.md</a>
 │   ├── 🔔 <a href="js/utils/event_emitter.md">event_emitter.md</a>
 │   ├── 📄 <a href="js/utils/flatten_object.md">flatten_object.md</a>
+│   ├── 📄 <a href="js/utils/map_limit.md">map_limit.md</a>
 │   ├── ⏱️ <a href="js/utils/throttle.md">throttle.md</a>
 │   └── 📄 <a href="js/utils/undefined_to_null.md">undefined_to_null.md</a>
 </pre>
@@ -68,6 +76,7 @@
 ### 🛠️ machine-coding
 
 <pre>
+├── 📄 <a href="machine-coding/analytics_sdk.md">analytics_sdk.md</a>
 ├── 🔍 <a href="machine-coding/breadcrumb.md">breadcrumb.md</a>
 ├── 🧮 <a href="machine-coding/chained_calculator.md">chained_calculator.md</a>
 └── 📈 <a href="machine-coding/progress_bar.md">progress_bar.md</a>
