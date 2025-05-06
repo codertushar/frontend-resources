@@ -24,6 +24,7 @@
 │   ├── 📄 <a href="js/general-concepts/js_constructor.md">js_constructor.md</a>
 │   ├── 📄 <a href="js/general-concepts/of_in.md">of_in.md</a>
 │   ├── 🔄 <a href="js/general-concepts/prototype.md">prototype.md</a>
+│   ├── 📄 <a href="js/general-concepts/proxy.md">proxy.md</a>
 │   └── 📄 <a href="js/general-concepts/spread.md">spread.md</a>
 ├── 🧩 <b>polyfills</b>
 │   ├── 📊 <b>arrays</b>
@@ -66,9 +67,12 @@
 │   ├── ⏱️ <a href="js/utils/debounce.md">debounce.md</a>
 │   ├── 🧬 <a href="js/utils/deep_clone.md">deep_clone.md</a>
 │   ├── 📄 <a href="js/utils/distinct_until_changed.md">distinct_until_changed.md</a>
+│   ├── 📄 <a href="js/utils/document_comparison.md">document_comparison.md</a>
 │   ├── 🔔 <a href="js/utils/event_emitter.md">event_emitter.md</a>
 │   ├── 📄 <a href="js/utils/flatten_object.md">flatten_object.md</a>
+│   ├── 📄 <a href="js/utils/js-camel-to-snake-case.md">js-camel-to-snake-case.md</a>
 │   ├── 📄 <a href="js/utils/map_limit.md">map_limit.md</a>
+│   ├── 📊 <a href="js/utils/observable_array_push_event.md">observable_array_push_event.md</a>
 │   ├── ⏱️ <a href="js/utils/throttle.md">throttle.md</a>
 │   └── 📄 <a href="js/utils/undefined_to_null.md">undefined_to_null.md</a>
 </pre>
