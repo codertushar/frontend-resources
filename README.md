@@ -4,6 +4,12 @@
 
 > **Note:** To open links in a new tab, hold the Ctrl key (or Cmd on Mac) while clicking the link.
 
+### 📁 ai
+
+<pre>
+└── 📄 <a href="ai/llm_instructions.md">llm_instructions.md</a>
+</pre>
+
 ### 🧮 dsa
 
 <pre>
@@ -13,6 +19,10 @@
 ### 📝 general
 
 <pre>
+├── 📁 <b>design-patterns</b>
+│   ├── 📄 <a href="general/design-patterns/mvc.md">mvc.md</a>
+│   ├── 📄 <a href="general/design-patterns/observer.md">observer.md</a>
+│   └── 📄 <a href="general/design-patterns/singelton.md">singelton.md</a>
 └── 📄 <a href="general/browser_rendering.md">browser_rendering.md</a>
 </pre>
 
@@ -21,6 +31,7 @@
 <pre>
 ├── 💡 <b>general-concepts</b>
 │   ├── 📄 <a href="js/general-concepts/abort_controller.md">abort_controller.md</a>
+│   ├── 📄 <a href="js/general-concepts/function_vs_arrow_function.md">function_vs_arrow_function.md</a>
 │   ├── 📄 <a href="js/general-concepts/js_constructor.md">js_constructor.md</a>
 │   ├── 📄 <a href="js/general-concepts/of_in.md">of_in.md</a>
 │   ├── 🔄 <a href="js/general-concepts/prototype.md">prototype.md</a>
