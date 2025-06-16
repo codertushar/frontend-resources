@@ -20,6 +20,9 @@
 
 <pre>
 ├── 📁 <b>design-patterns</b>
+│   ├── 📄 <a href="general/design-patterns/factory.md">factory.md</a>
+│   ├── 📄 <a href="general/design-patterns/general.md">general.md</a>
+│   ├── 📄 <a href="general/design-patterns/module.md">module.md</a>
 │   ├── 📄 <a href="general/design-patterns/mvc.md">mvc.md</a>
 │   ├── 📄 <a href="general/design-patterns/observer.md">observer.md</a>
 │   └── 📄 <a href="general/design-patterns/singelton.md">singelton.md</a>
@@ -31,6 +34,7 @@
 <pre>
 ├── 💡 <b>general-concepts</b>
 │   ├── 📄 <a href="js/general-concepts/abort_controller.md">abort_controller.md</a>
+│   ├── 📄 <a href="js/general-concepts/es6_modules.md">es6_modules.md</a>
 │   ├── 📄 <a href="js/general-concepts/function_vs_arrow_function.md">function_vs_arrow_function.md</a>
 │   ├── 📄 <a href="js/general-concepts/js_constructor.md">js_constructor.md</a>
 │   ├── 📄 <a href="js/general-concepts/of_in.md">of_in.md</a>
@@ -84,6 +88,8 @@
 │   ├── 📄 <a href="js/utils/js-camel-to-snake-case.md">js-camel-to-snake-case.md</a>
 │   ├── 📄 <a href="js/utils/map_limit.md">map_limit.md</a>
 │   ├── 📊 <a href="js/utils/observable_array_push_event.md">observable_array_push_event.md</a>
+│   ├── 📄 <a href="js/utils/remove_cycle_from_object.md">remove_cycle_from_object.md</a>
+│   ├── 📄 <a href="js/utils/sampler.md">sampler.md</a>
 │   ├── ⏱️ <a href="js/utils/throttle.md">throttle.md</a>
 │   └── 📄 <a href="js/utils/undefined_to_null.md">undefined_to_null.md</a>
 </pre>
