@@ -20,8 +20,10 @@
 
 <pre>
 ├── 📁 <b>design-patterns</b>
+│   ├── 📄 <a href="general/design-patterns/facade.md">facade.md</a>
 │   ├── 📄 <a href="general/design-patterns/factory.md">factory.md</a>
 │   ├── 📄 <a href="general/design-patterns/general.md">general.md</a>
+│   ├── 📄 <a href="general/design-patterns/how_to_know_which_to_use.md">how_to_know_which_to_use.md</a>
 │   ├── 📄 <a href="general/design-patterns/module.md">module.md</a>
 │   ├── 📄 <a href="general/design-patterns/mvc.md">mvc.md</a>
 │   ├── 📄 <a href="general/design-patterns/observer.md">observer.md</a>
