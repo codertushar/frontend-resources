@@ -4,12 +4,6 @@
 
 > **Note:** To open links in a new tab, hold the Ctrl key (or Cmd on Mac) while clicking the link.
 
-### 📁 ai
-
-<pre>
-└── 📄 <a href="ai/llm_instructions.md">llm_instructions.md</a>
-</pre>
-
 ### 🧮 dsa
 
 <pre>
@@ -39,6 +33,7 @@
 │   ├── 📄 <a href="js/general-concepts/es6_modules.md">es6_modules.md</a>
 │   ├── 📄 <a href="js/general-concepts/function_vs_arrow_function.md">function_vs_arrow_function.md</a>
 │   ├── 📄 <a href="js/general-concepts/js_constructor.md">js_constructor.md</a>
+│   ├── 📄 <a href="js/general-concepts/mutation_observer.md">mutation_observer.md</a>
 │   ├── 📄 <a href="js/general-concepts/of_in.md">of_in.md</a>
 │   ├── 🔄 <a href="js/general-concepts/prototype.md">prototype.md</a>
 │   ├── 📄 <a href="js/general-concepts/proxy.md">proxy.md</a>
