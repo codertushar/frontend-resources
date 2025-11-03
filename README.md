@@ -22,7 +22,8 @@
 │   ├── 📄 <a href="general/design-patterns/mvc.md">mvc.md</a>
 │   ├── 📄 <a href="general/design-patterns/observer.md">observer.md</a>
 │   └── 📄 <a href="general/design-patterns/singelton.md">singelton.md</a>
-└── 📄 <a href="general/browser_rendering.md">browser_rendering.md</a>
+├── 📄 <a href="general/browser_rendering.md">browser_rendering.md</a>
+└── 📄 <a href="general/critical_rendering_path.md">critical_rendering_path.md</a>
 </pre>
 
 ### 📚 js
@@ -37,6 +38,7 @@
 │   ├── 📄 <a href="js/general-concepts/of_in.md">of_in.md</a>
 │   ├── 🔄 <a href="js/general-concepts/prototype.md">prototype.md</a>
 │   ├── 📄 <a href="js/general-concepts/proxy.md">proxy.md</a>
+│   ├── 📄 <a href="js/general-concepts/script_loading_async_defer.md">script_loading_async_defer.md</a>
 │   └── 📄 <a href="js/general-concepts/spread.md">spread.md</a>
 ├── 🧩 <b>polyfills</b>
 │   ├── 📊 <b>arrays</b>
