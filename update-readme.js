@@ -8,7 +8,7 @@ function getFolders(dir) {
   return fs.readdirSync(dir).filter(file => {
     return fs.statSync(path.join(dir, file)).isDirectory() &&
       !file.startsWith('.') &&
-      !['website', 'node_modules', '.git', '.github'].includes(file);
+      !['website', 'node_modules', '.git', '.github', 'scripts'].includes(file);
   });
 }
 
