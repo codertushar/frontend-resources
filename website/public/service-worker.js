@@ -51,9 +51,14 @@ self.addEventListener('fetch', (event) => {
     // For other assets – cache‑first strategy
     event.respondWith(
         caches.match(request).then((cachedResponse) => {
-            return cachedResponse || fetch(request).then((networkResponse) => {
-                // Optionally cache the new asset
-                caches.open(CACHE_NAME).then((cache) => cache.put(request, networkResponse.clone()));
+            if (cachedResponse) {
+                return cachedResponse;
+            }
+
+            return fetch(request).then((networkResponse) => {
+                // Clone before caching
+                const responseToCache = networkResponse.clone();
+                caches.open(CACHE_NAME).then((cache) => cache.put(request, responseToCache));
                 return networkResponse;
             });
         })

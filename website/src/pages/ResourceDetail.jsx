@@ -12,7 +12,11 @@ const ResourceDetail = () => {
   const location = useLocation();
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(true);
-  const resourceId = location.pathname.replace('/resource/', '').replace(/^\//, '');
+
+  // Extract and decode the resource ID from the pathname
+  const resourceId = decodeURIComponent(
+    location.pathname.replace('/resource/', '').replace(/^\//, '')
+  );
 
   const resource = contentData.find(r => r.id === resourceId);
 
