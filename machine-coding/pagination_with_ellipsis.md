@@ -75,7 +75,7 @@ const Pagination = ({ totalPages, onPageChange }) => {
     
     // Add pages around current page (avoiding duplicates with first/last)
     for (let i = startPage; i <= endPage; i++) {
-      if (i < totalPages) { // Don't add if it's the last page (added separately)
+      if (i !== totalPages) { // Don't add if it's the last page (added separately)
         pages.push(i);
       }
     }
@@ -281,7 +281,7 @@ const PaginationControlled = ({ currentPage, totalPages, onPageChange }) => {
     if (startPage > 2) pages.push('...');
     
     for (let i = startPage; i <= endPage; i++) {
-      if (i < totalPages) pages.push(i);
+      if (i !== totalPages) pages.push(i);
     }
     
     if (endPage < totalPages - 1) pages.push('...');
@@ -528,7 +528,7 @@ const getPageNumbers = (currentPage, totalPages) => {
   
   // Step 4: Add pages in visible range (avoid duplicating last page)
   for (let i = startPage; i <= endPage; i++) {
-    if (i < totalPages) { // Don't add last page here; it's added in step 6
+    if (i !== totalPages) { // Don't add last page here; it's added in step 6
       pages.push(i);
     }
   }
