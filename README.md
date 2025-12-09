@@ -1,4 +1,32 @@
-# frontend-resources
+# 🚀 Frontend Resources
+
+<div align="center">
+
+<h3>Your one-stop destination for mastering frontend development concepts, patterns, and interview questions.</h3>
+
+<p align="center">
+  <a href="https://codertushar.github.io/frontend-resources/" target="_blank">
+    <img src="https://img.shields.io/badge/Visit%20Website-Click%20Here-blue?style=for-the-badge&logo=github&logoColor=white" alt="Visit Website" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://codertushar.github.io/frontend-resources/"><strong>Explore the Documentation »</strong></a>
+</p>
+
+</div>
+
+---
+
+## 🌟 Overview
+
+This repository contains a curated collection of resources for frontend developers, covering topics from **Data Structures & Algorithms** to **System Design** and **Machine Coding** challenges.
+
+For the best reading experience, we highly recommend visiting our **[Live Website](https://codertushar.github.io/frontend-resources/)**.
+
+---
+
+## 📂 Content Structure
 
 <!-- Links will be automatically generated below this line -->
 
