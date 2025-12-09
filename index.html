@@ -3,15 +3,28 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="./vite.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <meta name="description"
+    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
   <title>Frontend Resources</title>
-  <script type="module" crossorigin src="./assets/index-BZo4zPmV.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-CDUOSX9W.css">
+  <script type="module" crossorigin src="./assets/index-THiW_cy7.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BrcmSszk.css">
 </head>
 
 <body>
   <div id="root"></div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js');
+      });
+    }
+  </script>
 </body>
 
 </html>
