@@ -73,11 +73,10 @@ const Pagination = ({ totalPages, onPageChange }) => {
       pages.push('...');
     }
     
-    // Add pages around current page (avoiding duplicates with first/last)
+    // Add pages around current page
+    // Note: endPage is capped at totalPages - 1, so we never duplicate the last page
     for (let i = startPage; i <= endPage; i++) {
-      if (i !== totalPages) { // Don't add if it's the last page (added separately)
-        pages.push(i);
-      }
+      pages.push(i);
     }
     
     // Add ellipsis before last page if there's a gap
@@ -281,7 +280,7 @@ const PaginationControlled = ({ currentPage, totalPages, onPageChange }) => {
     if (startPage > 2) pages.push('...');
     
     for (let i = startPage; i <= endPage; i++) {
-      if (i !== totalPages) pages.push(i);
+      pages.push(i);
     }
     
     if (endPage < totalPages - 1) pages.push('...');
@@ -526,11 +525,10 @@ const getPageNumbers = (currentPage, totalPages) => {
     pages.push('...');
   }
   
-  // Step 4: Add pages in visible range (avoid duplicating last page)
+  // Step 4: Add pages in visible range
+  // Note: endPage is constrained to totalPages - 1, preventing duplicate last page
   for (let i = startPage; i <= endPage; i++) {
-    if (i !== totalPages) { // Don't add last page here; it's added in step 6
-      pages.push(i);
-    }
+    pages.push(i);
   }
   
   // Step 5: Add right ellipsis if gap exists
