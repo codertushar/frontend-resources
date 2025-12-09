@@ -144,21 +144,24 @@ class Operation {
     this.content = content;
     this.clientId = null;
     this.version = null;
+    this.id = Math.random().toString(36).substr(2, 9); // Unique operation ID
   }
 }
 
-// Transform operation A against operation B
+// Transform operation B against operation A
+// Returns the transformed version of opB that accounts for opA being applied first
 const transform = (opA, opB) => {
   if (opA.type === 'insert' && opB.type === 'insert') {
     if (opA.position < opB.position) {
-      return opB; // B is unaffected
-    } else if (opA.position > opB.position) {
-      // Shift B's position by A's content length
+      // A inserts before B, shift B's position right
       return new Operation(
         opB.type,
         opB.position + opA.content.length,
         opB.content
       );
+    } else if (opA.position > opB.position) {
+      // A inserts after B, B is unaffected
+      return opB;
     } else {
       // Same position - use client ID for deterministic ordering
       if (opA.clientId < opB.clientId) {
@@ -174,21 +177,17 @@ const transform = (opA, opB) => {
   
   if (opA.type === 'delete' && opB.type === 'insert') {
     if (opB.position <= opA.position) {
-      // B is before deletion, shift A
-      return new Operation(
-        opA.type,
-        opA.position + opB.content.length,
-        opA.content
-      );
+      // B inserts before deletion, B is unaffected
+      return opB;
     } else if (opB.position >= opA.position + opA.content.length) {
-      // B is after deletion, shift B
+      // B inserts after deletion, shift B's position left
       return new Operation(
         opB.type,
         opB.position - opA.content.length,
         opB.content
       );
     } else {
-      // B is within deleted range, adjust position
+      // B inserts within deleted range, adjust to deletion point
       return new Operation(
         opB.type,
         opA.position,
@@ -479,7 +478,7 @@ class SyncEngine {
 
 - **Papers:**
   - "Operational Transformation in Real-Time Group Editors" (Ellis & Gibbs, 1989)
-  - "A Comprehensive Study of CRDT" (Shapiro et al., 2011)
+  - "A Comprehensive Study of Convergent and Commutative Replicated Data Types" (Shapiro et al., 2011)
 
 - **Open Source Examples:**
   - [Firepad](https://github.com/FirebaseExtended/firepad) - Collaborative text editor using Firebase
