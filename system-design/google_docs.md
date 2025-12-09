@@ -144,7 +144,7 @@ class Operation {
     this.content = content;
     this.clientId = null;
     this.version = null;
-    this.id = Math.random().toString(36).substr(2, 9); // Unique operation ID
+    this.id = Math.random().toString(36).slice(2, 11); // Unique operation ID
   }
 }
 
@@ -427,6 +427,28 @@ class SyncEngine {
   renderDocument() {
     // Update editor display (implementation depends on UI framework)
     document.getElementById('editor').textContent = this.doc.content;
+  }
+  
+  async getDB() {
+    // Initialize and return IndexedDB connection
+    if (this.db) return this.db;
+    
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open('GoogleDocsOffline', 1);
+      
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        this.db = request.result;
+        resolve(this.db);
+      };
+      
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains('operations')) {
+          db.createObjectStore('operations', { autoIncrement: true });
+        }
+      };
+    });
   }
   
   async saveToOfflineQueue(operation) {
