@@ -136,12 +136,6 @@ For the best reading experience, we highly recommend visiting our **[Live Websit
 └── 📈 <a href="machine-coding/progress_bar.md">progress_bar.md</a>
 </pre>
 
-### 📁 scripts
-
-<pre>
-└── 📄 <a href="scripts/generate-sitemap.js">generate-sitemap.js</a>
-</pre>
-
 ### 📐 system-design
 
 <pre>
