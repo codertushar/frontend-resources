@@ -62,7 +62,7 @@ const cache = new Map(); // Prevent redundant calculations
 
 - Use emoji prefixes in headings for visual navigation
 - Maintain consistent heading hierarchy (don't skip levels)
-- Use code blocks with proper language specification (\`\`\`javascript)
+- Use code blocks with proper language specification (```javascript)
 - Use tables for comparisons
 
 **Common emoji prefixes:**
