@@ -215,7 +215,7 @@ const Library = () => {
 
         .resource-card:hover {
           transform: translateY(-4px);
-          background: rgba(30, 41, 59, 0.9);
+          background: var(--card-hover-bg);
           border-color: var(--primary);
         }
 

@@ -113,14 +113,16 @@ const ResourceDetail = () => {
           font-size: 3rem;
           line-height: 1.2;
           font-weight: 800;
-          background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+          background: var(--heading-gradient);
           -webkit-background-clip: text;
+          background-clip: text;
           -webkit-text-fill-color: transparent;
         }
 
         .article-content {
           padding: 3rem;
-          color: #e2e8f0;
+          padding: 3rem;
+          color: var(--text-main);
           font-size: 1.1rem;
           line-height: 1.8;
         }
@@ -167,12 +169,12 @@ const ResourceDetail = () => {
         }
 
         .article-content code {
-          background: rgba(0,0,0,0.3);
+          background: var(--code-bg);
           padding: 0.2em 0.4em;
           border-radius: 4px;
           font-family: var(--font-mono);
           font-size: 0.9em;
-          color: #e2e8f0;
+          color: var(--code-text);
         }
         
         .article-content pre code {
@@ -194,7 +196,7 @@ const ResourceDetail = () => {
         }
         
         .article-content th {
-          background: rgba(255,255,255,0.05);
+          background: var(--surface-hover);
         }
 
         @media (max-width: 768px) {

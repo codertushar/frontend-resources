@@ -8,19 +8,23 @@ import Library from './pages/Library';
 import LearningPath from './pages/LearningPath';
 import ResourceDetail from './pages/ResourceDetail';
 
+import { ThemeProvider } from './context/ThemeContext';
+
 function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/library" element={<Library />} />
-          <Route path="/learning-path" element={<LearningPath />} />
-          <Route path="/resource/:id" element={<ResourceDetail />} />
-        </Routes>
-      </Layout>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <ScrollToTop />
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/library" element={<Library />} />
+            <Route path="/learning-path" element={<LearningPath />} />
+            <Route path="/resource/:id" element={<ResourceDetail />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </ThemeProvider>
   );
 }
 

@@ -1,6 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
+  /* Common Variables */
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Default Dark Theme (matches original) */
   --bg-color: #030712;
   --surface-color: #111827;
   --surface-hover: #1f2937;
@@ -13,12 +18,54 @@
   --text-main: #f9fafb;
   --text-muted: #9ca3af;
 
-  --font-sans: 'Inter', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-
   --glass-bg: rgba(17, 24, 39, 0.7);
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-blur: 16px;
+
+  --btn-secondary-bg: rgba(255, 255, 255, 0.05);
+  --btn-secondary-hover: rgba(255, 255, 255, 0.1);
+  --card-hover-bg: rgba(30, 41, 59, 0.9);
+
+  --heading-gradient: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+
+  --code-bg: rgba(255, 255, 255, 0.1);
+  --code-text: #e2e8f0;
+}
+
+:root.light {
+  --bg-color: #f8fafc;
+  /* Slate 50 - subtly cool background */
+  --surface-color: #ffffff;
+  --surface-hover: #f1f5f9;
+  /* Slate 100 */
+  --border-color: #cbd5e1;
+  /* Slate 300 - better definition */
+
+  --primary: #7c3aed;
+  /* Violet 600 */
+  --primary-hover: #6d28d9;
+  /* Violet 700 */
+  --primary-glow: rgba(124, 58, 237, 0.15);
+  /* Softer glow for light mode */
+
+  --text-main: #0f172a;
+  /* Slate 900 - Sharp, deep contrast */
+  --text-muted: #64748b;
+  /* Slate 500 */
+
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(148, 163, 184, 0.2);
+
+  --btn-secondary-bg: rgba(0, 0, 0, 0.04);
+  --btn-secondary-hover: rgba(0, 0, 0, 0.08);
+  --card-hover-bg: #ffffff;
+
+  --heading-gradient: linear-gradient(135deg, #0f172a 0%, #7c3aed 100%);
+  /* Deep slate to violet */
+
+  --code-bg: rgba(0, 0, 0, 0.06);
+  --code-text: #334155;
+  /* Slate 700 */
 }
 
 * {
@@ -54,7 +101,14 @@ a {
   -webkit-backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--glass-border);
   border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  /* Added subtle shadow for depth in light mode */
 }
+
+/* Adjust shadow for dark mode via media query or specific variable if needed, 
+   but this low opacity black shadow works well on dark mode tool. 
+   Actually, let's make the shadow a variable for perfection.
+*/
 
 .btn-primary {
   background: var(--primary);
@@ -75,10 +129,28 @@ a {
 }
 
 .heading-gradient {
-  background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+  background: var(--heading-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.theme-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 0.5rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--surface-hover);
+  color: var(--primary);
 }
 
 /* Scrollbar */

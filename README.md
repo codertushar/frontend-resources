@@ -7,6 +7,7 @@
 ### 📁 ai
 
 <pre>
+└── 📄 <a href="ai/streaming_llm_responses.md">streaming_llm_responses.md</a>
 </pre>
 
 ### 🧮 dsa
@@ -107,36 +108,9 @@
 └── 📈 <a href="machine-coding/progress_bar.md">progress_bar.md</a>
 </pre>
 
-### 📁 website
+### 📁 system-design
 
 <pre>
-├── 📁 <b>public</b>
-    └── 📄 <a href="website/public/vite.svg">vite.svg</a>
-├── 📁 <b>scripts</b>
-    └── 📄 <a href="website/scripts/generate-content.js">generate-content.js</a>
-├── 📁 <b>src</b>
-    ├── 📁 <b>assets</b>
-    │   └── 📄 <a href="website/src/assets/react.svg">react.svg</a>
-    ├── 📁 <b>components</b>
-    │   ├── 📄 <a href="website/src/components/Layout.jsx">Layout.jsx</a>
-    │   └── 📄 <a href="website/src/components/ScrollToTop.jsx">ScrollToTop.jsx</a>
-    ├── 📁 <b>data</b>
-    │   └── 📄 <a href="website/src/data/content.json">content.json</a>
-    ├── 📁 <b>pages</b>
-    │   ├── 📄 <a href="website/src/pages/Home.jsx">Home.jsx</a>
-    │   ├── 📄 <a href="website/src/pages/LearningPath.jsx">LearningPath.jsx</a>
-    │   ├── 📄 <a href="website/src/pages/Library.jsx">Library.jsx</a>
-    │   └── 📄 <a href="website/src/pages/ResourceDetail.jsx">ResourceDetail.jsx</a>
-    ├── 📄 <a href="website/src/App.css">App.css</a>
-    ├── 📄 <a href="website/src/App.jsx">App.jsx</a>
-    ├── 📄 <a href="website/src/index.css">index.css</a>
-    └── 📄 <a href="website/src/main.jsx">main.jsx</a>
-├── 📄 <a href="website/.gitignore">.gitignore</a>
-├── 📄 <a href="website/eslint.config.js">eslint.config.js</a>
-├── 📄 <a href="website/index.html">index.html</a>
-├── 📄 <a href="website/package-lock.json">package-lock.json</a>
-├── 📄 <a href="website/package.json">package.json</a>
-├── 📄 <a href="website/README.md">README.md</a>
-└── 📄 <a href="website/vite.config.js">vite.config.js</a>
+└── 📄 <a href="system-design/google-maps.md">google-maps.md</a>
 </pre>
 

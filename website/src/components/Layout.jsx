@@ -4,6 +4,8 @@ import { NavLink, Link } from 'react-router-dom';
 import { Terminal, BookOpen, Layers, Map, Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+import ThemeToggle from './ThemeToggle';
+
 const Layout = ({ children }) => {
   return (
     <div className="layout">
@@ -26,6 +28,8 @@ const Layout = ({ children }) => {
               <Map size={18} />
               <span>Path</span>
             </NavLink>
+            <div className="nav-separator"></div>
+            <ThemeToggle />
           </div>
         </div>
       </nav>
@@ -75,7 +79,15 @@ const Layout = ({ children }) => {
 
         .nav-links {
           display: flex;
+          align-items: center;
           gap: 0.5rem;
+        }
+
+        .nav-separator {
+          width: 1px;
+          height: 24px;
+          background-color: var(--border-color);
+          margin: 0 0.5rem;
         }
 
         .nav-item {
@@ -92,7 +104,7 @@ const Layout = ({ children }) => {
 
         .nav-item:hover {
           color: var(--text-main);
-          background: rgba(255, 255, 255, 0.05);
+          background: var(--surface-hover);
         }
 
         .nav-item.active {
