@@ -11,6 +11,7 @@ const CATEGORIES = [
   { id: 'dsa', label: 'DSA' },
   { id: 'ai', label: 'AI Engineering' },
   { id: 'machine-coding', label: 'Machine Coding' },
+  { id: 'system-design', label: 'System Design' },
   { id: 'general', label: 'General' },
 ];
 

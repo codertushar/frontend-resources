@@ -11,7 +11,7 @@ const WEBSITE_ROOT = path.resolve(__dirname, '../');
 const PUBLIC_CONTENT_DIR = path.join(WEBSITE_ROOT, 'public', 'content');
 const OUTPUT_JSON = path.join(WEBSITE_ROOT, 'src', 'data', 'content.json');
 
-const CONTENT_DIRS = ['js', 'dsa', 'ai', 'general', 'machine-coding'];
+const CONTENT_DIRS = ['js', 'dsa', 'ai', 'general', 'machine-coding', 'system-design'];
 
 // Ensure src/data exists
 const DATA_DIR = path.dirname(OUTPUT_JSON);

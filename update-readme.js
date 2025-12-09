@@ -20,6 +20,8 @@ function getFolderIcon(folderName) {
   if (folderName === 'dsa') return '🧮';
   if (folderName === 'js') return '📚';
   if (folderName === 'machine-coding') return '🛠️';
+  if (folderName === 'system-design') return '📐';
+  if (folderName === 'ai') return '🤖';
 
   // Sub-categories
   if (folderName === 'general-concepts') return '💡';

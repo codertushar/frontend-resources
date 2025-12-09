@@ -4,7 +4,7 @@
 
 > **Note:** To open links in a new tab, hold the Ctrl key (or Cmd on Mac) while clicking the link.
 
-### 📁 ai
+### 🤖 ai
 
 <pre>
 └── 📄 <a href="ai/streaming_llm_responses.md">streaming_llm_responses.md</a>
@@ -108,7 +108,7 @@
 └── 📈 <a href="machine-coding/progress_bar.md">progress_bar.md</a>
 </pre>
 
-### 📁 system-design
+### 📐 system-design
 
 <pre>
 └── 📄 <a href="system-design/google-maps.md">google-maps.md</a>
