@@ -172,6 +172,62 @@ const Layout = ({ children }) => {
           border-color: var(--primary);
           background: var(--surface-hover);
         }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+          .navbar {
+            width: 95%;
+            padding: 0.625rem 1rem;
+          }
+
+          .logo-text {
+            display: none;
+          }
+
+          .nav-links {
+            gap: 0.25rem;
+          }
+
+          .nav-item span {
+            display: none;
+          }
+
+          .nav-item {
+            padding: 0.5rem;
+          }
+
+          .nav-separator {
+            margin: 0 0.25rem;
+          }
+
+          .main-content {
+            padding-top: 5rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .navbar {
+            width: 100%;
+            top: 0;
+            border-radius: 0 0 16px 16px;
+          }
+
+          .logo {
+            font-size: 1rem;
+          }
+
+          .footer {
+            padding: 2rem 0;
+          }
+
+          .footer-content {
+            gap: 1rem;
+          }
+
+          .social-links {
+            gap: 1rem;
+          }
+        }
       `}</style>
     </div>
   );

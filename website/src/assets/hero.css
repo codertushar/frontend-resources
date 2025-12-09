@@ -57,3 +57,37 @@
     background: var(--primary-hover);
     transform: translateY(-2px);
 }
+
+/* Responsive Hero Styles */
+@media (max-width: 768px) {
+    .hero {
+        min-height: 60vh;
+        padding: 1.5rem 1rem;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero .cta {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 1.75rem;
+    }
+
+    .hero p {
+        font-size: 0.9375rem;
+        max-width: 100%;
+    }
+}

@@ -121,14 +121,31 @@ const ResourceDetail = () => {
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
         }
 
         .article-content {
           padding: 3rem;
-          padding: 3rem;
           color: var(--text-main);
           font-size: 1.1rem;
           line-height: 1.8;
+          overflow-x: hidden;
+          max-width: 100%;
+        }
+
+        .article-content * {
+          max-width: 100%;
+        }
+
+        .article-content pre {
+          overflow-x: auto;
+          max-width: 100%;
+        }
+
+        .article-content code {
+          word-wrap: break-word;
+          overflow-wrap: break-word;
         }
 
         /* Markdown Styles */
@@ -204,8 +221,62 @@ const ResourceDetail = () => {
         }
 
         @media (max-width: 768px) {
-          .article-title { font-size: 2rem; }
-          .article-content { padding: 1.5rem; }
+          .detail-container {
+            padding-top: 1rem;
+            overflow-x: hidden;
+          }
+
+          .article-title { 
+            font-size: 2rem;
+            line-height: 1.3;
+          }
+
+          .article-content { 
+            padding: 1.5rem;
+            font-size: 1rem;
+          }
+
+          .article-content h2 { font-size: 1.5rem; }
+          .article-content h3 { font-size: 1.25rem; }
+
+          .article-content pre {
+            margin-left: -1.5rem;
+            margin-right: -1.5rem;
+            border-radius: 0;
+            max-width: calc(100% + 3rem);
+            overflow-x: auto;
+          }
+
+          .article-content table {
+            display: block;
+            overflow-x: auto;
+            max-width: 100%;
+          }
+
+          .article-content img {
+            max-width: 100%;
+            height: auto;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .article-title { 
+            font-size: 1.75rem;
+          }
+
+          .article-content { 
+            padding: 1rem;
+            font-size: 0.9375rem;
+          }
+
+          .article-content h2 { font-size: 1.375rem; }
+          .article-content h3 { font-size: 1.125rem; }
+
+          .article-content pre {
+            margin-left: -1rem;
+            margin-right: -1rem;
+            max-width: calc(100% + 2rem);
+          }
         }
       `}</style>
     </div>

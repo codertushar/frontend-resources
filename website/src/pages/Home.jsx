@@ -152,7 +152,69 @@ const Home = () => {
         }
 
         @media (max-width: 768px) {
-          .hero-title { font-size: 2.5rem; }
+          .hero {
+            padding: 2rem 1rem;
+          }
+
+          .hero-title { 
+            font-size: 2.5rem;
+          }
+
+          .hero-subtitle {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+          }
+
+          .hero-actions {
+            flex-direction: column;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 3rem;
+          }
+
+          .hero-actions .btn-primary,
+          .hero-actions .btn-secondary {
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+          }
+
+          .features-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
+
+          .feature-card {
+            padding: 1.5rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .hero {
+            padding: 1.5rem 0.5rem;
+          }
+
+          .hero-title { 
+            font-size: 2rem;
+            margin-bottom: 1rem;
+          }
+
+          .hero-subtitle {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+          }
+
+          .hero-actions {
+            margin-bottom: 2.5rem;
+          }
+
+          .feature-card h3 {
+            font-size: 1.125rem;
+          }
+
+          .feature-card p {
+            font-size: 0.875rem;
+          }
         }
       `}</style>
     </div>
