@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -9,10 +9,10 @@ import { ArrowLeft, Calendar, Tag } from 'lucide-react';
 import contentData from '../data/content.json';
 
 const ResourceDetail = () => {
-  const { id } = useParams();
+  const location = useLocation();
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(true);
-  const resourceId = decodeURIComponent(id);
+  const resourceId = location.pathname.replace('/resource/', '').replace(/^\//, '');
 
   const resource = contentData.find(r => r.id === resourceId);
 

@@ -1,0 +1,26 @@
+{
+    "name": "Frontend Resources",
+    "short_name": "FE‑Resources",
+    "description": "Curated frontend concepts, patterns & interview prep.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#00bfa5",
+    "icons": [
+        {
+            "src": "/favicon.svg",
+            "type": "image/svg+xml",
+            "sizes": "256x256"
+        },
+        {
+            "src": "/favicon-192.svg",
+            "type": "image/svg+xml",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/favicon-512.svg",
+            "type": "image/svg+xml",
+            "sizes": "512x512"
+        }
+    ]
+}

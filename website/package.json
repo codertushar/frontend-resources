@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/generate-content.js && vite",
-    "build": "node scripts/generate-content.js && vite build",
+    "build": "node scripts/generate-content.js && npm run sitemap && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sitemap": "node ../scripts/generate-sitemap.js"
   },
   "dependencies": {
     "framer-motion": "^12.23.25",

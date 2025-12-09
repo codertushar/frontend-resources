@@ -20,7 +20,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/library" element={<Library />} />
             <Route path="/learning-path" element={<LearningPath />} />
-            <Route path="/resource/:id" element={<ResourceDetail />} />
+            <Route path="/resource/*" element={<ResourceDetail />} />
           </Routes>
         </Layout>
       </Router>
