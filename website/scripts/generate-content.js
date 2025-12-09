@@ -21,9 +21,24 @@ if (!fs.existsSync(DATA_DIR)) {
 
 let resources = [];
 
-function getTitle(content) {
-    const match = content.match(/^#+\s+(.*)$/m);
-    return match ? match[1].replace(/\*\*/g, '').trim() : 'Untitled';
+function getTitle(content, filename) {
+    // Try to find H1 first
+    const h1Match = content.match(/^#\s+(.*)$/m);
+    if (h1Match) {
+        return h1Match[1].replace(/\*\*/g, '').trim();
+    }
+
+    // Fallback to filename if no H1 found
+    const name = filename.replace(/\.md$/, '');
+    // Split camelCase and delimiters
+    const humanized = name
+        .replace(/([a-z])([A-Z])/g, '$1 $2') // CamelCase to spaced
+        .replace(/[-_]/g, ' ') // Hyphens/Underscores to space
+        .split(/\s+/)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Title Case
+        .join(' ');
+
+    return humanized;
 }
 
 function processDirectory(dirPath, relativePath) {
@@ -40,7 +55,7 @@ function processDirectory(dirPath, relativePath) {
             // Ignore README/AGENTS at root if strictly looking for resources, 
             // but maybe we want them? Let's stick to CONTENT_DIRS for now.
             const content = fs.readFileSync(itemPath, 'utf-8');
-            const title = getTitle(content);
+            const title = getTitle(content, item.name);
 
             const pathParts = itemRelativePath.split('/');
             const category = pathParts[0];

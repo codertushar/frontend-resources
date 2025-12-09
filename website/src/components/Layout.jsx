@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { Terminal, BookOpen, Layers, Map, Search } from 'lucide-react';
+import { Terminal, BookOpen, Layers, Map, Search, Mail, Github, Linkedin } from 'lucide-react';
+import { XIcon } from './SocialIcons';
 import { motion } from 'framer-motion';
 
 import ThemeToggle from './ThemeToggle';
@@ -39,8 +40,22 @@ const Layout = ({ children }) => {
       </main>
 
       <footer className="footer">
-        <div className="container">
-          <p>Built with ❤️ by Tushar</p>
+        <div className="container footer-content">
+          <p>Built with ❤️ by Tushar Khanna</p>
+          <div className="social-links">
+            <a href="mailto:hellokhannatushar@gmail.com" className="social-link" title="Email">
+              <Mail size={20} />
+            </a>
+            <a href="https://x.com/iamtusharkhanna" target="_blank" rel="noopener noreferrer" className="social-link" title="X (Twitter)">
+              <XIcon size={18} />
+            </a>
+            <a href="https://www.linkedin.com/in/khannatushar/" target="_blank" rel="noopener noreferrer" className="social-link" title="LinkedIn">
+              <Linkedin size={20} />
+            </a>
+            <a href="https://github.com/codertushar/frontend-resources" target="_blank" rel="noopener noreferrer" className="social-link" title="GitHub">
+              <Github size={20} />
+            </a>
+          </div>
         </div>
       </footer>
 
@@ -119,10 +134,43 @@ const Layout = ({ children }) => {
         }
 
         .footer {
-          text-align: center;
-          padding: 2rem;
+          padding: 3rem 0;
           color: var(--text-muted);
           font-size: 0.9rem;
+          margin-top: auto;
+          border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1.5rem;
+        }
+
+        .social-links {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+        }
+
+        .social-link {
+          color: var(--text-muted);
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.5rem;
+          border-radius: 50%;
+          background: var(--surface-card);
+          border: 1px solid var(--border-color);
+        }
+
+        .social-link:hover {
+          color: var(--primary);
+          transform: translateY(-2px);
+          border-color: var(--primary);
+          background: var(--surface-hover);
         }
       `}</style>
     </div>
