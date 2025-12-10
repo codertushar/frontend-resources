@@ -50,7 +50,7 @@ function generateSitemap() {
     const now = new Date().toISOString();
     const urlEntries = urls
         .map((url) => {
-            return `  <url>\n    <loc>${BASE_URL}#${url}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`;
+            return `  <url>\n    <loc>${BASE_URL}${url}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`;
         })
         .join('\n');
 

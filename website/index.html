@@ -23,6 +23,19 @@
   <link rel="stylesheet" href="/src/assets/hero.css">
 
   <title>Frontend Resources</title>
+  <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const path = params.get('p');
+      const hash = params.get('h');
+      if (path) {
+        window.history.replaceState(null, '',
+          path + (hash ? '#' + hash : '')
+        );
+      }
+    })();
+  </script>
 </head>
 
 <body>
