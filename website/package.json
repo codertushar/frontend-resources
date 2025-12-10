@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/generate-content.js && vite",
-    "build": "node scripts/generate-content.js && npm run sitemap && vite build",
+    "build": "node scripts/generate-content.js && npm run sitemap && vite build && node scripts/generate-route-files.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "sitemap": "node ../scripts/generate-sitemap.js"
@@ -24,6 +24,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@prerenderer/renderer-puppeteer": "^1.2.4",
+    "@prerenderer/rollup-plugin": "^0.3.12",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
