@@ -7,17 +7,19 @@
     // Single Page App GitHub Pages redirect
     // This script redirects 404 requests to the index.html with the path preserved
     // See: https://github.com/rafgraph/spa-github-pages
-    const segmentCount = 1; // number of path segments to keep (frontend-resources)
-    const location = window.location;
-    const pathSegmentsToKeep = location.pathname.split('/').slice(0, 1 + segmentCount).join('/');
-    const remainingPath = location.pathname.slice(pathSegmentsToKeep.length);
+    (function() {
+      var segmentCount = 1; // number of path segments to keep (frontend-resources)
+      var loc = window.location;
+      var pathSegmentsToKeep = loc.pathname.split('/').slice(0, 1 + segmentCount).join('/');
+      var remainingPath = loc.pathname.slice(pathSegmentsToKeep.length);
 
-    location.replace(
-      location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') +
-      pathSegmentsToKeep + '/?p=' +
-      encodeURIComponent(remainingPath + location.search) +
-      (location.hash ? '&h=' + encodeURIComponent(location.hash.slice(1)) : '')
-    );
+      loc.replace(
+        loc.protocol + '//' + loc.hostname + (loc.port ? ':' + loc.port : '') +
+        pathSegmentsToKeep + '/?p=' +
+        encodeURIComponent(remainingPath + loc.search) +
+        (loc.hash ? '&h=' + encodeURIComponent(loc.hash.slice(1)) : '')
+      );
+    })();
   </script>
 </head>
 <body>
