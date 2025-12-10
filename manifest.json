@@ -14,21 +14,16 @@
     ],
     "icons": [
         {
-            "src": "/frontend-resources/favicon-192.svg",
-            "type": "image/svg+xml",
+            "src": "/frontend-resources/android-launchericon-192-192.png",
+            "type": "image/png",
             "sizes": "192x192",
             "purpose": "any maskable"
         },
         {
-            "src": "/frontend-resources/favicon-512.svg",
-            "type": "image/svg+xml",
+            "src": "/frontend-resources/android-launchericon-512-512.png",
+            "type": "image/png",
             "sizes": "512x512",
             "purpose": "any maskable"
-        },
-        {
-            "src": "/frontend-resources/favicon.svg",
-            "type": "image/svg+xml",
-            "sizes": "any"
         }
     ]
 }

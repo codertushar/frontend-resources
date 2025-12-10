@@ -1,14 +1,13 @@
 // Service Worker for Frontend Resources PWA
 // Cache core assets during install
-const CACHE_NAME = 'frontend-resources-v3';
+const CACHE_NAME = 'frontend-resources-v5';
 const BASE_PATH = '/frontend-resources';
 const CORE_ASSETS = [
     `${BASE_PATH}/`,
     `${BASE_PATH}/favicon.svg`,
     `${BASE_PATH}/manifest.json`,
-    `${BASE_PATH}/index.html`,
-    `${BASE_PATH}/icon-192.png`,
-    `${BASE_PATH}/icon-512.png`
+    `${BASE_PATH}/android-launchericon-192-192.png`,
+    `${BASE_PATH}/android-launchericon-512-512.png`
 ];
 
 self.addEventListener('install', (event) => {
