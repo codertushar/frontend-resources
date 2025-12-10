@@ -25,12 +25,14 @@
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
-      const params = new URLSearchParams(window.location.search);
-      const path = params.get('p');
-      const hash = params.get('h');
+      var params = new URLSearchParams(window.location.search);
+      var path = params.get('p');
+      var hash = params.get('h');
       if (path) {
+        // Restore the full path (path already excludes /frontend-resources)
+        // React Router with basename="/frontend-resources" expects paths like /library, /resource/...
         window.history.replaceState(null, '',
-          path + (hash ? '#' + hash : '')
+          '/frontend-resources' + path + (hash ? '#' + hash : '')
         );
       }
     })();
