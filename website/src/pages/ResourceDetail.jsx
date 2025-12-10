@@ -14,12 +14,13 @@ const ResourceDetail = () => {
   const [loading, setLoading] = useState(true);
 
   // Extract and decode the resource ID from the pathname
-  // Remove basename (/frontend-resources) and /resource/ prefix
+  // Remove basename (/frontend-resources), /resource/ prefix, and trailing slash
   const resourceId = decodeURIComponent(
     location.pathname
       .replace('/frontend-resources', '')
       .replace('/resource/', '')
       .replace(/^\//, '')
+      .replace(/\/$/, '')
   );
 
   const resource = contentData.find(r => r.id === resourceId);
