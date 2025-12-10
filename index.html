@@ -22,7 +22,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
   <title>Frontend Resources</title>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-zTcbakU_.js"></script>
+  <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const path = params.get('p');
+      const hash = params.get('h');
+      if (path) {
+        window.history.replaceState(null, '',
+          path + (hash ? '#' + hash : '')
+        );
+      }
+    })();
+  </script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-D7UVzLox.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-fHG6NWuH.css">
 </head>
 
