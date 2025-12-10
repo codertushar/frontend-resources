@@ -5,18 +5,15 @@
   <title>Frontend Resources</title>
   <script>
     // Single Page App GitHub Pages redirect
-    // This script redirects 404 requests to the index.html with the path preserved
-    // See: https://github.com/rafgraph/spa-github-pages
+    // Redirects 404 requests to index.html with the path preserved
     (function() {
-      var segmentCount = 1; // number of path segments to keep (frontend-resources)
       var loc = window.location;
-      var pathSegmentsToKeep = loc.pathname.split('/').slice(0, 1 + segmentCount).join('/');
-      var remainingPath = loc.pathname.slice(pathSegmentsToKeep.length);
-
+      // Redirect to the base with the full path as a query param
+      // Keep /frontend-resources as the base
       loc.replace(
         loc.protocol + '//' + loc.hostname + (loc.port ? ':' + loc.port : '') +
-        pathSegmentsToKeep + '/?p=' +
-        encodeURIComponent(remainingPath + loc.search) +
+        '/frontend-resources/?p=' +
+        encodeURIComponent(loc.pathname.replace('/frontend-resources', '') + loc.search) +
         (loc.hash ? '&h=' + encodeURIComponent(loc.hash.slice(1)) : '')
       );
     })();
