@@ -14,8 +14,12 @@ const ResourceDetail = () => {
   const [loading, setLoading] = useState(true);
 
   // Extract and decode the resource ID from the pathname
+  // Remove basename (/frontend-resources) and /resource/ prefix
   const resourceId = decodeURIComponent(
-    location.pathname.replace('/resource/', '').replace(/^\//, '')
+    location.pathname
+      .replace('/frontend-resources', '')
+      .replace('/resource/', '')
+      .replace(/^\//, '')
   );
 
   const resource = contentData.find(r => r.id === resourceId);
