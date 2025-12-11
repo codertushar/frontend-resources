@@ -65,6 +65,7 @@ For the best reading experience, we highly recommend visiting our **[Live Websit
 <pre>
 ├── 💡 <b>general-concepts</b>
 │   ├── 📄 <a href="js/general-concepts/abort_controller.md">abort_controller.md</a>
+│   ├── 📄 <a href="js/general-concepts/closures.md">closures.md</a>
 │   ├── 📄 <a href="js/general-concepts/es6_modules.md">es6_modules.md</a>
 │   ├── 📄 <a href="js/general-concepts/function_vs_arrow_function.md">function_vs_arrow_function.md</a>
 │   ├── 📄 <a href="js/general-concepts/js_constructor.md">js_constructor.md</a>
