@@ -306,6 +306,8 @@ const ResourceDetail = () => {
         .article-content pre {
           overflow-x: auto;
           max-width: 100%;
+          -webkit-overflow-scrolling: touch;
+          touch-action: pan-x;
         }
 
         .article-content code {
@@ -547,12 +549,16 @@ const ResourceDetail = () => {
             border-radius: 0;
             max-width: calc(100% + 3rem);
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
           }
 
           .article-content table {
             display: block;
             overflow-x: auto;
             max-width: 100%;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
           }
 
           .article-content img {
@@ -592,6 +598,8 @@ const ResourceDetail = () => {
             margin-left: -1rem;
             margin-right: -1rem;
             max-width: calc(100% + 2rem);
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
           }
 
           .related-section {
