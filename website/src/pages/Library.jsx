@@ -120,17 +120,17 @@ const Library = () => {
         .page-container {
           padding-top: 2rem;
         }
-        
+
         .header-section {
           margin-bottom: 2rem;
           text-align: center;
         }
-        
+
         .header-section h1 {
           font-size: 2.5rem;
           margin-bottom: 0.5rem;
         }
-        
+
         .subtitle {
           color: var(--text-muted);
         }
@@ -192,6 +192,7 @@ const Library = () => {
           cursor: pointer;
           font-size: 0.9rem;
           transition: all 0.2s;
+          white-space: nowrap;
         }
 
         .category-pill:hover {
@@ -215,19 +216,41 @@ const Library = () => {
           display: block;
           padding: 1.5rem;
           height: 100%;
-          transition: all 0.2s;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .resource-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: radial-gradient(circle at 50% 0%, var(--primary-glow), transparent 70%);
+          opacity: 0;
+          transition: opacity 0.3s ease;
         }
 
         .resource-card:hover {
           transform: translateY(-4px);
           background: var(--card-hover-bg);
           border-color: var(--primary);
+          box-shadow: 0 16px 32px -8px rgba(139, 92, 246, 0.2);
+        }
+
+        .resource-card:hover::before {
+          opacity: 1;
         }
 
         .card-header {
           display: flex;
           gap: 0.5rem;
           margin-bottom: 1rem;
+          position: relative;
+          z-index: 1;
+          flex-wrap: wrap;
         }
 
         .badge {
@@ -250,6 +273,8 @@ const Library = () => {
           margin-bottom: 0.75rem;
           color: var(--text-main);
           line-height: 1.4;
+          position: relative;
+          z-index: 1;
         }
 
         .resource-card p {
@@ -260,6 +285,8 @@ const Library = () => {
           -webkit-box-orient: vertical;
           overflow: hidden;
           margin-bottom: 1.5rem;
+          position: relative;
+          z-index: 1;
         }
 
         .card-footer {
@@ -270,6 +297,13 @@ const Library = () => {
           font-size: 0.9rem;
           font-weight: 500;
           margin-top: auto;
+          position: relative;
+          z-index: 1;
+          transition: gap 0.2s ease;
+        }
+
+        .resource-card:hover .card-footer {
+          gap: 0.5rem;
         }
 
         .empty-state {
@@ -277,6 +311,81 @@ const Library = () => {
           text-align: center;
           padding: 4rem;
           color: var(--text-muted);
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 640px) {
+          .page-container {
+            padding-top: 1rem;
+          }
+
+          .header-section h1 {
+            font-size: 1.75rem;
+          }
+
+          .subtitle {
+            font-size: 0.9rem;
+          }
+
+          .controls-section {
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+          }
+
+          .categories {
+            overflow-x: auto;
+            flex-wrap: nowrap;
+            padding-bottom: 0.5rem;
+            margin: 0 -1rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+          }
+
+          .categories::-webkit-scrollbar {
+            display: none;
+          }
+
+          .category-pill {
+            flex-shrink: 0;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.8rem;
+          }
+
+          .resources-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+
+          .resource-card {
+            padding: 1rem;
+          }
+
+          .resource-card h3 {
+            font-size: 1.05rem;
+          }
+
+          .resource-card p {
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+          }
+
+          .empty-state {
+            padding: 2rem 1rem;
+          }
+        }
+
+        /* Tablet Styles */
+        @media (min-width: 641px) and (max-width: 900px) {
+          .header-section h1 {
+            font-size: 2rem;
+          }
+
+          .resources-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
         }
       `}</style>
     </div>

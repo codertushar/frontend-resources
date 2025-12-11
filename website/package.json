@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/generate-content.js --watch & vite",
-    "build": "node scripts/generate-content.js && npm run sitemap && vite build && node scripts/generate-route-files.js",
+    "build": "node scripts/generate-content.js && npm run sitemap && node scripts/generate-sw-version.js && vite build && node scripts/generate-route-files.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "sitemap": "node ../scripts/generate-sitemap.js"
