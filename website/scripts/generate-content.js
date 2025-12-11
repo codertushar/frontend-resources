@@ -23,13 +23,14 @@ if (!fs.existsSync(DATA_DIR)) {
 function stripMarkdown(text) {
     return text
         .replace(/```[a-z]*\r?\n[\s\S]*?```/gi, '') // Code blocks with language identifier
+        .replace(/^>\s*\*\*Interview Importance:\*\*.*$/gm, '') // Remove interview importance badges
+        .replace(/^>.*$/gm, '')            // Remove entire blockquote lines
         .replace(/^#+\s+/gm, '')           // Headers
         .replace(/\*\*(.+?)\*\*/g, '$1')   // Bold (non-greedy)
         .replace(/\*(.+?)\*/g, '$1')       // Italic (non-greedy)
         .replace(/`([^`]+)`/g, '$1')       // Inline code
         .replace(/^\s*[-*+]\s+/gm, '')     // Unordered list items
         .replace(/^\s*\d+\.\s+/gm, '')     // Numbered list items
-        .replace(/^\s*>\s*/gm, '')         // Blockquotes
         .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Links
         .replace(/\|[^|]*\|/g, ' ')        // Table cells
         .replace(/^[-|:\s]+$/gm, '')       // Table separator rows
