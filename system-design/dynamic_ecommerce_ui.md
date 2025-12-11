@@ -1335,9 +1335,10 @@ const getPageConfig = async (page, userId) => {
 };
 
 // Layer 3: In-Memory Cache (Per BFF Instance)
+import NodeCache from 'node-cache';
 const memCache = new NodeCache({ stdTTL: 60 });
 
-const getCachedConfig = (page, segment) => {
+const getCachedConfig = async (page, segment) => {
   const key = `${page}:${segment}`;
   
   // Check memory cache first (fastest)
