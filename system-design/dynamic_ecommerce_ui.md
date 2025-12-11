@@ -1292,7 +1292,7 @@ const abTest = {
 // - TTL: 1 minute for personalized pages
 // - Cache-Key: Include user segment (not individual user ID)
 
-app.get('/api/bff/page-config', (req, res) => {
+app.get('/api/bff/page-config', async (req, res) => {
   const { page, userId } = req.query;
   
   // Get user segment (not personal data)
@@ -1348,14 +1348,15 @@ const getCachedConfig = async (page, segment) => {
   // Check Redis (medium speed)
   config = await redis.get(key);
   if (config) {
-    memCache.set(key, config);
-    return config;
+    const parsedConfig = JSON.parse(config);
+    memCache.set(key, parsedConfig);
+    return parsedConfig;
   }
   
   // Generate fresh (slowest)
   config = await generateConfig(page, segment);
   memCache.set(key, config);
-  redis.setex(key, 300, config);
+  redis.setex(key, 300, JSON.stringify(config));
   return config;
 };
 
