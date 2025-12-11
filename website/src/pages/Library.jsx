@@ -341,6 +341,7 @@ const Library = () => {
             padding-left: 1rem;
             padding-right: 1rem;
             -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
             scrollbar-width: none;
           }
 
