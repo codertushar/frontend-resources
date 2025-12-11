@@ -11,6 +11,7 @@ on:
       - 'ai/**'
       - 'general/**'
       - 'machine-coding/**'
+      - 'system-design/**'
   workflow_dispatch:
 
 permissions:
