@@ -1,5 +1,4 @@
-
-# Removing Circular References from Objects in JavaScript
+# 🔄 Removing Circular References from Objects
 
 Circular references can create serious problems in JavaScript — from infinite recursions to `JSON.stringify` errors. Here’s how to remove cycles **both structurally** and **during serialization** using idiomatic, memory-safe JavaScript.
 

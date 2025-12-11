@@ -1,5 +1,10 @@
+# 🔢 Array.prototype.indexOf() Polyfill
 
-Here’s a more readable version of the text:
+The `indexOf()` method returns the first index at which a given element can be found, or `-1` if not present.
+
+---
+
+## ✅ Implementation
 
 ```javascript
 Array.prototype.customIndexOf = function(searchElement, fromIndex = 0) {

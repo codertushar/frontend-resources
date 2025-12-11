@@ -1,4 +1,10 @@
-Here’s a more readable version of the text:
+# 🔍 Array.prototype.includes() Polyfill
+
+The `includes()` method determines whether an array includes a certain value, returning `true` or `false`.
+
+---
+
+## ✅ Implementation
 
 ```javascript
 Array.prototype.customIncludes = function (searchElement, fromIndex = 0) {

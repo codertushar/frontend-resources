@@ -1,12 +1,10 @@
+# 🛑 AbortController: Canceling Async Operations in JavaScript
 
-
-### ✅ **`AbortController` — Precise Definition**
-
-`AbortController` is a built-in Web API that allows you to  **cancel asynchronous operations** , especially ones that support an `AbortSignal`, like `fetch`, streams, or custom async tasks.
+`AbortController` is a built-in Web API that allows you to **cancel asynchronous operations**, especially ones that support an `AbortSignal`, like `fetch`, streams, or custom async tasks.
 
 ---
 
-### 🔧 **Core Concepts**
+## 💡 Core Concepts
 
 #### 1. **`AbortController`**
 

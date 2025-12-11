@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node scripts/generate-content.js && vite",
+    "dev": "node scripts/generate-content.js --watch & vite",
     "build": "node scripts/generate-content.js && npm run sitemap && vite build && node scripts/generate-route-files.js",
     "lint": "eslint .",
     "preview": "vite preview",

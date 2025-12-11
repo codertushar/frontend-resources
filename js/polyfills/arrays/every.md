@@ -1,4 +1,10 @@
-Here's a correct and **readable** implementation of `customEvery`:
+# ✅ Array.prototype.every() Polyfill
+
+The `every()` method tests whether all elements in the array pass the test implemented by the provided function.
+
+---
+
+## ✅ Implementation
 
 ```javascript
 Array.prototype.customEvery = function (callback, thisArg) {

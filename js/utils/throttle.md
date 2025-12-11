@@ -1,8 +1,10 @@
-Here’s a **precise throttle implementation** in JavaScript and as a **React hook** — ideal for interviews.
+# ⏱️ Throttle Function in JavaScript
+
+Here's a **precise throttle implementation** in JavaScript and as a **React hook** — ideal for interviews.
 
 ---
 
-### ✅ **Throttle Function (Vanilla JS)**
+## ✅ Implementation (Vanilla JS)
 
 ```js
 function throttle(fn, delay) {

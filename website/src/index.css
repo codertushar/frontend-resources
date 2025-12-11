@@ -30,6 +30,8 @@
 
   --code-bg: rgba(255, 255, 255, 0.1);
   --code-text: #e2e8f0;
+
+  --input-bg: rgba(0, 0, 0, 0.2);
 }
 
 :root.light {
@@ -66,6 +68,8 @@
   --code-bg: rgba(0, 0, 0, 0.06);
   --code-text: #334155;
   /* Slate 700 */
+
+  --input-bg: rgba(0, 0, 0, 0.04);
 }
 
 * {

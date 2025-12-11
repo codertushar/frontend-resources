@@ -1,5 +1,4 @@
-
-# Understanding mapLimit: Controlled Concurrency in JavaScript
+# 🔄 mapLimit: Controlled Concurrency in JavaScript
 
 When processing large datasets in JavaScript, we often need to perform asynchronous operations on multiple items. However, launching all operations simultaneously can overwhelm system resources or hit API rate limits. This is where the `mapLimit` function becomes invaluable.
 

@@ -1,6 +1,6 @@
-### **Understanding `prototype` and Prototype Inheritance in JavaScript**
+# 🔗 Prototype and Prototype Inheritance in JavaScript
 
-JavaScript uses  **prototype-based inheritance** , meaning objects inherit properties and methods from other objects via the `prototype` chain.
+JavaScript uses **prototype-based inheritance**, meaning objects inherit properties and methods from other objects via the `prototype` chain.
 
 ---
 

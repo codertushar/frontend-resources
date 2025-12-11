@@ -158,14 +158,18 @@ const Library = () => {
 
         .search-bar input {
           width: 100%;
-          background: rgba(0,0,0,0.2);
+          background: var(--input-bg, rgba(0,0,0,0.2));
           border: 1px solid var(--border-color);
           padding: 0.75rem 1rem 0.75rem 2.8rem;
           border-radius: 8px;
-          color: white;
+          color: var(--text-main);
           font-size: 1rem;
           outline: none;
           transition: all 0.2s;
+        }
+
+        .search-bar input::placeholder {
+          color: var(--text-muted);
         }
 
         .search-bar input:focus {

@@ -1,8 +1,10 @@
-Here’s an **interactive AOT debugger version** of the `reduce` polyfill. It logs each **Atom-of-Thought** (AOT) step with relevant state, making it easier to trace behavior on any input.
+# 🔄 Array.prototype.reduce() Polyfill
+
+Here's an **interactive AOT debugger version** of the `reduce` polyfill. It logs each **Atom-of-Thought** (AOT) step with relevant state, making it easier to trace behavior on any input.
 
 ---
 
-## 🧪 Spec-Compliant `reduce` with Debug Logs
+## ✅ Spec-Compliant Implementation
 
 ```js
 if (!Array.prototype.reduce) {

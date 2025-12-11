@@ -1,8 +1,10 @@
-Here's a clean implementation of a **cancelable promise** in JavaScript:
+# 🛑 Cancelable Promise Implementation
+
+Here's a clean implementation of a **cancelable promise** in JavaScript.
 
 ---
 
-### ✅ **Cancelable Promise Wrapper**
+## ✅ Implementation
 
 ```js
 function makeCancelable(promise) {

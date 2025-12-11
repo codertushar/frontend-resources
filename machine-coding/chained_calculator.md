@@ -1,6 +1,10 @@
+# 🔢 Chained Calculator Implementation
+
 Here's an implementation of a **Chain Calculator** in JavaScript. This calculator allows chaining operations like addition, subtraction, multiplication, and division in a fluent and readable way.
 
-### Code
+---
+
+## ✅ Implementation
 
 ```javascript
 class ChainCalculator {

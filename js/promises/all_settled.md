@@ -1,8 +1,10 @@
-Let’s break down **`Promise.allSettled`** using  **Atom-of-Thoughts** , then implement it.
+# ✅ Promise.allSettled() Implementation
+
+Let's break down **`Promise.allSettled`** using **Atom-of-Thoughts**, then implement it.
 
 ---
 
-## 🧠 Atom-of-Thoughts: `Promise.allSettled`
+## 🧠 Understanding Promise.allSettled
 
 ---
 

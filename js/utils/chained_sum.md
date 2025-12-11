@@ -1,7 +1,10 @@
+# ➕ Chained Sum (Curried Function)
 
-Here are two different implementations of a **curried sum** function, one using **state within the function** and the other using  **recursion** .
+Here are two different implementations of a **curried sum** function, one using **state within the function** and the other using **recursion**.
 
-### 1.  **Currying with Internal State** :
+---
+
+## ✅ Currying with Internal State
 
 ```javascript
 function sum(a) {

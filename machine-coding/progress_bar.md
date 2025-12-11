@@ -1,3 +1,5 @@
+# 📊 Progress Bar with Controls
+
 Below is an example React component for a progress bar that has Start, Pause, Stop, and Reset buttons. The component uses a timer (setInterval) to update the progress value, and different buttons change the component's state:
 
 ---

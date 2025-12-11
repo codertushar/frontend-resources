@@ -1,5 +1,10 @@
+# 🔄 Array.prototype.reverse() Polyfill
 
-Here’s a more readable version of the text:
+The `reverse()` method reverses an array in place and returns the reference to the same array.
+
+---
+
+## ✅ Implementation
 
 ```javascript
 Array.prototype.customReverse = function() {

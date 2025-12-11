@@ -1,8 +1,10 @@
-Here’s a breakdown and implementation of **`Promise.any`** using  **Atom-of-Thoughts** :
+# 🎯 Promise.any() Implementation
+
+Here's a breakdown and implementation of **`Promise.any`** using **Atom-of-Thoughts**.
 
 ---
 
-## 🧠 Atom-of-Thoughts: `Promise.any`
+## 🧠 Understanding Promise.any
 
 ---
 

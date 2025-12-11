@@ -1,4 +1,4 @@
-# Handling Streaming LLM Responses in React
+# 🤖 Handling Streaming LLM Responses in React
 
 When building AI-powered interfaces, one of the most critical UX patterns is **streaming**. Large Language Models (LLMs) can take seconds or even minutes to generate a full response. Waiting for the entire response before showing anything leads to a poor user experience (perceived latency).
 

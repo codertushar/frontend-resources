@@ -1,4 +1,10 @@
-Here's a correct and **easy-to-read** implementation of `customSome`:
+# 🔘 Array.prototype.some() Polyfill
+
+The `some()` method tests whether at least one element in the array passes the test implemented by the provided function.
+
+---
+
+## ✅ Implementation
 
 ```javascript
 Array.prototype.customSome = function (callback, thisArg) {

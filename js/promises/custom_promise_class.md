@@ -1,10 +1,10 @@
-### **Custom JavaScript Promise Implementation**
+# 🔧 Custom Promise Class Implementation
 
-A JavaScript `Promise` is an asynchronous mechanism that represents a future value. Below is a **fully functional** implementation of a custom Promise (`CustomPromise`) that behaves **exactly** like the native JavaScript `Promise`:
+A JavaScript `Promise` is an asynchronous mechanism that represents a future value. Below is a **fully functional** implementation of a custom Promise (`CustomPromise`) that behaves **exactly** like the native JavaScript `Promise`.
 
 ---
 
-### **Custom Promise Implementation**
+## ✅ Implementation
 
 ```javascript
 class CustomPromise {

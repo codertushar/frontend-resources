@@ -1,4 +1,10 @@
-Here’s a correct and efficient implementation of `customShift` that mimics `Array.prototype.shift`:
+# ⬅️ Array.prototype.shift() Polyfill
+
+The `shift()` method removes the first element from an array and returns that element.
+
+---
+
+## ✅ Implementation
 
 ```javascript
 Array.prototype.customShift = function () {

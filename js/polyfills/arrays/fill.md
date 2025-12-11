@@ -1,5 +1,10 @@
+# 🔲 Array.prototype.fill() Polyfill
 
-Here’s a more readable version of the text:
+The `fill()` method changes all elements in an array to a static value, from a start index to an end index.
+
+---
+
+## ✅ Implementation
 
 ```javascript
 Array.prototype.customFill = function(value, start = 0, end = this.length) {

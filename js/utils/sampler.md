@@ -1,4 +1,4 @@
-# Sampling Function in JavaScript: Execute Once Every N Calls
+# 📊 Sampling Function: Execute Once Every N Calls
 
 In modern JavaScript development, controlling when and how often a function executes is critical for performance optimization and behavior control. Among techniques like throttling and debouncing, **sampling** offers a unique mechanism: **execute a function once for every *N* calls**.
 

@@ -1,7 +1,10 @@
+# 🔗 Function.prototype.bind() Polyfill
 
-Here’s a more readable and structured version of the explanation for `myBind`:
+Here's a more readable and structured version of the explanation for `myBind`.
 
-### `myBind` Implementation:
+---
+
+## ✅ Implementation
 
 ```javascript
 Function.prototype.myBind = function(context, ...boundArgs) {

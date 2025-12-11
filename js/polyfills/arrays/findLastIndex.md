@@ -1,10 +1,10 @@
-To implement `Array.prototype.findLastIndex`, you need to create a function that returns the **index of the last element** in an array that satisfies the provided testing function. If no elements match, it should return `-1`.
+# 🔙 Array.prototype.findLastIndex() Polyfill
 
-The built-in `findLastIndex` method iterates over the array from the **end to the start**, and returns the **index** of the first element that satisfies the provided condition.
+The `findLastIndex()` method returns the index of the last element that satisfies the provided testing function, iterating from end to start. Returns `-1` if none found.
 
-### Polyfill for `Array.prototype.findLastIndex`
+---
 
-Here’s how you can implement a polyfill for `findLastIndex`:
+## ✅ Implementation
 
 ```javascript
 if (!Array.prototype.findLastIndex) {

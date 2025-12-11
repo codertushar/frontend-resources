@@ -1,8 +1,10 @@
-Here is a  **precise** ,  **non-regex** , and **structured** JavaScript implementation to **compare two documents** (strings) and return a  **line-by-line and word-by-word diff** :
+# 📄 Document Comparison (Diff)
+
+Here is a **precise**, **non-regex**, and **structured** JavaScript implementation to **compare two documents** (strings) and return a **line-by-line and word-by-word diff**.
 
 ---
 
-## ✅ Implementation: Compare Two Documents
+## ✅ Implementation
 
 ```javascript
 function compareDocuments(doc1, doc2) {

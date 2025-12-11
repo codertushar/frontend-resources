@@ -1,7 +1,6 @@
+# 📊 Analytics SDK with Retry Logic
 
-## 🔍 Implementing a Reliable Analytics SDK with Retry Logic in JavaScript
-
-When building modern web apps, logging user behavior or system events reliably is essential. However, network conditions are unpredictable—so sending analytics events must be  **delayed, serialized, and resilient to transient failures** .
+When building modern web apps, logging user behavior or system events reliably is essential. However, network conditions are unpredictable—so sending analytics events must be **delayed, serialized, and resilient to transient failures**.
 
 Let's build an SDK that:
 

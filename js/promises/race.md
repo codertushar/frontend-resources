@@ -1,8 +1,10 @@
+# 🏁 Promise.race() Implementation
+
 Let's break down **`Promise.race`** using **Atom-of-Thoughts** and then implement it.
 
 ---
 
-## 🧠 Atom-of-Thoughts Explanation: `Promise.race`
+## 🧠 Understanding Promise.race
 
 ---
 

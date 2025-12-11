@@ -1,6 +1,10 @@
-To implement `Array.prototype.findIndex`, we need to create a method that mimics the behavior of the native `findIndex` method. The `findIndex` method returns the **index** of the first element in an array that satisfies a provided testing function, and if no element satisfies the condition, it returns `-1`.
+# 🔢 Array.prototype.findIndex() Polyfill
 
-### **Steps to Implement:**
+The `findIndex()` method returns the index of the first element that satisfies the provided testing function, or `-1` if none is found.
+
+---
+
+## 💡 How It Works
 
 1. **Iterate through the array**: Loop over each element in the array.
 2. **Apply the callback function**: For each element, invoke the provided callback function.

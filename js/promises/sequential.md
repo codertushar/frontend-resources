@@ -1,8 +1,10 @@
-To  **execute promises in sequence** , chain them using `reduce` or an async loop.
+# 📋 Sequential Promise Execution
+
+To **execute promises in sequence**, chain them using `reduce` or an async loop.
 
 ---
 
-### ✅ 1. **Using `Array.prototype.reduce`**
+## ✅ Using Array.prototype.reduce
 
 ```js
 function runSequential(promises) {

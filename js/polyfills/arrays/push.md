@@ -1,4 +1,10 @@
-Here’s a correct and efficient implementation of `customPush` that mimics `Array.prototype.push`:
+# ➕ Array.prototype.push() Polyfill
+
+The `push()` method adds one or more elements to the end of an array and returns the new length.
+
+---
+
+## ✅ Implementation
 
 ```javascript
 Array.prototype.customPush = function (...elements) {

@@ -55,7 +55,24 @@ const ResourceDetail = () => {
           <span className="badge">{resource.category}</span>
           {resource.subcategory && <span className="badge sub">{resource.subcategory}</span>}
         </div>
-        <h1 className="article-title">{resource.title}</h1>
+        <h1 className="article-title">
+          {(() => {
+            // Extract leading emojis from title so they render with native colors
+            const emojiRegex = /^([\p{Emoji_Presentation}\p{Extended_Pictographic}\s]+)/u;
+            const match = resource.title.match(emojiRegex);
+            if (match) {
+              const emojis = match[1];
+              const rest = resource.title.slice(emojis.length);
+              return (
+                <>
+                  <span className="title-emoji">{emojis}</span>
+                  <span className="title-text">{rest}</span>
+                </>
+              );
+            }
+            return <span className="title-text">{resource.title}</span>;
+          })()}
+        </h1>
       </div>
 
       <div className="article-content glass-panel">
@@ -122,12 +139,19 @@ const ResourceDetail = () => {
           font-size: 3rem;
           line-height: 1.2;
           font-weight: 800;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+        }
+
+        .article-title .title-text {
           background: var(--heading-gradient);
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
-          word-wrap: break-word;
-          overflow-wrap: break-word;
+        }
+
+        .article-title .title-emoji {
+          -webkit-text-fill-color: initial;
         }
 
         .article-content {

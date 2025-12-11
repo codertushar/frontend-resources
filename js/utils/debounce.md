@@ -1,8 +1,10 @@
-Here's a clean and robust **debounce** implementation in JavaScript:
+# ⏱️ Debounce Function in JavaScript
+
+Here's a clean and robust **debounce** implementation in JavaScript.
 
 ---
 
-### ✅ **Debounce Function**
+## ✅ Implementation
 
 ```js
 function debounce(fn, delay) {

@@ -1,4 +1,4 @@
-# System Design: Google Maps (Frontend Interview Guide)
+# 🗺️ System Design: Google Maps (Frontend Interview Guide)
 
 **Target Level:** Senior Frontend Engineer / Staff Engineer
 **Duration:** 45-60 minutes

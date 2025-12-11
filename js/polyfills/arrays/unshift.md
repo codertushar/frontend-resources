@@ -1,5 +1,10 @@
+# ➡️ Array.prototype.unshift() Polyfill
 
-Here's an implementation of `customUnshift` that correctly mimics `Array.prototype.unshift`:
+The `unshift()` method adds one or more elements to the beginning of an array and returns the new length.
+
+---
+
+## ✅ Implementation
 
 ```javascript
 Array.prototype.customUnshift = function (...elements) {

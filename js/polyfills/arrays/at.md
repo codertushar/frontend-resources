@@ -1,5 +1,10 @@
+# 🎯 Array.prototype.at() Polyfill
 
-Here’s a more readable version of the text:
+The `at()` method takes an integer and returns the item at that index, allowing for positive and negative integers.
+
+---
+
+## ✅ Implementation
 
 ```javascript
 Array.prototype.customAt = function(index) {

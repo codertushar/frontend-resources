@@ -1,10 +1,10 @@
-To implement `Array.prototype.findLast` in JavaScript, you would need to simulate the behavior of the method, which returns the **last element** in an array that satisfies a given predicate function.
+# 🔙 Array.prototype.findLast() Polyfill
 
-The built-in `findLast` method starts iterating from the **end of the array**, checking each element until it finds the first one that satisfies the provided condition. If no such element is found, it returns `undefined`.
+The `findLast()` method returns the last element in an array that satisfies a given predicate function. It iterates from the end of the array.
 
-### Implementation of `Array.prototype.findLast`
+---
 
-Here's how you can implement `findLast` as a polyfill:
+## ✅ Implementation
 
 ```javascript
 if (!Array.prototype.findLast) {

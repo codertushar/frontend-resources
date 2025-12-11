@@ -1,8 +1,10 @@
-Here are the most reliable ways to perform a **deep clone** of an object in JavaScript:
+# 📋 Deep Clone Implementation
+
+Here are the most reliable ways to perform a **deep clone** of an object in JavaScript.
 
 ---
 
-### ✅ 1. **Structured Clone (Modern & Robust)**
+## ✅ Structured Clone (Modern & Robust)
 
 Supports functions, dates, maps, sets, circular references, etc.
 

@@ -1,4 +1,4 @@
-### **JavaScript Spread Operator (`...`) Explained**
+# 📤 JavaScript Spread Operator (...) Explained
 
 The **spread operator (`...`)** in JavaScript is used to **expand** elements of an iterable (like an array or object) into individual elements.
 

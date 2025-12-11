@@ -1,7 +1,10 @@
+# 🔍 Array.prototype.filter() Polyfill
 
-Here's a more readable and structured version of the explanation for your `myFilter` implementation:
+Here's a more readable and structured version of the explanation for your `myFilter` implementation.
 
-### `myFilter` Implementation:
+---
+
+## ✅ Implementation
 
 ```javascript
 Array.prototype.myFilter = function(callback, thisArg) {

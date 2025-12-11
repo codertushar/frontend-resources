@@ -1,5 +1,10 @@
+# ✅ Array.isArray() Polyfill
 
-Here’s a more readable version of the text:
+The `Array.isArray()` method determines whether the passed value is an Array.
+
+---
+
+## ✅ Implementation
 
 ```javascript
 function customIsArray(value) {

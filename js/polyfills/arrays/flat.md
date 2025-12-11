@@ -1,8 +1,10 @@
-Here’s a **clean recursive solution** to flatten a nested array of arbitrary depth.
+# 📋 Array.prototype.flat() Polyfill
+
+Here's a **clean recursive solution** to flatten a nested array of arbitrary depth.
 
 ---
 
-## ✅ Recursive Array Flatten Function
+## ✅ Implementation
 
 ```js
 function flattenRecursive(arr) {

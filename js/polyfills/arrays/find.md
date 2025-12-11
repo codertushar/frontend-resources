@@ -1,5 +1,10 @@
+# 🔎 Array.prototype.find() Polyfill
 
-Here’s a more readable version of the text:
+Here's a more readable version of the implementation.
+
+---
+
+## ✅ Implementation
 
 ```javascript
 Array.prototype.customFind = function(callbackFn, thisArg) {

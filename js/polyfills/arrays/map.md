@@ -1,6 +1,10 @@
-Here's a clearer explanation and summary of the `myMap` implementation along with the key points about `thisArg` handling and `hasOwnProperty()`:
+# 🗺️ Array.prototype.map() Polyfill
 
-### `myMap` Implementation:
+Here's a clearer explanation and summary of the `myMap` implementation along with the key points about `thisArg` handling and `hasOwnProperty()`.
+
+---
+
+## ✅ Implementation
 
 ```javascript
 Array.prototype.myMap = function(callback, thisArg) {

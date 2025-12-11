@@ -1,4 +1,10 @@
-Here's an implementation of `customPop` that mimics `Array.prototype.pop`:
+# ➖ Array.prototype.pop() Polyfill
+
+The `pop()` method removes the last element from an array and returns that element.
+
+---
+
+## ✅ Implementation
 
 ```javascript
 Array.prototype.customPop = function () {

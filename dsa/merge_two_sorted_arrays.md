@@ -1,8 +1,10 @@
-Here’s an efficient function to  **merge two sorted arrays** :
+# 🔀 Merge Two Sorted Arrays
+
+Here's an efficient function to **merge two sorted arrays**.
 
 ---
 
-### ✅ **Sorted Merge Function**
+## ✅ Implementation
 
 ```js
 function mergeSortedArrays(arr1, arr2) {

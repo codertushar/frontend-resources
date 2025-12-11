@@ -1,6 +1,6 @@
-### **Implementing `apply` Polyfill with Dry Run**
+# 📞 Function.prototype.apply() Polyfill
 
-The `apply` method in JavaScript is similar to `call`, except that it  **takes arguments as an array** .
+The `apply` method in JavaScript is similar to `call`, except that it **takes arguments as an array**.
 
 ---
 

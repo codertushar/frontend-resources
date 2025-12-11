@@ -1,6 +1,6 @@
-### **Implementing `call` Polyfill in JavaScript**
+# 📞 Function.prototype.call() Polyfill
 
-The `call` method in JavaScript allows us to  **invoke a function with a specified `this` context and arguments** . Let's implement a **polyfill** for it.
+The `call` method in JavaScript allows us to **invoke a function with a specified `this` context and arguments**. Let's implement a **polyfill** for it.
 
 ---
 

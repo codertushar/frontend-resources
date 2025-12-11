@@ -1,7 +1,12 @@
+# 🔀 Array.prototype.sort() Polyfill
 
-Here are the two implementations of `customSort`, one using **Bubble Sort** and the other using  **QuickSort** .
+The `sort()` method sorts the elements of an array in place and returns the sorted array.
 
-### 1.  **Bubble Sort Implementation** :
+Here are two implementations: **Bubble Sort** and **QuickSort**.
+
+---
+
+## ✅ Bubble Sort Implementation
 
 ```javascript
 Array.prototype.customSort = function(compareFn) {

@@ -1,5 +1,10 @@
+# 🔄 distinctUntilChanged() Polyfill
 
-Here’s a simple polyfill for `distinctUntilChanged()` (similar to RxJS) as an array method:
+Here's a simple polyfill for `distinctUntilChanged()` (similar to RxJS) as an array method.
+
+---
+
+## ✅ Implementation
 
 ```javascript
 if (!Array.prototype.distinctUntilChanged) {

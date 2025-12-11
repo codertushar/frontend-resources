@@ -1,8 +1,10 @@
-Here's a precise utility to  **retry a promise-returning function up to N times on failure** :
+# 🔄 Promise Retry Implementation
+
+Here's a precise utility to **retry a promise-returning function up to N times on failure**.
 
 ---
 
-### ✅ **Retry Promise N Times**
+## ✅ Implementation
 
 ```js
 function retry(fn, retries = 3, delay = 0) {

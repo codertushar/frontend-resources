@@ -1,8 +1,10 @@
-Here’s the **fixed and robust version** of your flattening function with **inline debugger-style comments** to explain each line and decision.
+# 📦 Flatten Object Implementation
+
+Here's the **fixed and robust version** of the flattening function with **inline debugger-style comments** to explain each line and decision.
 
 ---
 
-## ✅ **Flatten Object with Inline Debugger Comments**
+## ✅ Implementation
 
 ```js
 function flattenObject(obj, keyName = '', result = {}) {

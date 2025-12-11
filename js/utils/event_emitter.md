@@ -1,12 +1,14 @@
-Here’s a **custom EventEmitter implementation** in JavaScript that covers the essential functionalities: 
+# 📢 Custom EventEmitter Implementation
 
-- `on(event, listener)`: Registers an event listener.
-- `off(event, listener)`: Removes a specific listener.
-- `emit(event, ...args)`: Calls all listeners for an event.
-- `once(event, listener)`: Registers a one-time event listener.
-- `listeners(event)`: Returns an array of listeners for a given event.
+Here's a **custom EventEmitter implementation** in JavaScript that covers the essential functionalities:
 
-This implementation is **simple yet complete**, making it a good interview task that tests a candidate's understanding of JavaScript event handling, closures, and memory management.
+- `on(event, listener)`: Registers an event listener
+- `off(event, listener)`: Removes a specific listener
+- `emit(event, ...args)`: Calls all listeners for an event
+- `once(event, listener)`: Registers a one-time event listener
+- `listeners(event)`: Returns an array of listeners for a given event
+
+This implementation is **simple yet complete**, making it a good interview task that tests understanding of JavaScript event handling, closures, and memory management.
 
 ---
 
