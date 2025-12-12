@@ -1,11 +1,29 @@
 
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { Terminal, BookOpen, Layers, Map, Search, Mail, Github, Linkedin } from 'lucide-react';
+import { BookOpen, Layers, Map, Mail, Github, Linkedin } from 'lucide-react';
 import { XIcon } from './SocialIcons';
 import { motion } from 'framer-motion';
 
 import ThemeToggle from './ThemeToggle';
+
+const Logo = ({ className }) => (
+  <svg
+    className={className}
+    viewBox="0 0 100 100"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#a78bfa" />
+        <stop offset="100%" stopColor="#7c3aed" />
+      </linearGradient>
+    </defs>
+    <path d="M50 5 L55 30 L65 35 L55 40 L50 65 L45 40 L35 35 L45 30 Z" fill="url(#logoGrad)" />
+    <circle cx="50" cy="75" r="12" fill="url(#logoGrad)" />
+  </svg>
+);
 
 const Layout = ({ children }) => {
   return (
@@ -13,8 +31,11 @@ const Layout = ({ children }) => {
       <nav className="navbar glass-panel">
         <div className="container nav-content">
           <Link to="/" className="logo">
-            <Terminal className="logo-icon" size={24} />
-            <span className="logo-text">Frontend Resources</span>
+            <Logo className="logo-icon" />
+            <span className="logo-text">
+              <span className="logo-text-full">Frontend Resources</span>
+              <span className="logo-text-short">FR</span>
+            </span>
           </Link>
           <div className="nav-links">
             <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
@@ -85,14 +106,29 @@ const Layout = ({ children }) => {
         .logo {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 0.5rem;
+          font-family: 'Space Grotesk', sans-serif;
           font-weight: 700;
-          font-size: 1.1rem;
+          font-size: 1.15rem;
           color: var(--text-main);
+          letter-spacing: -0.02em;
         }
 
         .logo-icon {
-          color: var(--primary);
+          width: 28px;
+          height: 28px;
+          flex-shrink: 0;
+        }
+
+        .logo-text {
+          display: flex;
+          align-items: center;
+          color: #8b5cf6;
+        }
+
+        .logo-text-short {
+          display: none;
+          font-weight: 800;
         }
 
         .nav-links {
@@ -183,8 +219,19 @@ const Layout = ({ children }) => {
             padding: 0.625rem 1rem;
           }
 
-          .logo-text {
+          .logo-text-full {
             display: none;
+          }
+
+          .logo-text-short {
+            display: inline;
+            font-size: 1rem;
+            font-weight: 800;
+          }
+
+          .logo-icon {
+            width: 24px;
+            height: 24px;
           }
 
           .nav-links {
