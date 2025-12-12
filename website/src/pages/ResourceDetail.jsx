@@ -302,7 +302,7 @@ const ResourceDetail = () => {
           color: var(--text-main);
           font-size: 1.1rem;
           line-height: 1.8;
-          overflow-x: clip;
+          overflow: visible;
           max-width: 100%;
         }
 
