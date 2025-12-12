@@ -149,6 +149,13 @@ const ResourceDetail = () => {
                     {children}
                   </code>
                 )
+              },
+              table({ node, children, ...props }) {
+                return (
+                  <div className="table-wrapper">
+                    <table {...props}>{children}</table>
+                  </div>
+                )
               }
             }}
           >
@@ -371,20 +378,55 @@ const ResourceDetail = () => {
           color: inherit;
         }
         
+        .article-content .table-wrapper {
+          width: 100%;
+          max-height: 600px;
+          overflow: auto;
+          margin-bottom: 2rem;
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          -webkit-overflow-scrolling: touch;
+          touch-action: pan-x pan-y;
+          scrollbar-width: thin;
+          scrollbar-color: var(--border-color) transparent;
+        }
+
+        .article-content .table-wrapper::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+
+        .article-content .table-wrapper::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        .article-content .table-wrapper::-webkit-scrollbar-thumb {
+          background: var(--border-color);
+          border-radius: 4px;
+        }
+
+        .article-content .table-wrapper::-webkit-scrollbar-thumb:hover {
+          background: var(--text-muted);
+        }
+        
         .article-content table {
           width: 100%;
           border-collapse: collapse;
-          margin-bottom: 2rem;
+          margin-bottom: 0;
         }
         
         .article-content th, .article-content td {
           border: 1px solid var(--border-color);
           padding: 0.75rem;
           text-align: left;
+          white-space: nowrap;
         }
         
         .article-content th {
           background: var(--surface-hover);
+          position: sticky;
+          top: 0;
+          z-index: 10;
         }
 
         /* Prev/Next Navigation */
@@ -553,12 +595,14 @@ const ResourceDetail = () => {
             touch-action: pan-x;
           }
 
-          .article-content table {
-            display: block;
-            overflow-x: auto;
-            max-width: 100%;
-            -webkit-overflow-scrolling: touch;
-            touch-action: pan-x;
+          .article-content .table-wrapper {
+            margin-left: -1.5rem;
+            margin-right: -1.5rem;
+            max-width: calc(100% + 3rem);
+            border-radius: 0;
+            border-left: none;
+            border-right: none;
+            max-height: 400px;
           }
 
           .article-content img {
@@ -600,6 +644,13 @@ const ResourceDetail = () => {
             max-width: calc(100% + 2rem);
             -webkit-overflow-scrolling: touch;
             touch-action: pan-x;
+          }
+
+          .article-content .table-wrapper {
+            margin-left: -1rem;
+            margin-right: -1rem;
+            max-width: calc(100% + 2rem);
+            max-height: 350px;
           }
 
           .related-section {
