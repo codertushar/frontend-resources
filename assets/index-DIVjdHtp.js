@@ -424,20 +424,19 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
           }
 
           .stats-row {
-            flex-direction: column;
             gap: 1rem;
-            padding: 1.25rem 1.5rem;
+            padding: 1.25rem 1rem;
             margin-bottom: 3rem;
           }
 
-          .stat-divider {
-            width: 60%;
-            height: 1px;
+          .stat-item {
+            flex-direction: column;
+            gap: 0.5rem;
           }
 
-          .stat-item {
-            width: 100%;
-            justify-content: center;
+          .stat-content {
+            align-items: center;
+            text-align: center;
           }
 
           .features-grid {
@@ -475,12 +474,21 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
           }
 
           .stats-row {
-            padding: 1rem;
+            padding: 1rem 0.75rem;
             margin-bottom: 2rem;
+            gap: 0.5rem;
+          }
+
+          .stat-item {
+            gap: 0.375rem;
           }
 
           .stat-value {
-            font-size: 1.1rem;
+            font-size: 1rem;
+          }
+
+          .stat-label {
+            font-size: 0.7rem;
           }
 
           .feature-card h3 {
@@ -971,7 +979,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           overflow-x: auto;
           max-width: 100%;
           -webkit-overflow-scrolling: touch;
-          touch-action: pan-x;
+          touch-action: pan-x pan-y;
         }
 
         .article-content code {
@@ -1091,6 +1099,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           display: flex;
           gap: 1.5rem;
           margin-top: 3rem;
+          width: 100%;
+          max-width: 100%;
         }
 
         .nav-link {
@@ -1127,6 +1137,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           flex-direction: column;
           gap: 0.25rem;
           overflow: hidden;
+          min-width: 0;
+          flex: 1;
         }
 
         .nav-label {
@@ -1142,6 +1154,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          max-width: 100%;
         }
 
         .nav-spacer {
@@ -1249,7 +1262,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             max-width: calc(100% + 3rem);
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            touch-action: pan-x;
+            touch-action: pan-x pan-y;
           }
 
           .article-content .table-wrapper {
@@ -1272,9 +1285,19 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             gap: 1rem;
           }
 
+          .nav-link {
+            max-width: 100%;
+          }
+
           .nav-link.next {
             text-align: left;
             justify-content: flex-start;
+          }
+
+          .nav-title {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
           }
 
           .related-grid {
@@ -1300,7 +1323,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             margin-right: -1rem;
             max-width: calc(100% + 2rem);
             -webkit-overflow-scrolling: touch;
-            touch-action: pan-x;
+            touch-action: pan-x pan-y;
           }
 
           .article-content .table-wrapper {
@@ -1319,4 +1342,4 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             font-size: 1.25rem;
           }
         }
-      `})]})]}):(0,M.jsxs)(`div`,{className:`container error-container`,children:[(0,M.jsx)(`h2`,{children:`Resource not found`}),(0,M.jsx)(fn,{to:`/library`,className:`btn-primary`,children:`Back to Library`})]})};function yj(){return(0,M.jsx)($f,{children:(0,M.jsxs)(ln,{basename:`/frontend-resources`,children:[(0,M.jsx)(rp,{}),(0,M.jsx)(np,{children:(0,M.jsxs)(Ct,{children:[(0,M.jsx)(xt,{path:`/`,element:(0,M.jsx)(sp,{})}),(0,M.jsx)(xt,{path:`/library`,element:(0,M.jsx)(Dm,{})}),(0,M.jsx)(xt,{path:`/learning-path`,element:(0,M.jsx)(km,{})}),(0,M.jsx)(xt,{path:`/resource/*`,element:(0,M.jsx)(vj,{})})]})})]})})}var bj=yj;(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(b.StrictMode,{children:(0,M.jsx)(bj,{})}));
+      `})]})]}):(0,M.jsxs)(`div`,{className:`container error-container`,children:[(0,M.jsx)(`h2`,{children:`Resource not found`}),(0,M.jsx)(fn,{to:`/library`,className:`btn-primary`,children:`Back to Library`})]})},yj=`/frontend-resources`;function bj(){return(0,M.jsx)($f,{children:(0,M.jsxs)(ln,{basename:yj,children:[(0,M.jsx)(rp,{}),(0,M.jsx)(np,{children:(0,M.jsxs)(Ct,{children:[(0,M.jsx)(xt,{path:`/`,element:(0,M.jsx)(sp,{})}),(0,M.jsx)(xt,{path:`/library`,element:(0,M.jsx)(Dm,{})}),(0,M.jsx)(xt,{path:`/learning-path`,element:(0,M.jsx)(km,{})}),(0,M.jsx)(xt,{path:`/resource/*`,element:(0,M.jsx)(vj,{})})]})})]})})}var xj=bj;(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(b.StrictMode,{children:(0,M.jsx)(xj,{})}));
