@@ -10,10 +10,12 @@ import ResourceDetail from './pages/ResourceDetail';
 
 import { ThemeProvider } from './context/ThemeContext';
 
+const basename = import.meta.env.PROD ? '/frontend-resources' : '/';
+
 function App() {
   return (
     <ThemeProvider>
-      <Router basename="/frontend-resources">
+      <Router basename={basename}>
         <ScrollToTop />
         <Layout>
           <Routes>

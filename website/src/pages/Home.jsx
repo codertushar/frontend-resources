@@ -352,20 +352,19 @@ const Home = () => {
           }
 
           .stats-row {
-            flex-direction: column;
             gap: 1rem;
-            padding: 1.25rem 1.5rem;
+            padding: 1.25rem 1rem;
             margin-bottom: 3rem;
           }
 
-          .stat-divider {
-            width: 60%;
-            height: 1px;
+          .stat-item {
+            flex-direction: column;
+            gap: 0.5rem;
           }
 
-          .stat-item {
-            width: 100%;
-            justify-content: center;
+          .stat-content {
+            align-items: center;
+            text-align: center;
           }
 
           .features-grid {
@@ -403,12 +402,21 @@ const Home = () => {
           }
 
           .stats-row {
-            padding: 1rem;
+            padding: 1rem 0.75rem;
             margin-bottom: 2rem;
+            gap: 0.5rem;
+          }
+
+          .stat-item {
+            gap: 0.375rem;
           }
 
           .stat-value {
-            font-size: 1.1rem;
+            font-size: 1rem;
+          }
+
+          .stat-label {
+            font-size: 0.7rem;
           }
 
           .feature-card h3 {
