@@ -16,14 +16,14 @@ const CATEGORIES = [
 ];
 
 const DIFFICULTIES = [
-  { id: 'all', label: 'All Levels' },
+  { id: 'all', label: 'Difficulty' },
   { id: 'easy', label: 'Easy', color: '#22c55e' },
   { id: 'medium', label: 'Medium', color: '#f59e0b' },
   { id: 'hard', label: 'Hard', color: '#ef4444' },
 ];
 
 const SORT_OPTIONS = [
-  { id: 'default', label: 'Default' },
+  { id: 'default', label: 'Newest First' },
   { id: 'difficulty-asc', label: 'Difficulty (Easy → Hard)' },
   { id: 'difficulty-desc', label: 'Difficulty (Hard → Easy)' },
   { id: 'title-asc', label: 'Title (A → Z)' },
@@ -175,7 +175,7 @@ const Library = () => {
               onChange={(e) => setActiveTag(e.target.value)}
               className={`filter-select ${activeTag !== 'all' ? 'active' : ''}`}
             >
-              <option value="all">All Tags</option>
+              <option value="all">Tags</option>
               {POPULAR_TAGS.map(tag => (
                 <option key={tag} value={tag}>
                   #{tag}
