@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Bell, BellOff, X } from 'lucide-react';
+import { Bell, X } from 'lucide-react';
 import useNotifications from '../hooks/useNotifications';
+import { ICON_192 } from '../constants/app';
 
 const NotificationPrompt = () => {
   const { isSupported, isDefault, requestPermission } = useNotifications();
@@ -27,7 +28,7 @@ const NotificationPrompt = () => {
         const registration = await navigator.serviceWorker.ready;
         registration.showNotification('Notifications Enabled! 🎉', {
           body: "You'll be notified when new articles are published.",
-          icon: '/frontend-resources/android-launchericon-192-192.png',
+          icon: ICON_192,
           tag: 'welcome',
         });
       }

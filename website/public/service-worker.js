@@ -1,6 +1,6 @@
 // Service Worker for Frontend Resources PWA
 // Cache version is auto-updated during build via generate-sw-version.js
-const CACHE_NAME = 'frontend-resources-v1765558646523';
+const CACHE_NAME = 'frontend-resources-v1765558873755';
 const BASE_PATH = '/frontend-resources';
 const CORE_ASSETS = [
     `${BASE_PATH}/`,
@@ -33,7 +33,17 @@ self.addEventListener('activate', (event) => {
 });
 
 // Check for new content and show notification
+let lastContentCheck = 0;
+const CONTENT_CHECK_THROTTLE = 5 * 60 * 1000; // Only check every 5 minutes max
+
 async function checkForNewContent() {
+    // Throttle content checks to avoid excessive API calls
+    const now = Date.now();
+    if (now - lastContentCheck < CONTENT_CHECK_THROTTLE) {
+        return;
+    }
+    lastContentCheck = now;
+
     try {
         const response = await fetch(`${BASE_PATH}/content.json`);
         if (!response.ok) return;
@@ -43,13 +53,13 @@ async function checkForNewContent() {
         
         // Get stored count from IndexedDB or default to current
         const storedData = await getStoredContentData();
-        const storedCount = storedData?.count || currentCount;
+        const storedCount = storedData?.count || 0;
         
         // Store current count
         await storeContentData({ count: currentCount, lastChecked: Date.now() });
         
-        // If there are new articles and we're not on first load
-        if (currentCount > storedCount && storedData?.count) {
+        // If there are new articles and this isn't the first visit
+        if (currentCount > storedCount && storedCount > 0) {
             const newArticles = currentCount - storedCount;
             await showNewArticleNotification(newArticles, content[0]);
         }
@@ -80,7 +90,10 @@ async function getStoredContentData() {
     return new Promise((resolve) => {
         const request = indexedDB.open('frontend-resources-db', 1);
         
-        request.onerror = () => resolve(null);
+        request.onerror = (err) => {
+            console.error('IndexedDB error:', err);
+            resolve(null);
+        };
         
         request.onupgradeneeded = (event) => {
             const db = event.target.result;
@@ -91,12 +104,20 @@ async function getStoredContentData() {
         
         request.onsuccess = (event) => {
             const db = event.target.result;
-            const transaction = db.transaction(['metadata'], 'readonly');
-            const store = transaction.objectStore('metadata');
-            const getRequest = store.get('contentData');
-            
-            getRequest.onsuccess = () => resolve(getRequest.result);
-            getRequest.onerror = () => resolve(null);
+            try {
+                const transaction = db.transaction(['metadata'], 'readonly');
+                const store = transaction.objectStore('metadata');
+                const getRequest = store.get('contentData');
+                
+                getRequest.onsuccess = () => resolve(getRequest.result);
+                getRequest.onerror = (err) => {
+                    console.error('Error reading from IndexedDB:', err);
+                    resolve(null);
+                };
+            } catch (err) {
+                console.error('Transaction error:', err);
+                resolve(null);
+            }
         };
     });
 }
@@ -114,14 +135,25 @@ async function storeContentData(data) {
         
         request.onsuccess = (event) => {
             const db = event.target.result;
-            const transaction = db.transaction(['metadata'], 'readwrite');
-            const store = transaction.objectStore('metadata');
-            store.put(data, 'contentData');
-            transaction.oncomplete = () => resolve();
-            transaction.onerror = () => resolve();
+            try {
+                const transaction = db.transaction(['metadata'], 'readwrite');
+                const store = transaction.objectStore('metadata');
+                store.put(data, 'contentData');
+                transaction.oncomplete = () => resolve();
+                transaction.onerror = (err) => {
+                    console.error('Error writing to IndexedDB:', err);
+                    resolve();
+                };
+            } catch (err) {
+                console.error('Transaction error:', err);
+                resolve();
+            }
         };
         
-        request.onerror = () => resolve();
+        request.onerror = (err) => {
+            console.error('IndexedDB error:', err);
+            resolve();
+        };
     });
 }
 

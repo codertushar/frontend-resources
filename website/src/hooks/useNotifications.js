@@ -41,12 +41,14 @@ const useNotifications = () => {
 
       if (result === 'granted') {
         // Try to register periodic sync if available
-        if ('serviceWorker' in navigator && 'periodicSync' in navigator.serviceWorker) {
+        if ('serviceWorker' in navigator) {
           try {
             const registration = await navigator.serviceWorker.ready;
-            await registration.periodicSync.register('check-new-content', {
-              minInterval: 6 * 60 * 60 * 1000, // 6 hours
-            });
+            if ('periodicSync' in registration) {
+              await registration.periodicSync.register('check-new-content', {
+                minInterval: 6 * 60 * 60 * 1000, // 6 hours
+              });
+            }
           } catch (err) {
             console.log('Periodic Sync not available, will use fallback');
           }
