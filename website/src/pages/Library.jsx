@@ -95,7 +95,7 @@ const Library = () => {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
             >
-              <Link to={`/resource/${encodeURIComponent(item.id)}`} className="resource-card glass-panel">
+              <Link to={`/resource/${item.id}`} className="resource-card glass-panel">
                 <div className="card-header">
                   <span className="badge">{item.category}</span>
                   {item.subcategory && <span className="badge sub">{item.subcategory}</span>}

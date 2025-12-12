@@ -168,7 +168,7 @@ const ResourceDetail = () => {
       {(prevArticle || nextArticle) && (
         <div className="article-nav">
           {prevArticle ? (
-            <Link to={`/resource/${encodeURIComponent(prevArticle.id)}`} className="nav-link prev glass-panel">
+            <Link to={`/resource/${prevArticle.id}`} className="nav-link prev glass-panel">
               <ChevronLeft size={20} />
               <div className="nav-link-content">
                 <span className="nav-label">Previous</span>
@@ -178,7 +178,7 @@ const ResourceDetail = () => {
           ) : <div className="nav-spacer" />}
 
           {nextArticle ? (
-            <Link to={`/resource/${encodeURIComponent(nextArticle.id)}`} className="nav-link next glass-panel">
+            <Link to={`/resource/${nextArticle.id}`} className="nav-link next glass-panel">
               <div className="nav-link-content">
                 <span className="nav-label">Next</span>
                 <span className="nav-title">{nextArticle.title}</span>
@@ -200,7 +200,7 @@ const ResourceDetail = () => {
             {relatedArticles.map((article) => (
               <Link
                 key={article.id}
-                to={`/resource/${encodeURIComponent(article.id)}`}
+                to={`/resource/${article.id}`}
                 className="related-card glass-panel"
               >
                 <div className="related-badge">{article.category}</div>
