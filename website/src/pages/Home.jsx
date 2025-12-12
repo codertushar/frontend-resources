@@ -356,16 +356,23 @@ const Home = () => {
             gap: 1rem;
             padding: 1.25rem 1.5rem;
             margin-bottom: 3rem;
+            width: 100%;
           }
 
           .stat-divider {
-            width: 60%;
+            width: 80%;
             height: 1px;
           }
 
           .stat-item {
             width: 100%;
             justify-content: center;
+            gap: 1rem;
+          }
+
+          .stat-content {
+            align-items: center;
+            text-align: center;
           }
 
           .features-grid {
@@ -405,10 +412,23 @@ const Home = () => {
           .stats-row {
             padding: 1rem;
             margin-bottom: 2rem;
+            gap: 0.875rem;
+          }
+
+          .stat-divider {
+            width: 70%;
+          }
+
+          .stat-item {
+            gap: 0.875rem;
           }
 
           .stat-value {
             font-size: 1.1rem;
+          }
+
+          .stat-label {
+            font-size: 0.75rem;
           }
 
           .feature-card h3 {

@@ -434,6 +434,8 @@ const ResourceDetail = () => {
           display: flex;
           gap: 1.5rem;
           margin-top: 3rem;
+          width: 100%;
+          max-width: 100%;
         }
 
         .nav-link {
@@ -470,6 +472,8 @@ const ResourceDetail = () => {
           flex-direction: column;
           gap: 0.25rem;
           overflow: hidden;
+          min-width: 0;
+          flex: 1;
         }
 
         .nav-label {
@@ -485,6 +489,7 @@ const ResourceDetail = () => {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          max-width: 100%;
         }
 
         .nav-spacer {
@@ -615,9 +620,19 @@ const ResourceDetail = () => {
             gap: 1rem;
           }
 
+          .nav-link {
+            max-width: 100%;
+          }
+
           .nav-link.next {
             text-align: left;
             justify-content: flex-start;
+          }
+
+          .nav-title {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: initial;
           }
 
           .related-grid {
