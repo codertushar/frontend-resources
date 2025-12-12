@@ -967,7 +967,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           color: var(--text-main);
           font-size: 1.1rem;
           line-height: 1.8;
-          overflow-x: hidden;
+          overflow-x: clip;
           max-width: 100%;
         }
 
@@ -977,9 +977,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 
         .article-content pre {
           overflow-x: auto;
+          overflow-y: hidden;
           max-width: 100%;
           -webkit-overflow-scrolling: touch;
-          touch-action: pan-x pan-y;
+          touch-action: manipulation;
+          overscroll-behavior-x: contain;
+        }
+
+        .article-content pre > div {
+          touch-action: manipulation;
         }
 
         .article-content code {
@@ -1051,7 +1057,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           border: 1px solid var(--border-color);
           border-radius: 8px;
           -webkit-overflow-scrolling: touch;
-          touch-action: pan-x pan-y;
+          touch-action: auto;
+          overscroll-behavior: auto;
           scrollbar-width: thin;
           scrollbar-color: var(--border-color) transparent;
         }
@@ -1096,7 +1103,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 
         /* Prev/Next Navigation */
         .article-nav {
-          display: flex;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
           gap: 1.5rem;
           margin-top: 3rem;
           width: 100%;
@@ -1104,12 +1112,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }
 
         .nav-link {
-          flex: 1;
           display: flex;
           align-items: center;
           gap: 1rem;
           padding: 1.25rem;
           transition: all 0.3s ease;
+          min-width: 0;
         }
 
         .nav-link:hover {
@@ -1120,11 +1128,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 
         .nav-link.prev {
           text-align: left;
+          grid-column: 1;
         }
 
         .nav-link.next {
           text-align: right;
           justify-content: flex-end;
+          grid-column: 2;
         }
 
         .nav-link svg {
@@ -1151,14 +1161,17 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         .nav-title {
           font-weight: 600;
           color: var(--text-main);
-          white-space: nowrap;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
           overflow: hidden;
           text-overflow: ellipsis;
-          max-width: 100%;
+          white-space: normal;
+          line-height: 1.4;
         }
 
         .nav-spacer {
-          flex: 1;
+          display: none;
         }
 
         /* Related Articles */
@@ -1261,17 +1274,16 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             border-radius: 0;
             max-width: calc(100% + 3rem);
             overflow-x: auto;
+            overflow-y: hidden;
             -webkit-overflow-scrolling: touch;
-            touch-action: pan-x pan-y;
+            touch-action: manipulation;
           }
 
           .article-content .table-wrapper {
-            margin-left: -1.5rem;
-            margin-right: -1.5rem;
-            max-width: calc(100% + 3rem);
-            border-radius: 0;
-            border-left: none;
-            border-right: none;
+            margin-left: 0;
+            margin-right: 0;
+            max-width: 100%;
+            border-radius: 8px;
             max-height: 400px;
           }
 
@@ -1281,7 +1293,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           }
 
           .article-nav {
-            flex-direction: column;
+            grid-template-columns: 1fr;
             gap: 1rem;
           }
 
@@ -1289,15 +1301,11 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             max-width: 100%;
           }
 
+          .nav-link.prev,
           .nav-link.next {
+            grid-column: 1;
             text-align: left;
             justify-content: flex-start;
-          }
-
-          .nav-title {
-            white-space: normal;
-            overflow: visible;
-            text-overflow: clip;
           }
 
           .related-grid {
@@ -1323,13 +1331,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             margin-right: -1rem;
             max-width: calc(100% + 2rem);
             -webkit-overflow-scrolling: touch;
-            touch-action: pan-x pan-y;
+            touch-action: manipulation;
           }
 
           .article-content .table-wrapper {
-            margin-left: -1rem;
-            margin-right: -1rem;
-            max-width: calc(100% + 2rem);
+            margin-left: 0;
+            margin-right: 0;
+            max-width: 100%;
             max-height: 350px;
           }
 
