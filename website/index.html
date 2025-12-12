@@ -10,9 +10,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="FE Resources" />
 
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="apple-touch-icon" href="/android-launchericon-192-192.png" />
-  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="/frontend-resources/favicon.svg" />
+  <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
+  <link rel="manifest" href="/frontend-resources/manifest.json" />
 
   <meta name="description"
     content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
@@ -45,7 +45,8 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/frontend-resources/service-worker.js');
+        navigator.serviceWorker.register('/frontend-resources/service-worker.js')
+          .catch(err => console.error('SW registration failed:', err));
       });
     }
   </script>
