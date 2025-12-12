@@ -20,8 +20,8 @@ const Logo = ({ className }) => (
         <stop offset="100%" stopColor="#7c3aed" />
       </linearGradient>
     </defs>
-    <path d="M50 5 L55 30 L65 35 L55 40 L50 65 L45 40 L35 35 L45 30 Z" fill="url(#logoGrad)" />
-    <circle cx="50" cy="75" r="12" fill="url(#logoGrad)" />
+    <path d="M50 2 L58 28 L78 35 L58 42 L50 68 L42 42 L22 35 L42 28 Z" fill="url(#logoGrad)" />
+    <circle cx="50" cy="82" r="14" fill="url(#logoGrad)" />
   </svg>
 );
 
