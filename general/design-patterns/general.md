@@ -1,3 +1,8 @@
+---
+date: 2025-06-16T09:14:37+05:30
+description: Overview of essential JavaScript design patterns including Module, Observer, Factory, and Singleton. Use to write reusable and maintainable code.
+---
+
 # 📘 Most Important Design Patterns in JavaScript
 
 JavaScript, being a flexible, multi-paradigm language, empowers developers with the ability to write both object-oriented and functional code. As applications grow in complexity, **design patterns** become essential tools for creating **reusable, maintainable, and scalable** code.

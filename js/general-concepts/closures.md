@@ -1,3 +1,8 @@
+---
+description: Closures allow functions to retain access to outer scope variables. Essential for data privacy, callbacks, and functional programming patterns.
+date: 2025-12-11T10:15:15+05:30
+---
+
 # 🔒 Closures in JavaScript — The Complete Guide
 
 > **Interview Importance:** 🔴 Critical — Closures are asked in 90% of JavaScript interviews and form the foundation for understanding scope, data privacy, and functional patterns

@@ -1,3 +1,7 @@
+---
+date: 2025-03-15T00:35:56+05:30
+description: The at() method returns the item at a given index, supporting negative integers to count from the end. Simplifies array access patterns.
+---
 # 🎯 Array.prototype.at() Polyfill
 
 The `at()` method takes an integer and returns the item at that index, allowing for positive and negative integers.

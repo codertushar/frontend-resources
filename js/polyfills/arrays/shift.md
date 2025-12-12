@@ -1,3 +1,7 @@
+---
+date: 2025-03-15T16:01:07+05:30
+description: The shift() method removes and returns the first array element. Modifies the array in place, shifting all remaining elements down.
+---
 # ⬅️ Array.prototype.shift() Polyfill
 
 The `shift()` method removes the first element from an array and returns that element.

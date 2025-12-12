@@ -1,3 +1,8 @@
+---
+date: 2025-11-03T07:06:19+05:30
+description: Optimize web performance by understanding the critical rendering path, including resource prioritization, async loading, and reducing render-blocking.
+---
+
 # 🎯 Critical Rendering Path: Deep Dive into Browser Rendering Cycle
 
 Understanding how browsers render web pages is essential for performance optimization. This guide explains the **Critical Rendering Path (CRP)**, rendering stages, performance metrics, and practical optimization strategies.

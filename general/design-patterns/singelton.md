@@ -1,6 +1,11 @@
+---
+date: 2025-05-09T13:06:09+05:30
+description: Ensures only one instance of a class exists with global access. Use for config managers, logging services, caches, and shared state stores.
+---
+
 # 🔒 Singleton — One Instance to Rule Them All
 
-> **Use this article as an interview quick‑ref.** No external diagram tools required.
+The Singleton pattern ensures a class has only one instance and provides a global point of access to it. In JavaScript, it's commonly used for configuration managers, logging services, caches, and state stores.
 
 ---
 

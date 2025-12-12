@@ -1,3 +1,7 @@
+---
+date: 2025-03-15T16:01:07+05:30
+description: The unshift() method adds elements to the beginning of an array and returns the new length. Modifies the array in place efficiently.
+---
 # ➡️ Array.prototype.unshift() Polyfill
 
 The `unshift()` method adds one or more elements to the beginning of an array and returns the new length.

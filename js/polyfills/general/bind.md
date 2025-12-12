@@ -1,3 +1,8 @@
+---
+date: 2025-03-15T00:35:56+05:30
+description: The bind() method creates a new function with a bound this context and optional preset arguments. Critical for event handlers and callbacks.
+---
+
 # 🔗 Function.prototype.bind() Polyfill
 
 > **Interview Importance:** 🔴 Critical — One of the holy trinity of `call`, `apply`, `bind` questions. Understanding `bind` demonstrates deep knowledge of JavaScript's `this` binding and closures.

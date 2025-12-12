@@ -1,3 +1,8 @@
+---
+description: MutationObserver watches for DOM changes like added, removed, or modified elements. Essential for reactive UIs, debugging, and monitoring dynamic content.
+date: 2025-10-28T10:00:40+05:30
+---
+
 # 👁️ MutationObserver: Watching DOM Changes in JavaScript
 
 `MutationObserver` is a powerful Web API that lets you **watch for changes in the DOM** — whenever elements are added, removed, modified, or their attributes change. It's like having a security camera for your DOM tree.

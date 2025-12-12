@@ -1,3 +1,8 @@
+---
+date: 2025-03-15T00:35:56+05:30
+description: Recursively converts all undefined values to null in objects and arrays. Essential for JSON serialization and data sanitization.
+---
+
 # 🔄 undefinedToNull Utility
 
 Here's a clearer explanation of the `undefinedToNull` function with test cases.

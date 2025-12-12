@@ -1,3 +1,7 @@
+---
+date: 2025-03-27T07:42:52+05:30
+description: Executes promises one after another in sequence, waiting for each to complete before starting the next. Useful for dependent operations.
+---
 # 📋 Sequential Promise Execution
 
 To **execute promises in sequence**, chain them using `reduce` or an async loop.

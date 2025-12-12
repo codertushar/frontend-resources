@@ -1,6 +1,10 @@
+---
+date: 2025-03-21T07:33:05+05:30
+description: The reduce() method executes a reducer function on array elements to produce a single value. Powerful for aggregations and transformations.
+---
 # 🔄 Array.prototype.reduce() Polyfill
 
-Here's an **interactive AOT debugger version** of the `reduce` polyfill. It logs each **Atom-of-Thought** (AOT) step with relevant state, making it easier to trace behavior on any input.
+The `reduce()` method executes a reducer function on each element of the array, resulting in a single output value. This polyfill is spec-compliant, handling edge cases like sparse arrays, missing initial values, and proper validation.
 
 ---
 
@@ -101,6 +105,3 @@ Length: 3
 ✅ AOT 7: Returning final result: 6
 ```
 
----
-
-Let me know if you want to turn this into a visual debugger (e.g., with DOM rendering) or adapt it to support `reduceRight`.

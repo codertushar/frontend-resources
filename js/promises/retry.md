@@ -1,6 +1,10 @@
+---
+date: 2025-03-27T08:09:10+05:30
+description: Automatically retries a failed async operation a specified number of times with optional delays. Essential for handling transient failures.
+---
 # 🔄 Promise Retry Implementation
 
-Here's a precise utility to **retry a promise-returning function up to N times on failure**.
+Promise retry is a resilience pattern that automatically retries a failed async operation a specified number of times before giving up. This is essential for handling transient network failures, rate limits, or intermittent service unavailability.
 
 ---
 
@@ -50,6 +54,3 @@ retry(unstableTask, 5, 500)
 * Stops on first success.
 * Rejects with final error if all fail.
 
----
-
-Want exponential backoff or max timeout behavior?

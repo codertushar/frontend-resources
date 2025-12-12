@@ -1,3 +1,7 @@
+---
+date: 2025-03-15T01:35:02+05:30
+description: The findLastIndex() method returns the last matching element's index, searching from end to start. Returns -1 if no match found.
+---
 # 🔙 Array.prototype.findLastIndex() Polyfill
 
 The `findLastIndex()` method returns the index of the last element that satisfies the provided testing function, iterating from end to start. Returns `-1` if none found.

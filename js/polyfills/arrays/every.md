@@ -1,3 +1,7 @@
+---
+date: 2025-03-15T16:01:07+05:30
+description: The every() method tests if all array elements pass a test function. Returns true only if every element satisfies the condition.
+---
 # ✅ Array.prototype.every() Polyfill
 
 The `every()` method tests whether all elements in the array pass the test implemented by the provided function.

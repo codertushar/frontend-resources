@@ -1,3 +1,7 @@
+---
+date: 2025-06-16T09:14:37+05:30
+description: Executes a function once every N calls based on count. Perfect for rate-limiting logs, sampling telemetry, and reducing UI event overhead.
+---
 # 📊 Sampling Function: Execute Once Every N Calls
 
 In modern JavaScript development, controlling when and how often a function executes is critical for performance optimization and behavior control. Among techniques like throttling and debouncing, **sampling** offers a unique mechanism: **execute a function once for every *N* calls**.

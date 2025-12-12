@@ -1,3 +1,8 @@
+---
+date: 2025-05-06T06:50:41+05:30
+description: Design and implement a lightweight analytics SDK with event tracking, batching, retry logic, and offline support for web applications.
+---
+
 # 📊 Analytics SDK with Retry Logic
 
 When building modern web apps, logging user behavior or system events reliably is essential. However, network conditions are unpredictable—so sending analytics events must be **delayed, serialized, and resilient to transient failures**.

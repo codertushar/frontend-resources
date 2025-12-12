@@ -1,3 +1,8 @@
+---
+description: The for...of loop iterates over values in iterable objects like arrays and strings. Modern alternative to traditional for loops with cleaner syntax.
+date: 2025-03-21T07:33:05+05:30
+---
+
 
 # 🔍 Understanding `of` in JavaScript – `for...of` Loop Deep Dive
 

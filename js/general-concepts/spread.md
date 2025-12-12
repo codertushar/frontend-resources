@@ -1,3 +1,8 @@
+---
+description: The spread operator expands arrays and objects into individual elements. Essential for copying, merging, and passing array elements as function arguments.
+date: 2025-03-20T09:40:40+05:30
+---
+
 # 📤 JavaScript Spread Operator (...) Explained
 
 The **spread operator (`...`)** in JavaScript is used to **expand** elements of an iterable (like an array or object) into individual elements.

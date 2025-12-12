@@ -1,6 +1,10 @@
+---
+date: 2025-03-21T07:33:05+05:30
+description: Converts nested objects into single-level structure with delimited keys. Useful for form serialization, API payloads, and configuration management.
+---
 # 📦 Flatten Object Implementation
 
-Here's the **fixed and robust version** of the flattening function with **inline debugger-style comments** to explain each line and decision.
+Flattening an object converts a nested object structure into a single-level object where nested keys are joined with a delimiter (like underscore). This is commonly used for form data serialization, API payloads, and configuration management.
 
 ---
 
@@ -101,10 +105,3 @@ console.log('✅ Final Flattened Object:', flat);
 * **No global state** : Uses `result` as an accumulator.
 * **Prefix logic** : Avoids leading underscores.
 
----
-
-Let me know if you want:
-
-* Flatten arrays with index-based keys (`g_0`, `g_1`)
-* Dot `.` separator instead of `_`
-* Typescript version with types and signatures

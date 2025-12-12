@@ -1,10 +1,14 @@
+---
+date: 2025-03-21T07:33:05+05:30
+description: The flat() method creates a new array with all sub-array elements concatenated recursively up to the specified depth. Includes simple recursive and spec-compliant implementations.
+---
 # 📋 Array.prototype.flat() Polyfill
 
-Here's a **clean recursive solution** to flatten a nested array of arbitrary depth.
+The `flat()` method creates a new array with all sub-array elements concatenated into it recursively up to the specified depth. This polyfill provides both a simple recursive solution and a spec-compliant depth-aware implementation.
 
 ---
 
-## ✅ Implementation
+## ✅ Simple Recursive Implementation
 
 ```js
 function flattenRecursive(arr) {
@@ -114,10 +118,3 @@ if (!Array.prototype.flat) {
 | `[1, [2, [3]]]`with `depth=2` | `[1, 2, 3]`     |
 | `[1, [2, [3]]]`with `depth=0` | `[1, [2, [3]]]` |
 
----
-
-Let me know if you want:
-
-* `Infinity` depth support (fully flatten all levels)
-* Non-recursive version using a stack
-* `flatMap` polyfill as well

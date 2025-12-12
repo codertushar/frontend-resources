@@ -1,3 +1,8 @@
+---
+date: 2025-03-20T09:40:40+05:30
+description: Create a chainable calculator API that supports method chaining for arithmetic operations with a fluent interface pattern.
+---
+
 # 🔢 Chained Calculator Implementation
 
 Here's an implementation of a **Chain Calculator** in JavaScript. This calculator allows chaining operations like addition, subtraction, multiplication, and division in a fluent and readable way.

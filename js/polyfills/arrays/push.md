@@ -1,3 +1,7 @@
+---
+date: 2025-03-15T16:01:07+05:30
+description: The push() method adds elements to the end of an array and returns the new length. Modifies the array in place for efficient appending.
+---
 # ➕ Array.prototype.push() Polyfill
 
 The `push()` method adds one or more elements to the end of an array and returns the new length.

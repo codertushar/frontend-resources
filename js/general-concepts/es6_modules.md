@@ -1,3 +1,8 @@
+---
+description: ES6 modules provide a native way to organize and share JavaScript code using import and export. Standard for modern JavaScript development and code organization.
+date: 2025-06-16T09:14:37+05:30
+---
+
 # 📦 Understanding ES6 Modules in JavaScript
 
 JavaScript applications have grown massively in size and complexity over the years. To manage this growth, developers need tools for **organizing code**, **avoiding global scope pollution**, and **promoting reusability**. Enter the **ES6 Module System** — a native solution to modular programming in JavaScript.

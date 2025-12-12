@@ -1,6 +1,10 @@
+---
+date: 2025-03-15T00:35:56+05:30
+description: The filter() method creates a new array with elements passing a test function. Critical for data filtering and commonly used in interviews.
+---
 # 🔍 Array.prototype.filter() Polyfill
 
-Here's a more readable and structured version of the explanation for your `myFilter` implementation.
+The `filter()` method creates a new array with all elements that pass the test implemented by the provided callback function. This polyfill replicates the native behavior, including support for `thisArg` and proper handling of sparse arrays.
 
 ---
 

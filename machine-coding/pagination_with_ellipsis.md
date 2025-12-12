@@ -1,3 +1,8 @@
+---
+date: 2025-12-10T00:34:12+05:30
+description: Implement a smart pagination component with ellipsis for large datasets, showing relevant page numbers with proper spacing and navigation.
+---
+
 # 🔢 React Pagination with Ellipsis
 
 A comprehensive guide to building an intelligent pagination component in React that displays page numbers with ellipsis ("...") for large page ranges.

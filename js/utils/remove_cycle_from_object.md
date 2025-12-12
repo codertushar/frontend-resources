@@ -1,3 +1,7 @@
+---
+date: 2025-06-16T09:14:37+05:30
+description: Removes circular references from object graphs using WeakSet tracking. Prevents JSON.stringify errors and infinite recursion.
+---
 # 🔄 Removing Circular References from Objects
 
 Circular references can create serious problems in JavaScript — from infinite recursions to `JSON.stringify` errors. Here’s how to remove cycles **both structurally** and **during serialization** using idiomatic, memory-safe JavaScript.

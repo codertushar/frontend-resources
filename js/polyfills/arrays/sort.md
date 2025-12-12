@@ -1,3 +1,7 @@
+---
+date: 2025-03-15T00:35:56+05:30
+description: The sort() method sorts array elements in place and returns the sorted array. Accepts custom comparator for flexible sorting logic.
+---
 # 🔀 Array.prototype.sort() Polyfill
 
 The `sort()` method sorts the elements of an array in place and returns the sorted array.

@@ -1,6 +1,10 @@
+---
+date: 2025-03-27T08:09:10+05:30
+description: A wrapper that prevents promise handlers from executing after cancellation. Useful for avoiding state updates in unmounted components.
+---
 # 🛑 Cancelable Promise Implementation
 
-Here's a clean implementation of a **cancelable promise** in JavaScript.
+A cancelable promise wrapper allows you to prevent promise handlers from executing after cancellation. This is useful for avoiding state updates in unmounted React components or canceling outdated API responses.
 
 ---
 

@@ -318,6 +318,117 @@ function stripMarkdown(text) {
         .trim();
 }
 
+/**
+ * Generate a meaningful description from the content
+ * Extracts the first meaningful paragraph or sentence that describes the topic
+ */
+function generateDescription(content, title, maxLength = 160) {
+    // Clean the content first
+    let text = content
+        .replace(/```[a-z]*\r?\n[\s\S]*?```/gi, '') // Remove code blocks
+        .replace(/^>\s*\*\*Interview Importance:\*\*.*$/gm, '') // Remove interview badges
+        .replace(/^>\s*\*\*Target Level:\*\*.*$/gm, '') // Remove target level badges
+        .replace(/^>.*$/gm, '')            // Remove blockquotes
+        .replace(/^#{1,6}\s+.*$/gm, '')    // Remove headers
+        .replace(/^\s*[-*+]\s+/gm, '')     // Remove list markers
+        .replace(/^\s*\d+\.\s+/gm, '')     // Remove numbered list markers
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Convert links to text
+        .replace(/\|[^|]*\|/g, '')         // Remove table cells
+        .replace(/^[-|:\s]+$/gm, '')       // Remove table separators
+        .replace(/---+/g, '')              // Remove horizontal rules
+        .replace(/\*\*(.+?)\*\*/g, '$1')   // Remove bold markers
+        .replace(/\*(.+?)\*/g, '$1')       // Remove italic markers
+        .replace(/`([^`]+)`/g, '$1')       // Remove inline code markers
+        .replace(/\n{2,}/g, '\n')          // Normalize newlines
+        .trim();
+
+    // Patterns that indicate non-descriptive content (meta text, incomplete sentences, etc.)
+    const skipPatterns = [
+        /^here'?s?\s+(a|an|the|how|my|our)/i,        // "Here's a...", "Here is how..."
+        /^let'?s?\s+(break|look|see|start|dive)/i,   // "Let's break down...", "Let's look at..."
+        /^below\s+(is|are)/i,                         // "Below is..."
+        /^this\s+(is|shows|demonstrates)/i,           // "This is..." at start
+        /^in\s+this\s+(article|guide|tutorial)/i,     // "In this article..."
+        /^(base|edge)\s+case:?$/i,                    // Just "Base Case:" alone
+        /^target\s+level:/i,                          // "Target Level:"
+        /:\s*$/,                                       // Ends with just a colon
+        /^[A-Z][a-z]+\s*:\s*$/,                       // Single word followed by colon like "Parameters :"
+        /^(note|tip|warning|important):/i,            // Note:, Tip:, etc.
+    ];
+
+    // Check if a paragraph is a good description candidate
+    function isGoodParagraph(p) {
+        const trimmed = p.trim();
+        // Too short
+        if (trimmed.length < 40) return false;
+        // Matches skip patterns
+        for (const pattern of skipPatterns) {
+            if (pattern.test(trimmed)) return false;
+        }
+        // Ends with incomplete markers
+        if (/\s*[:=]\s*$/.test(trimmed)) return false;
+        // Contains too many special formatting chars (likely a list or code)
+        if ((trimmed.match(/[→←↑↓✅❌⚠️]/g) || []).length > 3) return false;
+        return true;
+    }
+
+    // Split into sentences/paragraphs and find the first meaningful one
+    const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 30);
+
+    // Find the first good paragraph
+    let description = '';
+    for (const p of paragraphs) {
+        if (isGoodParagraph(p)) {
+            description = p.trim();
+            break;
+        }
+    }
+
+    // Fallback: if no good paragraph found, use title-based description or cleaned content
+    if (!description) {
+        // Try to create a description from the title
+        const cleanTitle = title.replace(/^[^\w]*/, '').replace(/[—–-].*$/, '').trim();
+        if (cleanTitle) {
+            // Use the first good paragraph even if it's not perfect, or fallback to content
+            description = paragraphs[0]?.trim() || stripMarkdown(content).slice(0, maxLength);
+        } else {
+            description = stripMarkdown(content).slice(0, maxLength);
+        }
+    }
+
+    // Clean up any remaining markdown artifacts
+    description = description
+        .replace(/\s{2,}/g, ' ')
+        .replace(/\s*:\s*$/, '')  // Remove trailing colons
+        .trim();
+
+    // Truncate intelligently at sentence boundary if too long
+    if (description.length > maxLength) {
+        // Try to cut at a sentence boundary
+        const truncated = description.slice(0, maxLength);
+        const lastPeriod = truncated.lastIndexOf('.');
+        const lastQuestion = truncated.lastIndexOf('?');
+        const lastExclaim = truncated.lastIndexOf('!');
+        const lastSentenceEnd = Math.max(lastPeriod, lastQuestion, lastExclaim);
+
+        if (lastSentenceEnd > maxLength * 0.5) {
+            // Found a good sentence boundary
+            description = truncated.slice(0, lastSentenceEnd + 1);
+        } else {
+            // Cut at word boundary
+            const lastSpace = truncated.lastIndexOf(' ');
+            description = truncated.slice(0, lastSpace) + '...';
+        }
+    }
+
+    // Final check: if description is too short or ends poorly, add ellipsis
+    if (description.length < 50 && !description.endsWith('.') && !description.endsWith('!') && !description.endsWith('?')) {
+        description = description + '...';
+    }
+
+    return description;
+}
+
 function parseFrontmatter(content) {
     // Check for YAML frontmatter (starts with --- and ends with ---)
     const frontmatterRegex = /^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/;
@@ -451,9 +562,8 @@ function processDirectory(dirPath, relativePath, resources) {
             if (metadata.date) {
                 resource.date = metadata.date;
             }
-            if (metadata.description) {
-                resource.description = metadata.description;
-            }
+            // Use frontmatter description or auto-generate one
+            resource.description = metadata.description || generateDescription(processedContent, title);
 
             resources.push(resource);
         }

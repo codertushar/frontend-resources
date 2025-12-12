@@ -1,3 +1,8 @@
+---
+date: 2025-12-09T10:51:33+05:30
+description: Implement real-time streaming of large language model responses using Server-Sent Events and ReadableStream APIs for improved user experience.
+---
+
 # 🤖 Handling Streaming LLM Responses in React
 
 When building AI-powered interfaces, one of the most critical UX patterns is **streaming**. Large Language Models (LLMs) can take seconds or even minutes to generate a full response. Waiting for the entire response before showing anything leads to a poor user experience (perceived latency).

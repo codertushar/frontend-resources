@@ -1,6 +1,10 @@
+---
+date: 2025-05-06T07:45:22+05:30
+description: Line-by-line and word-by-word document comparison utility. Essential for version control, collaborative editing, and content management systems.
+---
 # 📄 Document Comparison (Diff)
 
-Here is a **precise**, **non-regex**, and **structured** JavaScript implementation to **compare two documents** (strings) and return a **line-by-line and word-by-word diff**.
+Document comparison (diff) is essential for version control, collaborative editing, and content management systems. This implementation compares two text documents and returns structured line-by-line and word-by-word differences.
 
 ---
 

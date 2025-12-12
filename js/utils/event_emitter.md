@@ -1,3 +1,7 @@
+---
+date: 2025-03-20T09:40:40+05:30
+description: Pub-sub pattern implementation using Map and Set for efficient event handling. Foundation for reactive programming and event-driven architecture.
+---
 # 📢 Custom EventEmitter Implementation
 
 > **Interview Importance:** 🔴 Critical — EventEmitter is a classic interview question that tests understanding of the Observer pattern, closures, memory management, and JavaScript fundamentals.

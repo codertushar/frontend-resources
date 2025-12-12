@@ -1,3 +1,8 @@
+---
+description: Constructor functions create and initialize objects with shared properties and methods. Foundation for object-oriented patterns before ES6 classes.
+date: 2025-03-20T09:40:40+05:30
+---
+
 # 🏗️ Constructor Functions in JavaScript
 
 A **constructor** in JavaScript is a special function used to create and initialize objects. It allows you to define reusable object structures.

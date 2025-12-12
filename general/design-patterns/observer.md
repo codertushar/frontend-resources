@@ -1,3 +1,8 @@
+---
+date: 2025-05-09T13:06:09+05:30
+description: Notifies observers automatically when a subject changes state. Use for event handling, UI state changes, and one-to-many update scenarios.
+---
+
 # 👀 Observer Pattern — React to Change Automatically
 
 > **Use this guide as a quick-reference for interviews or design discussions.**

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, ChevronRight } from 'lucide-react';
+import { Search, ChevronRight, LayoutGrid, List } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import contentData from '../data/content.json';
@@ -67,6 +67,7 @@ const Library = () => {
   const [activeDifficulty, setActiveDifficulty] = useState(initialDifficulty);
   const [sortBy, setSortBy] = useState(initialSort);
   const [activeTag, setActiveTag] = useState(initialTag);
+  const [viewMode, setViewMode] = useState('detailed'); // 'detailed' or 'compact'
 
   // Update URL when state changes (optional but good for sharing)
   useEffect(() => {
@@ -127,10 +128,11 @@ const Library = () => {
         }
       });
     } else {
-      // Default sorting: newest first (by createdAt timestamp)
+      // Default sorting: newest first (by publish date, falling back to createdAt)
       result = [...result].sort((a, b) => {
-        const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
-        const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+        // Prefer frontmatter 'date' (original publish date), fallback to file createdAt
+        const dateA = a.date ? new Date(a.date) : (a.createdAt ? new Date(a.createdAt) : new Date(0));
+        const dateB = b.date ? new Date(b.date) : (b.createdAt ? new Date(b.createdAt) : new Date(0));
         return dateB - dateA; // Newest first
       });
     }
@@ -155,6 +157,23 @@ const Library = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
+          </div>
+
+          <div className="view-toggle">
+            <button
+              className={`view-btn ${viewMode === 'detailed' ? 'active' : ''}`}
+              onClick={() => setViewMode('detailed')}
+              title="Detailed view"
+            >
+              <LayoutGrid size={18} />
+            </button>
+            <button
+              className={`view-btn ${viewMode === 'compact' ? 'active' : ''}`}
+              onClick={() => setViewMode('compact')}
+              title="Compact view"
+            >
+              <List size={18} />
+            </button>
           </div>
 
           <div className="filter-dropdowns">
@@ -215,7 +234,7 @@ const Library = () => {
         </div>
       </div>
 
-      <div className="resources-grid">
+      <div className={`resources-grid ${viewMode === 'compact' ? 'compact-view' : ''}`}>
         {filteredContent.length > 0 ? (
           filteredContent.map((item) => (
             <motion.div
@@ -237,7 +256,7 @@ const Library = () => {
                   )}
                 </div>
                 <h3>{item.title}</h3>
-                <p>{item.content.substring(0, 100)}...</p>
+                <p className="card-description">{item.description || item.content.substring(0, 120)}</p>
                 <div className="card-footer">
                   <span>Read More</span>
                   <ChevronRight size={16} />
@@ -317,6 +336,38 @@ const Library = () => {
         .search-bar input:focus {
           border-color: var(--primary);
           box-shadow: 0 0 0 2px var(--primary-glow);
+        }
+
+        .view-toggle {
+          display: flex;
+          gap: 0.25rem;
+          background: var(--input-bg, rgba(0,0,0,0.2));
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          padding: 0.25rem;
+        }
+
+        .view-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.4rem;
+          border: none;
+          background: transparent;
+          color: var(--text-muted);
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .view-btn:hover {
+          color: var(--text-main);
+          background: rgba(255,255,255,0.05);
+        }
+
+        .view-btn.active {
+          color: var(--primary);
+          background: rgba(139, 92, 246, 0.15);
         }
 
         .filter-dropdowns {
@@ -475,7 +526,7 @@ const Library = () => {
           z-index: 1;
         }
 
-        .resource-card p {
+        .card-description {
           color: var(--text-muted);
           font-size: 0.9rem;
           display: -webkit-box;
@@ -485,6 +536,24 @@ const Library = () => {
           margin-bottom: 1.5rem;
           position: relative;
           z-index: 1;
+          line-height: 1.5;
+        }
+
+        /* Compact view - hide descriptions */
+        .compact-view .card-description {
+          display: none;
+        }
+
+        .compact-view .resource-card {
+          padding: 1rem 1.25rem;
+        }
+
+        .compact-view .resource-card h3 {
+          margin-bottom: 0.5rem;
+        }
+
+        .compact-view .card-header {
+          margin-bottom: 0.5rem;
         }
 
         .card-footer {
@@ -558,6 +627,16 @@ const Library = () => {
             gap: 0.75rem;
           }
 
+          /* Hide view toggle on mobile - always use compact */
+          .view-toggle {
+            display: none;
+          }
+
+          /* Always hide description on mobile */
+          .card-description {
+            display: none;
+          }
+
           .filter-dropdowns {
             width: 100%;
             display: grid;
@@ -582,11 +661,11 @@ const Library = () => {
 
           .resource-card h3 {
             font-size: 1.05rem;
+            margin-bottom: 0.5rem;
           }
 
-          .resource-card p {
-            font-size: 0.85rem;
-            margin-bottom: 1rem;
+          .card-header {
+            margin-bottom: 0.5rem;
           }
 
           .empty-state {

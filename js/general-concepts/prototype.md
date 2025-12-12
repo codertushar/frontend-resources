@@ -1,3 +1,8 @@
+---
+description: Prototypes enable inheritance in JavaScript by linking objects through a chain. Foundation for understanding how JavaScript objects share properties and methods.
+date: 2025-03-20T09:40:40+05:30
+---
+
 # 🔗 Prototype and Prototype Inheritance in JavaScript
 
 > **Interview Importance:** 🔴 Critical — Asked in 90% of JavaScript interviews. Understanding prototypes is fundamental to understanding how JavaScript works under the hood.

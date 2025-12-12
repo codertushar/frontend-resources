@@ -1,3 +1,8 @@
+---
+date: 2025-06-16T09:14:37+05:30
+description: Encapsulates code into self-contained units with private data and public APIs. Use to avoid global namespace pollution and organize code better.
+---
+
 # 📦 The Module Pattern in JavaScript — A Deep Dive
 
 JavaScript is a flexible and expressive language. But with flexibility comes responsibility—especially as applications grow larger and more complex. One of the most essential patterns to structure and manage code better is the **Module Pattern**.

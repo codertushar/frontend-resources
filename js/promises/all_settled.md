@@ -1,6 +1,10 @@
+---
+date: 2025-03-27T08:09:10+05:30
+description: Promise.allSettled waits for all promises to settle and returns their outcomes. Never rejects, always returns success and error results.
+---
 # ✅ Promise.allSettled() Implementation
 
-Let's break down **`Promise.allSettled`** using **Atom-of-Thoughts**, then implement it.
+`Promise.allSettled()` returns a promise that resolves after all input promises have settled (either fulfilled or rejected). Unlike `Promise.all()`, it never rejects—it always returns an array of result objects describing each promise's outcome.
 
 ---
 
@@ -96,9 +100,3 @@ promiseAllSettled([
 */
 ```
 
----
-
-Let me know if you want:
-
-* A version that supports cancellation
-* `Promise.any` (resolves on first success, rejects if all fail)

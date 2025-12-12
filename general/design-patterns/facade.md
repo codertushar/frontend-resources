@@ -1,3 +1,8 @@
+---
+date: 2025-06-19T09:47:50+05:30
+description: Provides a simplified interface to complex subsystems. Use to hide complexity, decouple code from libraries, and create clean APIs.
+---
+
 # 🎭 The Facade Pattern in JavaScript – Simplifying Complex Systems
 
 As applications grow, systems often become complex, with multiple modules, APIs, or services interacting behind the scenes. The **Facade Pattern** helps **hide that complexity** by exposing a simple, unified interface.

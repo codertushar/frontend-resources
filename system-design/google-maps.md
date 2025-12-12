@@ -1,3 +1,8 @@
+---
+date: 2025-12-09T10:51:33+05:30
+description: Build a scalable maps application with tile rendering, WebGL performance, caching strategies, and gesture handling for millions of users.
+---
+
 # 🗺️ System Design: Google Maps (Frontend Interview Guide)
 
 **Target Level:** Senior Frontend Engineer / Staff Engineer
@@ -1233,4 +1238,3 @@ class TrafficLayer {
 
 **Sample closing statement:**
 > "To summarize, I'd build a hybrid architecture with WebGL for rendering, Zustand for state management, Web Workers for heavy processing, and a multi-tier caching strategy for offline support. The key challenges are maintaining 60fps performance, managing memory efficiently, and ensuring accessibility despite using Canvas. I'd use existing libraries like Mapbox GL as a foundation rather than building from scratch, focusing on the unique business requirements."
-

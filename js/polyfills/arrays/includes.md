@@ -1,3 +1,7 @@
+---
+date: 2025-03-15T16:01:07+05:30
+description: The includes() method checks if an array contains a value, returning true or false. Correctly handles NaN unlike indexOf().
+---
 # 🔍 Array.prototype.includes() Polyfill
 
 The `includes()` method determines whether an array includes a certain value, returning `true` or `false`.

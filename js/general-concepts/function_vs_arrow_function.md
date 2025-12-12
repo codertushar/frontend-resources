@@ -1,3 +1,8 @@
+---
+description: Arrow functions and regular functions differ in how they bind this context. Understanding this distinction is crucial for callbacks, methods, and event handlers.
+date: 2025-05-09T13:06:09+05:30
+---
+
 # 🧭 Arrow Functions vs Function Declarations in JavaScript
 
 > **Why `this.fire = function(...)` and not an arrow function? Here's the full breakdown.**

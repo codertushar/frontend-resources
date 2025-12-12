@@ -1,3 +1,8 @@
+---
+date: 2025-06-16T09:14:37+05:30
+description: Creates objects using functions without new keyword. Use to generate multiple similar objects with private data and flexible object composition.
+---
+
 # 🏭 The Factory Pattern in JavaScript – A Practical Guide
 
 As JavaScript applications scale, developers often need to create **multiple instances of similar objects** without repeating code or tightly coupling construction logic. This is where the **Factory Pattern** shines.

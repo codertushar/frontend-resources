@@ -1,3 +1,7 @@
+---
+date: 2025-03-27T07:19:24+05:30
+description: Limits function execution to once per time period. Critical for scroll tracking, resize handling, and API rate limiting.
+---
 # ⏱️ Throttle Function in JavaScript
 
 > **Interview Importance:** 🔴 Critical — Often asked alongside debounce. Understanding the difference between throttle and debounce is essential for any frontend interview.

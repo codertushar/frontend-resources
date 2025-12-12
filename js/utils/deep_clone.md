@@ -1,3 +1,7 @@
+---
+date: 2025-03-27T07:19:24+05:30
+description: Deep clones objects with dates, maps, sets, and circular references. Covers structuredClone, Lodash, and manual recursion approaches.
+---
 # 📋 Deep Clone Implementation
 
 Here are the most reliable ways to perform a **deep clone** of an object in JavaScript.

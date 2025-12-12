@@ -1,3 +1,7 @@
+---
+date: 2025-05-06T07:45:22+05:30
+description: Converts camelCase to snake_case without regex. Loop-based approach provides clarity, customizability, and better performance than pattern matching.
+---
 # 🐫➡️🐍 Converting camelCase to snake_case in JavaScript (Without Regex)
 
 In the world of code conventions, case styles are more than aesthetics — they're contracts. JavaScript favors `camelCase`, while many APIs, databases, and configuration files lean on `snake_case`. Converting between them is a common task — and yes, regex is usually the weapon of choice. But what if you want **clarity, control, or speed**, and **no regex**?

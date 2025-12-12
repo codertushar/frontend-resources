@@ -1,6 +1,10 @@
+---
+date: 2025-03-27T08:09:10+05:30
+description: Promise.race settles as soon as the first promise settles, whether it resolves or rejects. Used for timeouts and fastest response patterns.
+---
 # 🏁 Promise.race() Implementation
 
-Let's break down **`Promise.race`** using **Atom-of-Thoughts** and then implement it.
+`Promise.race()` returns a promise that settles as soon as any of the input promises settles—whether it resolves or rejects. The first promise to complete "wins the race" and determines the outcome.
 
 ---
 
@@ -75,9 +79,3 @@ promiseRace([p1, p2])
   .catch(console.error); // → "fail"
 ```
 
----
-
-Let me know if you want a version that:
-
-* **Ignores rejections** (`Promise.any`)
-* **Waits for all to settle** (`Promise.allSettled`)

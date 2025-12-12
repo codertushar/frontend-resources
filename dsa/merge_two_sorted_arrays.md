@@ -1,6 +1,11 @@
+---
+date: 2025-03-27T07:19:24+05:30
+description: Efficiently merge two sorted arrays into one sorted array using a two-pointer approach with O(n+m) time complexity.
+---
+
 # 🔀 Merge Two Sorted Arrays
 
-Here's an efficient function to **merge two sorted arrays**.
+Merging two sorted arrays is a fundamental algorithm used as a building block in merge sort and many other applications. This O(n + m) solution uses the two-pointer technique to efficiently combine arrays while maintaining sorted order.
 
 ---
 
@@ -45,9 +50,9 @@ mergeSortedArrays([1, 3, 5], [2, 4, 6]);
 
 ---
 
-Let me know if you want it  **in-place** , handling  **duplicates** , or merging  **more than 2 arrays** .
+## Merging K Sorted Arrays
 
-Here’s a clean, **readable** implementation of merging  **K sorted arrays** , using **Atom-of-Thoughts (AoT)** to explain step-by-step.
+For merging more than two arrays, we can use a min-heap approach for optimal performance.
 
 ---
 

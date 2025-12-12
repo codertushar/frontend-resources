@@ -1,3 +1,7 @@
+---
+date: 2025-03-15T16:01:07+05:30
+description: The some() method tests if at least one array element passes a test function. Returns true if any element satisfies the condition.
+---
 # 🔘 Array.prototype.some() Polyfill
 
 The `some()` method tests whether at least one element in the array passes the test implemented by the provided function.

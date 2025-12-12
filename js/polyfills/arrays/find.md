@@ -1,6 +1,10 @@
+---
+date: 2025-03-15T00:35:56+05:30
+description: The find() method returns the first element satisfying a test function, or undefined if none found. Simpler than filter for single matches.
+---
 # 🔎 Array.prototype.find() Polyfill
 
-Here's a more readable version of the implementation.
+The `find()` method returns the first element in an array that satisfies a provided testing function. If no element matches, it returns `undefined`. This polyfill supports the optional `thisArg` parameter for binding context.
 
 ---
 

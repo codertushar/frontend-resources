@@ -1,3 +1,7 @@
+---
+date: 2025-03-20T09:40:40+05:30
+description: The call() method invokes a function with a specified this context and arguments. Essential for borrowing methods and controlling execution context.
+---
 # 📞 Function.prototype.call() Polyfill
 
 The `call` method in JavaScript allows us to **invoke a function with a specified `this` context and arguments**. Let's implement a **polyfill** for it.

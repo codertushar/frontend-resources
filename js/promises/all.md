@@ -1,3 +1,7 @@
+---
+date: 2025-03-27T08:09:10+05:30
+description: Promise.all waits for all promises to resolve and returns their results as an array. Rejects immediately if any promise fails.
+---
 # 🎯 Promise.all() Implementation
 
 > **Interview Importance:** 🔴 Critical — Implementing `Promise.all` is one of the most common JavaScript interview questions. Tests understanding of promises, async handling, and edge cases.

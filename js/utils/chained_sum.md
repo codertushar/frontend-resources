@@ -1,3 +1,8 @@
+---
+date: 2025-03-15T00:35:56+05:30
+description: Curried sum function enabling chained calls like sum(1)(2)(3). Demonstrates closures, internal state, and valueOf/toString methods.
+---
+
 # ➕ Chained Sum (Curried Function)
 
 Here are two different implementations of a **curried sum** function, one using **state within the function** and the other using **recursion**.

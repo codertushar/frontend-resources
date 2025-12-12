@@ -1,3 +1,8 @@
+---
+description: Async and defer attributes control how scripts load and execute. Critical for optimizing page performance and preventing render-blocking JavaScript.
+date: 2025-11-03T07:06:19+05:30
+---
+
 # 🔄 Script Loading: async vs defer vs Both
 
 Understanding when to use `async`, `defer`, or both attributes on `<script>` tags to optimize page loading performance and avoid render-blocking issues.

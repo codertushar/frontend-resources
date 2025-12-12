@@ -1,6 +1,11 @@
+---
+date: 2025-05-09T13:06:09+05:30
+description: Separates applications into Model, View, and Controller for maintainable code. Use when building complex UIs with multiple synchronized views.
+---
+
 # 🧭 MVC (Model‑View‑Controller) — A Front‑End Deep Dive
 
-> **Purpose:** Store this as a self‑contained article for interview prep —  **no extra tools needed** .
+MVC is a software architectural pattern that separates an application into three interconnected components: Model (data), View (UI), and Controller (logic). This separation of concerns makes code more maintainable, testable, and scalable.
 
 ---
 

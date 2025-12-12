@@ -1,3 +1,8 @@
+---
+date: 2025-05-06T06:50:41+05:30
+description: Learn how browsers parse HTML, CSS, and JavaScript to render web pages, including DOM construction, CSSOM, render tree, and layout processes.
+---
+
 # 🌐 Browser Rendering: How Browsers Display Web Pages
 
 Here's the **full detailed flow** of how a browser renders a webpage, from receiving HTML to displaying pixels. This includes networking, parsing, DOM/CSSOM construction, layout, painting, and compositing.

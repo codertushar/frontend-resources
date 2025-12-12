@@ -1,6 +1,10 @@
+---
+date: 2025-03-27T08:09:10+05:30
+description: Promise.any resolves as soon as any promise succeeds. Rejects only if all promises fail, returning an AggregateError.
+---
 # 🎯 Promise.any() Implementation
 
-Here's a breakdown and implementation of **`Promise.any`** using **Atom-of-Thoughts**.
+`Promise.any()` takes an iterable of promises and returns a single promise that resolves as soon as any of the input promises fulfills. If all promises reject, it rejects with an `AggregateError` containing all rejection reasons.
 
 ---
 
@@ -96,9 +100,3 @@ promiseAny([
   });
 ```
 
----
-
-Let me know if you want:
-
-* Polyfill-safe version (older environments without `AggregateError`)
-* Timeout or cancel support inside `any`

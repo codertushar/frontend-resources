@@ -1,6 +1,10 @@
+---
+date: 2025-05-06T06:50:41+05:30
+description: Filters consecutive duplicate values from arrays. Similar to RxJS operator, preserving non-consecutive duplicates while removing sequential repeats.
+---
 # 🔄 distinctUntilChanged() Polyfill
 
-Here's a simple polyfill for `distinctUntilChanged()` (similar to RxJS) as an array method.
+The `distinctUntilChanged()` method filters out consecutive duplicate values from an array, similar to the RxJS operator. It only removes duplicates that appear next to each other, preserving non-consecutive duplicates.
 
 ---
 

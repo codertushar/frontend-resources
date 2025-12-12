@@ -1,3 +1,8 @@
+---
+description: Proxies intercept and customize object operations like property access, assignment, and deletion. Powerful for validation, reactivity, and metaprogramming.
+date: 2025-05-06T07:45:22+05:30
+---
+
 
 # 🕵️ What Are Proxies in JavaScript? (With Practical Use Cases)
 
