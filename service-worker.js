@@ -1,6 +1,6 @@
 // Service Worker for Frontend Resources PWA
 // Cache version is auto-updated during build via generate-sw-version.js
-const CACHE_NAME = 'frontend-resources-v1765531949910';
+const CACHE_NAME = 'frontend-resources-v1765559278187';
 const BASE_PATH = '/frontend-resources';
 const CORE_ASSETS = [
     `${BASE_PATH}/`,
@@ -32,6 +32,168 @@ self.addEventListener('activate', (event) => {
     );
 });
 
+// Check for new content and show notification
+let lastContentCheck = 0;
+const CONTENT_CHECK_THROTTLE = 5 * 60 * 1000; // Only check every 5 minutes max
+
+async function checkForNewContent() {
+    // Throttle content checks to avoid excessive API calls
+    const now = Date.now();
+    if (now - lastContentCheck < CONTENT_CHECK_THROTTLE) {
+        return;
+    }
+    lastContentCheck = now;
+
+    try {
+        const response = await fetch(`${BASE_PATH}/content.json`);
+        if (!response.ok) return;
+        
+        const content = await response.json();
+        const currentCount = content.length;
+        
+        // Get stored count from IndexedDB or default to current
+        const storedData = await getStoredContentData();
+        const storedCount = storedData?.count || 0;
+        
+        // Store current count
+        await storeContentData({ count: currentCount, lastChecked: Date.now() });
+        
+        // If there are new articles and this isn't the first visit
+        if (currentCount > storedCount && storedCount > 0) {
+            const newArticles = currentCount - storedCount;
+            await showNewArticleNotification(newArticles, content[0]);
+        }
+    } catch (error) {
+        console.error('Error checking for new content:', error);
+    }
+}
+
+// Show notification for new articles
+async function showNewArticleNotification(count, latestArticle) {
+    await self.registration.showNotification('New Articles Published! 🎉', {
+        body: count === 1 
+            ? `Check out: ${latestArticle?.title || 'New article available'}` 
+            : `${count} new articles available to explore!`,
+        icon: `${BASE_PATH}/android-launchericon-192-192.png`,
+        badge: `${BASE_PATH}/android-launchericon-192-192.png`,
+        tag: 'new-articles',
+        requireInteraction: false,
+        data: {
+            url: `${BASE_PATH}/library`,
+            timestamp: Date.now()
+        }
+    });
+}
+
+// IndexedDB helper functions for storing content metadata
+async function getStoredContentData() {
+    return new Promise((resolve) => {
+        const request = indexedDB.open('frontend-resources-db', 1);
+        
+        request.onerror = (err) => {
+            console.error('IndexedDB error:', err);
+            resolve(null);
+        };
+        
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains('metadata')) {
+                db.createObjectStore('metadata');
+            }
+        };
+        
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            try {
+                const transaction = db.transaction(['metadata'], 'readonly');
+                const store = transaction.objectStore('metadata');
+                const getRequest = store.get('contentData');
+                
+                getRequest.onsuccess = () => resolve(getRequest.result);
+                getRequest.onerror = (err) => {
+                    console.error('Error reading from IndexedDB:', err);
+                    resolve(null);
+                };
+            } catch (err) {
+                console.error('Transaction error:', err);
+                resolve(null);
+            }
+        };
+    });
+}
+
+async function storeContentData(data) {
+    return new Promise((resolve) => {
+        const request = indexedDB.open('frontend-resources-db', 1);
+        
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains('metadata')) {
+                db.createObjectStore('metadata');
+            }
+        };
+        
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            try {
+                const transaction = db.transaction(['metadata'], 'readwrite');
+                const store = transaction.objectStore('metadata');
+                store.put(data, 'contentData');
+                transaction.oncomplete = () => resolve();
+                transaction.onerror = (err) => {
+                    console.error('Error writing to IndexedDB:', err);
+                    resolve();
+                };
+            } catch (err) {
+                console.error('Transaction error:', err);
+                resolve();
+            }
+        };
+        
+        request.onerror = (err) => {
+            console.error('IndexedDB error:', err);
+            resolve();
+        };
+    });
+}
+
+// Handle notification clicks
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    
+    const urlToOpen = event.notification.data?.url || BASE_PATH;
+    
+    event.waitUntil(
+        self.clients.matchAll({ type: 'window', includeUncontrolled: true })
+            .then((clientList) => {
+                // Check if there's already a window open
+                for (const client of clientList) {
+                    if (client.url.includes(BASE_PATH) && 'focus' in client) {
+                        return client.focus().then(() => client.navigate(urlToOpen));
+                    }
+                }
+                // Open new window if none exists
+                if (self.clients.openWindow) {
+                    return self.clients.openWindow(urlToOpen);
+                }
+            })
+    );
+});
+
+// Periodic background sync to check for new content
+self.addEventListener('periodicsync', (event) => {
+    if (event.tag === 'check-new-content') {
+        event.waitUntil(checkForNewContent());
+    }
+});
+
+// Message handler for manual content check
+self.addEventListener('message', (event) => {
+    if (event.data?.type === 'CHECK_NEW_CONTENT') {
+        event.waitUntil(checkForNewContent());
+    }
+});
+
 // Fetch handler
 self.addEventListener('fetch', (event) => {
     const request = event.request;
@@ -46,6 +208,8 @@ self.addEventListener('fetch', (event) => {
                 .then((networkResponse) => {
                     const responseClone = networkResponse.clone();
                     caches.open(CACHE_NAME).then((cache) => cache.put(request, responseClone));
+                    // Check for new content on page load
+                    checkForNewContent();
                     return networkResponse;
                 })
                 .catch(() => caches.match(request).then((cached) => cached || caches.match(`${BASE_PATH}/`)))
