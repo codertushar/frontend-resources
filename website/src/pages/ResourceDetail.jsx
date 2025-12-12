@@ -314,7 +314,7 @@ const ResourceDetail = () => {
           overflow-x: auto;
           max-width: 100%;
           -webkit-overflow-scrolling: touch;
-          touch-action: pan-x;
+          touch-action: pan-x pan-y;
         }
 
         .article-content code {
@@ -597,7 +597,7 @@ const ResourceDetail = () => {
             max-width: calc(100% + 3rem);
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            touch-action: pan-x;
+            touch-action: pan-x pan-y;
           }
 
           .article-content .table-wrapper {
@@ -658,7 +658,7 @@ const ResourceDetail = () => {
             margin-right: -1rem;
             max-width: calc(100% + 2rem);
             -webkit-overflow-scrolling: touch;
-            touch-action: pan-x;
+            touch-action: pan-x pan-y;
           }
 
           .article-content .table-wrapper {
