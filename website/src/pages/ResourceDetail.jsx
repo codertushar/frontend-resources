@@ -632,7 +632,7 @@ const ResourceDetail = () => {
           .nav-title {
             white-space: normal;
             overflow: visible;
-            text-overflow: initial;
+            text-overflow: clip;
           }
 
           .related-grid {
