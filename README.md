@@ -41,7 +41,8 @@ For the best reading experience, we highly recommend visiting our **[Live Websit
 ### 🧮 dsa
 
 <pre>
-└── 📊 <a href="dsa/merge_two_sorted_arrays.md">merge_two_sorted_arrays.md</a>
+├── 📊 <a href="dsa/merge_two_sorted_arrays.md">merge_two_sorted_arrays.md</a>
+└── 📄 <a href="dsa/two_pointer_technique.md">two_pointer_technique.md</a>
 </pre>
 
 ### 📝 general
