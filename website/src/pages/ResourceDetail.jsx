@@ -102,10 +102,6 @@ const ResourceDetail = () => {
       </nav>
 
       <div className="article-header">
-        <div className="meta-tags">
-          <span className="badge">{resource.category}</span>
-          {resource.subcategory && <span className="badge sub">{resource.subcategory}</span>}
-        </div>
         <h1 className="article-title">
           {(() => {
             // Extract leading emojis from title so they render with native colors
@@ -124,6 +120,19 @@ const ResourceDetail = () => {
             return <span className="title-text">{resource.title}</span>;
           })()}
         </h1>
+        <div className="meta-tags">
+          <Link to={`/library?category=${resource.category}`} className="meta-tag category">
+            {resource.category}
+          </Link>
+          {resource.subcategory && (
+            <span className="meta-tag subcategory">{resource.subcategory}</span>
+          )}
+          {resource.difficulty && (
+            <span className={`meta-tag difficulty ${resource.difficulty}`}>
+              {resource.difficulty}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="article-content glass-panel">
@@ -272,12 +281,6 @@ const ResourceDetail = () => {
           margin-bottom: 3rem;
         }
 
-        .meta-tags {
-          display: flex;
-          gap: 0.75rem;
-          margin-bottom: 1rem;
-        }
-
         .article-title {
           font-size: 3rem;
           line-height: 1.2;
@@ -295,6 +298,65 @@ const ResourceDetail = () => {
 
         .article-title .title-emoji {
           -webkit-text-fill-color: initial;
+        }
+
+        .meta-tags {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-top: 1.5rem;
+          flex-wrap: wrap;
+        }
+
+        .meta-tag {
+          display: inline-flex;
+          align-items: center;
+          padding: 0.4rem 1rem;
+          border-radius: 99px;
+          font-size: 0.85rem;
+          font-weight: 500;
+          text-transform: capitalize;
+          transition: all 0.2s;
+        }
+
+        .meta-tag.category {
+          background: rgba(139, 92, 246, 0.15);
+          color: var(--primary);
+          border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .meta-tag.category:hover {
+          background: rgba(139, 92, 246, 0.25);
+          border-color: var(--primary);
+        }
+
+        .meta-tag.subcategory {
+          background: var(--surface-color);
+          color: var(--text-muted);
+          border: 1px solid var(--border-color);
+        }
+
+        .meta-tag.difficulty {
+          font-weight: 600;
+          text-transform: capitalize;
+        }
+
+        .meta-tag.difficulty.easy {
+          background: rgba(34, 197, 94, 0.15);
+          color: #22c55e;
+          border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .meta-tag.difficulty.medium {
+          background: rgba(245, 158, 11, 0.15);
+          color: #f59e0b;
+          border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .meta-tag.difficulty.hard {
+          background: rgba(239, 68, 68, 0.15);
+          color: #ef4444;
+          border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
         .article-content {
