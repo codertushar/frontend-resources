@@ -1,6 +1,6 @@
 // Service Worker for Frontend Resources PWA
 // Cache version is auto-updated during build via generate-sw-version.js
-const CACHE_NAME = 'frontend-resources-v1765518593675';
+const CACHE_NAME = 'frontend-resources-v1765519100822';
 const BASE_PATH = '/frontend-resources';
 const CORE_ASSETS = [
     `${BASE_PATH}/`,
