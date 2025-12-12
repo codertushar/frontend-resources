@@ -6,6 +6,7 @@ import { XIcon } from './SocialIcons';
 import { motion } from 'framer-motion';
 
 import ThemeToggle from './ThemeToggle';
+import NotificationPrompt from './NotificationPrompt';
 
 const Logo = ({ className }) => (
   <svg
@@ -79,6 +80,8 @@ const Layout = ({ children }) => {
           </div>
         </div>
       </footer>
+
+      <NotificationPrompt />
 
       <style>{`
         .navbar {

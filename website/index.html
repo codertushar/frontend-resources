@@ -45,6 +45,21 @@
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/frontend-resources/service-worker.js')
+          .then((registration) => {
+            console.log('Service Worker registered successfully');
+            
+            // Check for updates every 30 minutes
+            setInterval(() => {
+              registration.update();
+            }, 30 * 60 * 1000);
+            
+            // Manual content check trigger
+            window.checkForNewArticles = () => {
+              if (registration.active) {
+                registration.active.postMessage({ type: 'CHECK_NEW_CONTENT' });
+              }
+            };
+          })
           .catch(err => console.error('SW registration failed:', err));
       });
     }

@@ -268,3 +268,122 @@ a {
     padding: 0 3rem;
   }
 }
+
+/* Notification Prompt Styles */
+.notification-prompt {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.notification-prompt-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+}
+
+.notification-icon {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.notification-text h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.notification-text p {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.notification-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.notification-actions .btn-enable {
+  padding: 0.5rem 1rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.notification-actions .btn-enable:hover {
+  background: var(--primary-hover);
+}
+
+.notification-actions .btn-dismiss {
+  padding: 0.5rem;
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+.notification-actions .btn-dismiss:hover {
+  background: var(--btn-secondary-hover);
+  color: var(--text-main);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .notification-prompt {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .notification-prompt-content {
+    padding: 0.875rem 1rem;
+    gap: 0.75rem;
+    max-width: none;
+  }
+
+  .notification-text h3 {
+    font-size: 0.875rem;
+  }
+
+  .notification-text p {
+    font-size: 0.8rem;
+  }
+
+  .notification-actions .btn-enable {
+    padding: 0.45rem 0.875rem;
+    font-size: 0.8rem;
+  }
+}
