@@ -45,12 +45,26 @@ function markdownPathToUrl(mdPath) {
 
 function generateSitemap() {
     const mdFiles = collectMarkdownFiles(projectRoot);
-    const urls = mdFiles.map(markdownPathToUrl);
+    const resourceUrls = mdFiles.map(markdownPathToUrl);
+
+    // Static app pages that should also be indexed
+    const staticPages = [
+        '/',              // Homepage
+        '/library',       // Library page
+        '/learning-path', // Learning path page
+    ];
+
+    const urls = [...staticPages, ...resourceUrls];
 
     const now = new Date().toISOString();
+    const getPriority = (url) => {
+        if (url === '/') return 1;
+        if (url === '/library' || url === '/learning-path') return 0.9;
+        return 0.8;
+    };
     const urlEntries = urls
         .map((url) => {
-            return `  <url>\n    <loc>${BASE_URL}${url}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`;
+            return `  <url>\n    <loc>${BASE_URL}${url}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>${getPriority(url)}</priority>\n  </url>`;
         })
         .join('\n');
 
