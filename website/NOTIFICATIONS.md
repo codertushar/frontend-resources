@@ -187,16 +187,36 @@ const MyComponent = () => {
 
 ## Configuration
 
+### Build Process
+
+The notification system requires `content.json` to be accessible at runtime:
+
+**During Build (`npm run build`):**
+1. `generate-content.js` runs and creates:
+   - `src/data/content.json` → imported by React components
+   - `public/content.json` → copied to build output for service worker
+2. Vite build copies `public/*` to `dist/*`
+3. Result: `dist/content.json` available for service worker to fetch
+
+**In Development (`npm run dev`):**
+- Both files are generated and accessible
+- Service worker can fetch from `http://localhost:5173/content.json`
+
+**Important**: If you modify the build process, ensure `public/content.json` is created and copied to the output directory.
+
 ### Notification Timing
 
 Edit `public/service-worker.js` to adjust check intervals:
 
 ```javascript
-// Current: 6 hours
+// Current: 6 hours for periodic sync
 const CONTENT_CHECK_INTERVAL = 6 * 60 * 60 * 1000;
 
 // For more frequent checks, reduce the interval:
 const CONTENT_CHECK_INTERVAL = 1 * 60 * 60 * 1000; // 1 hour
+
+// Throttle for fetch-based checks (5 minutes)
+const CONTENT_CHECK_THROTTLE = 5 * 60 * 1000;
 ```
 
 ### Prompt Timing
@@ -235,8 +255,20 @@ setTimeout(() => setShowPrompt(true), 0);
 
 1. **Check browser permission**: Settings → Site Settings → Notifications
 2. **Verify service worker**: DevTools → Application → Service Workers
-3. **Check console**: Look for errors in browser console
-4. **Test manually**: `window.checkForNewArticles()` in console
+3. **Check console for `[SW]` logs**: Look for service worker logs in browser console
+   - Should see: `[SW] Checking for new content...`
+   - Should see: `[SW] Current article count: X`
+   - If you see: `[SW] Failed to fetch content.json` - the file is missing (build issue)
+4. **Verify content.json exists**: Navigate to `/frontend-resources/content.json` in browser
+5. **Test manually**: Open console and run:
+   ```javascript
+   // Check if service worker is active
+   navigator.serviceWorker.ready.then(reg => {
+     console.log('SW ready:', reg.active);
+     // Manually trigger content check
+     reg.active.postMessage({ type: 'CHECK_NEW_CONTENT' });
+   });
+   ```
 
 ### Prompt Not Showing
 
@@ -250,8 +282,24 @@ setTimeout(() => setShowPrompt(true), 0);
 ### Content Check Not Working
 
 1. **Verify content.json exists**: Navigate to `/frontend-resources/content.json`
+   - If 404: Build process may have failed
+   - Check that `node scripts/generate-content.js` was run during build
 2. **Check service worker**: Should be active in DevTools
 3. **Inspect IndexedDB**: Application tab → IndexedDB → frontend-resources-db
+   - Should have `metadata` object store with `contentData` key
+4. **Check service worker logs**: Open console and filter for `[SW]`
+   - Look for errors or warnings about content.json fetch
+
+### Common Issues
+
+**Issue**: Notifications never appear even with permission granted
+- **Cause**: `content.json` missing from build output
+- **Solution**: Ensure `generate-content.js` writes to `public/content.json` during build
+- **Verify**: Check that `dist/content.json` exists after running `npm run build`
+
+**Issue**: First visit doesn't show notification
+- **Expected behavior**: Service worker stores baseline count on first visit
+- **Notifications appear**: Only on subsequent visits when new articles are detected
 
 ## Future Enhancements
 
@@ -267,7 +315,10 @@ Potential improvements for future versions:
 
 ## Related Files
 
+- `website/scripts/generate-content.js` - Generates content.json in both src/data and public directories
 - `website/public/service-worker.js` - Service worker with notification logic
+- `website/public/content.json` - Runtime content index for service worker (auto-generated)
+- `website/src/data/content.json` - Content index for React imports (auto-generated)
 - `website/public/manifest.json` - PWA manifest with notification permission
 - `website/src/components/NotificationPrompt.jsx` - Permission prompt UI
 - `website/src/hooks/useNotifications.js` - Notification management hook

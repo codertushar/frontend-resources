@@ -11,6 +11,7 @@ const PROJECT_ROOT = path.resolve(__dirname, '../../');
 const WEBSITE_ROOT = path.resolve(__dirname, '../');
 const PUBLIC_CONTENT_DIR = path.join(WEBSITE_ROOT, 'public', 'content');
 const OUTPUT_JSON = path.join(WEBSITE_ROOT, 'src', 'data', 'content.json');
+const PUBLIC_JSON = path.join(WEBSITE_ROOT, 'public', 'content.json'); // For service worker access
 
 const CONTENT_DIRS = ['js', 'dsa', 'ai', 'general', 'machine-coding', 'system-design'];
 
@@ -580,9 +581,17 @@ function generateContent() {
         }
     }
 
-    // Write JSON
-    fs.writeFileSync(OUTPUT_JSON, JSON.stringify(resources, null, 2));
+    const jsonContent = JSON.stringify(resources, null, 2);
+    
+    // Write JSON to src/data for React imports
+    fs.writeFileSync(OUTPUT_JSON, jsonContent);
+    
+    // Also write to public directory for service worker access
+    fs.writeFileSync(PUBLIC_JSON, jsonContent);
+    
     console.log(`Generated ${resources.length} resources.`);
+    console.log(`  → ${OUTPUT_JSON}`);
+    console.log(`  → ${PUBLIC_JSON}`);
 }
 
 // Initial generation
