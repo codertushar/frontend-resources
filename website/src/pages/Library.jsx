@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, ChevronRight, LayoutGrid, List } from 'lucide-react';
+import { Search, ChevronRight, LayoutGrid, List, X } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import contentData from '../data/content.json';
@@ -157,6 +157,16 @@ const Library = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
+            {query && (
+              <button
+                className="clear-search-btn"
+                onClick={() => setQuery('')}
+                title="Clear search"
+                aria-label="Clear search"
+              >
+                <X size={18} />
+              </button>
+            )}
           </div>
 
           <div className="view-toggle">
@@ -226,6 +236,7 @@ const Library = () => {
                 setActiveDifficulty('all');
                 setActiveTag('all');
                 setSortBy('default');
+                setQuery('');
               }}
             >
               {cat.label}
@@ -317,11 +328,33 @@ const Library = () => {
           color: var(--text-muted);
         }
 
+        .clear-search-btn {
+          position: absolute;
+          right: 0.75rem;
+          top: 50%;
+          transform: translateY(-50%);
+          background: transparent;
+          border: none;
+          color: var(--text-muted);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.25rem;
+          border-radius: 4px;
+          transition: all 0.2s;
+        }
+
+        .clear-search-btn:hover {
+          color: var(--text-main);
+          background: rgba(255, 255, 255, 0.1);
+        }
+
         .search-bar input {
           width: 100%;
           background: var(--input-bg, rgba(0,0,0,0.2));
           border: 1px solid var(--border-color);
-          padding: 0.6rem 1rem 0.6rem 2.8rem;
+          padding: 0.6rem 2.5rem 0.6rem 2.8rem;
           border-radius: 8px;
           color: var(--text-main);
           font-size: 0.95rem;
