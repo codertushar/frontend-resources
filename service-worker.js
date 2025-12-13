@@ -1,6 +1,6 @@
 // Service Worker for Frontend Resources PWA
 // Cache version is auto-updated during build via generate-sw-version.js
-const CACHE_NAME = 'frontend-resources-v1765560054413';
+const CACHE_NAME = 'frontend-resources-v1765599110499';
 const BASE_PATH = '/frontend-resources';
 const CORE_ASSETS = [
     `${BASE_PATH}/`,
@@ -40,20 +40,27 @@ async function checkForNewContent() {
     // Throttle content checks to avoid excessive API calls
     const now = Date.now();
     if (now - lastContentCheck < CONTENT_CHECK_THROTTLE) {
+        console.log('[SW] Content check throttled, last check was recent');
         return;
     }
     lastContentCheck = now;
 
     try {
+        console.log('[SW] Checking for new content...');
         const response = await fetch(`${BASE_PATH}/content.json`);
-        if (!response.ok) return;
+        if (!response.ok) {
+            console.warn('[SW] Failed to fetch content.json:', response.status, response.statusText);
+            return;
+        }
         
         const content = await response.json();
         const currentCount = content.length;
+        console.log('[SW] Current article count:', currentCount);
         
         // Get stored count from IndexedDB or default to current
         const storedData = await getStoredContentData();
         const storedCount = storedData?.count || 0;
+        console.log('[SW] Stored article count:', storedCount);
         
         // Store current count
         await storeContentData({ count: currentCount, lastChecked: Date.now() });
@@ -61,28 +68,39 @@ async function checkForNewContent() {
         // If there are new articles and this isn't the first visit
         if (currentCount > storedCount && storedCount > 0) {
             const newArticles = currentCount - storedCount;
+            console.log('[SW] New articles detected:', newArticles);
             await showNewArticleNotification(newArticles, content[0]);
+        } else if (storedCount === 0) {
+            console.log('[SW] First visit, storing baseline count');
+        } else {
+            console.log('[SW] No new articles');
         }
     } catch (error) {
-        console.error('Error checking for new content:', error);
+        console.error('[SW] Error checking for new content:', error);
     }
 }
 
 // Show notification for new articles
 async function showNewArticleNotification(count, latestArticle) {
-    await self.registration.showNotification('New Articles Published! 🎉', {
-        body: count === 1 
-            ? `Check out: ${latestArticle?.title || 'New article available'}` 
-            : `${count} new articles available to explore!`,
-        icon: `${BASE_PATH}/android-launchericon-192-192.png`,
-        badge: `${BASE_PATH}/android-launchericon-192-192.png`,
-        tag: 'new-articles',
-        requireInteraction: false,
-        data: {
-            url: `${BASE_PATH}/library`,
-            timestamp: Date.now()
-        }
-    });
+    console.log('[SW] Showing notification for', count, 'new article(s)');
+    try {
+        await self.registration.showNotification('New Articles Published! 🎉', {
+            body: count === 1 
+                ? `Check out: ${latestArticle?.title || 'New article available'}` 
+                : `${count} new articles available to explore!`,
+            icon: `${BASE_PATH}/android-launchericon-192-192.png`,
+            badge: `${BASE_PATH}/android-launchericon-192-192.png`,
+            tag: 'new-articles',
+            requireInteraction: false,
+            data: {
+                url: `${BASE_PATH}/library`,
+                timestamp: Date.now()
+            }
+        });
+        console.log('[SW] Notification displayed successfully');
+    } catch (error) {
+        console.error('[SW] Error showing notification:', error);
+    }
 }
 
 // IndexedDB helper functions for storing content metadata
