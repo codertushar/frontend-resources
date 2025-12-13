@@ -61,7 +61,9 @@ Think of it like a camera viewfinder moving across a landscape. Instead of takin
 ```javascript
 // Find maximum sum of any subarray of size k
 const maxSumSubarray = (arr, k) => {
-  if (arr.length < k) return null;  // Edge case: array smaller than window
+  if (!arr || arr.length === 0) return null;  // Edge case: null or empty array
+  if (k <= 0) return null;                     // Edge case: invalid window size
+  if (arr.length < k) return null;             // Edge case: array smaller than window
   
   // Calculate sum of first window
   let windowSum = 0;
@@ -429,7 +431,7 @@ const useSearchWithWindow = (searchFn, windowSize = 10) => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const cacheRef = useRef(new Map());  // LRU cache with sliding window
+  const cacheRef = useRef(new Map());  // FIFO cache with sliding window (max size)
   
   useEffect(() => {
     if (!query) {
@@ -986,5 +988,5 @@ for (let right = 0; right < n; right++) {      // Executes n times
 
 ### 🔗 Related Resources in This Repo
 
-- [Two-Pointer Technique](./two_pointer_technique.md) - Complementary pattern for sorted arrays and palindromes
-- [Merge Two Sorted Arrays](./merge_two_sorted_arrays.md) - Uses two-pointer technique similar to sliding window
+- [Two-Pointer Technique](two_pointer_technique.md) - Complementary pattern for sorted arrays and palindromes
+- [Merge Two Sorted Arrays](merge_two_sorted_arrays.md) - Uses two-pointer technique similar to sliding window
