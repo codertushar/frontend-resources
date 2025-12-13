@@ -162,6 +162,7 @@ const Library = () => {
                 className="clear-search-btn"
                 onClick={() => setQuery('')}
                 title="Clear search"
+                aria-label="Clear search"
               >
                 <X size={18} />
               </button>
