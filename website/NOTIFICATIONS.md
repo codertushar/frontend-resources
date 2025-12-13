@@ -325,10 +325,6 @@ Potential improvements for future versions:
 - `website/src/components/Layout.jsx` - Integration point
 - `website/index.html` - Service worker registration
 - `website/src/index.css` - Notification prompt styles
-- `website/src/hooks/useNotifications.js` - Notification management hook
-- `website/src/components/Layout.jsx` - Integration point
-- `website/index.html` - Service worker registration
-- `website/src/index.css` - Notification prompt styles
 
 ## Resources
 
