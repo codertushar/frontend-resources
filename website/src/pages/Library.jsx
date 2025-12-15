@@ -1,9 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, ChevronRight, LayoutGrid, List, X } from 'lucide-react';
+import { Search, ChevronRight, LayoutGrid, List, X, CheckCircle, Circle } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import contentData from '../data/content.json';
+import { useProgress } from '../context/ProgressContext';
 
 const CATEGORIES = [
   { id: 'all', label: 'All Resources' },
@@ -55,6 +56,7 @@ const fuseOptions = {
 
 const Library = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { isRead, getStats } = useProgress();
 
   const initialQuery = searchParams.get('q') || '';
   const initialCategory = searchParams.get('category') || 'all';
@@ -68,6 +70,9 @@ const Library = () => {
   const [sortBy, setSortBy] = useState(initialSort);
   const [activeTag, setActiveTag] = useState(initialTag);
   const [viewMode, setViewMode] = useState('detailed'); // 'detailed' or 'compact'
+
+  // Get progress stats
+  const stats = getStats(contentData.length);
 
   // Update URL when state changes (optional but good for sharing)
   useEffect(() => {
@@ -258,6 +263,11 @@ const Library = () => {
             >
               <Link to={`/resource/${item.id}`} className="resource-card glass-panel">
                 <div className="card-header">
+                  {isRead(item.id) && (
+                    <span className="read-indicator" title="Read">
+                      <CheckCircle size={16} />
+                    </span>
+                  )}
                   <span className="badge">{item.category}</span>
                   {item.subcategory && <span className="badge sub">{item.subcategory}</span>}
                   {item.difficulty && (
@@ -299,6 +309,40 @@ const Library = () => {
 
         .subtitle {
           color: var(--text-muted);
+        }
+
+        .progress-stats {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-top: 1rem;
+          padding: 0.75rem 1rem;
+          background: var(--surface-hover);
+          border-radius: 8px;
+          border: 1px solid var(--border-color);
+          justify-content: center;
+        }
+
+        .stat-item {
+          display: flex;
+          align-items: center;
+          gap: 0.375rem;
+          font-size: 0.875rem;
+          color: var(--text-muted);
+        }
+
+        .stat-item svg {
+          color: var(--primary);
+        }
+
+        .stat-separator {
+          color: var(--text-muted);
+          opacity: 0.5;
+        }
+
+        .stat-percentage {
+          font-weight: 600;
+          color: var(--primary);
         }
 
         .controls-section {
@@ -514,6 +558,14 @@ const Library = () => {
           position: relative;
           z-index: 1;
           flex-wrap: wrap;
+          align-items: center;
+        }
+
+        .read-indicator {
+          display: flex;
+          align-items: center;
+          color: #22c55e;
+          margin-right: auto;
         }
 
         .badge {

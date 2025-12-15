@@ -10,6 +10,8 @@ This is the web interface for the [Frontend Resources repository](https://github
 - 🔔 **Push Notifications** - Get notified when new articles are published (PWA)
 - 🔍 **Fuzzy Search** - Fast client-side search with Fuse.js
 - 📱 **Progressive Web App** - Install as an app on your device
+- 🔐 **User Authentication** - Track your reading progress with Clerk authentication
+- ✅ **Progress Tracking** - Mark articles as read and track your learning journey
 
 ## Tech Stack
 - **Vite + React**
@@ -17,6 +19,7 @@ This is the web interface for the [Frontend Resources repository](https://github
 - **Fuse.js** (Client-side Fuzzy Search)
 - **React Markdown** (Rendering content)
 - **PWA** (Service Worker + Web App Manifest)
+- **Clerk** (Authentication & User Management)
 
 ## Development
 
@@ -25,11 +28,41 @@ This is the web interface for the [Frontend Resources repository](https://github
    npm install
    ```
 
-2. Run development server:
+2. Set up Clerk authentication (optional):
+   
+   Copy the `.env.example` file to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Get your Clerk API keys:
+   - Sign up at [https://clerk.com](https://clerk.com)
+   - Create a new application
+   - Copy your Publishable Key
+   - Add it to `.env`:
+     ```
+     VITE_CLERK_PUBLISHABLE_KEY=pk_test_your_publishable_key_here
+     ```
+   
+   *Note: The app will work without Clerk configured, but authentication and synced progress tracking will be disabled. Local progress tracking via localStorage will still work.*
+
+3. Run development server:
    ```bash
    npm run dev
    ```
    *Note: This will automatically run `node scripts/generate-content.js` to index the markdown files from the parent directory.*
+
+## Authentication & Progress Tracking
+
+The site uses Clerk for user authentication and progress tracking:
+
+- **Without Authentication**: Progress is stored in browser localStorage
+- **With Authentication**: Progress syncs to your Clerk account via `unsafeMetadata`
+- **Sign In/Sign Up**: Click the auth buttons in the navigation bar
+- **Mark as Read**: Click the "Mark as Read" button on any article
+- **View Progress**: Your progress stats appear on the Library page when signed in
+
+When you sign in, any local progress stored in localStorage will be automatically merged with your account data.
 
 ## PWA Notifications
 
