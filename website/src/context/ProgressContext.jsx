@@ -14,7 +14,20 @@ export const useProgress = () => {
 };
 
 export const ProgressProvider = ({ children }) => {
-  const { user, isLoaded, isSignedIn } = useUser();
+  // Check if Clerk is available
+  let user, isLoaded, isSignedIn;
+  try {
+    const clerkUser = useUser();
+    user = clerkUser.user;
+    isLoaded = clerkUser.isLoaded;
+    isSignedIn = clerkUser.isSignedIn;
+  } catch (error) {
+    // Clerk is not configured, use localStorage only
+    user = null;
+    isLoaded = true;
+    isSignedIn = false;
+  }
+
   const [readArticles, setReadArticles] = useState(new Set());
   const [isInitialized, setIsInitialized] = useState(false);
 

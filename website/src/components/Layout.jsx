@@ -9,6 +9,9 @@ import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import NotificationPrompt from './NotificationPrompt';
 
+// Check if Clerk is configured
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
 const Logo = ({ className }) => (
   <svg
     className={className}
@@ -28,7 +31,20 @@ const Logo = ({ className }) => (
 );
 
 const Layout = ({ children }) => {
-  const { isSignedIn, isLoaded } = useUser();
+  // Check if Clerk is available
+  let isSignedIn = false;
+  let isLoaded = true;
+  
+  if (PUBLISHABLE_KEY) {
+    try {
+      const clerkUser = useUser();
+      isSignedIn = clerkUser.isSignedIn;
+      isLoaded = clerkUser.isLoaded;
+    } catch (error) {
+      // Clerk hook not available
+      console.warn('Clerk useUser hook failed:', error.message);
+    }
+  }
 
   return (
     <div className="layout">
@@ -56,7 +72,7 @@ const Layout = ({ children }) => {
             </NavLink>
             <div className="nav-separator"></div>
             <ThemeToggle />
-            {isLoaded && (
+            {PUBLISHABLE_KEY && isLoaded && (
               <>
                 {isSignedIn ? (
                   <div className="auth-section">
