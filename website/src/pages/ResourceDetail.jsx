@@ -5,14 +5,16 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { ArrowRight, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, Check, Circle } from 'lucide-react';
 import contentData from '../data/content.json';
+import { useProgress } from '../context/ProgressContext';
 
 const ResourceDetail = () => {
   const location = useLocation();
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(true);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const { isRead, toggleRead, isInitialized } = useProgress();
 
   // Extract and decode the resource ID from the pathname
   // Remove basename (/frontend-resources), /resource/ prefix, and trailing slash
@@ -131,6 +133,26 @@ const ResourceDetail = () => {
             <span className={`meta-tag difficulty ${resource.difficulty}`}>
               {resource.difficulty}
             </span>
+          )}
+          {isInitialized && (
+            <button
+              onClick={() => toggleRead(resourceId)}
+              className={`btn-mark-read ${isRead(resourceId) ? 'read' : ''}`}
+              aria-label={isRead(resourceId) ? 'Mark as unread' : 'Mark as read'}
+              title={isRead(resourceId) ? 'Mark as unread' : 'Mark as read'}
+            >
+              {isRead(resourceId) ? (
+                <>
+                  <Check size={16} />
+                  <span>Read</span>
+                </>
+              ) : (
+                <>
+                  <Circle size={16} />
+                  <span>Mark as Read</span>
+                </>
+              )}
+            </button>
           )}
         </div>
       </div>
@@ -357,6 +379,41 @@ const ResourceDetail = () => {
           background: rgba(239, 68, 68, 0.15);
           color: #ef4444;
           border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-mark-read {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+          font-weight: 500;
+          border-radius: 8px;
+          border: 1px solid var(--border-color);
+          background: var(--surface-card);
+          color: var(--text-muted);
+          cursor: pointer;
+          transition: all 0.2s ease;
+          margin-left: auto;
+        }
+
+        .btn-mark-read:hover {
+          background: var(--surface-hover);
+          border-color: var(--primary);
+          color: var(--text-main);
+          transform: translateY(-1px);
+        }
+
+        .btn-mark-read.read {
+          background: rgba(34, 197, 94, 0.15);
+          color: #22c55e;
+          border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-mark-read.read:hover {
+          background: rgba(34, 197, 94, 0.25);
+          border-color: rgba(34, 197, 94, 0.5);
+          transform: translateY(-1px);
         }
 
         .article-content {

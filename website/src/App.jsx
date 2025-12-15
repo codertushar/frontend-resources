@@ -10,6 +10,7 @@ import ResourceDetail from './pages/ResourceDetail';
 import { useCanonical } from './hooks/useCanonical';
 
 import { ThemeProvider } from './context/ThemeContext';
+import { ProgressProvider } from './context/ProgressContext';
 
 const basename = import.meta.env.PROD ? '/frontend-resources' : '/';
 
@@ -33,9 +34,11 @@ function AppContent() {
 function App() {
   return (
     <ThemeProvider>
-      <Router basename={basename}>
-        <AppContent />
-      </Router>
+      <ProgressProvider>
+        <Router basename={basename}>
+          <AppContent />
+        </Router>
+      </ProgressProvider>
     </ThemeProvider>
   );
 }

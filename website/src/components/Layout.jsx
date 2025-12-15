@@ -2,6 +2,7 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { BookOpen, Layers, Map, Mail, Github, Linkedin } from 'lucide-react';
+import { SignInButton, SignUpButton, UserButton, useUser } from '@clerk/clerk-react';
 import { XIcon } from './SocialIcons';
 import { motion } from 'framer-motion';
 
@@ -27,6 +28,8 @@ const Logo = ({ className }) => (
 );
 
 const Layout = ({ children }) => {
+  const { isSignedIn, isLoaded } = useUser();
+
   return (
     <div className="layout">
       <nav className="navbar glass-panel">
@@ -53,6 +56,31 @@ const Layout = ({ children }) => {
             </NavLink>
             <div className="nav-separator"></div>
             <ThemeToggle />
+            {isLoaded && (
+              <>
+                {isSignedIn ? (
+                  <div className="auth-section">
+                    <UserButton 
+                      afterSignOutUrl="/"
+                      appearance={{
+                        elements: {
+                          avatarBox: "w-8 h-8"
+                        }
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div className="auth-section">
+                    <SignInButton mode="modal">
+                      <button className="btn-auth btn-signin">Sign In</button>
+                    </SignInButton>
+                    <SignUpButton mode="modal">
+                      <button className="btn-auth btn-signup">Sign Up</button>
+                    </SignUpButton>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -169,6 +197,44 @@ const Layout = ({ children }) => {
           color: var(--primary);
         }
 
+        .auth-section {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-left: 0.5rem;
+        }
+
+        .btn-auth {
+          padding: 0.5rem 1rem;
+          border-radius: 99px;
+          font-size: 0.875rem;
+          font-weight: 500;
+          border: none;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .btn-signin {
+          background: transparent;
+          color: var(--text-main);
+          border: 1px solid var(--border-color);
+        }
+
+        .btn-signin:hover {
+          background: var(--surface-hover);
+          border-color: var(--primary);
+        }
+
+        .btn-signup {
+          background: var(--primary);
+          color: white;
+        }
+
+        .btn-signup:hover {
+          background: var(--primary-hover);
+          transform: translateY(-1px);
+        }
+
         .main-content {
           padding-top: 6rem;
           padding-bottom: 4rem;
@@ -251,6 +317,16 @@ const Layout = ({ children }) => {
 
           .nav-separator {
             margin: 0 0.25rem;
+          }
+
+          .auth-section {
+            display: flex;
+            gap: 0.25rem;
+          }
+
+          .btn-auth {
+            font-size: 0.75rem;
+            padding: 0.4rem 0.6rem;
           }
 
           .main-content {
