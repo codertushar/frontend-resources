@@ -140,6 +140,7 @@ For the best reading experience, we highly recommend visiting our **[Live Websit
 ├── 📄 <a href="machine-coding/analytics_sdk.md">analytics_sdk.md</a>
 ├── 🔍 <a href="machine-coding/breadcrumb.md">breadcrumb.md</a>
 ├── 🧮 <a href="machine-coding/chained_calculator.md">chained_calculator.md</a>
+├── 📄 <a href="machine-coding/cursor_tracking.md">cursor_tracking.md</a>
 ├── 📄 <a href="machine-coding/pagination_with_ellipsis.md">pagination_with_ellipsis.md</a>
 └── 📈 <a href="machine-coding/progress_bar.md">progress_bar.md</a>
 </pre>
