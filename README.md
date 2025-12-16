@@ -71,6 +71,7 @@ For the best reading experience, we highly recommend visiting our **[Live Websit
 │   ├── 📄 <a href="js/general-concepts/es6_modules.md">es6_modules.md</a>
 │   ├── 🔔 <a href="js/general-concepts/event_loop.md">event_loop.md</a>
 │   ├── 📄 <a href="js/general-concepts/function_vs_arrow_function.md">function_vs_arrow_function.md</a>
+│   ├── 📄 <a href="js/general-concepts/garbage_collection.md">garbage_collection.md</a>
 │   ├── 📄 <a href="js/general-concepts/js_constructor.md">js_constructor.md</a>
 │   ├── 📄 <a href="js/general-concepts/mutation_observer.md">mutation_observer.md</a>
 │   ├── 📄 <a href="js/general-concepts/of_in.md">of_in.md</a>
