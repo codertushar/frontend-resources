@@ -1,6 +1,6 @@
 // Service Worker for Frontend Resources PWA
 // Cache version is auto-updated during build via generate-sw-version.js
-const CACHE_NAME = 'frontend-resources-v1765946193764';
+const CACHE_NAME = 'frontend-resources-v1765946970338';
 const BASE_PATH = '/frontend-resources';
 const CORE_ASSETS = [
     `${BASE_PATH}/`,
@@ -69,7 +69,13 @@ async function checkForNewContent() {
         if (currentCount > storedCount && storedCount > 0) {
             const newArticles = currentCount - storedCount;
             console.log('[SW] New articles detected:', newArticles);
-            await showNewArticleNotification(newArticles, content[0]);
+            // Find the newest article by createdAt date (content[0] is alphabetically first, not newest)
+            const latestArticle = content.reduce((newest, article) => {
+                const newestDate = newest.createdAt ? new Date(newest.createdAt) : new Date(0);
+                const articleDate = article.createdAt ? new Date(article.createdAt) : new Date(0);
+                return articleDate > newestDate ? article : newest;
+            }, content[0]);
+            await showNewArticleNotification(newArticles, latestArticle);
         } else if (storedCount === 0) {
             console.log('[SW] First visit, storing baseline count');
         } else {
