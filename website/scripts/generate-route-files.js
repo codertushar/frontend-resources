@@ -37,10 +37,20 @@ function escapeHtml(text) {
 function stripMarkdown(md) {
     if (!md) return '';
     return md
-        .replace(/```[\s\S]*?```/g, '') // Remove code blocks
-        .replace(/`[^`]+`/g, '') // Remove inline code
+        .replace(/```[\s\S]*?```/g, '[code example]') // Replace code blocks with placeholder
+        .replace(/`([^`]+)`/g, '$1') // Keep inline code content, just remove backticks
         .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Links to text
-        .replace(/[#*_~]/g, '') // Remove markdown chars
+        .replace(/#{1,6}\s*/g, '') // Remove heading markers
+        .replace(/\*\*([^*]+)\*\*/g, '$1') // Bold to plain text
+        .replace(/\*([^*]+)\*/g, '$1') // Italic to plain text
+        .replace(/__([^_]+)__/g, '$1') // Bold underscore to plain text
+        .replace(/_([^_]+)_/g, '$1') // Italic underscore to plain text
+        .replace(/~~([^~]+)~~/g, '$1') // Strikethrough to plain text
+        .replace(/^\s*[-*+]\s+/gm, '') // Remove list markers
+        .replace(/^\s*\d+\.\s+/gm, '') // Remove numbered list markers
+        .replace(/^\s*>\s+/gm, '') // Remove blockquote markers
+        .replace(/\|[^|]*\|/g, ' ') // Remove table cells
+        .replace(/[-]{3,}/g, '') // Remove horizontal rules
         .replace(/\n+/g, ' ') // Collapse newlines
         .replace(/\s+/g, ' ') // Collapse whitespace
         .trim();
