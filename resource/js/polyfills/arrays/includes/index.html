@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="The method determines whether an array includes a certain value, returning or . --- ✅ Implementation How It Works: 1.">
+  <meta name="description" content="The includes() method determines whether an array includes a certain value, returning true or false.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🔍 Array.prototype.includes() Polyfill | Frontend Resources">
-  <meta property="og:description" content="The method determines whether an array includes a certain value, returning or . --- ✅ Implementation How It Works: 1.">
+  <meta property="og:description" content="The includes() method determines whether an array includes a certain value, returning true or false.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/includes">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="🔍 Array.prototype.includes() Polyfill | Frontend Resources">
-  <meta name="twitter:description" content="The method determines whether an array includes a certain value, returning or . --- ✅ Implementation How It Works: 1.">
+  <meta name="twitter:description" content="The includes() method determines whether an array includes a certain value, returning true or false.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/includes">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔍 Array.prototype.includes() Polyfill","description":"The method determines whether an array includes a certain value, returning or . --- ✅ Implementation How It Works: 1.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/includes"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔍 Array.prototype.includes() Polyfill","description":"The includes() method determines whether an array includes a certain value, returning true or false.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/includes"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / polyfills</p>
       <p><strong>Difficulty:</strong> medium</p>
       <div class="content">
-        The method determines whether an array includes a certain value, returning or . --- ✅ Implementation How It Works: 1. Parameters : : The element to search for in the array. : The index to start the search from (defaults to 0). Negative values are adjusted to count from the end of the array. 2. Iteration : The method iterates through the array starting from . 3. Comparison : For each element, it checks if the element is strictly equal () to or if both are . 4. Return Value : Returns if is found. Returns if is not found. Example: returns because is in the array. returns because is not in the array. returns because is found when counting from the end. returns because is found when counting from the end. returns because is found in the array. Key Features: Supports negative by adjusting it to count from the end of the array. Iterates through the array and checks for strict equality () with or if both are . Returns a boolean indicating whether is found in the array....
+        The includes() method determines whether an array includes a certain value, returning true or false. ✅ Implementation [code example] How It Works: Parameters : searchElement: The element to search for in the array. fromIndex: The index to start the search from (defaults to 0). Negative values are adjusted to count from the end of the array. Iteration : The customIncludes method iterates through the array starting from fromIndex. Comparison : For each element, it checks if the element is strictly equal (===) to searchElement or if both are NaN. Return Value : Returns true if searchElement is found. Returns false if searchElement is not found. Example: customIncludes(2) returns true because 2 is in the array. customIncludes(4) returns false because 4 is not in the array. customIncludes(3, -1) returns true because 3 is found when counting from the end. customIncludes(1, -3) returns true because 1 is found when counting from the end. [NaN].customIncludes(NaN) returns true because NaN is found in the array. Key Features: Supports negative fromIndex by adjusting it to count from the end of the array. Iterates through the array and checks for strict equality (===) with searchElement or if both are NaN. Returns a boolean indicating whether searchElement is found in the array....
       </div>
     </article>
   </noscript>

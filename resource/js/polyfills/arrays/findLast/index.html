@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="The method returns the last element in an array that satisfies a given predicate function. It iterates from the end of the array.">
+  <meta name="description" content="The findLast() method returns the last element in an array that satisfies a given predicate function. It iterates from the end of the array.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🔙 Array.prototype.findLast() Polyfill | Frontend Resources">
-  <meta property="og:description" content="The method returns the last element in an array that satisfies a given predicate function. It iterates from the end of the array.">
+  <meta property="og:description" content="The findLast() method returns the last element in an array that satisfies a given predicate function. It iterates from the end of the array.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/findLast">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="🔙 Array.prototype.findLast() Polyfill | Frontend Resources">
-  <meta name="twitter:description" content="The method returns the last element in an array that satisfies a given predicate function. It iterates from the end of the array.">
+  <meta name="twitter:description" content="The findLast() method returns the last element in an array that satisfies a given predicate function. It iterates from the end of the array.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/findLast">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔙 Array.prototype.findLast() Polyfill","description":"The method returns the last element in an array that satisfies a given predicate function. It iterates from the end of the array.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/findLast"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔙 Array.prototype.findLast() Polyfill","description":"The findLast() method returns the last element in an array that satisfies a given predicate function. It iterates from the end of the array.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/findLast"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / polyfills</p>
       <p><strong>Difficulty:</strong> medium</p>
       <div class="content">
-        The method returns the last element in an array that satisfies a given predicate function. It iterates from the end of the array. --- ✅ Implementation Explanation: 1. Check if is defined: The condition ensures that the polyfill only runs if is not already available. 2. Callback validation: It checks whether the provided is a valid function using . 3. Iterate backward: The loop starts from the last element of the array () and moves towards the first element (). 4. Calling the callback: is used to invoke the function. This gives you the correct value for within the callback function, the current element (), its index (), and the array itself (). 5. Return the matching element: If the callback returns a truthy value, that element is returned as the result of . 6. Return if no match is found: If the loop completes without finding a match, is returned. Example Usage: In this example, finds the last even number (4) in the array. Edge Cases: - If no element matches the condition, it returns . - If the array is empty, it returns . This implementation closely mimics the behavior of the modern method that was introduced in newer versions of JavaScript....
+        The findLast() method returns the last element in an array that satisfies a given predicate function. It iterates from the end of the array. ✅ Implementation [code example] Explanation: Check if findLast is defined: The if (!Array.prototype.findLast) condition ensures that the polyfill only runs if findLast is not already available. Callback validation: It checks whether the callback provided is a valid function using typeof callback !== &#39;function&#39;. Iterate backward: The loop starts from the last element of the array (i = this.length - 1) and moves towards the first element (i--). Calling the callback: callback.call(thisArg, this[i], i, this) is used to invoke the callback function. This gives you the correct value for this within the callback function, the current element (this[i]), its index (i), and the array itself (this). Return the matching element: If the callback returns a truthy value, that element is returned as the result of findLast. Return undefined if no match is found: If the loop completes without finding a match, undefined is returned. Example Usage: [code example] In this example, findLast finds the last even number (4) in the array. Edge Cases: If no element matches the condition, it returns undefined. If the array is empty, it returns undefined. This implementation closely mimics the behavior of the modern findLast method that was introduced in newer versions of JavaScript....
       </div>
     </article>
   </noscript>

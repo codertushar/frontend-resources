@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="The method determines whether the passed value is an Array. --- ✅ Implementation Explanation: 1. Null and Undefined Check : The function first checks if is or .">
+  <meta name="description" content="The Array.isArray() method determines whether the passed value is an Array. ✅ Implementation [code example] Explanation: Null and Undefined Check : The...">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="✅ Array.isArray() Polyfill | Frontend Resources">
-  <meta property="og:description" content="The method determines whether the passed value is an Array. --- ✅ Implementation Explanation: 1. Null and Undefined Check : The function first checks if is or .">
+  <meta property="og:description" content="The Array.isArray() method determines whether the passed value is an Array. ✅ Implementation [code example] Explanation: Null and Undefined Check : The...">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/isArray">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="✅ Array.isArray() Polyfill | Frontend Resources">
-  <meta name="twitter:description" content="The method determines whether the passed value is an Array. --- ✅ Implementation Explanation: 1. Null and Undefined Check : The function first checks if is or .">
+  <meta name="twitter:description" content="The Array.isArray() method determines whether the passed value is an Array. ✅ Implementation [code example] Explanation: Null and Undefined Check : The...">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/isArray">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"✅ Array.isArray() Polyfill","description":"The method determines whether the passed value is an Array. --- ✅ Implementation Explanation: 1. Null and Undefined Check : The function first checks if is or .","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/isArray"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"✅ Array.isArray() Polyfill","description":"The Array.isArray() method determines whether the passed value is an Array. ✅ Implementation [code example] Explanation: Null and Undefined Check : The...","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/isArray"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / polyfills</p>
       <p><strong>Difficulty:</strong> easy</p>
       <div class="content">
-        The method determines whether the passed value is an Array. --- ✅ Implementation Explanation: 1. Null and Undefined Check : The function first checks if is or . If it is, it immediately returns . 2. Reliable Type Checking : For all other values, the function uses . This method returns a string in the format , where is the internal class of the object. For arrays, it returns . 3. Why This Works : is a reliable way to determine the internal class of an object, which helps accurately identify arrays. This is a cross-environment solution that works similarly to . Behavior: Returns for arrays : Works for empty arrays, populated arrays, arrays created with the constructor, and even . Returns for non-arrays : Includes , , objects, numbers, strings, booleans, and array-like objects such as .
+        The Array.isArray() method determines whether the passed value is an Array. ✅ Implementation [code example] Explanation: Null and Undefined Check : The function first checks if value is null or undefined. If it is, it immediately returns false. Reliable Type Checking : For all other values, the function uses Object.prototype.toString.call(value). This method returns a string in the format &quot;[object Type]&quot;, where Type is the internal class of the object. For arrays, it returns &quot;[object Array]&quot;. Why This Works : Object.prototype.toString is a reliable way to determine the internal class of an object, which helps accurately identify arrays. This is a cross-environment solution that works similarly to Array.isArray(). Behavior: Returns true for arrays : Works for empty arrays, populated arrays, arrays created with the Array constructor, and even Array.prototype. Returns false for non-arrays : Includes undefined, null, objects, numbers, strings, booleans, and array-like objects such as TypedArrays.
       </div>
     </article>
   </noscript>

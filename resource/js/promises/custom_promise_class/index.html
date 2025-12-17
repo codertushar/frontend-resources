@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="A JavaScript is an asynchronous mechanism that represents a future value. Below is a fully functional implementation of a custom Promise () that behaves...">
+  <meta name="description" content="A JavaScript Promise is an asynchronous mechanism that represents a future value. Below is a fully functional implementation of a custom Promise...">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🔧 Custom Promise Class Implementation | Frontend Resources">
-  <meta property="og:description" content="A JavaScript is an asynchronous mechanism that represents a future value. Below is a fully functional implementation of a custom Promise () that behaves...">
+  <meta property="og:description" content="A JavaScript Promise is an asynchronous mechanism that represents a future value. Below is a fully functional implementation of a custom Promise...">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/promises/custom_promise_class">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="🔧 Custom Promise Class Implementation | Frontend Resources">
-  <meta name="twitter:description" content="A JavaScript is an asynchronous mechanism that represents a future value. Below is a fully functional implementation of a custom Promise () that behaves...">
+  <meta name="twitter:description" content="A JavaScript Promise is an asynchronous mechanism that represents a future value. Below is a fully functional implementation of a custom Promise...">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/promises/custom_promise_class">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔧 Custom Promise Class Implementation","description":"A JavaScript is an asynchronous mechanism that represents a future value. Below is a fully functional implementation of a custom Promise () that behaves...","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/promises/custom_promise_class"},"articleSection":"js","keywords":"js, promises, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔧 Custom Promise Class Implementation","description":"A JavaScript Promise is an asynchronous mechanism that represents a future value. Below is a fully functional implementation of a custom Promise...","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/promises/custom_promise_class"},"articleSection":"js","keywords":"js, promises, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / promises</p>
       <p><strong>Difficulty:</strong> hard</p>
       <div class="content">
-        A JavaScript is an asynchronous mechanism that represents a future value. Below is a fully functional implementation of a custom Promise () that behaves exactly like the native JavaScript . --- ✅ Implementation --- How This Works 1. Constructor () Receives an function with and callbacks. Initializes state (, , or ). Stores callbacks for when is still . 2. Then Method () Registers callbacks for resolution and rejection. If the is already resolved, calls the callback immediately. Supports chaining by returning a new . 3. Catch Method () Calls , forwarding rejection. 4. Finally Method () Runs a callback regardless of success or failure. 5. Static Methods → Instantly resolves with . → Instantly rejects with . → Resolves when all promises succeed, or rejects on the first failure. → Resolves or rejects as soon as one promise settles. → Resolves when all promises are settled, never rejects. --- Example Usage --- Why This Is a Solid Implementation ✅ Matches JavaScript Promises API exactly ✅ Supports async execution with , , ✅ Implements , , ✅ Uses for microtask-like behavior 🚀 This implementation is fully functional and behaves like native JS Promises! Additional Resources: Build Your Own Promise...
+        A JavaScript Promise is an asynchronous mechanism that represents a future value. Below is a fully functional implementation of a custom Promise (CustomPromise) that behaves exactly like the native JavaScript Promise. ✅ Implementation [code example] How This Works Constructor (executor) Receives an executor function with resolve and reject callbacks. Initializes state (pending, fulfilled, or rejected). Stores callbacks for .then() when Promise is still pending. Then Method (then) Registers callbacks for resolution and rejection. If the Promise is already resolved, calls the callback immediately. Supports chaining by returning a new CustomPromise. Catch Method (catch) Calls .then(null, onRejected), forwarding rejection. Finally Method (finally) Runs a callback regardless of success or failure. Static Methods resolve(value) → Instantly resolves with value. reject(reason) → Instantly rejects with reason. all(promises) → Resolves when all promises succeed, or rejects on the first failure. race(promises) → Resolves or rejects as soon as one promise settles. allSettled(promises) → Resolves when all promises are settled, never rejects. Example Usage [code example] Why This Is a Solid Implementation ✅ Matches JavaScript Promises API exactly ✅ Supports async execution with .then(), .catch(), .finally() ✅ Implements Promise.all, Promise.race, Promise.allSettled ✅ Uses setTimeout(…, 0) for microtask-like behavior 🚀 This implementation is fully functional and behaves like native JS Promises! Additional Resources: Build Your Own Promise...
       </div>
     </article>
   </noscript>

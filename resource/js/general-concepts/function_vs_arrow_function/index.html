@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="&gt; Why and not an arrow function? Here&#39;s the full breakdown. --- 1️⃣ Introduction JavaScript offers multiple ways to define functions: Function Declarations:...">
+  <meta name="description" content="Why this.fire = function(...) and not an arrow function? Here&#39;s the full breakdown.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🧭 Arrow Functions vs Function Declarations in JavaScript | Frontend Resources">
-  <meta property="og:description" content="&gt; Why and not an arrow function? Here&#39;s the full breakdown. --- 1️⃣ Introduction JavaScript offers multiple ways to define functions: Function Declarations:...">
+  <meta property="og:description" content="Why this.fire = function(...) and not an arrow function? Here&#39;s the full breakdown.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/function_vs_arrow_function">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="🧭 Arrow Functions vs Function Declarations in JavaScript | Frontend Resources">
-  <meta name="twitter:description" content="&gt; Why and not an arrow function? Here&#39;s the full breakdown. --- 1️⃣ Introduction JavaScript offers multiple ways to define functions: Function Declarations:...">
+  <meta name="twitter:description" content="Why this.fire = function(...) and not an arrow function? Here&#39;s the full breakdown.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/function_vs_arrow_function">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🧭 Arrow Functions vs Function Declarations in JavaScript","description":"> Why and not an arrow function? Here's the full breakdown. --- 1️⃣ Introduction JavaScript offers multiple ways to define functions: Function Declarations:...","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/function_vs_arrow_function"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🧭 Arrow Functions vs Function Declarations in JavaScript","description":"Why this.fire = function(...) and not an arrow function? Here's the full breakdown.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/function_vs_arrow_function"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / general-concepts</p>
       <p><strong>Difficulty:</strong> easy</p>
       <div class="content">
-        &gt; Why and not an arrow function? Here&#39;s the full breakdown. --- 1️⃣ Introduction JavaScript offers multiple ways to define functions: Function Declarations: Function Expressions: Arrow Functions: While arrow functions offer brevity and clarity, they do not have their own , which is why choosing between the two depends entirely on your use case. --- 2️⃣ The Key Difference: Binding Function Expressions Function expressions define their own context depending on how they&#39;re called: Arrow Functions Arrow functions lexically bind , meaning they inherit from the surrounding context: 📌 Why Not Use Arrow in ? Because refers to the object instance ( in this case), and the fire method needs to explicitly bind or use the current instance as context. If you used an arrow function, it would ignore and would not refer to the instance or a provided scope — breaking functionality like : --- 3️⃣ When to Use Which | Use Case | Prefer Function | Prefer Arrow Function | | -------------------------------- | --------------- | --------------------------------- | | Needs dynamic binding | ✅ Yes | ❌ No | | Callback inside method | ✅ Yes | ✅ Yes (if no dependency) | | Inside classes or object methods | ✅ Yes | ❌ No (unless explicitly static) | | Event handlers | ✅ Usually | ❌ Only if you bind explicitly | | Simple one-liners / pure funcs | ❌ Overhead | ✅ Perfect match | --- 4️⃣ Real Examples ✅ Good Use of Arrow: ✅ Good Use of Function Declaration: ⚠️ Misuse of Arrow in Object Method: --- 5️⃣ Interview Q&amp;A Q1: Why don’t arrow functions have their own ? A: Because arrow functions are designed for lexical scoping. They inherit from the context in which they are defined, rather than from how they are called. Q2: When would using an arrow function inside a class break things? A: When the method depends on referring to the class instance. Arrow functions don’t have their own , so they won’t work properly in instance methods. Q3: Can you replace all function expressions with arrow functions? A: No....
+        Why this.fire = function(...) and not an arrow function? Here&#39;s the full breakdown. 1️⃣ Introduction JavaScript offers multiple ways to define functions: Function Declarations: function greet() {} Function Expressions: const greet = function() {} Arrow Functions: const greet = () =&gt; {} While arrow functions offer brevity and clarity, they do not have their own this , which is why choosing between the two depends entirely on your use case. 2️⃣ The Key Difference: this Binding Function Expressions Function expressions define their own this context depending on how they&#39;re called: [code example] Arrow Functions Arrow functions lexically bind this , meaning they inherit this from the surrounding context: [code example] 📌 Why Not Use Arrow in this.fire = function (...)? Because this refers to the object instance (Move in this case), and the fire method needs to explicitly bind thisObj or use the current instance as context. If you used an arrow function, it would ignore thisObj and this would not refer to the Move instance or a provided scope — breaking functionality like .call(): [code example] 3️⃣ When to Use Which Prefer Function ✅ Yes ✅ Yes ✅ Yes ✅ Usually ❌ Overhead 4️⃣ Real Examples ✅ Good Use of Arrow: [code example] ✅ Good Use of Function Declaration: [code example] ⚠️ Misuse of Arrow in Object Method: [code example] 5️⃣ Interview Q&amp;A Q1: Why don’t arrow functions have their own this? A: Because arrow functions are designed for lexical scoping. They inherit this from the context in which they are defined, rather than from how they are called. Q2: When would using an arrow function inside a class break things? A: When the method depends on this referring to the class instance. Arrow functions don’t have their own this, so they won’t work properly in instance methods. Q3: Can you replace all function expressions with arrow functions? A: No. If the function needs a dynamic or context-based this, you must use a traditional function. Q4: How does .call() or .apply() ...
       </div>
     </article>
   </noscript>

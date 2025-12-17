@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="The method returns the first element in an array that satisfies a provided testing function. If no element matches, it returns .">
+  <meta name="description" content="The find() method returns the first element in an array that satisfies a provided testing function. If no element matches, it returns undefined.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🔎 Array.prototype.find() Polyfill | Frontend Resources">
-  <meta property="og:description" content="The method returns the first element in an array that satisfies a provided testing function. If no element matches, it returns .">
+  <meta property="og:description" content="The find() method returns the first element in an array that satisfies a provided testing function. If no element matches, it returns undefined.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/find">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="🔎 Array.prototype.find() Polyfill | Frontend Resources">
-  <meta name="twitter:description" content="The method returns the first element in an array that satisfies a provided testing function. If no element matches, it returns .">
+  <meta name="twitter:description" content="The find() method returns the first element in an array that satisfies a provided testing function. If no element matches, it returns undefined.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/find">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔎 Array.prototype.find() Polyfill","description":"The method returns the first element in an array that satisfies a provided testing function. If no element matches, it returns .","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/find"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔎 Array.prototype.find() Polyfill","description":"The find() method returns the first element in an array that satisfies a provided testing function. If no element matches, it returns undefined.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/find"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / polyfills</p>
       <p><strong>Difficulty:</strong> medium</p>
       <div class="content">
-        The method returns the first element in an array that satisfies a provided testing function. If no element matches, it returns . This polyfill supports the optional parameter for binding context. --- ✅ Implementation How It Works: 1. Iteration : The method iterates through the array using a loop. 2. Callback Execution : For each element, it calls the provided with the current element, its index, and the array. If the callback returns a truthy value, the method immediately returns that element. 1. Optional : If provided, is used to bind inside the callback function using . 2. No Match : If no element satisfies the condition in , it returns . Example: returns the first element greater than 10, which is . If no element matches, such as , it returns . Why Use ? Explicit Binding : The ensures that the value inside the callback is explicitly set to . This is crucial when is provided and the callback relies on it. Without , the value could be undefined (in strict mode) or the global object (non-strict mode), leading to unexpected results. By using , we guarantee that is used as the context inside the callback. Example of in Action: Summary: allows explicit control over the context inside the callback. Without , the context inside the callback may not behave as expected, especially when is provided....
+        The find() method returns the first element in an array that satisfies a provided testing function. If no element matches, it returns undefined. This polyfill supports the optional thisArg parameter for binding context. ✅ Implementation [code example] How It Works: Iteration : The customFind method iterates through the array using a for loop. Callback Execution : For each element, it calls the provided callbackFn with the current element, its index, and the array. If the callback returns a truthy value, the method immediately returns that element. Optional thisArg : If provided, thisArg is used to bind this inside the callback function using .call(thisArg, this[i], i, this). No Match : If no element satisfies the condition in callbackFn, it returns undefined. Example: customFind(element =&gt; element &gt; 10) returns the first element greater than 10, which is 12. If no element matches, such as customFind(element =&gt; element &gt; 200), it returns undefined. Why Use .call(thisArg, ...)? Explicit this Binding : The .call(thisArg, ...) ensures that the this value inside the callback is explicitly set to thisArg. This is crucial when thisArg is provided and the callback relies on it. Without .call(), the this value could be undefined (in strict mode) or the global object (non-strict mode), leading to unexpected results. By using .call(thisArg, ...), we guarantee that thisArg is used as the context inside the callback. Example of .call() in Action: [code example] Summary: .call(thisArg, ...) allows explicit control over the this context inside the callback. Without .call(), the this context inside the callback may not behave as expected, especially when thisArg is provided....
       </div>
     </article>
   </noscript>

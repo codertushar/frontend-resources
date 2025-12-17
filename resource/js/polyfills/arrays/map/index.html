@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="&gt; Interview Importance: 🔴 Critical — One of the most frequently asked polyfill questions.">
+  <meta name="description" content="Interview Importance: 🔴 Critical — One of the most frequently asked polyfill questions.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🗺️ Array.prototype.map() Polyfill | Frontend Resources">
-  <meta property="og:description" content="&gt; Interview Importance: 🔴 Critical — One of the most frequently asked polyfill questions.">
+  <meta property="og:description" content="Interview Importance: 🔴 Critical — One of the most frequently asked polyfill questions.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/map">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="🗺️ Array.prototype.map() Polyfill | Frontend Resources">
-  <meta name="twitter:description" content="&gt; Interview Importance: 🔴 Critical — One of the most frequently asked polyfill questions.">
+  <meta name="twitter:description" content="Interview Importance: 🔴 Critical — One of the most frequently asked polyfill questions.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/map">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🗺️ Array.prototype.map() Polyfill","description":"> Interview Importance: 🔴 Critical — One of the most frequently asked polyfill questions.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/map"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🗺️ Array.prototype.map() Polyfill","description":"Interview Importance: 🔴 Critical — One of the most frequently asked polyfill questions.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/map"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / polyfills</p>
       <p><strong>Difficulty:</strong> hard</p>
       <div class="content">
-        &gt; Interview Importance: 🔴 Critical — One of the most frequently asked polyfill questions. Tests understanding of array methods, binding, callbacks, and prototype extension. --- 1️⃣ What is Array.map()? creates a new array populated with the results of calling a provided function on every element in the calling array. Key Characteristics | Feature | Description | |---------|-------------| | Returns | New array of same length | | Mutates original? | No (pure function) | | Handles sparse arrays? | Yes (skips holes) | | Accepts thisArg? | Yes (optional second parameter) | --- 2️⃣ Why Know the Polyfill? 1. Interview staple — Asked frequently to test JavaScript fundamentals 2. Understand internals — Know how native methods work under the hood 3. Edge cases — Learn about sparse arrays, binding, callback signature 4. Build confidence — If you can implement , you can implement any array method --- 3️⃣ Native API Signature | Parameter | Description | |-----------|-------------| | | Function called for each element | | | Current element being processed | | | Index of current element | | | The array was called on | | | Value to use as inside callback (optional) | --- 4️⃣ Implementation Basic Implementation 🔍 Dry Run: Basic Usage --- 5️⃣ Key Implementation Details Why ? Handles sparse arrays — arrays with &quot;holes&quot; (missing indices): 🔍 Dry Run: Sparse Array Production Implementation (Preserves Holes) Why ? The parameter lets you set the context inside the callback: 🔍 Dry Run: Using thisArg --- 6️⃣ Complete Spec-Compliant Implementation Why ? Handles edge cases where is called on primitives: Why ? Converts length to a 32-bit unsigned integer (spec requirement): Why instead of ? Checks both own and inherited numeric properties (spec-compliant): --- 7️⃣ Common Interview Variations Variation 1: Implement without using Variation 2: Implement using reduce Variation 3: Async map --- 8️⃣ Common Interview Questions Q1: Implement Array.prototype.map Answer: See Section 4 or Section 6. Q...
+        Interview Importance: 🔴 Critical — One of the most frequently asked polyfill questions. Tests understanding of array methods, this binding, callbacks, and prototype extension. 1️⃣ What is Array.map()? Array.prototype.map() creates a new array populated with the results of calling a provided function on every element in the calling array. [code example] Key Characteristics Description New array of same length Mutates original? Yes (skips holes) Accepts thisArg? 2️⃣ Why Know the Polyfill? Interview staple — Asked frequently to test JavaScript fundamentals Understand internals — Know how native methods work under the hood Edge cases — Learn about sparse arrays, this binding, callback signature Build confidence — If you can implement map, you can implement any array method 3️⃣ Native API Signature [code example] Description Function called for each element currentValue Index of current element array Value to use as this inside callback (optional) Feature forEach Returns undefined Chainable No Purpose Side effects Aspect Explanation Time Iterates through each element once Space Creates new array of same size Concept Return value callback(currentValue, index, array) thisArg Skip holes, preserve in result Key method Key Takeaways Always check for holes — use i in this or hasOwnProperty(i) Preserve array length — use new Array(length) not [] Handle thisArg — use .call() or .bind() Return new array — never mutate original Validate callback — must be a function 📚 Further Reading MDN: Array.prototype.map() ECMAScript Specification: Array.prototype.map...
       </div>
     </article>
   </noscript>

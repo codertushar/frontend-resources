@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="Understanding when to use , , or both attributes on tags to optimize page loading performance and avoid render-blocking issues.">
+  <meta name="description" content="Understanding when to use async, defer, or both attributes on &lt;script&gt; tags to optimize page loading performance and avoid render-blocking issues.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🔄 Script Loading: async vs defer vs Both | Frontend Resources">
-  <meta property="og:description" content="Understanding when to use , , or both attributes on tags to optimize page loading performance and avoid render-blocking issues.">
+  <meta property="og:description" content="Understanding when to use async, defer, or both attributes on &lt;script&gt; tags to optimize page loading performance and avoid render-blocking issues.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/script_loading_async_defer">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="🔄 Script Loading: async vs defer vs Both | Frontend Resources">
-  <meta name="twitter:description" content="Understanding when to use , , or both attributes on tags to optimize page loading performance and avoid render-blocking issues.">
+  <meta name="twitter:description" content="Understanding when to use async, defer, or both attributes on &lt;script&gt; tags to optimize page loading performance and avoid render-blocking issues.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/script_loading_async_defer">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔄 Script Loading: async vs defer vs Both","description":"Understanding when to use , , or both attributes on tags to optimize page loading performance and avoid render-blocking issues.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/script_loading_async_defer"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔄 Script Loading: async vs defer vs Both","description":"Understanding when to use async, defer, or both attributes on <script> tags to optimize page loading performance and avoid render-blocking issues.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/script_loading_async_defer"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / general-concepts</p>
       <p><strong>Difficulty:</strong> hard</p>
       <div class="content">
-        Understanding when to use , , or both attributes on tags to optimize page loading performance and avoid render-blocking issues. --- 💡 What are Script Loading Attributes? Script loading attributes control how and when JavaScript files are downloaded and executed, preventing render-blocking and improving page performance. Why it matters: Default tags block HTML parsing and rendering, causing slow page loads and poor user experience. --- 🧠 Core Concepts Default Behavior (No Attributes) What happens: 1. HTML parsing stops 2. Script downloads 3. Script executes immediately 4. HTML parsing resumes Impact: Slows First Contentful Paint, blocks rendering. Attribute What happens: 1. Download starts in parallel with HTML parsing 2. HTML parsing continues uninterrupted 3. Script executes after DOM is complete 4. Multiple deferred scripts run in order Best for: Application scripts that need DOM access. Attribute What happens: 1. Download starts in parallel with HTML parsing 2. HTML parsing continues 3. Script executes as soon as download completes 4. May interrupt HTML parsing if downloaded early Best for: Independent scripts (analytics, ads, widgets). (Both) What happens: takes precedence, is ignored. Same as only. --- ✅ When to Use Each Approach Use for: - Application scripts that manipulate DOM - Scripts that depend on each other (maintains execution order) - Scripts that need DOM to be ready - Most JavaScript in modern web apps Use for: - Analytics and tracking scripts - Social media widgets - Ads and third-party scripts - Independent utilities that don&#39;t need DOM Never use both: --- 🧪 Practical Examples E-commerce Site Loading Strategy Blog Site Loading Strategy Single Page Application (SPA) --- ⚠️ Limitations &amp; Considerations Execution Order Issues DOMContentLoaded Timing - scripts run before event - scripts may run before or after - Default scripts run immediately (block ) Module Scripts Browser Support - : IE 10+, all modern browsers - : IE 10+, all modern browsers - ...
+        Understanding when to use async, defer, or both attributes on &lt;script&gt; tags to optimize page loading performance and avoid render-blocking issues. 💡 What are Script Loading Attributes? Script loading attributes control how and when JavaScript files are downloaded and executed, preventing render-blocking and improving page performance. Why it matters: Default &lt;script&gt; tags block HTML parsing and rendering, causing slow page loads and poor user experience. 🧠 Core Concepts Default Behavior (No Attributes) [code example] What happens: HTML parsing stops Script downloads Script executes immediately HTML parsing resumes Impact: Slows First Contentful Paint, blocks rendering. defer Attribute [code example] What happens: Download starts in parallel with HTML parsing HTML parsing continues uninterrupted Script executes after DOM is complete Multiple deferred scripts run in order Best for: Application scripts that need DOM access. async Attribute [code example] What happens: Download starts in parallel with HTML parsing HTML parsing continues Script executes as soon as download completes May interrupt HTML parsing if downloaded early Best for: Independent scripts (analytics, ads, widgets). async defer (Both) [code example] What happens: async takes precedence, defer is ignored. Same as async only. ✅ When to Use Each Approach Use defer for: Application scripts that manipulate DOM Scripts that depend on each other (maintains execution order) Scripts that need DOM to be ready Most JavaScript in modern web apps [code example] Use async for: Analytics and tracking scripts Social media widgets Ads and third-party scripts Independent utilities that don&#39;t need DOM [code example] Never use both: [code example] 🧪 Practical Examples E-commerce Site Loading Strategy [code example] Blog Site Loading Strategy [code example] Single Page Application (SPA) [code example] ⚠️ Limitations &amp; Considerations Execution Order Issues [code example] DOMContentLoaded Timing defer scripts run before D...
       </div>
     </article>
   </noscript>

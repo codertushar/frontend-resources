@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="&gt; Interview Importance: 🔴 Critical — This technique appears in 35% of frontend coding interviews for substring, subarray, and data stream problems.">
+  <meta name="description" content="Interview Importance: 🔴 Critical — This technique appears in 35% of frontend coding interviews for substring, subarray, and data stream problems.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🎯 Sliding Window Technique: Efficient String &amp; Array Pattern for Frontend Interviews | Frontend Resources">
-  <meta property="og:description" content="&gt; Interview Importance: 🔴 Critical — This technique appears in 35% of frontend coding interviews for substring, subarray, and data stream problems.">
+  <meta property="og:description" content="Interview Importance: 🔴 Critical — This technique appears in 35% of frontend coding interviews for substring, subarray, and data stream problems.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/dsa/sliding_window">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="🎯 Sliding Window Technique: Efficient String &amp; Array Pattern for Frontend Interviews | Frontend Resources">
-  <meta name="twitter:description" content="&gt; Interview Importance: 🔴 Critical — This technique appears in 35% of frontend coding interviews for substring, subarray, and data stream problems.">
+  <meta name="twitter:description" content="Interview Importance: 🔴 Critical — This technique appears in 35% of frontend coding interviews for substring, subarray, and data stream problems.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/dsa/sliding_window">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🎯 Sliding Window Technique: Efficient String & Array Pattern for Frontend Interviews","description":"> Interview Importance: 🔴 Critical — This technique appears in 35% of frontend coding interviews for substring, subarray, and data stream problems.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/dsa/sliding_window"},"articleSection":"dsa","keywords":"dsa, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🎯 Sliding Window Technique: Efficient String & Array Pattern for Frontend Interviews","description":"Interview Importance: 🔴 Critical — This technique appears in 35% of frontend coding interviews for substring, subarray, and data stream problems.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/dsa/sliding_window"},"articleSection":"dsa","keywords":"dsa, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> dsa</p>
       <p><strong>Difficulty:</strong> hard</p>
       <div class="content">
-        &gt; Interview Importance: 🔴 Critical — This technique appears in 35% of frontend coding interviews for substring, subarray, and data stream problems. Essential for optimizing O(n²) brute force solutions to O(n) linear time. --- 1️⃣ What is the Sliding Window Technique? The Sliding Window Technique is an algorithmic pattern that maintains a &quot;window&quot; (contiguous sequence) over an array or string. The window slides through the data structure by adding elements on one end and removing from the other, allowing efficient computation without recalculating everything from scratch. Visual Representation: Real-World Analogy: Think of it like a camera viewfinder moving across a landscape. Instead of taking a new photo for every possible view (expensive), you slide the viewfinder smoothly, only adjusting what enters and exits the frame. This is exactly how video streaming buffers work in frontend applications! --- 2️⃣ Why Use the Sliding Window Technique? | Problem Type | Without Sliding Window | With Sliding Window | Benefit | |------------------|---------------------------|------------------------|-------------| | Longest substring without repeats | O(n³) check all substrings | O(n) single pass | 1000x faster for 1000 chars | | Max sum of k elements | O(nk) recalculate sums | O(n) maintain sum | Linear scaling | | Count anagrams | O(nm) compare each window | O(n) frequency map | Optimal for pattern matching | | Find all substrings of length k | O(nk) create substrings | O(n) slide indices | 50% memory saved | | Valid window with conditions | O(n²) nested checks | O(n) expand/contract | Real-time processing | Performance Benefits: - Reduces time complexity from O(n²) or O(n³) to O(n) - Often achieves O(1) or O(k) space complexity with hash maps - Perfect for frontend: autocomplete suggestions, real-time validation, data stream monitoring - Powers features like search-as-you-type, infinite scroll, pagination --- 3️⃣ How It Works — Basic Implementation Pattern 1: Fixed-Size Windo...
+        Interview Importance: 🔴 Critical — This technique appears in 35% of frontend coding interviews for substring, subarray, and data stream problems. Essential for optimizing O(n²) brute force solutions to O(n) linear time. 1️⃣ What is the Sliding Window Technique? The Sliding Window Technique is an algorithmic pattern that maintains a &quot;window&quot; (contiguous sequence) over an array or string. The window slides through the data structure by adding elements on one end and removing from the other, allowing efficient computation without recalculating everything from scratch. Visual Representation: [code example] Real-World Analogy: Think of it like a camera viewfinder moving across a landscape. Instead of taking a new photo for every possible view (expensive), you slide the viewfinder smoothly, only adjusting what enters and exits the frame. This is exactly how video streaming buffers work in frontend applications! 2️⃣ Why Use the Sliding Window Technique? Without Sliding Window Benefit O(n³) check all substrings 1000x faster for 1000 chars Max sum of k elements O(n) maintain sum O(nm) compare each window Optimal for pattern matching Find all substrings of length k O(n) slide indices O(n²) nested checks Real-time processing Aspect Two Pointers Brute Force Time Complexity O(n) O(n²) or O(n³) Space Complexity O(1) typically O(1) Use Case Sorted arrays, pairs Small inputs only Window Type N/A All possible Best For Finding pairs, palindromes Testing, validation Frontend Example Merge sorted lists Simple validation Operation Space Complexity Fixed window (size k) O(1) or O(k) O(n) Each element enters and exits once; window state With hash map O(k) O(nklog k) Sorting each window position; not optimal 2D sliding window O(k²) O(n²) or O(n³) Nested loops; no optimization Category Definition Reduces O(n²) or O(n³) to O(n) by avoiding recalculation Space Optimization Constant size k, slide by adding one and removing one element Variable Window Search autocomplete, real-time monitoring,...
       </div>
     </article>
   </noscript>

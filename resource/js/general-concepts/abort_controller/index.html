@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="is a built-in Web API that allows you to cancel asynchronous operations, especially ones that support an , like , streams, or custom async tasks.">
+  <meta name="description" content="AbortController is a built-in Web API that allows you to cancel asynchronous operations, especially ones that support an AbortSignal, like fetch, streams, or...">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🛑 AbortController: Canceling Async Operations in JavaScript | Frontend Resources">
-  <meta property="og:description" content="is a built-in Web API that allows you to cancel asynchronous operations, especially ones that support an , like , streams, or custom async tasks.">
+  <meta property="og:description" content="AbortController is a built-in Web API that allows you to cancel asynchronous operations, especially ones that support an AbortSignal, like fetch, streams, or...">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/abort_controller">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="🛑 AbortController: Canceling Async Operations in JavaScript | Frontend Resources">
-  <meta name="twitter:description" content="is a built-in Web API that allows you to cancel asynchronous operations, especially ones that support an , like , streams, or custom async tasks.">
+  <meta name="twitter:description" content="AbortController is a built-in Web API that allows you to cancel asynchronous operations, especially ones that support an AbortSignal, like fetch, streams, or...">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/abort_controller">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🛑 AbortController: Canceling Async Operations in JavaScript","description":"is a built-in Web API that allows you to cancel asynchronous operations, especially ones that support an , like , streams, or custom async tasks.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/abort_controller"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🛑 AbortController: Canceling Async Operations in JavaScript","description":"AbortController is a built-in Web API that allows you to cancel asynchronous operations, especially ones that support an AbortSignal, like fetch, streams, or...","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/abort_controller"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / general-concepts</p>
       <p><strong>Difficulty:</strong> medium</p>
       <div class="content">
-        is a built-in Web API that allows you to cancel asynchronous operations, especially ones that support an , like , streams, or custom async tasks. --- 💡 Core Concepts 1. Creates a controller with a object. You call to cancel the operation. 2. Passed to the async operation. Has boolean flag and emits an event. --- 🧪 Example: Cancel --- 📦 Common Use Cases | Use Case | How Helps | | ----------------------- | ----------------------------------------- | | cancellation | ✅ Native support | | Custom async tasks | ✅ Add your own signal checks | | Debounce, retry, race | ✅ Combine with timeouts or control logic | | React effects | ✅ Cleanup async ops on unmount | --- 🧠 Example in Custom Code Create a function that supports cancellation via . Here’s a precise, fetch-cancelable promise implementation using : --- ✅ Cancelable Fetch with AbortController --- 🧪 Example: --- ✅ Behavior: Uses to terminate the underlying request. If canceled, rejects with . Unlike , this actually stops the request . --- ⚠️ Works With: Some APIs like , , (in newer specs) --- Let me know if you want a generic wrapper that adds cancelation to any async operation (not just )....
+        AbortController is a built-in Web API that allows you to cancel asynchronous operations, especially ones that support an AbortSignal, like fetch, streams, or custom async tasks. 💡 Core Concepts AbortController Creates a controller with a .signal object. You call .abort() to cancel the operation. AbortSignal Passed to the async operation. Has .aborted boolean flag and emits an abort event. 🧪 Example: Cancel fetch [code example] 📦 Common Use Cases How AbortControllerHelps ✅ Native support Custom async tasks ✅ Combine with timeouts or control logic React effects 🧠 Example in Custom Code Create a wait(ms) function that supports cancellation via AbortController. [code example] Here’s a precise, fetch-cancelable promise implementation using AbortController : ✅ Cancelable Fetch with AbortController [code example] 🧪 Example: [code example] ✅ Behavior: Uses AbortController to terminate the underlying fetch request. If canceled, fetch rejects with AbortError. Unlike makeCancelable, this actually stops the request . ⚠️ Works With: fetch Some APIs like ReadableStream, Request, WebSocket (in newer specs) Let me know if you want a generic wrapper that adds cancelation to any* async operation (not just fetch)....
       </div>
     </article>
   </noscript>

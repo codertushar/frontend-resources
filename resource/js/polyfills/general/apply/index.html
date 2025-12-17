@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="The method in JavaScript is similar to , except that it takes arguments as an array.">
+  <meta name="description" content="The apply method in JavaScript is similar to call, except that it takes arguments as an array. 1️⃣ Understanding Function.prototype.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="📞 Function.prototype.apply() Polyfill | Frontend Resources">
-  <meta property="og:description" content="The method in JavaScript is similar to , except that it takes arguments as an array.">
+  <meta property="og:description" content="The apply method in JavaScript is similar to call, except that it takes arguments as an array. 1️⃣ Understanding Function.prototype.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/polyfills/general/apply">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="📞 Function.prototype.apply() Polyfill | Frontend Resources">
-  <meta name="twitter:description" content="The method in JavaScript is similar to , except that it takes arguments as an array.">
+  <meta name="twitter:description" content="The apply method in JavaScript is similar to call, except that it takes arguments as an array. 1️⃣ Understanding Function.prototype.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/polyfills/general/apply">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"📞 Function.prototype.apply() Polyfill","description":"The method in JavaScript is similar to , except that it takes arguments as an array.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/general/apply"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"📞 Function.prototype.apply() Polyfill","description":"The apply method in JavaScript is similar to call, except that it takes arguments as an array. 1️⃣ Understanding Function.prototype.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/general/apply"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / polyfills</p>
       <p><strong>Difficulty:</strong> medium</p>
       <div class="content">
-        The method in JavaScript is similar to , except that it takes arguments as an array. --- 1️⃣ Understanding Native behavior: 📌 Difference from : → Arguments are passed individually. → Arguments are passed as an array. --- 2️⃣ Polyfill for We need to: Attach the function to the (context). Pass the arguments as an array. Remove the temporary function reference. --- 3️⃣ Testing the Polyfill --- 4️⃣ Dry Run Step-by-Step Let&#39;s break it down for: --- 📌 Step 1: Call inside refers to . (). . --- 📌 Step 2: Function Definition Breakdown Inside : ✅ is (a function), so no error. --- 📌 Step 3: Set . --- 📌 Step 4: Attach Function Temporarily A unique property is added to : --- 📌 Step 5: Invoke Function Equivalent to: Since is now , it prints: --- 📌 Step 6: Cleanup Removes the temporary function from , restoring it to: --- 📌 Final Execution Summary | Step | Action | | ----- | ---------------------------------------------------------------------------------------------------------- | | 1️⃣ | is called | | 2️⃣ | | | 3️⃣ | is created and assigned to | | 4️⃣ | is invoked, printing | | 5️⃣ | Temporary function property is deleted | ✅ Works just like the native method! Would you like a polyfill next? 🚀...
+        The apply method in JavaScript is similar to call, except that it takes arguments as an array. 1️⃣ Understanding Function.prototype.apply Native behavior: [code example] 📌 Difference from call : call(context, arg1, arg2, arg3, ...) → Arguments are passed individually. apply(context, [arg1, arg2, arg3, ...]) → Arguments are passed as an array. 2️⃣ Polyfill for apply We need to: Attach the function to the thisArg (context). Pass the arguments as an array. Remove the temporary function reference. [code example] 3️⃣ Testing the Polyfill [code example] 4️⃣ Dry Run Step-by-Step Let&#39;s break it down for: [code example] 📌 Step 1: Call myApply [code example] this inside myApply refers to greet. context = person ({ name: &quot;Bob&quot; }). args = [30, &quot;Los Angeles&quot;]. 📌 Step 2: Function Definition Breakdown Inside myApply: [code example] ✅ this is greet (a function), so no error. 📌 Step 3: Set context [code example] context = person. 📌 Step 4: Attach Function Temporarily [code example] A unique property is added to person: [code example] 📌 Step 5: Invoke Function [code example] Equivalent to: [code example] Since this is now person, it prints: [code example] 📌 Step 6: Cleanup [code example] Removes the temporary function from person, restoring it to: [code example] 📌 Final Execution Summary Action greet.myApply(person, [30, &quot;Los Angeles&quot;])is called 2️⃣ Symbol(fnKey)is created and assigned to person[Symbol(fnKey)] = greet 4️⃣ Temporary function property is deleted | ✅ Works just like the native apply method! Would you like a bind polyfill next? 🚀...
       </div>
     </article>
   </noscript>

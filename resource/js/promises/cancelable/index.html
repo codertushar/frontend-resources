@@ -35,7 +35,7 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / promises</p>
       <p><strong>Difficulty:</strong> medium</p>
       <div class="content">
-        A cancelable promise wrapper allows you to prevent promise handlers from executing after cancellation. This is useful for avoiding state updates in unmounted React components or canceling outdated API responses. --- ✅ Implementation --- 🧪 Example: --- ✅ Behavior: If is called before resolution, the promise rejects with . If not canceled, resolves normally. Doesn’t abort the underlying task — only prevents / from running. --- 🧠 Notes: This doesn&#39;t stop network/fetch/etc. — only suppresses result handlers . Use for cancelable fetch requests or actual task termination.
+        A cancelable promise wrapper allows you to prevent promise handlers from executing after cancellation. This is useful for avoiding state updates in unmounted React components or canceling outdated API responses. ✅ Implementation [code example] 🧪 Example: [code example] ✅ Behavior: If .cancel() is called before resolution, the promise rejects with { canceled: true }. If not canceled, resolves normally. Doesn’t abort the underlying task — only prevents .then()/.catch() from running. 🧠 Notes: This doesn&#39;t stop network/fetch/etc. — only suppresses result handlers . Use AbortController for cancelable fetch requests or actual task termination.
       </div>
     </article>
   </noscript>

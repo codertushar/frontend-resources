@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="takes an iterable of promises and returns a single promise that resolves as soon as any of the input promises fulfills.">
+  <meta name="description" content="Promise.any() takes an iterable of promises and returns a single promise that resolves as soon as any of the input promises fulfills.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🎯 Promise.any() Implementation | Frontend Resources">
-  <meta property="og:description" content="takes an iterable of promises and returns a single promise that resolves as soon as any of the input promises fulfills.">
+  <meta property="og:description" content="Promise.any() takes an iterable of promises and returns a single promise that resolves as soon as any of the input promises fulfills.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/promises/any">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="🎯 Promise.any() Implementation | Frontend Resources">
-  <meta name="twitter:description" content="takes an iterable of promises and returns a single promise that resolves as soon as any of the input promises fulfills.">
+  <meta name="twitter:description" content="Promise.any() takes an iterable of promises and returns a single promise that resolves as soon as any of the input promises fulfills.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/promises/any">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🎯 Promise.any() Implementation","description":"takes an iterable of promises and returns a single promise that resolves as soon as any of the input promises fulfills.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/promises/any"},"articleSection":"js","keywords":"js, promises, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🎯 Promise.any() Implementation","description":"Promise.any() takes an iterable of promises and returns a single promise that resolves as soon as any of the input promises fulfills.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/promises/any"},"articleSection":"js","keywords":"js, promises, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / promises</p>
       <p><strong>Difficulty:</strong> medium</p>
       <div class="content">
-        takes an iterable of promises and returns a single promise that resolves as soon as any of the input promises fulfills. If all promises reject, it rejects with an containing all rejection reasons. --- 🧠 Understanding Promise.any --- Atom 1: Purpose returns a promise that: ✅ Resolves as soon as any input promise resolves ❌ Rejects only if all input promises reject --- Atom 2: Normalization Convert all inputs to promises with --- Atom 3: Resolve on First Fulfilled On first , resolve the outer promise. --- Atom 4: Track Rejections Maintain count of rejections. If all promises reject, reject with , which contains all rejection reasons. --- Atom 5: Edge Case If input is empty → reject immediately with --- ✅ Implementation: --- 🧪 Example: ❌ If all reject:...
+        Promise.any() takes an iterable of promises and returns a single promise that resolves as soon as any of the input promises fulfills. If all promises reject, it rejects with an AggregateError containing all rejection reasons. 🧠 Understanding Promise.any Atom 1: Purpose Promise.any returns a promise that: ✅ Resolves as soon as any input promise resolves ❌ Rejects only if all input promises reject Atom 2: Normalization Convert all inputs to promises with Promise.resolve(...) Atom 3: Resolve on First Fulfilled On first .then, resolve the outer promise. Atom 4: Track Rejections Maintain count of rejections. If all promises reject, reject with AggregateError , which contains all rejection reasons. Atom 5: Edge Case If input is empty → reject immediately with AggregateError ✅ Implementation: promiseAny [code example] 🧪 Example: [code example] ❌ If all reject: [code example]...
       </div>
     </article>
   </noscript>

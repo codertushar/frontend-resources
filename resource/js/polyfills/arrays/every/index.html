@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="The method tests whether all elements in the array pass the test implemented by the provided function. --- ✅ Implementation --- How It Works 1.">
+  <meta name="description" content="The every() method tests whether all elements in the array pass the test implemented by the provided function.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="✅ Array.prototype.every() Polyfill | Frontend Resources">
-  <meta property="og:description" content="The method tests whether all elements in the array pass the test implemented by the provided function. --- ✅ Implementation --- How It Works 1.">
+  <meta property="og:description" content="The every() method tests whether all elements in the array pass the test implemented by the provided function.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/every">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="✅ Array.prototype.every() Polyfill | Frontend Resources">
-  <meta name="twitter:description" content="The method tests whether all elements in the array pass the test implemented by the provided function. --- ✅ Implementation --- How It Works 1.">
+  <meta name="twitter:description" content="The every() method tests whether all elements in the array pass the test implemented by the provided function.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/every">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"✅ Array.prototype.every() Polyfill","description":"The method tests whether all elements in the array pass the test implemented by the provided function. --- ✅ Implementation --- How It Works 1.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/every"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"✅ Array.prototype.every() Polyfill","description":"The every() method tests whether all elements in the array pass the test implemented by the provided function.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/every"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / polyfills</p>
       <p><strong>Difficulty:</strong> medium</p>
       <div class="content">
-        The method tests whether all elements in the array pass the test implemented by the provided function. --- ✅ Implementation --- How It Works 1. Checks if is a function If not, throws a (same behavior as ). 2. Iterates through the array Calls for each element with . Uses to bind if provided. 3. Returns early if any test fails If returns for any element, immediately returns (optimized). 4. Returns if all tests pass If all elements satisfy the condition, it returns . --- Edge Cases Handled ✔ Empty array always returns ✔ Stops checking as soon as one element fails (Optimized) ✔ Works with binding ✔ Throws an error if is not a function 🚀 This implementation is efficient, clean, and mirrors exactly. Let me know if you need further refinements!
+        The every() method tests whether all elements in the array pass the test implemented by the provided function. ✅ Implementation [code example] How It Works Checks if callback is a function If not, throws a TypeError (same behavior as Array.prototype.every). Iterates through the array Calls callback for each element with (element, index, array). Uses .call(thisArg, ...) to bind thisArg if provided. Returns early if any test fails If callback returns false for any element, customEvery immediately returns false (optimized). Returns true if all tests pass If all elements satisfy the condition, it returns true. Edge Cases Handled ✔ Empty array always returns true ✔ Stops checking as soon as one element fails (Optimized) ✔ Works with thisArg binding ✔ Throws an error if callback is not a function 🚀 This implementation is efficient, clean, and mirrors Array.prototype.every exactly. Let me know if you need further refinements!
       </div>
     </article>
   </noscript>

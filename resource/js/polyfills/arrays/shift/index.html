@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="The method removes the first element from an array and returns that element. --- ✅ Implementation --- How It Works 1.">
+  <meta name="description" content="The shift() method removes the first element from an array and returns that element.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="⬅️ Array.prototype.shift() Polyfill | Frontend Resources">
-  <meta property="og:description" content="The method removes the first element from an array and returns that element. --- ✅ Implementation --- How It Works 1.">
+  <meta property="og:description" content="The shift() method removes the first element from an array and returns that element.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/shift">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="⬅️ Array.prototype.shift() Polyfill | Frontend Resources">
-  <meta name="twitter:description" content="The method removes the first element from an array and returns that element. --- ✅ Implementation --- How It Works 1.">
+  <meta name="twitter:description" content="The shift() method removes the first element from an array and returns that element.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/shift">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"⬅️ Array.prototype.shift() Polyfill","description":"The method removes the first element from an array and returns that element. --- ✅ Implementation --- How It Works 1.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/shift"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"⬅️ Array.prototype.shift() Polyfill","description":"The shift() method removes the first element from an array and returns that element.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/shift"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / polyfills</p>
       <p><strong>Difficulty:</strong> medium</p>
       <div class="content">
-        The method removes the first element from an array and returns that element. --- ✅ Implementation --- How It Works 1. Handles an empty array If , it returns , just like . 2. Stores the first element Saves before modifying the array. 3. Shifts elements to the left Iterates through the array and shifts elements to the left (). 4. Reduces the array length effectively removes the last duplicate. 5. Returns the removed element Mimics behavior by returning the removed item. --- Edge Cases Handled ✔ Works on normal arrays ✔ Works on empty arrays () ✔ Modifies the original array in place ✔ Returns the first element as expected 🚀 This implementation is simple, efficient, and follows exactly! Let me know if you need any refinements.
+        The shift() method removes the first element from an array and returns that element. ✅ Implementation [code example] How It Works Handles an empty array If this.length === 0, it returns undefined, just like shift(). Stores the first element Saves this[0] before modifying the array. Shifts elements to the left Iterates through the array and shifts elements to the left (this[i - 1] = this[i]). Reduces the array length this.length -= 1; effectively removes the last duplicate. Returns the removed element Mimics shift() behavior by returning the removed item. Edge Cases Handled ✔ Works on normal arrays ✔ Works on empty arrays ([].customShift() → undefined) ✔ Modifies the original array in place ✔ Returns the first element as expected 🚀 This implementation is simple, efficient, and follows Array.prototype.shift exactly! Let me know if you need any refinements.
       </div>
     </article>
   </noscript>

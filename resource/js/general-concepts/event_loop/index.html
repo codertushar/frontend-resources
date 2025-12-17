@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="&gt; Interview Importance: 🔴 Critical — The Event Loop is asked in 85% of JavaScript interviews.">
+  <meta name="description" content="Interview Importance: 🔴 Critical — The Event Loop is asked in 85% of JavaScript interviews.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="⚡ JavaScript Event Loop: Complete Guide to Asynchronous Execution | Frontend Resources">
-  <meta property="og:description" content="&gt; Interview Importance: 🔴 Critical — The Event Loop is asked in 85% of JavaScript interviews.">
+  <meta property="og:description" content="Interview Importance: 🔴 Critical — The Event Loop is asked in 85% of JavaScript interviews.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/event_loop">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="⚡ JavaScript Event Loop: Complete Guide to Asynchronous Execution | Frontend Resources">
-  <meta name="twitter:description" content="&gt; Interview Importance: 🔴 Critical — The Event Loop is asked in 85% of JavaScript interviews.">
+  <meta name="twitter:description" content="Interview Importance: 🔴 Critical — The Event Loop is asked in 85% of JavaScript interviews.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/event_loop">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"⚡ JavaScript Event Loop: Complete Guide to Asynchronous Execution","description":"> Interview Importance: 🔴 Critical — The Event Loop is asked in 85% of JavaScript interviews.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/event_loop"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"⚡ JavaScript Event Loop: Complete Guide to Asynchronous Execution","description":"Interview Importance: 🔴 Critical — The Event Loop is asked in 85% of JavaScript interviews.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/event_loop"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / general-concepts</p>
       <p><strong>Difficulty:</strong> hard</p>
       <div class="content">
-        &gt; Interview Importance: 🔴 Critical — The Event Loop is asked in 85% of JavaScript interviews. Understanding it is essential for explaining how async code works, debugging timing issues, and architecting performant applications. --- 1️⃣ What is the Event Loop? The Event Loop is JavaScript&#39;s mechanism for handling asynchronous operations in a single-threaded environment. It continuously monitors the call stack and task queues, executing code in a specific order to create the illusion of concurrent execution. Visual Representation: Real-World Analogy: Restaurant Kitchen 🍳 Imagine a restaurant kitchen with one chef (single-threaded JavaScript): The chef can&#39;t cook multiple dishes simultaneously, but the manager ensures orders are handled efficiently by prioritizing and coordinating work. --- 2️⃣ Why Does This Matter? Common Use Cases | Problem | Why Event Loop Matters | Real Example | |------------|---------------------------|------------------| | API calls blocking UI | Event loop delegates I/O to browser APIs, keeping UI responsive | doesn&#39;t freeze the page | | Animation frame timing | Event loop schedules rendering between tasks | | | User input responsiveness | Events queue up without blocking execution | Click handlers work during loading | | Promise resolution order | Microtask queue ensures promises resolve before next task | runs before | | Debouncing/throttling | Understanding timing helps optimize performance | Search autocomplete | | Race conditions | Knowing execution order prevents bugs | Multiple async state updates | Performance Benefits --- 3️⃣ How It Works — Execution Order Basic Implementation Visualization 🔍 Dry Run: Event Loop Execution Code: Step-by-Step Execution: Key Insight: Microtasks ALWAYS execute before the next macrotask, even if the macrotask was queued first! --- 4️⃣ Understanding Key Concepts The Call Stack The call stack is where JavaScript tracks function execution. It follows LIFO (Last In, First Out). What happens if the call stack...
+        Interview Importance: 🔴 Critical — The Event Loop is asked in 85% of JavaScript interviews. Understanding it is essential for explaining how async code works, debugging timing issues, and architecting performant applications. 1️⃣ What is the Event Loop? The Event Loop is JavaScript&#39;s mechanism for handling asynchronous operations in a single-threaded environment. It continuously monitors the call stack and task queues, executing code in a specific order to create the illusion of concurrent execution. Visual Representation: [code example] Real-World Analogy: Restaurant Kitchen 🍳 Imagine a restaurant kitchen with one chef (single-threaded JavaScript): [code example] The chef can&#39;t cook multiple dishes simultaneously, but the manager ensures orders are handled efficiently by prioritizing and coordinating work. 2️⃣ Why Does This Matter? Common Use Cases Why Event Loop Matters Event loop delegates I/O to browser APIs, keeping UI responsive Event loop schedules rendering between tasks Events queue up without blocking execution Microtask queue ensures promises resolve before next task Understanding timing helps optimize performance Knowing execution order prevents bugs Performance Benefits [code example] 3️⃣ How It Works — Execution Order Basic Implementation Visualization [code example] 🔍 Dry Run: Event Loop Execution Code: [code example] Step-by-Step Execution: [code example] Key Insight: Microtasks ALWAYS execute before the next macrotask, even if the macrotask was queued first! 4️⃣ Understanding Key Concepts The Call Stack The call stack is where JavaScript tracks function execution. It follows LIFO (Last In, First Out). [code example] What happens if the call stack is never empty? -&gt; Infinite loop! The event loop can&#39;t process queued tasks. [code example] Microtask Queue (Job Queue) Microtasks have the highest priority and execute immediately after the current script finishes, before any macrotasks. Sources of Microtasks: Promise.then(), Promise.catch(), Promise.fi...
       </div>
     </article>
   </noscript>

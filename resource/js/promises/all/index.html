@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="&gt; Interview Importance: 🔴 Critical — Implementing is one of the most common JavaScript interview questions.">
+  <meta name="description" content="Interview Importance: 🔴 Critical — Implementing Promise.all is one of the most common JavaScript interview questions.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🎯 Promise.all() Implementation | Frontend Resources">
-  <meta property="og:description" content="&gt; Interview Importance: 🔴 Critical — Implementing is one of the most common JavaScript interview questions.">
+  <meta property="og:description" content="Interview Importance: 🔴 Critical — Implementing Promise.all is one of the most common JavaScript interview questions.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/promises/all">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="🎯 Promise.all() Implementation | Frontend Resources">
-  <meta name="twitter:description" content="&gt; Interview Importance: 🔴 Critical — Implementing is one of the most common JavaScript interview questions.">
+  <meta name="twitter:description" content="Interview Importance: 🔴 Critical — Implementing Promise.all is one of the most common JavaScript interview questions.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/promises/all">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🎯 Promise.all() Implementation","description":"> Interview Importance: 🔴 Critical — Implementing is one of the most common JavaScript interview questions.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/promises/all"},"articleSection":"js","keywords":"js, promises, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🎯 Promise.all() Implementation","description":"Interview Importance: 🔴 Critical — Implementing Promise.all is one of the most common JavaScript interview questions.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/promises/all"},"articleSection":"js","keywords":"js, promises, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / promises</p>
       <p><strong>Difficulty:</strong> hard</p>
       <div class="content">
-        &gt; Interview Importance: 🔴 Critical — Implementing is one of the most common JavaScript interview questions. Tests understanding of promises, async handling, and edge cases. --- 1️⃣ What is Promise.all? takes an iterable (usually an array) of promises and returns a single promise that: - Resolves when ALL input promises resolve -&gt; returns array of results in order - Rejects immediately when ANY promise rejects -&gt; returns the first rejection reason Visual Behavior --- 2️⃣ Why Use Promise.all? Use Cases | Scenario | Without Promise.all | With Promise.all | |----------|---------------------|------------------| | Fetch multiple APIs | Sequential: slow | Parallel: fast | | Load multiple resources | One-by-one | All at once | | Validate multiple conditions | Complex chaining | Clean and readable | | Batch operations | Manual tracking | Automatic handling | Performance Benefit --- 3️⃣ How Promise.all Works — Implementation Basic Implementation 🔍 Dry Run: All Promises Resolve 🔍 Dry Run: One Promise Rejects --- 4️⃣ Key Implementation Details Why ? accepts any iterable, not just arrays: Why ? Handles non-promise values (normalizes input): Why Store by Index ()? Preserves order regardless of resolution order: Why Counter Instead of ? Sparse arrays can have length without actual values: --- 5️⃣ Edge Cases | Edge Case | Behavior | Example | |-----------|----------|---------| | Empty array | Resolves immediately with | -&gt; | | Non-promise values | Wrapped in | -&gt; | | Mixed values | All work together | -&gt; | | Already rejected | Rejects immediately | -&gt; rejects | | Multiple rejections | First rejection wins | Only first error returned | Edge Case Implementation Test --- 6️⃣ Complete Production Implementation --- 7️⃣ Related Promise Methods Comparison | Method | Resolves When | Rejects When | Use Case | |--------|---------------|--------------|----------| | | ALL resolve | ANY rejects | Need all results | | | ALL settle | Never | Need all outcomes | | | FIRST settles | FIRST reject...
+        Interview Importance: 🔴 Critical — Implementing Promise.all is one of the most common JavaScript interview questions. Tests understanding of promises, async handling, and edge cases. 1️⃣ What is Promise.all? Promise.all takes an iterable (usually an array) of promises and returns a single promise that: Resolves when ALL input promises resolve -&gt; returns array of results in order Rejects immediately when ANY promise rejects -&gt; returns the first rejection reason [code example] Visual Behavior [code example] 2️⃣ Why Use Promise.all? Use Cases Without Promise.all Sequential: slow One-by-one Complex chaining Manual tracking Performance Benefit [code example] 3️⃣ How Promise.all Works — Implementation Basic Implementation [code example] 🔍 Dry Run: All Promises Resolve [code example] [code example] 🔍 Dry Run: One Promise Rejects [code example] [code example] 4️⃣ Key Implementation Details Why Array.from(iterable)? Promise.all accepts any iterable, not just arrays: [code example] Why Promise.resolve(promise)? Handles non-promise values (normalizes input): [code example] Why Store by Index (results[index] = value)? Preserves order regardless of resolution order: [code example] Why Counter Instead of results.length? Sparse arrays can have length without actual values: [code example] 5️⃣ Edge Cases Behavior Resolves immediately with [] Wrapped in Promise.resolve() All work together Rejects immediately First rejection wins Edge Case Implementation Test [code example] 6️⃣ Complete Production Implementation [code example] 7️⃣ Related Promise Methods Comparison Resolves When Use Case ALL resolve Need all results Promise.allSettled Never FIRST settles Timeout/fastest Promise.any ALL reject Comparison Example [code example] 8️⃣ Common Interview Questions Q1: Implement Promise.all from scratch Answer: See Section 3 or Section 6. Q2: What&#39;s the difference between Promise.all and Promise.allSettled? Answer: Promise.all: Fails fast on first rejection Promise.allSettled: Waits for all...
       </div>
     </article>
   </noscript>

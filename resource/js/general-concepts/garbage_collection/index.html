@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="&gt; Interview Importance: 🔴 Critical — Asked in 70% of senior frontend interviews. Essential for understanding memory management, performance optimization, and...">
+  <meta name="description" content="Interview Importance: 🔴 Critical — Asked in 70% of senior frontend interviews. Essential for understanding memory management, performance optimization, and...">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🗑️ Garbage Collection in JavaScript — Memory Management &amp; Leak Prevention | Frontend Resources">
-  <meta property="og:description" content="&gt; Interview Importance: 🔴 Critical — Asked in 70% of senior frontend interviews. Essential for understanding memory management, performance optimization, and...">
+  <meta property="og:description" content="Interview Importance: 🔴 Critical — Asked in 70% of senior frontend interviews. Essential for understanding memory management, performance optimization, and...">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/garbage_collection">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="🗑️ Garbage Collection in JavaScript — Memory Management &amp; Leak Prevention | Frontend Resources">
-  <meta name="twitter:description" content="&gt; Interview Importance: 🔴 Critical — Asked in 70% of senior frontend interviews. Essential for understanding memory management, performance optimization, and...">
+  <meta name="twitter:description" content="Interview Importance: 🔴 Critical — Asked in 70% of senior frontend interviews. Essential for understanding memory management, performance optimization, and...">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/garbage_collection">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🗑️ Garbage Collection in JavaScript — Memory Management & Leak Prevention","description":"> Interview Importance: 🔴 Critical — Asked in 70% of senior frontend interviews. Essential for understanding memory management, performance optimization, and...","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/garbage_collection"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🗑️ Garbage Collection in JavaScript — Memory Management & Leak Prevention","description":"Interview Importance: 🔴 Critical — Asked in 70% of senior frontend interviews. Essential for understanding memory management, performance optimization, and...","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/garbage_collection"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / general-concepts</p>
       <p><strong>Difficulty:</strong> hard</p>
       <div class="content">
-        &gt; Interview Importance: 🔴 Critical — Asked in 70% of senior frontend interviews. Essential for understanding memory management, performance optimization, and preventing memory leaks in production applications. --- 1️⃣ What is Garbage Collection? Garbage Collection (GC) is an automatic memory management mechanism that identifies and reclaims memory occupied by objects that are no longer needed by the program. It frees developers from manual memory allocation/deallocation, preventing common bugs like dangling pointers and memory leaks. The Core Concept Real-World Analogy: The Office Cleaning Service 🧹 Think of GC like an automated office cleaning service: Simple Example --- 2️⃣ Why Does Garbage Collection Matter? | Concern | Without GC (Manual Memory) | With GC (JavaScript) | Impact | |-------------|-------------------------------|--------------------------|------------| | Memory leaks | Developer forgets to free memory | Automatic cleanup of unreachable objects | 99% fewer memory bugs | | Development speed | Must track every allocation | Focus on business logic | 5x faster development | | Dangling pointers | Accessing freed memory crashes | Impossible - memory stays until unreachable | Zero pointer errors | | Memory fragmentation | Manual defragmentation needed | GC compacts memory automatically | Better performance | | Cognitive load | Track object lifecycles manually | Declare and forget | Mental freedom | Performance Benefits: - Prevents gradual memory consumption (leaks) - Enables long-running web applications (SPAs) - Automatic memory compaction improves cache locality - Generational GC optimizes for short-lived objects (90% of objects) --- 3️⃣ How Garbage Collection Works — Algorithms Algorithm 1: Mark-and-Sweep (Modern JavaScript Engines) The Mark-and-Sweep algorithm is the foundation of garbage collection in V8 (Chrome/Node.js) and SpiderMonkey (Firefox). Implementation Concept 🔍 Dry Run — Mark-and-Sweep Example Step-by-step execution: Algorithm 2: Referen...
+        Interview Importance: 🔴 Critical — Asked in 70% of senior frontend interviews. Essential for understanding memory management, performance optimization, and preventing memory leaks in production applications. 1️⃣ What is Garbage Collection? Garbage Collection (GC) is an automatic memory management mechanism that identifies and reclaims memory occupied by objects that are no longer needed by the program. It frees developers from manual memory allocation/deallocation, preventing common bugs like dangling pointers and memory leaks. The Core Concept [code example] Real-World Analogy: The Office Cleaning Service 🧹 Think of GC like an automated office cleaning service: [code example] Simple Example [code example] 2️⃣ Why Does Garbage Collection Matter? Without GC (Manual Memory) Impact Developer forgets to free memory 99% fewer memory bugs Development speed Focus on business logic Accessing freed memory crashes Zero pointer errors Memory fragmentation GC compacts memory automatically Track object lifecycles manually Mental freedom Algorithm Space Complexity Mark-and-Sweep O(n) for marking set O(1) per operation Fails on cycles Generational GC O(n) for all generations O(live objects only) Compacts memory Incremental GC O(n) total Memory Leak Detection Time Complexity Notes O(n) for all objects Can be large Snapshot comparison O(2n) for two snapshots O(1) per sample Track over time Event listener audit O(1) 📊 Summary Key Takeaway Automatic memory management that reclaims unreachable objects How it works Objects reachable from roots (globals, stack) are kept Generational GC Unintentional references prevent GC (timers, listeners, closures) Weak references DevTools snapshots, performance.memory, look for growth patterns Prevention 5 Key Takeaways GC is automatic but not magic — You can still create memory leaks by keeping unintended references Mark-and-sweep traces reachability — Objects unreachable from roots are garbage Generational GC optimizes for short-lived objects — 9...
       </div>
     </article>
   </noscript>

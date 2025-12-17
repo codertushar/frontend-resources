@@ -35,7 +35,7 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> machine-coding</p>
       <p><strong>Difficulty:</strong> medium</p>
       <div class="content">
-        When building modern web apps, logging user behavior or system events reliably is essential. However, network conditions are unpredictable—so sending analytics events must be delayed, serialized, and resilient to transient failures. Let&#39;s build an SDK that: 1. Queues events via 2. Sends events one at a time , every 1 second 3. Simulates failure every 5th event 4. Retries once on failure --- ✅ Desired Output: --- ✅ Final Code --- 🔍 How It Works 1. Queueing Every call to pushes the event into an internal array. 2. Controlled Sending The method ensures: Only one sending loop runs at a time () Events are dequeued one-by-one () Each event waits 1 second before sending 3. Simulated Failures Every 5th event () fails, logs a failure, waits another second, and retries sending. 4. Retry Guarantee The logic does not proceed to the next event until the current one (including its retry) completes. --- 🔧 Why This is Good Engineering Reliable delivery : Events are serialized and retried. Robust simulation : Failures are explicit and testable. Reusable utilities : is abstracted for clarity. Separation of concerns : Queue management, retry logic, and delay handling are well-isolated....
+        When building modern web apps, logging user behavior or system events reliably is essential. However, network conditions are unpredictable—so sending analytics events must be delayed, serialized, and resilient to transient failures. Let&#39;s build an SDK that: Queues events via logEvent() Sends events one at a time , every 1 second Simulates failure every 5th event Retries once on failure ✅ Desired Output: [code example] ✅ Final Code [code example] 🔍 How It Works Queueing Every call to logEvent() pushes the event into an internal array. Controlled Sending The send() method ensures: Only one sending loop runs at a time (this.isSending) Events are dequeued one-by-one (this.queue.shift()) Each event waits 1 second before sending Simulated Failures Every 5th event (sendCount % 5 === 0) fails, logs a failure, waits another second, and retries sending. Retry Guarantee The logic does not proceed to the next event until the current one (including its retry) completes. 🔧 Why This is Good Engineering Reliable delivery : Events are serialized and retried. Robust simulation : Failures are explicit and testable. Reusable utilities : sleep() is abstracted for clarity. Separation of concerns : Queue management, retry logic, and delay handling are well-isolated....
       </div>
     </article>
   </noscript>

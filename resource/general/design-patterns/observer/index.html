@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="&gt; Use this guide as a quick-reference for interviews or design discussions. --- 1️⃣ Core Idea The Observer Pattern (also known as the Pub/Sub Pattern ) is a...">
+  <meta name="description" content="Use this guide as a quick-reference for interviews or design discussions. 1️⃣ Core Idea The Observer Pattern (also known as the Pub/Sub Pattern ) is a...">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="👀 Observer Pattern — React to Change Automatically | Frontend Resources">
-  <meta property="og:description" content="&gt; Use this guide as a quick-reference for interviews or design discussions. --- 1️⃣ Core Idea The Observer Pattern (also known as the Pub/Sub Pattern ) is a...">
+  <meta property="og:description" content="Use this guide as a quick-reference for interviews or design discussions. 1️⃣ Core Idea The Observer Pattern (also known as the Pub/Sub Pattern ) is a...">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/general/design-patterns/observer">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="👀 Observer Pattern — React to Change Automatically | Frontend Resources">
-  <meta name="twitter:description" content="&gt; Use this guide as a quick-reference for interviews or design discussions. --- 1️⃣ Core Idea The Observer Pattern (also known as the Pub/Sub Pattern ) is a...">
+  <meta name="twitter:description" content="Use this guide as a quick-reference for interviews or design discussions. 1️⃣ Core Idea The Observer Pattern (also known as the Pub/Sub Pattern ) is a...">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/general/design-patterns/observer">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"👀 Observer Pattern — React to Change Automatically","description":"> Use this guide as a quick-reference for interviews or design discussions. --- 1️⃣ Core Idea The Observer Pattern (also known as the Pub/Sub Pattern ) is a...","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/general/design-patterns/observer"},"articleSection":"general","keywords":"general, design-patterns, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"👀 Observer Pattern — React to Change Automatically","description":"Use this guide as a quick-reference for interviews or design discussions. 1️⃣ Core Idea The Observer Pattern (also known as the Pub/Sub Pattern ) is a...","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/general/design-patterns/observer"},"articleSection":"general","keywords":"general, design-patterns, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> general / design-patterns</p>
       <p><strong>Difficulty:</strong> medium</p>
       <div class="content">
-        &gt; Use this guide as a quick-reference for interviews or design discussions. --- 1️⃣ Core Idea The Observer Pattern (also known as the Pub/Sub Pattern ) is a behavioral design pattern in which a subject (publisher) maintains a list of observers (subscribers) and notifies them automatically whenever a state change or event occurs. This pattern promotes loose coupling between the subject and the observers, facilitating clean, modular design — a fundamental principle of event-driven programming. --- 2️⃣ JavaScript &amp; Event-Driven Programming JavaScript is one of the most event-driven programming languages. We frequently use the Observer Pattern via event listeners : &gt; ✅ The browser’s event system is a natural example of the observer pattern in action. --- 3️⃣ Basic Implementation 3.1 Simple Observer System Output: --- 4️⃣ Advanced Version: Multi-Mode Event Hub Inspired by a Coursera interview, here&#39;s an advanced Observer implementation supporting: Sample Test --- 5️⃣ Observer vs Pub-Sub | Feature | Observer | Pub-Sub | | -------------------- | --------------------------------- | -------------------------------------- | | Direct link | Subject holds observer references | Decoupled via channels/topics | | Notification trigger | Direct method call | Broadcast via event bus or channel | | Common in | MVC apps, local state updates | Microservices, cross-app communication | --- 6️⃣ Pros &amp; Cons | ✅ Advantages | ⚠️ Drawbacks | | --------------------------------- | -------------------------------------------- | | Loose coupling, modularity | May cause memory leaks (unremoved observers) | | Supports dynamic notification | Can cause performance issues with many subs | | Easy integration in event systems | Complex state sync in larger apps | --- 7️⃣ Interview Q&amp;A Q1: What is the Observer Pattern? A: It’s a behavioral pattern where an object (subject) notifies a list of observers when a change in state occurs. Q2: Difference between Observer and Pub/Sub? A: In Observer, the subject k...
+        Use this guide as a quick-reference for interviews or design discussions. 1️⃣ Core Idea The Observer Pattern (also known as the Pub/Sub Pattern ) is a behavioral design pattern in which a subject (publisher) maintains a list of observers (subscribers) and notifies them automatically whenever a state change or event occurs. [code example] This pattern promotes loose coupling between the subject and the observers, facilitating clean, modular design — a fundamental principle of event-driven programming. 2️⃣ JavaScript &amp; Event-Driven Programming JavaScript is one of the most event-driven programming languages. We frequently use the Observer Pattern via event listeners : [code example] ✅ The browser’s event system is a natural example of the observer pattern in action. 3️⃣ Basic Implementation 3.1 Simple Observer System [code example] Output: [code example] 4️⃣ Advanced Version: Multi-Mode Event Hub Inspired by a Coursera interview, here&#39;s an advanced Observer implementation supporting: subscribe() subscribeOnce() subscribeOnceAsync() publish() publishAll() [code example] Sample Test [code example] 5️⃣ Observer vs Pub-Sub Observer Subject holds observer references Direct method call MVC apps, local state updates 6️⃣ Pros &amp; Cons ⚠️ Drawbacks May cause memory leaks (unremoved observers) Supports dynamic notification Complex state sync in larger apps | 7️⃣ Interview Q&amp;A Q1: What is the Observer Pattern? A: It’s a behavioral pattern where an object (subject) notifies a list of observers when a change in state occurs. Q2: Difference between Observer and Pub/Sub? A: In Observer, the subject knows the observers directly. In Pub/Sub, they are decoupled via a message broker or event bus. Q3: How does JavaScript use the Observer Pattern? A: Through event listeners (addEventListener, onClick), state libraries like Redux, and libraries like RxJS. Q4: When is Observer not a good fit? A: In highly decoupled systems where components should not know about each other; use Pub/Sub instead...
       </div>
     </article>
   </noscript>

@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="The method tests whether at least one element in the array passes the test implemented by the provided function. --- ✅ Implementation --- How This Works 1.">
+  <meta name="description" content="The some() method tests whether at least one element in the array passes the test implemented by the provided function.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🔘 Array.prototype.some() Polyfill | Frontend Resources">
-  <meta property="og:description" content="The method tests whether at least one element in the array passes the test implemented by the provided function. --- ✅ Implementation --- How This Works 1.">
+  <meta property="og:description" content="The some() method tests whether at least one element in the array passes the test implemented by the provided function.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/some">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="🔘 Array.prototype.some() Polyfill | Frontend Resources">
-  <meta name="twitter:description" content="The method tests whether at least one element in the array passes the test implemented by the provided function. --- ✅ Implementation --- How This Works 1.">
+  <meta name="twitter:description" content="The some() method tests whether at least one element in the array passes the test implemented by the provided function.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/some">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔘 Array.prototype.some() Polyfill","description":"The method tests whether at least one element in the array passes the test implemented by the provided function. --- ✅ Implementation --- How This Works 1.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/some"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔘 Array.prototype.some() Polyfill","description":"The some() method tests whether at least one element in the array passes the test implemented by the provided function.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/some"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / polyfills</p>
       <p><strong>Difficulty:</strong> medium</p>
       <div class="content">
-        The method tests whether at least one element in the array passes the test implemented by the provided function. --- ✅ Implementation --- How This Works 1. Checks if is a function If not, it throws a (same behavior as ). 2. Iterates through the array Calls for each element with . Uses to bind the optional . 3. Returns early if a match is found If returns , immediately returns . 4. Returns if no match is found If no element passes the test, returns after the loop. --- Edge Cases Handled ✔ Empty array always returns ✔ Works with binding ✔ Stops checking as soon as one match is found (Optimized) ✔ Throws an error if is not a function This version is simple, efficient, and follows the behavior of exactly . 🚀 Let me know if you need improvements!
+        The some() method tests whether at least one element in the array passes the test implemented by the provided function. ✅ Implementation [code example] How This Works Checks if callback is a function If not, it throws a TypeError (same behavior as Array.prototype.some). Iterates through the array Calls callback for each element with (element, index, array). Uses .call(thisArg, ...) to bind the optional thisArg. Returns early if a match is found If callback returns true, customSome immediately returns true. Returns false if no match is found If no element passes the test, customSome returns false after the loop. Edge Cases Handled ✔ Empty array always returns false ✔ Works with thisArg binding ✔ Stops checking as soon as one match is found (Optimized) ✔ Throws an error if callback is not a function This version is simple, efficient, and follows the behavior of Array.prototype.some exactly . 🚀 Let me know if you need improvements!
       </div>
     </article>
   </noscript>

@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="The method returns the first index at which a given element can be found, or if not present. --- ✅ Implementation How It Works: 1.">
+  <meta name="description" content="The indexOf() method returns the first index at which a given element can be found, or -1 if not present.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🔢 Array.prototype.indexOf() Polyfill | Frontend Resources">
-  <meta property="og:description" content="The method returns the first index at which a given element can be found, or if not present. --- ✅ Implementation How It Works: 1.">
+  <meta property="og:description" content="The indexOf() method returns the first index at which a given element can be found, or -1 if not present.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/indexOf">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="🔢 Array.prototype.indexOf() Polyfill | Frontend Resources">
-  <meta name="twitter:description" content="The method returns the first index at which a given element can be found, or if not present. --- ✅ Implementation How It Works: 1.">
+  <meta name="twitter:description" content="The indexOf() method returns the first index at which a given element can be found, or -1 if not present.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/indexOf">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔢 Array.prototype.indexOf() Polyfill","description":"The method returns the first index at which a given element can be found, or if not present. --- ✅ Implementation How It Works: 1.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/indexOf"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔢 Array.prototype.indexOf() Polyfill","description":"The indexOf() method returns the first index at which a given element can be found, or -1 if not present.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/indexOf"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / polyfills</p>
       <p><strong>Difficulty:</strong> easy</p>
       <div class="content">
-        The method returns the first index at which a given element can be found, or if not present. --- ✅ Implementation How It Works: 1. Negative : If is negative, it is adjusted to count from the end of the array. For example, starts the search from the last element. 2. Array Iteration : The loop starts from the (or if not provided) and compares each element with using strict equality (). 3. Return Index or -1 : If is found, the method returns the index of the first match. If no match is found, it returns . Example Walkthrough: : Starts at index and finds at index , so it returns . : No match is found, so it returns . : Starts at index and finds at index , so it returns . : Starts searching from the last element (), doesn&#39;t find , so it returns . : Starts searching from , finds at index , so it returns . This implementation mimics , with additional support for negative , ensuring the search works as expected....
+        The indexOf() method returns the first index at which a given element can be found, or -1 if not present. ✅ Implementation [code example] How It Works: Negative fromIndex : If fromIndex is negative, it is adjusted to count from the end of the array. For example, fromIndex = -1 starts the search from the last element. Array Iteration : The loop starts from the fromIndex (or 0 if not provided) and compares each element with searchElement using strict equality (===). Return Index or -1 : If searchElement is found, the method returns the index of the first match. If no match is found, it returns -1. Example Walkthrough: customIndexOf(2): Starts at index 0 and finds 2 at index 0, so it returns 0. customIndexOf(7): No match is found, so it returns -1. customIndexOf(9, 2): Starts at index 2 and finds 9 at index 2, so it returns 2. customIndexOf(2, -1): Starts searching from the last element (index 2), doesn&#39;t find 2, so it returns -1. customIndexOf(2, -3): Starts searching from index 0, finds 2 at index 0, so it returns 0. This implementation mimics Array.prototype.indexOf, with additional support for negative fromIndex, ensuring the search works as expected....
       </div>
     </article>
   </noscript>

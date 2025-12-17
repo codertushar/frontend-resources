@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="&gt; Interview Importance: 🔴 Critical — binding is frequently asked in JavaScript interviews.">
+  <meta name="description" content="Interview Importance: 🔴 Critical — this binding is frequently asked in JavaScript interviews.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🎯 The JavaScript `this` Keyword: Complete Guide to Context Binding | Frontend Resources">
-  <meta property="og:description" content="&gt; Interview Importance: 🔴 Critical — binding is frequently asked in JavaScript interviews.">
+  <meta property="og:description" content="Interview Importance: 🔴 Critical — this binding is frequently asked in JavaScript interviews.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/this_keyword">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="🎯 The JavaScript `this` Keyword: Complete Guide to Context Binding | Frontend Resources">
-  <meta name="twitter:description" content="&gt; Interview Importance: 🔴 Critical — binding is frequently asked in JavaScript interviews.">
+  <meta name="twitter:description" content="Interview Importance: 🔴 Critical — this binding is frequently asked in JavaScript interviews.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/this_keyword">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🎯 The JavaScript `this` Keyword: Complete Guide to Context Binding","description":"> Interview Importance: 🔴 Critical — binding is frequently asked in JavaScript interviews.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/this_keyword"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🎯 The JavaScript `this` Keyword: Complete Guide to Context Binding","description":"Interview Importance: 🔴 Critical — this binding is frequently asked in JavaScript interviews.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/this_keyword"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / general-concepts</p>
       <p><strong>Difficulty:</strong> medium</p>
       <div class="content">
-        &gt; Interview Importance: 🔴 Critical — binding is frequently asked in JavaScript interviews. Understanding its behavior is essential for object-oriented patterns, React class components, event handlers, and debugging mysterious bugs. --- 1️⃣ What is ? is a special keyword in JavaScript that refers to the execution context of a function. Unlike variables, isn&#39;t determined by where a function is written (lexical scope), but by how and where the function is called (runtime binding). The Core Concept Real-World Analogy: The Pronoun &quot;You&quot; 👤 Think of like the pronoun &quot;you&quot; in English: Quick Example --- 2️⃣ Why Does Matter? Use Cases Table | Problem | Why is Needed | Example | |-------------|-------------------------|-------------| | Object methods need to access their own properties | refers to the object | accesses | | Event handlers need context | refers to the element | | | Class methods need instance data | refers to the instance | uses | | Constructor functions | refers to new object being created | | | Method borrowing/sharing | can be explicitly set | , , | | React class components | refers to component instance | , | Why is Confusing Common Pain Points: - Passing methods as callbacks loses binding - Event handlers have unexpected values - Arrow functions in objects don&#39;t work as expected - Nested functions lose outer context --- 3️⃣ How It Works — The 4 Binding Rules JavaScript determines using 4 rules in order of precedence: Rule 1: Binding (Highest Priority) Rule 2: Explicit Binding (call, apply, bind) Rule 3: Implicit Binding (Method Call) Rule 4: Default Binding (Lowest Priority) 🔍 Dry Run: Binding Resolution Example: Step-by-Step Execution: --- 4️⃣ Understanding Key Concepts Concept 1: The Lost Problem Why it happens: What&#39;s happening: The fix: Use , arrow functions, or preserve context: Concept 2: Arrow Functions Don&#39;t Have Their Own Arrow functions inherit from their enclosing lexical scope: Why this works: Concept 3: in Event Handlers --- 5️⃣ Production/A...
+        Interview Importance: 🔴 Critical — this binding is frequently asked in JavaScript interviews. Understanding its behavior is essential for object-oriented patterns, React class components, event handlers, and debugging mysterious bugs. 1️⃣ What is this? this is a special keyword in JavaScript that refers to the execution context of a function. Unlike variables, this isn&#39;t determined by where a function is written (lexical scope), but by how and where the function is called (runtime binding). The Core Concept [code example] Real-World Analogy: The Pronoun &quot;You&quot; 👤 Think of this like the pronoun &quot;you&quot; in English: [code example] Quick Example [code example] 2️⃣ Why Does this Matter? Use Cases Table Why this is Needed this refers to the object this refers to the element this refers to the instance this refers to new object being created this can be explicitly set this refers to component instance Why this is Confusing [code example] Common Pain Points: Passing methods as callbacks loses this binding Event handlers have unexpected this values Arrow functions in objects don&#39;t work as expected Nested functions lose outer this context 3️⃣ How It Works — The 4 Binding Rules JavaScript determines this using 4 rules in order of precedence: Rule 1: new Binding (Highest Priority) [code example] Rule 2: Explicit Binding (call, apply, bind) [code example] Rule 3: Implicit Binding (Method Call) [code example] Rule 4: Default Binding (Lowest Priority) [code example] 🔍 Dry Run: this Binding Resolution Example: [code example] Step-by-Step Execution: [code example] 4️⃣ Understanding Key Concepts Concept 1: The Lost this Problem Why it happens: [code example] What&#39;s happening: [code example] The fix: Use bind, arrow functions, or preserve context: [code example] Concept 2: Arrow Functions Don&#39;t Have Their Own this Arrow functions inherit this from their enclosing lexical scope: [code example] Why this works: [code example] Concept 3: this in Event Handlers [code example] 5️⃣ Production...
       </div>
     </article>
   </noscript>

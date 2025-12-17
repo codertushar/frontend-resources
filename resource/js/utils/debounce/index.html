@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description" content="&gt; Interview Importance: 🔴 Critical — One of the most commonly asked JavaScript interview questions. Expected at every level from junior to senior.">
+  <meta name="description" content="Interview Importance: 🔴 Critical — One of the most commonly asked JavaScript interview questions. Expected at every level from junior to senior.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -35,22 +35,22 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-CJz1g7nU.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-pFbcVVI5.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="⏱️ Debounce Function in JavaScript | Frontend Resources">
-  <meta property="og:description" content="&gt; Interview Importance: 🔴 Critical — One of the most commonly asked JavaScript interview questions. Expected at every level from junior to senior.">
+  <meta property="og:description" content="Interview Importance: 🔴 Critical — One of the most commonly asked JavaScript interview questions. Expected at every level from junior to senior.">
   <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/utils/debounce">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Frontend Resources">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="⏱️ Debounce Function in JavaScript | Frontend Resources">
-  <meta name="twitter:description" content="&gt; Interview Importance: 🔴 Critical — One of the most commonly asked JavaScript interview questions. Expected at every level from junior to senior.">
+  <meta name="twitter:description" content="Interview Importance: 🔴 Critical — One of the most commonly asked JavaScript interview questions. Expected at every level from junior to senior.">
   <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/utils/debounce">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"⏱️ Debounce Function in JavaScript","description":"> Interview Importance: 🔴 Critical — One of the most commonly asked JavaScript interview questions. Expected at every level from junior to senior.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/utils/debounce"},"articleSection":"js","keywords":"js, utils, frontend, javascript, web development"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"⏱️ Debounce Function in JavaScript","description":"Interview Importance: 🔴 Critical — One of the most commonly asked JavaScript interview questions. Expected at every level from junior to senior.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/utils/debounce"},"articleSection":"js","keywords":"js, utils, frontend, javascript, web development"}</script>
 </head>
 
 <body>
@@ -64,7 +64,7 @@
       <p><strong>Category:</strong> js / utils</p>
       <p><strong>Difficulty:</strong> medium</p>
       <div class="content">
-        &gt; Interview Importance: 🔴 Critical — One of the most commonly asked JavaScript interview questions. Expected at every level from junior to senior. --- 1️⃣ What is Debounce? Debounce is a technique that delays the execution of a function until a certain amount of time has passed since the last time it was invoked. If the function is called again before the delay completes, the timer resets. Real-World Analogy Think of an elevator door: - When someone enters, the door waits a few seconds before closing - If another person enters during that wait, the timer resets - The door only closes after no one has entered for the full delay period --- 2️⃣ Why Use Debounce? Common Use Cases | Use Case | Problem Without Debounce | Solution With Debounce | |----------|--------------------------|------------------------| | Search Input | API call on every keystroke | API call after user stops typing | | Window Resize | Layout calculation on every pixel | Calculate after resize ends | | Button Click | Multiple submissions on rapid clicks | Single submission after clicks stop | | Auto-save | Save on every character | Save after user pauses typing | | Scroll Events | Hundreds of events per scroll | Process after scroll stops | Performance Impact --- 3️⃣ How Debounce Works — Implementation Basic Implementation 🔍 Dry Run: Step-by-Step Execution Result: Only is logged, 1000ms after the last call. --- 4️⃣ Understanding Key Concepts Why ? Why ? Preserves the correct context and passes arguments: Why Return a Function (Closure)? The returned function &quot;remembers&quot; between calls: --- 5️⃣ Advanced Implementations With Immediate/Leading Edge Option Sometimes you want to execute immediately on first call, then debounce subsequent calls: With Cancel and Flush Methods With Max Wait (Throttle Fallback) Ensures function is called at least once every ms: --- 6️⃣ React Implementations Using useCallback + useRef Debounced Value Hook --- 7️⃣ Debounce vs Throttle | Aspect | Debounce | Throttle | |--------...
+        Interview Importance: 🔴 Critical — One of the most commonly asked JavaScript interview questions. Expected at every level from junior to senior. 1️⃣ What is Debounce? Debounce is a technique that delays the execution of a function until a certain amount of time has passed since the last time it was invoked. If the function is called again before the delay completes, the timer resets. Real-World Analogy Think of an elevator door: When someone enters, the door waits a few seconds before closing If another person enters during that wait, the timer resets The door only closes after no one has entered for the full delay period [code example] 2️⃣ Why Use Debounce? Common Use Cases Problem Without Debounce API call on every keystroke Layout calculation on every pixel Multiple submissions on rapid clicks Save on every character Hundreds of events per scroll Performance Impact [code example] 3️⃣ How Debounce Works — Implementation Basic Implementation [code example] 🔍 Dry Run: Step-by-Step Execution [code example] [code example] Result: Only &quot;C&quot; is logged, 1000ms after the last call. 4️⃣ Understanding Key Concepts Why clearTimeout(timerId)? [code example] Why fn.apply(this, args)? Preserves the correct this context and passes arguments: [code example] Why Return a Function (Closure)? The returned function &quot;remembers&quot; timerId between calls: [code example] 5️⃣ Advanced Implementations With Immediate/Leading Edge Option Sometimes you want to execute immediately on first call, then debounce subsequent calls: [code example] With Cancel and Flush Methods [code example] With Max Wait (Throttle Fallback) Ensures function is called at least once every maxWait ms: [code example] 6️⃣ React Implementations Using useCallback + useRef [code example] Debounced Value Hook [code example] 7️⃣ Debounce vs Throttle Debounce After a pause in calls Once after delay Search input, auto-save Waits for silence Visual Comparison [code example] 8️⃣ Common Interview Questions Q1: Implement a debounce ...
       </div>
     </article>
   </noscript>
