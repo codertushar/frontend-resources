@@ -71,26 +71,29 @@ const ResourceDetail = () => {
         metaDescription.setAttribute('content', description);
       }
 
-      // Update Open Graph tags
+      // Update Open Graph and Twitter tags
       const ogTitle = document.querySelector('meta[property="og:title"]');
       const ogDescription = document.querySelector('meta[property="og:description"]');
       const ogUrl = document.querySelector('meta[property="og:url"]');
+      const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+      const twitterDescription = document.querySelector('meta[name="twitter:description"]');
       const canonical = document.querySelector('link[rel="canonical"]');
 
       const url = `https://codertushar.github.io/frontend-resources/resource/${resource.id}`;
+      const title = `${resource.title} | Frontend Resources`;
+      const desc = resource.fullContent
+        .replace(/```[\s\S]*?```/g, '')
+        .replace(/`([^`]+)`/g, '$1')
+        .replace(/[#*_~]/g, '')
+        .replace(/\n+/g, ' ')
+        .trim()
+        .substring(0, 160) + '...';
 
-      if (ogTitle) ogTitle.setAttribute('content', `${resource.title} | Frontend Resources`);
-      if (ogDescription) {
-        const desc = resource.fullContent
-          .replace(/```[\s\S]*?```/g, '')
-          .replace(/`([^`]+)`/g, '$1')
-          .replace(/[#*_~]/g, '')
-          .replace(/\n+/g, ' ')
-          .trim()
-          .substring(0, 160) + '...';
-        ogDescription.setAttribute('content', desc);
-      }
+      if (ogTitle) ogTitle.setAttribute('content', title);
+      if (ogDescription) ogDescription.setAttribute('content', desc);
       if (ogUrl) ogUrl.setAttribute('content', url);
+      if (twitterTitle) twitterTitle.setAttribute('content', title);
+      if (twitterDescription) twitterDescription.setAttribute('content', desc);
       if (canonical) canonical.setAttribute('href', url);
     } else {
       setLoading(false);
