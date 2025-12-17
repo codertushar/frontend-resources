@@ -7,6 +7,10 @@ export default defineConfig(({ command }) => ({
   plugins: [react()],
   // Use '/' for dev and Vercel, '/frontend-resources/' for GitHub Pages
   base: command === 'serve' ? '/' : (process.env.VERCEL ? '/' : '/frontend-resources/'),
+  define: {
+    // Pass VERCEL env to client-side code
+    'import.meta.env.VITE_VERCEL': JSON.stringify(process.env.VERCEL || ''),
+  },
   server: {
     watch: {
       // Force watching of JSON files in src/data

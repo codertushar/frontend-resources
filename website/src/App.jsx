@@ -12,7 +12,8 @@ import { useCanonical } from './hooks/useCanonical';
 import { ThemeProvider } from './context/ThemeContext';
 import { ProgressProvider } from './context/ProgressContext';
 
-const basename = import.meta.env.PROD ? '/frontend-resources' : '/';
+// Use '/' for dev and Vercel, '/frontend-resources' for GitHub Pages
+const basename = import.meta.env.PROD && !import.meta.env.VITE_VERCEL ? '/frontend-resources' : '/';
 
 function AppContent() {
   useCanonical();
