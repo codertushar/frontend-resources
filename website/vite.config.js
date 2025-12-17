@@ -5,8 +5,8 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig(({ command }) => ({
   plugins: [react()],
-  // Use '/' for dev, '/frontend-resources/' for production (GitHub Pages)
-  base: command === 'serve' ? '/' : '/frontend-resources/',
+  // Use '/' for dev and Vercel, '/frontend-resources/' for GitHub Pages
+  base: command === 'serve' ? '/' : (process.env.VERCEL ? '/' : '/frontend-resources/'),
   server: {
     watch: {
       // Force watching of JSON files in src/data
