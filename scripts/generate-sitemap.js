@@ -43,9 +43,30 @@ function markdownPathToUrl(mdPath) {
     return '/resource/' + withoutExt.replace(/\\/g, '/');
 }
 
+// Extract all intermediate category paths from a URL
+// e.g., /resource/js/polyfills/arrays/at -> [/resource/js, /resource/js/polyfills, /resource/js/polyfills/arrays]
+function getIntermediatePaths(url) {
+    const parts = url.split('/').filter(Boolean);
+    const paths = [];
+    // Start from index 1 to skip 'resource', and stop before the last part (the actual page)
+    for (let i = 2; i < parts.length; i++) {
+        paths.push('/' + parts.slice(0, i).join('/'));
+    }
+    return paths;
+}
+
 function generateSitemap() {
     const mdFiles = collectMarkdownFiles(projectRoot);
     const resourceUrls = mdFiles.map(markdownPathToUrl);
+
+    // Collect all intermediate category paths for better crawlability
+    const categoryPaths = new Set();
+    for (const url of resourceUrls) {
+        const intermediatePaths = getIntermediatePaths(url);
+        for (const p of intermediatePaths) {
+            categoryPaths.add(p);
+        }
+    }
 
     // Static app pages that should also be indexed
     const staticPages = [
@@ -54,12 +75,15 @@ function generateSitemap() {
         '/learning-path', // Learning path page
     ];
 
-    const urls = [...staticPages, ...resourceUrls];
+    // Combine all URLs: static pages, category paths, and resource pages
+    const urls = [...staticPages, ...Array.from(categoryPaths).sort(), ...resourceUrls];
 
     const now = new Date().toISOString();
     const getPriority = (url) => {
         if (url === '/') return 1;
         if (url === '/library' || url === '/learning-path') return 0.9;
+        // Category pages get slightly higher priority than leaf pages
+        if (categoryPaths.has(url)) return 0.85;
         return 0.8;
     };
     const urlEntries = urls
