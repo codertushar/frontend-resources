@@ -13,8 +13,11 @@ const publicDir = path.join(projectRoot, 'website', 'public');
 // Output file
 const sitemapPath = path.join(publicDir, 'sitemap.xml');
 
-// Base URL of the deployed site
-const BASE_URL = 'https://codertushar.github.io/frontend-resources';
+// Base URL of the deployed site - dynamic based on deployment target
+const isVercel = !!process.env.VERCEL;
+const BASE_URL = isVercel
+    ? 'https://frontend-resources-chi.vercel.app'
+    : 'https://codertushar.github.io/frontend-resources';
 
 // Helper: recursively collect .md files (excluding hidden dirs)
 function collectMarkdownFiles(dir) {
@@ -96,6 +99,16 @@ function generateSitemap() {
 
     fs.writeFileSync(sitemapPath, sitemapContent, 'utf-8');
     console.log('✅ sitemap.xml generated with', urls.length, 'entries');
+
+    // Also generate robots.txt with correct sitemap URL
+    const robotsTxtPath = path.join(publicDir, 'robots.txt');
+    const robotsTxtContent = `User-agent: *
+Allow: /
+
+Sitemap: ${BASE_URL}/sitemap.xml
+`;
+    fs.writeFileSync(robotsTxtPath, robotsTxtContent, 'utf-8');
+    console.log('✅ robots.txt generated with sitemap URL:', BASE_URL);
 }
 
 generateSitemap();
