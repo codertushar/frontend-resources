@@ -10,18 +10,18 @@ export default defineConfig(({ command }) => {
   return {
     plugins: [
       react(),
-      // Plugin to replace __VITE_BASE__ placeholders in HTML
+      // Plugin to handle dynamic base path in HTML
       {
         name: 'html-base-replace',
         transformIndexHtml(html) {
-          // First inject the __VITE_BASE__ variable at the top of head
-          // so it's available before any scripts run
+          // Inject the __VITE_BASE__ variable at the top of head
           let result = html.replace(
             '<head>',
             `<head>\n<script>window.__VITE_BASE__="${base}";</script>`
           )
-          // Then replace all __VITE_BASE__ placeholders in href/src attributes
-          result = result.replace(/__VITE_BASE__/g, base)
+          // Only replace __VITE_BASE__ in href and src attributes (not in JS code)
+          result = result.replace(/href="__VITE_BASE__/g, `href="${base}`)
+          result = result.replace(/src="__VITE_BASE__/g, `src="${base}`)
           return result
         },
       },
