@@ -14,12 +14,15 @@ export default defineConfig(({ command }) => {
       {
         name: 'html-base-replace',
         transformIndexHtml(html) {
-          return html
-            .replace(/__VITE_BASE__/g, base)
-            .replace(
-              '</head>',
-              `<script>window.__VITE_BASE__="${base}";</script>\n</head>`
-            )
+          // First inject the __VITE_BASE__ variable at the top of head
+          // so it's available before any scripts run
+          let result = html.replace(
+            '<head>',
+            `<head>\n<script>window.__VITE_BASE__="${base}";</script>`
+          )
+          // Then replace all __VITE_BASE__ placeholders in href/src attributes
+          result = result.replace(/__VITE_BASE__/g, base)
+          return result
         },
       },
     ],
