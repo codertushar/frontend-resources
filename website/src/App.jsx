@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Layout from './components/Layout';
 import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
@@ -39,6 +40,7 @@ function App() {
         <Router basename={basename}>
           <AppContent />
         </Router>
+        <Analytics />
       </ProgressProvider>
     </ThemeProvider>
   );
