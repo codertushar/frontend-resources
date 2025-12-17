@@ -109,6 +109,45 @@ Sitemap: ${BASE_URL}/sitemap.xml
 `;
     fs.writeFileSync(robotsTxtPath, robotsTxtContent, 'utf-8');
     console.log('✅ robots.txt generated with sitemap URL:', BASE_URL);
+
+    // Generate manifest.json with correct base path
+    const basePath = isVercel ? '/' : '/frontend-resources/';
+    const manifestPath = path.join(publicDir, 'manifest.json');
+    const manifest = {
+        name: 'Frontend Resources',
+        short_name: 'FE Resources',
+        description: 'Curated frontend concepts, patterns & interview prep.',
+        start_url: basePath,
+        scope: basePath,
+        display: 'standalone',
+        orientation: 'portrait-primary',
+        background_color: '#ffffff',
+        theme_color: '#8b5cf6',
+        categories: ['education', 'productivity'],
+        permissions: ['notifications'],
+        icons: [
+            {
+                src: `${basePath}android-launchericon-192-192.png`,
+                type: 'image/png',
+                sizes: '192x192',
+                purpose: 'any'
+            },
+            {
+                src: `${basePath}android-launchericon-512-512.png`,
+                type: 'image/png',
+                sizes: '512x512',
+                purpose: 'any'
+            },
+            {
+                src: `${basePath}android-launchericon-192-192.png`,
+                type: 'image/png',
+                sizes: '192x192',
+                purpose: 'maskable'
+            }
+        ]
+    };
+    fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 4), 'utf-8');
+    console.log('✅ manifest.json generated with base path:', basePath);
 }
 
 generateSitemap();
