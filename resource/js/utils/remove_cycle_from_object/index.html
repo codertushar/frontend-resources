@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="Circular references can create serious problems in JavaScript — from infinite recursions to errors.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🔄 Removing Circular References from Objects | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🔄 Removing Circular References from Objects | Frontend Resources">
+  <meta property="og:description" content="Circular references can create serious problems in JavaScript — from infinite recursions to errors.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/utils/remove_cycle_from_object">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🔄 Removing Circular References from Objects | Frontend Resources">
+  <meta name="twitter:description" content="Circular references can create serious problems in JavaScript — from infinite recursions to errors.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/utils/remove_cycle_from_object">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔄 Removing Circular References from Objects","description":"Circular references can create serious problems in JavaScript — from infinite recursions to errors.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/utils/remove_cycle_from_object"},"articleSection":"js","keywords":"js, utils, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🔄 Removing Circular References from Objects</h1>
+      <p><strong>Category:</strong> js / utils</p>
+      <p><strong>Difficulty:</strong> hard</p>
+      <div class="content">
+        Circular references can create serious problems in JavaScript — from infinite recursions to errors. Here’s how to remove cycles both structurally and during serialization using idiomatic, memory-safe JavaScript. --- 🔁 1. Structural Removal with Purpose: Remove circular references in-place from object graphs (e.g., linked lists, trees, graphs). How It Works: A recursive traversal tracks visited objects using a . If a reference is encountered again, it is removed. Code: Test Case: --- 🧵 2. Serialization-Safe: with Replacer Purpose: Remove cycles on-the-fly during serialization to JSON. Useful when you don&#39;t want to mutate the original object. How It Works: accepts a replacer function. You can use a inside this replacer to track seen objects and return for repeats (i.e., remove cycles). Code: Usage: Output: --- 🔍 When to Use Which? | Use Case | Use | Use | | ----------------------------------- | ------------------- | -------------------------------- | | Mutate structure and clean cycles | ✅ Yes | ❌ No (non-destructive) | | Safe JSON serialization | ❌ No | ✅ Yes | | Need to traverse or clone afterward | ✅ Yes | ❌ No (only during serialization) | | Want GC-safe memory tracking | ✅ Uses WeakSet | ✅ Uses WeakSet | --- 🧠 Key Insight &gt; is perfect for tracking object identity in cyclic graphs, without interfering with garbage collection. --- ✅ Final Take Use structural traversal + to clean up in-memory object graphs. Use with a custom replacer to safely serialize cyclic structures on-demand. These patterns are standard in tools like , , or serializers for distributed systems and state management frameworks....
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

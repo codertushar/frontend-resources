@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="is a built-in Web API that allows you to cancel asynchronous operations, especially ones that support an , like , streams, or custom async tasks.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🛑 AbortController: Canceling Async Operations in JavaScript | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🛑 AbortController: Canceling Async Operations in JavaScript | Frontend Resources">
+  <meta property="og:description" content="is a built-in Web API that allows you to cancel asynchronous operations, especially ones that support an , like , streams, or custom async tasks.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/abort_controller">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🛑 AbortController: Canceling Async Operations in JavaScript | Frontend Resources">
+  <meta name="twitter:description" content="is a built-in Web API that allows you to cancel asynchronous operations, especially ones that support an , like , streams, or custom async tasks.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/abort_controller">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🛑 AbortController: Canceling Async Operations in JavaScript","description":"is a built-in Web API that allows you to cancel asynchronous operations, especially ones that support an , like , streams, or custom async tasks.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/abort_controller"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🛑 AbortController: Canceling Async Operations in JavaScript</h1>
+      <p><strong>Category:</strong> js / general-concepts</p>
+      <p><strong>Difficulty:</strong> medium</p>
+      <div class="content">
+        is a built-in Web API that allows you to cancel asynchronous operations, especially ones that support an , like , streams, or custom async tasks. --- 💡 Core Concepts 1. Creates a controller with a object. You call to cancel the operation. 2. Passed to the async operation. Has boolean flag and emits an event. --- 🧪 Example: Cancel --- 📦 Common Use Cases | Use Case | How Helps | | ----------------------- | ----------------------------------------- | | cancellation | ✅ Native support | | Custom async tasks | ✅ Add your own signal checks | | Debounce, retry, race | ✅ Combine with timeouts or control logic | | React effects | ✅ Cleanup async ops on unmount | --- 🧠 Example in Custom Code Create a function that supports cancellation via . Here’s a precise, fetch-cancelable promise implementation using : --- ✅ Cancelable Fetch with AbortController --- 🧪 Example: --- ✅ Behavior: Uses to terminate the underlying request. If canceled, rejects with . Unlike , this actually stops the request . --- ⚠️ Works With: Some APIs like , , (in newer specs) --- Let me know if you want a generic wrapper that adds cancelation to any async operation (not just )....
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

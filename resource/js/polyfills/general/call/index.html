@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="The method in JavaScript allows us to invoke a function with a specified context and arguments. Let&#39;s implement a polyfill for it.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>📞 Function.prototype.call() Polyfill | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="📞 Function.prototype.call() Polyfill | Frontend Resources">
+  <meta property="og:description" content="The method in JavaScript allows us to invoke a function with a specified context and arguments. Let&#39;s implement a polyfill for it.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/polyfills/general/call">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="📞 Function.prototype.call() Polyfill | Frontend Resources">
+  <meta name="twitter:description" content="The method in JavaScript allows us to invoke a function with a specified context and arguments. Let&#39;s implement a polyfill for it.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/polyfills/general/call">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"📞 Function.prototype.call() Polyfill","description":"The method in JavaScript allows us to invoke a function with a specified context and arguments. Let's implement a polyfill for it.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/general/call"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>📞 Function.prototype.call() Polyfill</h1>
+      <p><strong>Category:</strong> js / polyfills</p>
+      <p><strong>Difficulty:</strong> medium</p>
+      <div class="content">
+        The method in JavaScript allows us to invoke a function with a specified context and arguments. Let&#39;s implement a polyfill for it. --- 1️⃣ Understanding Native behavior: Here, makes inside refer to . --- 2️⃣ Polyfill for We need to: Attach the function to the (context). Invoke the function with arguments. Remove the temporary function reference. --- 3️⃣ Testing the Polyfill --- 4️⃣ Key Features of Our Polyfill ✅ Handles any function ✅ Supports multiple arguments ✅ Avoids polluting original object using ✅ Works in any execution environment () Dry Run of Polyfill Let’s take an example and go step by step to understand how our polyfill works. --- 📌 Example --- 📌 Step-by-Step Execution Step 1: Call inside refers to (the function being invoked). is (). . --- Step 2: Function Definition Breakdown Inside : --- 📌 Step 3: Execution Flow 1️⃣ Validate is , which is a function ✅. No error is thrown. --- 2️⃣ Set , since it was provided (). --- 3️⃣ Attach Function Temporarily creates a unique property key (e.g., ) to avoid overwriting existing properties . now has a new temporary property: So looks like this: --- 4️⃣ Invoke Function Equivalent to: Since inside is now , it prints: --- 5️⃣ Cleanup Removes the temporary function from to keep the object clean. is now back to: --- 📌 Final Execution Summary | Step | Action | | ----- | ---------------------------------------------------------------------------------- | | 1️⃣ | is called | | 2️⃣ | | | 3️⃣ | is created and assigned to | | 4️⃣ | is invoked, printing | | 5️⃣ | Temporary function property is deleted | ✅ Works just like the native method! Would you like a similar breakdown for or ? 🚀...
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

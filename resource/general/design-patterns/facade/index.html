@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="As applications grow, systems often become complex, with multiple modules, APIs, or services interacting behind the scenes.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🎭 The Facade Pattern in JavaScript – Simplifying Complex Systems | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🎭 The Facade Pattern in JavaScript – Simplifying Complex Systems | Frontend Resources">
+  <meta property="og:description" content="As applications grow, systems often become complex, with multiple modules, APIs, or services interacting behind the scenes.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/general/design-patterns/facade">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🎭 The Facade Pattern in JavaScript – Simplifying Complex Systems | Frontend Resources">
+  <meta name="twitter:description" content="As applications grow, systems often become complex, with multiple modules, APIs, or services interacting behind the scenes.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/general/design-patterns/facade">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🎭 The Facade Pattern in JavaScript – Simplifying Complex Systems","description":"As applications grow, systems often become complex, with multiple modules, APIs, or services interacting behind the scenes.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/general/design-patterns/facade"},"articleSection":"general","keywords":"general, design-patterns, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🎭 The Facade Pattern in JavaScript – Simplifying Complex Systems</h1>
+      <p><strong>Category:</strong> general / design-patterns</p>
+      <p><strong>Difficulty:</strong> medium</p>
+      <div class="content">
+        As applications grow, systems often become complex, with multiple modules, APIs, or services interacting behind the scenes. The Facade Pattern helps hide that complexity by exposing a simple, unified interface. This pattern is like a concierge: it simplifies access to multiple backend services so the client doesn’t need to deal with them directly. --- 📌 What Is the Facade Pattern? The Facade Pattern is a structural design pattern that provides a simplified interface to a larger body of code (often a complex system of subsystems, APIs, or objects). It does not add new functionality, but instead abstracts and coordinates existing ones behind a single function or object. --- 🧭 When to Use the Facade Pattern Use the Facade Pattern when: You want to simplify a complex set of operations. You want to decouple your code from underlying libraries or systems. You need to provide a clean API to external modules or consumers. You want to limit access to certain internal logic or subsystems. --- 📦 Real-World Analogy Imagine using a travel booking website: You input your destination and dates. The site internally calls multiple APIs: flights, hotels, cars, reviews. You don’t interact with each API — the UI is the facade. --- 🛠️ JavaScript Example: Without Facade Clients of need to know and manage each function separately. It couples the client to internal logic. --- ✅ With Facade Let’s create a facade function: ✅ The client doesn’t know how many subsystems are involved — it interacts only with the facade. --- 🌐 API Wrapper Facade Example Suppose you work with a browser API or third-party SDK (like Firebase or Stripe). Instead of letting components deal with raw methods, use a facade: --- 🔒 Security &amp; Access Control Facade Sometimes, the facade also restricts or validates access: --- ⚖️ Pros and Cons ✅ Benefits Simplifies API usage for the client. Decouples implementation details. Improves readability and testability. Acts as a contract or public API. ⚠️ Trade-offs Can becom...
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

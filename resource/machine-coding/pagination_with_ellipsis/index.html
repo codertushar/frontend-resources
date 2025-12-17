@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="A comprehensive guide to building an intelligent pagination component in React that displays page numbers with ellipsis (&quot;...&quot;) for large page ranges.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🔢 React Pagination with Ellipsis | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🔢 React Pagination with Ellipsis | Frontend Resources">
+  <meta property="og:description" content="A comprehensive guide to building an intelligent pagination component in React that displays page numbers with ellipsis (&quot;...&quot;) for large page ranges.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/machine-coding/pagination_with_ellipsis">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🔢 React Pagination with Ellipsis | Frontend Resources">
+  <meta name="twitter:description" content="A comprehensive guide to building an intelligent pagination component in React that displays page numbers with ellipsis (&quot;...&quot;) for large page ranges.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/machine-coding/pagination_with_ellipsis">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔢 React Pagination with Ellipsis","description":"A comprehensive guide to building an intelligent pagination component in React that displays page numbers with ellipsis (\"...\") for large page ranges.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/machine-coding/pagination_with_ellipsis"},"articleSection":"machine-coding","keywords":"machine-coding, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🔢 React Pagination with Ellipsis</h1>
+      <p><strong>Category:</strong> machine-coding</p>
+      <p><strong>Difficulty:</strong> hard</p>
+      <div class="content">
+        A comprehensive guide to building an intelligent pagination component in React that displays page numbers with ellipsis (&quot;...&quot;) for large page ranges. --- 💡 What is Pagination with Ellipsis? Pagination with ellipsis is a UI pattern that shows a subset of page numbers with gaps represented by &quot;...&quot; (ellipsis). This prevents overwhelming users with too many page numbers while still allowing quick navigation to key pages. Key Rules: - Always visible: First page, Last page, Current page, Previous page (current - 1), Next page (current + 1) - Gaps: Show &#39;...&#39; when there&#39;s a gap between displayed page numbers - Smart logic: Automatically calculates which pages to show based on current position --- 🧠 Core Concepts Display Logic The pagination needs to intelligently decide which page numbers to show: 1. First page (1) is always shown 2. Last page (totalPages) is always shown 3. Current page and its neighbors (current - 1, current + 1) are shown 4. Ellipsis appears when there&#39;s a gap of 2 or more pages Visual Examples --- ✅ Implementation Complete Pagination Component --- 🧪 Usage Examples Basic Usage With Data Fetching Controlled Component with External State --- 🔧 Advanced Features With Jump to Page Input With Page Size Selector --- ⚠️ Edge Cases &amp; Considerations Edge Case 1: Single Page When , only one button should be shown (no pagination needed). Edge Case 2: Two to Three Pages With very few pages, no ellipsis is needed: Edge Case 3: Current Page at Boundaries - When at page 1: No previous page shown - When at last page: No next page shown Performance Considerations 1. Memoization: Use for to avoid recalculating on every render: 2. Debouncing: If pagination triggers API calls, debounce rapid page changes: 3. Virtual Scrolling: For extremely large datasets (1000+ pages), consider infinite scroll or virtual scrolling instead. --- 🎯 Best Practices 1. Accessibility 2. Loading States 3. URL Synchronization --- 📊 Algorithm Breakdown Step-by-Step Page Number Generation --...
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

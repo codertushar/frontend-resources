@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="&gt; Why and not an arrow function? Here&#39;s the full breakdown. --- 1️⃣ Introduction JavaScript offers multiple ways to define functions: Function Declarations:...">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🧭 Arrow Functions vs Function Declarations in JavaScript | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🧭 Arrow Functions vs Function Declarations in JavaScript | Frontend Resources">
+  <meta property="og:description" content="&gt; Why and not an arrow function? Here&#39;s the full breakdown. --- 1️⃣ Introduction JavaScript offers multiple ways to define functions: Function Declarations:...">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/function_vs_arrow_function">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🧭 Arrow Functions vs Function Declarations in JavaScript | Frontend Resources">
+  <meta name="twitter:description" content="&gt; Why and not an arrow function? Here&#39;s the full breakdown. --- 1️⃣ Introduction JavaScript offers multiple ways to define functions: Function Declarations:...">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/function_vs_arrow_function">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🧭 Arrow Functions vs Function Declarations in JavaScript","description":"> Why and not an arrow function? Here's the full breakdown. --- 1️⃣ Introduction JavaScript offers multiple ways to define functions: Function Declarations:...","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/function_vs_arrow_function"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🧭 Arrow Functions vs Function Declarations in JavaScript</h1>
+      <p><strong>Category:</strong> js / general-concepts</p>
+      <p><strong>Difficulty:</strong> easy</p>
+      <div class="content">
+        &gt; Why and not an arrow function? Here&#39;s the full breakdown. --- 1️⃣ Introduction JavaScript offers multiple ways to define functions: Function Declarations: Function Expressions: Arrow Functions: While arrow functions offer brevity and clarity, they do not have their own , which is why choosing between the two depends entirely on your use case. --- 2️⃣ The Key Difference: Binding Function Expressions Function expressions define their own context depending on how they&#39;re called: Arrow Functions Arrow functions lexically bind , meaning they inherit from the surrounding context: 📌 Why Not Use Arrow in ? Because refers to the object instance ( in this case), and the fire method needs to explicitly bind or use the current instance as context. If you used an arrow function, it would ignore and would not refer to the instance or a provided scope — breaking functionality like : --- 3️⃣ When to Use Which | Use Case | Prefer Function | Prefer Arrow Function | | -------------------------------- | --------------- | --------------------------------- | | Needs dynamic binding | ✅ Yes | ❌ No | | Callback inside method | ✅ Yes | ✅ Yes (if no dependency) | | Inside classes or object methods | ✅ Yes | ❌ No (unless explicitly static) | | Event handlers | ✅ Usually | ❌ Only if you bind explicitly | | Simple one-liners / pure funcs | ❌ Overhead | ✅ Perfect match | --- 4️⃣ Real Examples ✅ Good Use of Arrow: ✅ Good Use of Function Declaration: ⚠️ Misuse of Arrow in Object Method: --- 5️⃣ Interview Q&amp;A Q1: Why don’t arrow functions have their own ? A: Because arrow functions are designed for lexical scoping. They inherit from the context in which they are defined, rather than from how they are called. Q2: When would using an arrow function inside a class break things? A: When the method depends on referring to the class instance. Arrow functions don’t have their own , so they won’t work properly in instance methods. Q3: Can you replace all function expressions with arrow functions? A: No....
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

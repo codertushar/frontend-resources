@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="Below is an example React component for a progress bar that has Start, Pause, Stop, and Reset buttons.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>📊 Progress Bar with Controls | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="📊 Progress Bar with Controls | Frontend Resources">
+  <meta property="og:description" content="Below is an example React component for a progress bar that has Start, Pause, Stop, and Reset buttons.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/machine-coding/progress_bar">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="📊 Progress Bar with Controls | Frontend Resources">
+  <meta name="twitter:description" content="Below is an example React component for a progress bar that has Start, Pause, Stop, and Reset buttons.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/machine-coding/progress_bar">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"📊 Progress Bar with Controls","description":"Below is an example React component for a progress bar that has Start, Pause, Stop, and Reset buttons.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/machine-coding/progress_bar"},"articleSection":"machine-coding","keywords":"machine-coding, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>📊 Progress Bar with Controls</h1>
+      <p><strong>Category:</strong> machine-coding</p>
+      <p><strong>Difficulty:</strong> medium</p>
+      <div class="content">
+        Below is an example React component for a progress bar that has Start, Pause, Stop, and Reset buttons. The component uses a timer (setInterval) to update the progress value, and different buttons change the component&#39;s state: --- Explanation State Management : (0–100) tracks the bar width. indicates if the progress is , , , , or . Timer Control : When Start is clicked, if not already running or stopped, an interval is set that increments progress. Pause clears the interval, keeping the current progress. Stop clears the interval and locks the progress (cannot resume). Reset clears any timer and resets progress and status. Auto-complete : When progress reaches 100%, the interval is cleared and status becomes . --- Code --- How It Works Start Button : Initiates the timer if the progress is idle or paused. It won’t restart if already running, completed, or stopped. Pause Button : Clears the interval, freezing the progress. Stop Button : Clears the interval and sets the state to , disallowing resume until the progress is reset. Reset Button : Resets the progress to 0 and the status to , allowing you to start over. This component demonstrates a simple progress bar that updates on an interval and provides control buttons to manage its state. ===================================================== Below is a complete example of a reusable Progress Bar component implemented as an ES6 class in plain JavaScript. You can reuse this component by instantiating it on any container element. --- Code --- Explanation 1. ES6 Class Component The class encapsulates the component’s state and DOM structure. The constructor accepts a container element in which the component is rendered. State properties include , , and . 2. DOM Creation The method creates all necessary elements (progress container, bar, text, and buttons) and appends them to the container. Inline styles and class names are used for basic styling. 3. UI Update The method adjusts the progress bar&#39;s width and updates the displa...
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

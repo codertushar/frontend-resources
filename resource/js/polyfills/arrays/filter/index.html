@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="The method creates a new array with all elements that pass the test implemented by the provided callback function.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🔍 Array.prototype.filter() Polyfill | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🔍 Array.prototype.filter() Polyfill | Frontend Resources">
+  <meta property="og:description" content="The method creates a new array with all elements that pass the test implemented by the provided callback function.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/filter">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🔍 Array.prototype.filter() Polyfill | Frontend Resources">
+  <meta name="twitter:description" content="The method creates a new array with all elements that pass the test implemented by the provided callback function.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/filter">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔍 Array.prototype.filter() Polyfill","description":"The method creates a new array with all elements that pass the test implemented by the provided callback function.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/filter"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🔍 Array.prototype.filter() Polyfill</h1>
+      <p><strong>Category:</strong> js / polyfills</p>
+      <p><strong>Difficulty:</strong> easy</p>
+      <div class="content">
+        The method creates a new array with all elements that pass the test implemented by the provided callback function. This polyfill replicates the native behavior, including support for and proper handling of sparse arrays. --- ✅ Implementation Example Usage: Key Features of This Polyfill: 1. Prototype Extension : The method is added to , making it available on all arrays. 1. Callback Execution : The callback function is executed on each array element, receiving as arguments. This allows the callback to inspect the element, index, and the entire array. 1. Handling : The parameter is used to bind a custom context when executing the callback function. 1. Sparse Array Handling : The method uses to ensure that only actual elements are processed. This prevents issues when working with sparse arrays or arrays with holes, ensuring only the array&#39;s own properties are considered (ignoring inherited properties). 1. Type Checking : The method checks if the argument is a valid function. If not, it throws a , mimicking the behavior of the native method. This polyfill behaves similarly to the native , allowing for array filtering based on a custom condition. It handles , ensures correct element processing in sparse arrays, and performs type checking on the callback....
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

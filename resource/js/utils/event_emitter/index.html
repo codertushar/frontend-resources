@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="&gt; Interview Importance: 🔴 Critical — EventEmitter is a classic interview question that tests understanding of the Observer pattern, closures, memory...">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>📢 Custom EventEmitter Implementation | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="📢 Custom EventEmitter Implementation | Frontend Resources">
+  <meta property="og:description" content="&gt; Interview Importance: 🔴 Critical — EventEmitter is a classic interview question that tests understanding of the Observer pattern, closures, memory...">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/utils/event_emitter">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="📢 Custom EventEmitter Implementation | Frontend Resources">
+  <meta name="twitter:description" content="&gt; Interview Importance: 🔴 Critical — EventEmitter is a classic interview question that tests understanding of the Observer pattern, closures, memory...">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/utils/event_emitter">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"📢 Custom EventEmitter Implementation","description":"> Interview Importance: 🔴 Critical — EventEmitter is a classic interview question that tests understanding of the Observer pattern, closures, memory...","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/utils/event_emitter"},"articleSection":"js","keywords":"js, utils, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>📢 Custom EventEmitter Implementation</h1>
+      <p><strong>Category:</strong> js / utils</p>
+      <p><strong>Difficulty:</strong> hard</p>
+      <div class="content">
+        &gt; Interview Importance: 🔴 Critical — EventEmitter is a classic interview question that tests understanding of the Observer pattern, closures, memory management, and JavaScript fundamentals. --- 1️⃣ What is an EventEmitter? An EventEmitter (or Event Bus) is a pattern that allows objects to subscribe to and publish events. It&#39;s the foundation of event-driven programming in JavaScript. Real-World Examples | Library/Platform | Event System | |------------------|--------------| | Node.js | class | | DOM | / | | React | Custom hooks, Context | | Vue | / | | RxJS | Subjects and Observables | --- 2️⃣ Why Implement EventEmitter? 1. Decouples components — Publishers don&#39;t know about subscribers 2. Flexible communication — Many-to-many relationships 3. Interview staple — Tests multiple JS concepts 4. Real-world usage — Foundation of reactive programming What This Tests - Closures &amp; Scoping — Managing listener references - Memory Management — Proper cleanup to prevent leaks - Data Structures — Efficient storage with and - Design Patterns — Observer/Pub-Sub pattern --- 3️⃣ Implementation Basic Implementation 🔍 Dry Run: Basic Usage 🔍 Dry Run: once() Method --- 4️⃣ Why Map and Set? Why for Events? Why for Listeners? --- 5️⃣ Production Implementation --- 6️⃣ Usage Examples Basic Pub/Sub Event Bus for React Async Event Handling --- 7️⃣ Common Interview Questions Q1: Implement a basic EventEmitter Answer: See Section 3. Q2: How do you prevent memory leaks in EventEmitter? Answer: 1. Always unsubscribe — Call when component unmounts 2. Use — For one-time events 3. Set max listeners — Warn when too many subscribers 4. Clear on destroy — Call Q3: What&#39;s the difference between and ? Answer: - : Listener stays subscribed, called every time event fires - : Listener auto-removes after first call Q4: How would you implement wildcard event names? Answer: Q5: How does Node.js EventEmitter differ from this implementation? Answer: | Feature | Node.js | Our Implementation | |---------|--------...
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

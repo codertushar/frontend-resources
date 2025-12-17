@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="Here&#39;s the full detailed flow of how a browser renders a webpage, from receiving HTML to displaying pixels.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🌐 Browser Rendering: How Browsers Display Web Pages | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🌐 Browser Rendering: How Browsers Display Web Pages | Frontend Resources">
+  <meta property="og:description" content="Here&#39;s the full detailed flow of how a browser renders a webpage, from receiving HTML to displaying pixels.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/general/browser_rendering">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🌐 Browser Rendering: How Browsers Display Web Pages | Frontend Resources">
+  <meta name="twitter:description" content="Here&#39;s the full detailed flow of how a browser renders a webpage, from receiving HTML to displaying pixels.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/general/browser_rendering">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🌐 Browser Rendering: How Browsers Display Web Pages","description":"Here's the full detailed flow of how a browser renders a webpage, from receiving HTML to displaying pixels.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/general/browser_rendering"},"articleSection":"general","keywords":"general, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🌐 Browser Rendering: How Browsers Display Web Pages</h1>
+      <p><strong>Category:</strong> general</p>
+      <p><strong>Difficulty:</strong> hard</p>
+      <div class="content">
+        Here&#39;s the full detailed flow of how a browser renders a webpage, from receiving HTML to displaying pixels. This includes networking, parsing, DOM/CSSOM construction, layout, painting, and compositing. &gt; 📚 Want Deep Dive Details? See Critical Rendering Path for comprehensive coverage of CRP, optimization strategies, and performance metrics. --- 💡 Understanding Render-Blocking Render-blocking means the browser pauses page rendering and waits for a resource to be downloaded and processed before continuing. This delays when users see content on their screen. Key Render-Blocking Resources: - CSS () - Blocks rendering until parsed - JavaScript (default ) - Blocks HTML parsing AND rendering - Fonts (some scenarios) - Can delay text rendering - Images - Generally don&#39;t block rendering (lazy load by default) Impact: Every render-blocking resource adds time to First Contentful Paint (FCP) and Largest Contentful Paint (LCP). --- 🧠 Full Webpage Rendering Flow 1. Browser Requests Page DNS Lookup: Translates domain to IP. TCP Connection: Handshake with server. HTTP Request: Browser sends for HTML. --- 2. Server Responds with HTML Browser starts receiving HTML as a stream (not all at once). Parsing begins immediately as data arrives. --- 3. HTML Parsing → DOM Tree HTML is parsed token by token by the HTML parser . Browser builds the DOM tree : Each tag becomes a node . Render-blocking factor: HTML parsing does NOT block rendering by itself unless a render-blocking resource is encountered (CSS or JS). --- 4. CSS Parsing → CSSOM Tree ⚠️ RENDER-BLOCKING or tags trigger CSS download and parsing. Builds a CSSOM (CSS Object Model) representing styles. Why CSS blocks rendering: - Browser needs all styles before creating render tree - Without styles, content would render unstyled, then flash with styles (FOUC - Flash of Unstyled Content) - Blocks rendering until CSSOM is complete Examples: --- 5. JavaScript Execution ⚠️ RENDER-BLOCKING (Default) tags pause parsing unless marked or . J...
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

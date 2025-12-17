@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="Understanding how browsers render web pages is essential for performance optimization.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🎯 Critical Rendering Path: Deep Dive into Browser Rendering Cycle | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🎯 Critical Rendering Path: Deep Dive into Browser Rendering Cycle | Frontend Resources">
+  <meta property="og:description" content="Understanding how browsers render web pages is essential for performance optimization.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/general/critical_rendering_path">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🎯 Critical Rendering Path: Deep Dive into Browser Rendering Cycle | Frontend Resources">
+  <meta name="twitter:description" content="Understanding how browsers render web pages is essential for performance optimization.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/general/critical_rendering_path">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🎯 Critical Rendering Path: Deep Dive into Browser Rendering Cycle","description":"Understanding how browsers render web pages is essential for performance optimization.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/general/critical_rendering_path"},"articleSection":"general","keywords":"general, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🎯 Critical Rendering Path: Deep Dive into Browser Rendering Cycle</h1>
+      <p><strong>Category:</strong> general</p>
+      <p><strong>Difficulty:</strong> hard</p>
+      <div class="content">
+        Understanding how browsers render web pages is essential for performance optimization. This guide explains the Critical Rendering Path (CRP), rendering stages, performance metrics, and practical optimization strategies. --- 💡 What is the Critical Rendering Path? The Critical Rendering Path is the sequence of steps a browser takes to: 1. Parse HTML and CSS 2. Construct the DOM and CSSOM 3. Create the render tree 4. Calculate layout 5. Paint pixels on screen The CRP directly impacts First Contentful Paint (FCP) and Largest Contentful Paint (LCP), which are key Web Vitals metrics. Why it matters: Any resource that blocks the CRP delays when your page becomes visible and interactive. --- ⚠️ What is Render-Blocking? Render-blocking means the browser pauses or delays rendering while waiting for a resource to be fetched and processed. Critical Render-Blocking Resources: | Resource | Blocks Rendering | Why | Impact | |----------|------------------|-----|--------| | CSS | ✅ Yes | Needed for styles before painting | Highest priority | | JavaScript (default) | ✅ Yes | Can modify DOM/CSSOM/styles | Must be optimized | | JavaScript (defer) | ❌ No | Deferred until DOM ready | Ideal for most | | JavaScript (async) | ❌ No | Runs independently | Best for non-critical | | Fonts | ⚠️ Partial | Text may be invisible (FOIT) | Use | | Images | ❌ No | Loaded separately | Lazy load below fold | May execute before rendering completes, but doesn&#39;t intentionally block it. Render-Blocking Impact on Performance: --- 🧠 The Complete Rendering Pipeline Stage 1: Network &amp; Resource Loading Key Points: - DNS lookup translates domain to IP address - TCP connection established - HTTP headers sent with conditional caching info - HTML bytes start streaming to browser Optimization: --- Stage 2: HTML Parsing → DOM Tree Process: - Browser receives HTML as a stream - HTML Parser tokenizes (, text, attributes) - Tokens converted to nodes - Parent-child relationships established Example: Results in DOM tree:...
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

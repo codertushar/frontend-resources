@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="&gt; Interview Importance: 🔴 Critical — One of the holy trinity of , , questions. Understanding demonstrates deep knowledge of JavaScript&#39;s binding and closures.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🔗 Function.prototype.bind() Polyfill | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🔗 Function.prototype.bind() Polyfill | Frontend Resources">
+  <meta property="og:description" content="&gt; Interview Importance: 🔴 Critical — One of the holy trinity of , , questions. Understanding demonstrates deep knowledge of JavaScript&#39;s binding and closures.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/polyfills/general/bind">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🔗 Function.prototype.bind() Polyfill | Frontend Resources">
+  <meta name="twitter:description" content="&gt; Interview Importance: 🔴 Critical — One of the holy trinity of , , questions. Understanding demonstrates deep knowledge of JavaScript&#39;s binding and closures.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/polyfills/general/bind">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔗 Function.prototype.bind() Polyfill","description":"> Interview Importance: 🔴 Critical — One of the holy trinity of , , questions. Understanding demonstrates deep knowledge of JavaScript's binding and closures.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/general/bind"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🔗 Function.prototype.bind() Polyfill</h1>
+      <p><strong>Category:</strong> js / polyfills</p>
+      <p><strong>Difficulty:</strong> hard</p>
+      <div class="content">
+        &gt; Interview Importance: 🔴 Critical — One of the holy trinity of , , questions. Understanding demonstrates deep knowledge of JavaScript&#39;s binding and closures. --- 1️⃣ What is bind()? creates a new function that, when called, has its keyword set to a specified value, with a given sequence of arguments preceding any provided when the new function is called. Key Characteristics | Feature | Description | |---------|-------------| | Returns | New function with bound | | Modifies original? | No (returns new function) | | Partial application? | Yes (can preset arguments) | | Works as constructor? | Yes (bound function can use ) | --- 2️⃣ Why Use bind()? Common Use Cases | Use Case | Problem | Solution with bind | |----------|---------|-------------------| | Event handlers | refers to DOM element | Bind to component | | Callbacks | lost in callback | Preserve context | | setTimeout | becomes | Bind to object | | Partial application | Need preset arguments | Bind arguments | | Method extraction | Lose context when extracting | Bind before extracting | Real-World Example --- 3️⃣ Native API Signature | Parameter | Description | |-----------|-------------| | | Value to use as inside bound function | | | Arguments to prepend to bound function calls (partial application) | --- 4️⃣ Implementation Basic Implementation 🔍 Dry Run: Basic Usage --- 5️⃣ Understanding Key Concepts What are and ? Visual: Argument Flow Why Instead of ? --- 6️⃣ Production Implementation (with Support) When a bound function is called with , the bound is ignored: Complete Implementation 🔍 Dry Run: Using with --- 7️⃣ call vs apply vs bind | Method | Invokes immediately? | Arguments format | Returns | |--------|---------------------|------------------|---------| | | Yes | Comma separated | Function result | | | Yes | Array | Function result | | | No | Comma separated | New function | Memory Aid --- 8️⃣ Common Interview Questions Q1: Implement bind from scratch Answer: See Section 4 for basic, Section 6 for p...
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

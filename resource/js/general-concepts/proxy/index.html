@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="JavaScript gives you full control over object behavior using a hidden gem: the . Think of it as a trap-layer between your code and the object it interacts with...">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🕵️ What Are Proxies in JavaScript? (With Practical Use Cases) | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🕵️ What Are Proxies in JavaScript? (With Practical Use Cases) | Frontend Resources">
+  <meta property="og:description" content="JavaScript gives you full control over object behavior using a hidden gem: the . Think of it as a trap-layer between your code and the object it interacts with...">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/proxy">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🕵️ What Are Proxies in JavaScript? (With Practical Use Cases) | Frontend Resources">
+  <meta name="twitter:description" content="JavaScript gives you full control over object behavior using a hidden gem: the . Think of it as a trap-layer between your code and the object it interacts with...">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/proxy">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🕵️ What Are Proxies in JavaScript? (With Practical Use Cases)","description":"JavaScript gives you full control over object behavior using a hidden gem: the . Think of it as a trap-layer between your code and the object it interacts with...","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/proxy"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🕵️ What Are Proxies in JavaScript? (With Practical Use Cases)</h1>
+      <p><strong>Category:</strong> js / general-concepts</p>
+      <p><strong>Difficulty:</strong> easy</p>
+      <div class="content">
+        JavaScript gives you full control over object behavior using a hidden gem: the . Think of it as a trap-layer between your code and the object it interacts with — letting you intercept reads, writes, deletes, method calls, and more. It’s like on steroids. Let&#39;s break it down with surgical clarity. --- 🔍 What Is a Proxy? A wraps an object and lets you override fundamental operations. Syntax: : the object you want to wrap : an object with traps (interceptor methods) --- ⚙️ Core Concept Here’s a minimal example that logs every property read: --- 🧠 Use Case 1: Validation Logic Enforce strict rules when setting object properties. --- 🧠 Use Case 2: Auto-Binding Methods Avoid binding bugs in classes: Now you can safely extract methods without losing context: --- 🧠 Use Case 3: Access Control / Read-Only Make an object read-only: --- 🧠 Use Case 4: Array Observation (Reactive Systems) Detect mutations like : This is foundational to reactivity engines (Vue 2 used Proxies via ; Vue 3 uses native ). --- 🧠 Use Case 5: Default Values / Fallbacks Return defaults for missing keys: --- ⚠️ Proxy Limitations Slower than direct access (microseconds, but real at scale) Not supported in IE11 (polyfills can&#39;t fully replicate) Harder to debug due to indirection JSON.stringify ignores Proxy traps --- 🧬 Summary | Feature | Can Intercept | | ------------------- | ---------------------- | | Property get/set | ✅ | | Method call binding | ✅ | | Deletion | ✅ | | Enumeration | ✅ | | operator | ✅ | | | ✅ | | | ✅ | --- 🧪 Final Thoughts is one of the most underrated meta-programming tools in JavaScript. It&#39;s not for every use case — but when you need full behavioral control, reactive systems, or clean abstractions, it&#39;s the scalpel you want....
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

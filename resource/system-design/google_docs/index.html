@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="Target Level: Senior Frontend Engineer / Staff Engineer Duration: 45-60 minutes Interview Focus: Real-time Collaboration, Conflict Resolution, State...">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>📝 System Design: Google Docs with Real-Time Collaboration (Frontend Interview Guide) | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="📝 System Design: Google Docs with Real-Time Collaboration (Frontend Interview Guide) | Frontend Resources">
+  <meta property="og:description" content="Target Level: Senior Frontend Engineer / Staff Engineer Duration: 45-60 minutes Interview Focus: Real-time Collaboration, Conflict Resolution, State...">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/system-design/google_docs">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="📝 System Design: Google Docs with Real-Time Collaboration (Frontend Interview Guide) | Frontend Resources">
+  <meta name="twitter:description" content="Target Level: Senior Frontend Engineer / Staff Engineer Duration: 45-60 minutes Interview Focus: Real-time Collaboration, Conflict Resolution, State...">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/system-design/google_docs">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"📝 System Design: Google Docs with Real-Time Collaboration (Frontend Interview Guide)","description":"Target Level: Senior Frontend Engineer / Staff Engineer Duration: 45-60 minutes Interview Focus: Real-time Collaboration, Conflict Resolution, State...","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/system-design/google_docs"},"articleSection":"system-design","keywords":"system-design, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>📝 System Design: Google Docs with Real-Time Collaboration (Frontend Interview Guide)</h1>
+      <p><strong>Category:</strong> system-design</p>
+      <p><strong>Difficulty:</strong> hard</p>
+      <div class="content">
+        Target Level: Senior Frontend Engineer / Staff Engineer Duration: 45-60 minutes Interview Focus: Real-time Collaboration, Conflict Resolution, State Synchronization, Performance --- Interview Approach &amp; What Interviewers Look For When asked to design Google Docs in a frontend interview, interviewers are evaluating: 1. Real-time Collaboration: Can you design a system where multiple users can edit simultaneously without conflicts? 2. Conflict Resolution: Do you understand Operational Transformation (OT) or CRDTs? 3. State Management: How do you keep local and remote state synchronized? 4. Performance: Can you handle large documents (100k+ characters) without lag? 5. Offline Support: How do you queue changes when the user is offline? 6. Scalability: Can your design support 50+ concurrent editors? Pro Tip: Start by clarifying the scope, then dive into the collaborative editing algorithm (OT/CRDT), followed by architecture and implementation details. --- 1. Clarifying Questions (First 5 minutes) Before diving in, ask these questions to scope the problem: Functional Scope: - &quot;Should we support just text editing, or also rich formatting (bold, italics, images)?&quot; - &quot;Do we need real-time cursor positions and presence indicators?&quot; - &quot;Should we support comments and suggestions mode?&quot; - &quot;Do we need version history and document recovery?&quot; Non-Functional Requirements: - &quot;How many concurrent users per document? 5? 50? 500?&quot; - &quot;What&#39;s the target latency for edits to appear on other clients? &lt;100ms?&quot; - &quot;Should we support offline editing with sync when reconnected?&quot; - &quot;What about conflict resolution when two users edit the same character?&quot; Technical Constraints: - &quot;Can we use WebSockets, or should we support HTTP-only environments?&quot; - &quot;Browser support? Modern browsers only?&quot; - &quot;Should we persist every keystroke, or batch updates?&quot; --- 2. High-Level Architecture (Draw This!) Key Talking Points: - Separation of Concerns: UI rendering is separate from document model and sync logic - Opt...
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

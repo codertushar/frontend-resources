@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="In JavaScript, the keyword is used in the loop— not an operator , but a language construct that allows iteration over iterable objects.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🔍 Understanding `of` in JavaScript – `for...of` Loop Deep Dive | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🔍 Understanding `of` in JavaScript – `for...of` Loop Deep Dive | Frontend Resources">
+  <meta property="og:description" content="In JavaScript, the keyword is used in the loop— not an operator , but a language construct that allows iteration over iterable objects.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/of_in">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🔍 Understanding `of` in JavaScript – `for...of` Loop Deep Dive | Frontend Resources">
+  <meta name="twitter:description" content="In JavaScript, the keyword is used in the loop— not an operator , but a language construct that allows iteration over iterable objects.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/of_in">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔍 Understanding `of` in JavaScript – `for...of` Loop Deep Dive","description":"In JavaScript, the keyword is used in the loop— not an operator , but a language construct that allows iteration over iterable objects.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/of_in"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🔍 Understanding `of` in JavaScript – `for...of` Loop Deep Dive</h1>
+      <p><strong>Category:</strong> js / general-concepts</p>
+      <p><strong>Difficulty:</strong> medium</p>
+      <div class="content">
+        In JavaScript, the keyword is used in the loop— not an operator , but a language construct that allows iteration over iterable objects. --- 📌 Syntax : variable that holds the current value : object with an internal iterator (e.g. , , , etc.) --- ✅ Supported Iterables | Type | Works with | | --------------- | ----------------------- | | | ✅ | | | ✅ | | , | ✅ | | | ✅ (in ES6+) | | | ✅ (browser) | | | ❌ (not iterable) | --- 🔁 Example: Array --- 🔁 Example: String --- 🔁 Example: Map --- 🚫 vs | Feature | | | | ---------------- | --------------------- | ----------------------------------- | | Iterates over | Values | Keys (property names) | | Works on objects | ❌ (unless iterable) | ✅ | | Use for arrays | ✅ Recommended | ❌ Avoid — includes inherited keys | | Order | Preserved (iterators) | Not guaranteed | --- 🧪 Example Difference: --- 🔍 Under the Hood uses the iterable protocol. When you do: JS internally does: --- 🛠 When to Use You want values, not keys. You’re dealing with iterable data (arrays, strings, sets, maps). You want cleaner syntax than or manual loops. You need , , or —which doesn&#39;t support. --- ⚠️ Caveats Doesn&#39;t work on plain objects unless you make them iterable. Can’t use async inside—use for that. --- ✅ Conclusion The construct is the canonical way to iterate over iterable values in modern JavaScript. It’s readable, concise, and robust— avoid for arrays or iterable data structures ....
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

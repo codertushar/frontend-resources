@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="When building modern web apps, logging user behavior or system events reliably is essential.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>📊 Analytics SDK with Retry Logic | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="📊 Analytics SDK with Retry Logic | Frontend Resources">
+  <meta property="og:description" content="When building modern web apps, logging user behavior or system events reliably is essential.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/machine-coding/analytics_sdk">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="📊 Analytics SDK with Retry Logic | Frontend Resources">
+  <meta name="twitter:description" content="When building modern web apps, logging user behavior or system events reliably is essential.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/machine-coding/analytics_sdk">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"📊 Analytics SDK with Retry Logic","description":"When building modern web apps, logging user behavior or system events reliably is essential.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/machine-coding/analytics_sdk"},"articleSection":"machine-coding","keywords":"machine-coding, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>📊 Analytics SDK with Retry Logic</h1>
+      <p><strong>Category:</strong> machine-coding</p>
+      <p><strong>Difficulty:</strong> medium</p>
+      <div class="content">
+        When building modern web apps, logging user behavior or system events reliably is essential. However, network conditions are unpredictable—so sending analytics events must be delayed, serialized, and resilient to transient failures. Let&#39;s build an SDK that: 1. Queues events via 2. Sends events one at a time , every 1 second 3. Simulates failure every 5th event 4. Retries once on failure --- ✅ Desired Output: --- ✅ Final Code --- 🔍 How It Works 1. Queueing Every call to pushes the event into an internal array. 2. Controlled Sending The method ensures: Only one sending loop runs at a time () Events are dequeued one-by-one () Each event waits 1 second before sending 3. Simulated Failures Every 5th event () fails, logs a failure, waits another second, and retries sending. 4. Retry Guarantee The logic does not proceed to the next event until the current one (including its retry) completes. --- 🔧 Why This is Good Engineering Reliable delivery : Events are serialized and retried. Robust simulation : Failures are explicit and testable. Reusable utilities : is abstracted for clarity. Separation of concerns : Queue management, retry logic, and delay handling are well-isolated....
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

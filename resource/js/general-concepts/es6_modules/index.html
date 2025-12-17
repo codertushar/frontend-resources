@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="JavaScript applications have grown massively in size and complexity over the years.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>📦 Understanding ES6 Modules in JavaScript | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="📦 Understanding ES6 Modules in JavaScript | Frontend Resources">
+  <meta property="og:description" content="JavaScript applications have grown massively in size and complexity over the years.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/es6_modules">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="📦 Understanding ES6 Modules in JavaScript | Frontend Resources">
+  <meta name="twitter:description" content="JavaScript applications have grown massively in size and complexity over the years.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/es6_modules">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"📦 Understanding ES6 Modules in JavaScript","description":"JavaScript applications have grown massively in size and complexity over the years.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/es6_modules"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>📦 Understanding ES6 Modules in JavaScript</h1>
+      <p><strong>Category:</strong> js / general-concepts</p>
+      <p><strong>Difficulty:</strong> medium</p>
+      <div class="content">
+        JavaScript applications have grown massively in size and complexity over the years. To manage this growth, developers need tools for organizing code, avoiding global scope pollution, and promoting reusability. Enter the ES6 Module System — a native solution to modular programming in JavaScript. This article explores what ES6 modules are, how they work, and why they&#39;re now the standard for modern JavaScript development. --- 🔍 What Are ES6 Modules? An ES6 Module is a JavaScript file that explicitly exports variables, functions, or classes so they can be imported into other files. They were introduced in ECMAScript 2015 (ES6) and are now supported in all modern browsers and Node.js environments. --- 🎯 Why Use Modules? Encapsulation: Avoid polluting the global namespace. Reusability: Share logic across files. Maintainability: Organize code by responsibility. Dependency Management: Declare what’s used where. Performance: Modules are statically analyzable (great for bundlers and tree-shaking). --- 📤 Exporting from a Module There are two types of exports: and . 1. Named Exports You can export multiple items from the same module: 2. Default Export Each module can have one export: You can also export a value directly: --- 📥 Importing in Other Files 1. Import Named Exports You can also rename imports: 2. Import Default Export 3. Import All (Namespace Import) --- 🧪 Combining Named and Default Exports --- ⚙️ Module Characteristics | Feature | Behavior | | ---------------------- | ---------------------------------------------------- | | File-scoped | Variables stay within the module, not global | | Strict mode by default | No need for | | Singleton execution | Module is loaded and run once (shared instance) | | Static structure | Imports/exports are statically analyzed | | Top-level only | / must be at the top level of a file | --- 🌐 Using Modules in Browsers Use the attribute in : Notes: Modules run in strict mode. is implicitly enabled, so the script loads after the HTML...
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

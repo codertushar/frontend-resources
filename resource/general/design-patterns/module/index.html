@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="JavaScript is a flexible and expressive language. But with flexibility comes responsibility—especially as applications grow larger and more complex.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>📦 The Module Pattern in JavaScript — A Deep Dive | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="📦 The Module Pattern in JavaScript — A Deep Dive | Frontend Resources">
+  <meta property="og:description" content="JavaScript is a flexible and expressive language. But with flexibility comes responsibility—especially as applications grow larger and more complex.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/general/design-patterns/module">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="📦 The Module Pattern in JavaScript — A Deep Dive | Frontend Resources">
+  <meta name="twitter:description" content="JavaScript is a flexible and expressive language. But with flexibility comes responsibility—especially as applications grow larger and more complex.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/general/design-patterns/module">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"📦 The Module Pattern in JavaScript — A Deep Dive","description":"JavaScript is a flexible and expressive language. But with flexibility comes responsibility—especially as applications grow larger and more complex.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/general/design-patterns/module"},"articleSection":"general","keywords":"general, design-patterns, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>📦 The Module Pattern in JavaScript — A Deep Dive</h1>
+      <p><strong>Category:</strong> general / design-patterns</p>
+      <p><strong>Difficulty:</strong> medium</p>
+      <div class="content">
+        JavaScript is a flexible and expressive language. But with flexibility comes responsibility—especially as applications grow larger and more complex. One of the most essential patterns to structure and manage code better is the Module Pattern. The Module Pattern helps you organize your code into reusable, self-contained units, enabling better encapsulation, separation of concerns, and namespace management. --- 🧭 What Is the Module Pattern? The Module Pattern is a design pattern used to: Group related functionalities together Hide private data Expose a public API It relies on closures and immediately invoked function expressions (IIFE) to create private scope. --- 🔍 Why Use the Module Pattern? Avoid polluting the global namespace Encapsulate private state and behavior Create self-contained, reusable components Improve maintainability and testability --- 📜 Syntax Overview Here’s a simple example of the pattern: ✅ How It Works: and are private to the module. Only , , and are exposed publicly. The function is immediately invoked, creating a singleton module. --- 🛠️ Practical Use Cases 1. Utility Modules 2. UI Components 3. State Management --- 🧱 Key Characteristics | Feature | Description | | ------------------- | ------------------------------- | | Private Members | Maintained via closures | | Public API | Defined in the returned object | | Singleton | Only one instance exists | | Encapsulation | Promotes separation of concerns | --- ⚠️ Drawbacks 1. Not reusable as multiple instances Since it’s an IIFE, the module is a singleton. 2. Testing private members Private state cannot be directly tested unless exposed. 3. Not dynamic You can&#39;t parameterize or reset private state easily without modifying the core structure. --- 🌐 Modern Alternatives With ES6, we now have native modules using syntax: ✅ These modules are: File-scoped (no global pollution) Easily testable Tree-shakable (dead-code elimination) Can be reused and parameterized --- 🧠 When to Use the Module Patte...
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

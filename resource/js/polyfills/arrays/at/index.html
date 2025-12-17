@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="The method takes an integer and returns the item at that index, allowing for positive and negative integers.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🎯 Array.prototype.at() Polyfill | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🎯 Array.prototype.at() Polyfill | Frontend Resources">
+  <meta property="og:description" content="The method takes an integer and returns the item at that index, allowing for positive and negative integers.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/at">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🎯 Array.prototype.at() Polyfill | Frontend Resources">
+  <meta name="twitter:description" content="The method takes an integer and returns the item at that index, allowing for positive and negative integers.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/at">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🎯 Array.prototype.at() Polyfill","description":"The method takes an integer and returns the item at that index, allowing for positive and negative integers.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/at"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🎯 Array.prototype.at() Polyfill</h1>
+      <p><strong>Category:</strong> js / polyfills</p>
+      <p><strong>Difficulty:</strong> medium</p>
+      <div class="content">
+        The method takes an integer and returns the item at that index, allowing for positive and negative integers. --- ✅ Implementation Explanation: Negative index handling : If the index is negative, it’s adjusted by adding the array’s length. This makes refer to the last element, to the second-to-last, and so on. Bounds check : After adjusting the index, the function checks if it’s within the valid range (i.e., ). If it’s valid, the element at that index is returned; otherwise, is returned. Edge case : If the index is out of bounds (e.g., for an array of length 5), it returns . Examples: returns the element at index 2 (which is 8). returns the last element (44). returns since the index is out of bounds. This mimics while supporting both positive and negative indices.
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

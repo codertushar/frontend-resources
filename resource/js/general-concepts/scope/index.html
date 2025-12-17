@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="google-site-verification" content="b8q0hZ6RhVoBR0_7jvr2AZJh0RltnvxPx5YgZRqzQdY" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#8b5cf6" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="FE Resources" />
+
+  <link rel="icon" type="image/svg+xml" href="/frontend-resources/favicon.svg" />
+  <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
+  <link rel="manifest" href="/frontend-resources/manifest.json" />
+
+  <meta name="description" content="&gt; Interview Importance: 🔴 Critical — Scope is fundamental to JavaScript. Questions about scope, hoisting, and closures appear in 95% of technical interviews...">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+
+  <title>🎯 Scope in JavaScript — The Complete Guide | Frontend Resources</title>
+  <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
+  <script>
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var path = params.get('p');
+      var hash = params.get('h');
+      if (path) {
+        // Restore the full path (path already excludes /frontend-resources)
+        // React Router with basename="/frontend-resources" expects paths like /library, /resource/...
+        window.history.replaceState(null, '',
+          '/frontend-resources' + path + (hash ? '#' + hash : '')
+        );
+      }
+    })();
+  </script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
+  <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🎯 Scope in JavaScript — The Complete Guide | Frontend Resources">
+  <meta property="og:description" content="&gt; Interview Importance: 🔴 Critical — Scope is fundamental to JavaScript. Questions about scope, hoisting, and closures appear in 95% of technical interviews...">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/scope">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🎯 Scope in JavaScript — The Complete Guide | Frontend Resources">
+  <meta name="twitter:description" content="&gt; Interview Importance: 🔴 Critical — Scope is fundamental to JavaScript. Questions about scope, hoisting, and closures appear in 95% of technical interviews...">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/scope">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🎯 Scope in JavaScript — The Complete Guide","description":"> Interview Importance: 🔴 Critical — Scope is fundamental to JavaScript. Questions about scope, hoisting, and closures appear in 95% of technical interviews...","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/scope"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🎯 Scope in JavaScript — The Complete Guide</h1>
+      <p><strong>Category:</strong> js / general-concepts</p>
+      <p><strong>Difficulty:</strong> hard</p>
+      <div class="content">
+        &gt; Interview Importance: 🔴 Critical — Scope is fundamental to JavaScript. Questions about scope, hoisting, and closures appear in 95% of technical interviews and are essential for debugging complex issues --- 1️⃣ What is Scope? Scope is the set of rules that determines how and where variables can be accessed in your code. It defines the visibility and lifetime of variables and functions, preventing naming conflicts and managing memory efficiently. The Core Concept Real-World Analogy: The House 🏠 Think of scope like a house with different rooms: Simple Example --- 2️⃣ Why Does Scope Matter? Use Cases Table | Problem | Scope Solution | Example | |---------|---------------|---------| | Variable conflicts | Encapsulation prevents naming collisions | Library development | | Memory management | Variables get garbage collected when out of scope | Performance optimization | | Code organization | Logical grouping of related functionality | Module patterns | | Security | Hide implementation details | API design | | Debugging | Clear boundaries make issues easier to trace | Error handling | | Maintainability | Limited visibility reduces side effects | Large applications | Benefits --- 3️⃣ How Scope Works — Implementation Types of Scope 🔍 Dry Run — Scope Resolution Process --- 4️⃣ Understanding Key Concepts Lexical vs Dynamic Scope Hoisting and Scope Scope Chain Visualization --- 5️⃣ Production/Advanced Implementation Scope-Safe Utilities Dynamic Scope Simulation --- 6️⃣ Real-World Examples Module Pattern with Scope Event Handler Scope Management --- 7️⃣ Scope Comparisons var vs let vs const | Feature | var | let | const | |---------|-----|-----|-------| | Scope | Function | Block | Block | | Hoisting | Yes (initialized as undefined) | Yes (TDZ) | Yes (TDZ) | | Reassignment | ✅ | ✅ | ❌ | | Redeclaration | ✅ | ❌ | ❌ | | Global Object Property | ✅ (window.varName) | ❌ | ❌ | | Use in Loops | ❌ (creates closure issues) | ✅ | ✅ | Visual Comparison Global Scope Behaviors ES Modules...
+      </div>
+    </article>
+  </noscript>
+  <script>
+    if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/frontend-resources/service-worker.js')
+          .then((registration) => {
+            console.log('Service Worker registered successfully');
+            
+            // Check for updates every 30 minutes
+            setInterval(() => {
+              registration.update();
+            }, 30 * 60 * 1000);
+            
+            // Manual content check trigger
+            window.checkForNewArticles = () => {
+              if (registration.active) {
+                registration.active.postMessage({ type: 'CHECK_NEW_CONTENT' });
+              }
+            };
+          })
+          .catch(err => console.error('SW registration failed:', err));
+      });
+    }
+  </script>
+</body>
+
+</html>

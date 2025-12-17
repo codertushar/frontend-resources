@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="The method returns the index of the first element that satisfies the provided testing function, or if none is found. --- 💡 How It Works 1.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🔢 Array.prototype.findIndex() Polyfill | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🔢 Array.prototype.findIndex() Polyfill | Frontend Resources">
+  <meta property="og:description" content="The method returns the index of the first element that satisfies the provided testing function, or if none is found. --- 💡 How It Works 1.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/findIndex">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🔢 Array.prototype.findIndex() Polyfill | Frontend Resources">
+  <meta name="twitter:description" content="The method returns the index of the first element that satisfies the provided testing function, or if none is found. --- 💡 How It Works 1.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/findIndex">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔢 Array.prototype.findIndex() Polyfill","description":"The method returns the index of the first element that satisfies the provided testing function, or if none is found. --- 💡 How It Works 1.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/polyfills/arrays/findIndex"},"articleSection":"js","keywords":"js, polyfills, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🔢 Array.prototype.findIndex() Polyfill</h1>
+      <p><strong>Category:</strong> js / polyfills</p>
+      <p><strong>Difficulty:</strong> medium</p>
+      <div class="content">
+        The method returns the index of the first element that satisfies the provided testing function, or if none is found. --- 💡 How It Works 1. Iterate through the array: Loop over each element in the array. 2. Apply the callback function: For each element, invoke the provided callback function. 3. Return the index: If the callback returns a truthy value for the current element, return its index. 4. Return : If no element matches the condition, return . Implementation: Explanation of How It Works: 1. Iteration over the array: - The method iterates through each element of the array using a loop. The loop will go from index to . 2. Executing the callback function: - For each element, the provided is executed with three arguments: (the current element), (the index of the element), and (the array itself). - The callback function should return a truthy value for the matching element. If it does, the method immediately returns the index . 3. Return if no match is found: - If the loop completes without finding a match, the method returns . Example Walkthrough: - : The callback function checks if an element is greater than . - For the array , it will return the index , because is the first element greater than . Edge Case: - If no element satisfies the condition (e.g., if you search for elements greater than in the same array), the method will return . Summary: - This custom implementation mimics the behavior of the native method. - It uses a loop to iterate over the array and to ensure the correct context for the inside the callback function. - The method returns the index of the first matching element or if no element satisfies the condition. Let me know if you&#39;d like any modifications or further explanations! 😊...
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

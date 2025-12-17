@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="Merging two sorted arrays is a fundamental algorithm used as a building block in merge sort and many other applications.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🔀 Merge Two Sorted Arrays | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🔀 Merge Two Sorted Arrays | Frontend Resources">
+  <meta property="og:description" content="Merging two sorted arrays is a fundamental algorithm used as a building block in merge sort and many other applications.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/dsa/merge_two_sorted_arrays">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🔀 Merge Two Sorted Arrays | Frontend Resources">
+  <meta name="twitter:description" content="Merging two sorted arrays is a fundamental algorithm used as a building block in merge sort and many other applications.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/dsa/merge_two_sorted_arrays">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔀 Merge Two Sorted Arrays","description":"Merging two sorted arrays is a fundamental algorithm used as a building block in merge sort and many other applications.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/dsa/merge_two_sorted_arrays"},"articleSection":"dsa","keywords":"dsa, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🔀 Merge Two Sorted Arrays</h1>
+      <p><strong>Category:</strong> dsa</p>
+      <p><strong>Difficulty:</strong> hard</p>
+      <div class="content">
+        Merging two sorted arrays is a fundamental algorithm used as a building block in merge sort and many other applications. This O(n + m) solution uses the two-pointer technique to efficiently combine arrays while maintaining sorted order. --- ✅ Implementation --- 🧪 Example --- ⏱️ Time Complexity — linear in total elements No sorting or mutation --- Merging K Sorted Arrays For merging more than two arrays, we can use a min-heap approach for optimal performance. --- ✅ Problem Given an array of sorted arrays, merge them into one fully sorted array efficiently. --- 🧠 Atom-of-Thoughts Approach --- Atom 1: Use a Min-Heap to track the smallest current element from each array We need to efficiently get the smallest item across all arrays — a min-heap (priority queue) is perfect for this. --- Atom 2: Initialize the heap with the first element of each array Each heap entry will track: : the number : which array it came from : its position in that array --- Atom 3: Repeatedly extract the smallest item, and push its next element into the heap This guarantees sorted order. Do this until the heap is empty. --- Atom 4: Output the final merged array --- ✅ Code (Readable) --- 🧪 Example --- 📈 Time Complexity Heap operations: Total elements: Overall: &gt; Can be optimized with a real heap ( or custom binary heap) instead of . --- Let&#39;s do a step-by-step dry run of using this example: --- 📥 Input: Goal: Merge into one sorted array. --- 🧠 Atom-of-Thought Dry Run --- 🔹 Step 1: Initialize Heap with First Elements We push the first element of each array into the heap: Then we sort it: --- 🔁 Loop Begins 🌀 Iteration 1: Pop → Next from array 2 is Push Heap: → after sort: 🌀 Iteration 2: Pop → Next from array 0 is Push Heap: → sort: 🌀 Iteration 3: Pop → Next from array 1 is Push Heap: → sort: 🌀 Iteration 4: Pop → Next from array 0 is Push Heap: → sort: 🌀 Iteration 5: Pop → Next from array 1 is Push Heap: → sort: 🌀 Iteration 6: Pop → Next from array 2 is Push Heap: → sort: 🌀 Iteration ...
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

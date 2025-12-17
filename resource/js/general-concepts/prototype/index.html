@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="&gt; Interview Importance: 🔴 Critical — Asked in 90% of JavaScript interviews. Understanding prototypes is fundamental to understanding how JavaScript works...">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🔗 Prototype and Prototype Inheritance in JavaScript | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🔗 Prototype and Prototype Inheritance in JavaScript | Frontend Resources">
+  <meta property="og:description" content="&gt; Interview Importance: 🔴 Critical — Asked in 90% of JavaScript interviews. Understanding prototypes is fundamental to understanding how JavaScript works...">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/prototype">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🔗 Prototype and Prototype Inheritance in JavaScript | Frontend Resources">
+  <meta name="twitter:description" content="&gt; Interview Importance: 🔴 Critical — Asked in 90% of JavaScript interviews. Understanding prototypes is fundamental to understanding how JavaScript works...">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/prototype">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🔗 Prototype and Prototype Inheritance in JavaScript","description":"> Interview Importance: 🔴 Critical — Asked in 90% of JavaScript interviews. Understanding prototypes is fundamental to understanding how JavaScript works...","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/prototype"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🔗 Prototype and Prototype Inheritance in JavaScript</h1>
+      <p><strong>Category:</strong> js / general-concepts</p>
+      <p><strong>Difficulty:</strong> medium</p>
+      <div class="content">
+        &gt; Interview Importance: 🔴 Critical — Asked in 90% of JavaScript interviews. Understanding prototypes is fundamental to understanding how JavaScript works under the hood. --- 1️⃣ What is a Prototype? JavaScript uses prototype-based inheritance, meaning objects inherit properties and methods from other objects via the chain — not through classical class-based inheritance like Java or C++. Core Concept Every JavaScript object has an internal link to another object called its prototype. When you access a property on an object, JavaScript first looks at the object itself. If not found, it looks up the prototype chain until it finds the property or reaches . --- 2️⃣ Why Do Prototypes Matter? Memory Efficiency Without prototypes, each object instance would have its own copy of every method: Real-World Impact - 1000 instances without prototype: 1000 function objects in memory - 1000 instances with prototype: 1 shared function object --- 3️⃣ How Prototypes Work — Step by Step 3.1 The Property (Functions) Every JavaScript function has a property (an object) that becomes the prototype of instances created with . 🔍 Dry Run: What happens when is called? 3.2 The Property (Objects) Every object has a property pointing to its prototype. This is how the chain is traversed. 3.3 Visualizing the Chain --- 4️⃣ Prototype Inheritance (Extending) Using Object.create() 🔍 Dry Run: Prototype Chain After Inheritance Why Each Step Matters | Step | Code | Purpose | |------|------|---------| | 1 | | Initialize parent properties on | | 2 | | Link prototype chain WITHOUT calling | | 3 | | Fix constructor reference (otherwise points to Person) | | 4 | Add methods to | Define child-specific behavior | ❌ Common Mistake: Using Instead of --- 5️⃣ ES6 Class Syntax (Syntactic Sugar) ES6 is syntactic sugar over prototype-based inheritance: Under the Hood — Same Prototype Chain! --- 6️⃣ Key Methods for Working with Prototypes | Method | Purpose | Example | |--------|---------|---------| | | Create object...
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

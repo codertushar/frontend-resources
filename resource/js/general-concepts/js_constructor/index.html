@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="A constructor in JavaScript is a special function used to create and initialize objects. It allows you to define reusable object structures.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>🏗️ Constructor Functions in JavaScript | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="🏗️ Constructor Functions in JavaScript | Frontend Resources">
+  <meta property="og:description" content="A constructor in JavaScript is a special function used to create and initialize objects. It allows you to define reusable object structures.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/js_constructor">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="🏗️ Constructor Functions in JavaScript | Frontend Resources">
+  <meta name="twitter:description" content="A constructor in JavaScript is a special function used to create and initialize objects. It allows you to define reusable object structures.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/general-concepts/js_constructor">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"🏗️ Constructor Functions in JavaScript","description":"A constructor in JavaScript is a special function used to create and initialize objects. It allows you to define reusable object structures.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/general-concepts/js_constructor"},"articleSection":"js","keywords":"js, general-concepts, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>🏗️ Constructor Functions in JavaScript</h1>
+      <p><strong>Category:</strong> js / general-concepts</p>
+      <p><strong>Difficulty:</strong> medium</p>
+      <div class="content">
+        A constructor in JavaScript is a special function used to create and initialize objects. It allows you to define reusable object structures. --- 1️⃣ What is a Constructor? A constructor function : Is a regular function but used with the keyword. Initializes an object and assigns properties to it. Typically follows PascalCase naming convention (, , ). Example of a Constructor Function 📌 How it works: 1. creates a new empty object . 2. inside refers to the newly created object. 3. The function assigns properties ( and ) to . 4. The new object is returned automatically. --- 2️⃣ Constructor Without (Why is Needed) If you forget to use , refers to the global object ( in browsers, in Node.js). ✅ Always use when calling a constructor function. --- 3️⃣ Constructor with Methods You can add methods inside the constructor, but it&#39;s inefficient because each instance gets a new copy of the method. --- 4️⃣ Constructor + Prototype (Efficient Approach) Instead of defining methods inside the constructor, use prototype to share methods among all instances. 📌 Why use prototype? Reduces memory usage by sharing methods among instances. --- 5️⃣ Constructor in ES6 Classes (Modern Approach) ES6 introduces syntax, making constructor-based object creation cleaner. ✅ Same behavior as constructor functions but more readable. ✅ Uses prototype under the hood. --- 6️⃣ Checking Constructor Reference Each object instance retains a reference to its constructor. This is why resetting in prototype inheritance is necessary: --- 7️⃣ Custom Object Creation Without You can simulate by manually creating and returning an object. 📌 Difference? is not required. Object literals are used instead of . --- 🚀 Summary | Feature | Constructor Function | ES6 Class | | ----------------- | ----------------------------------------- | --------------------------- | | Syntax | Function-based | keyword | | Instantiation | keyword | keyword | | Method Definition | Inside function (bad) or prototype (good) | Inside class ...
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {

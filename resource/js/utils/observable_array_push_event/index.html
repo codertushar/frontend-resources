@@ -14,13 +14,12 @@
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
 
-  <meta name="description"
-    content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
+  <meta name="description" content="JavaScript arrays are powerful—but they don’t emit events . Want to react when someone es a new item? You’re out of luck... unless you take control.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
-  <title>Frontend Resources</title>
+  <title>⚡️ Fire on Push: Dispatching Custom Events When an Array Changes in JavaScript | Frontend Resources</title>
   <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
   <script>
     (function() {
@@ -36,12 +35,39 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-BYeEm8kd.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-CFqKBp6B.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+
+  <!-- SEO Meta Tags -->
+  <meta property="og:title" content="⚡️ Fire on Push: Dispatching Custom Events When an Array Changes in JavaScript | Frontend Resources">
+  <meta property="og:description" content="JavaScript arrays are powerful—but they don’t emit events . Want to react when someone es a new item? You’re out of luck... unless you take control.">
+  <meta property="og:url" content="https://codertushar.github.io/frontend-resources/resource/js/utils/observable_array_push_event">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Frontend Resources">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="⚡️ Fire on Push: Dispatching Custom Events When an Array Changes in JavaScript | Frontend Resources">
+  <meta name="twitter:description" content="JavaScript arrays are powerful—but they don’t emit events . Want to react when someone es a new item? You’re out of luck... unless you take control.">
+  <link rel="canonical" href="https://codertushar.github.io/frontend-resources/resource/js/utils/observable_array_push_event">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"⚡️ Fire on Push: Dispatching Custom Events When an Array Changes in JavaScript","description":"JavaScript arrays are powerful—but they don’t emit events . Want to react when someone es a new item? You’re out of luck... unless you take control.","author":{"@type":"Person","name":"Tushar Khanna"},"publisher":{"@type":"Organization","name":"Frontend Resources","url":"https://codertushar.github.io/frontend-resources"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codertushar.github.io/frontend-resources/resource/js/utils/observable_array_push_event"},"articleSection":"js","keywords":"js, utils, frontend, javascript, web development"}</script>
 </head>
 
 <body>
   <div id="root"></div>
+  <!-- Pre-rendered content for SEO -->
+  <noscript>
+    <style>.seo-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; }</style>
+    
+    <article class="seo-content">
+      <h1>⚡️ Fire on Push: Dispatching Custom Events When an Array Changes in JavaScript</h1>
+      <p><strong>Category:</strong> js / utils</p>
+      <p><strong>Difficulty:</strong> medium</p>
+      <div class="content">
+        JavaScript arrays are powerful—but they don’t emit events . Want to react when someone es a new item? You’re out of luck... unless you take control. This post shows you how to intercept array mutations and dispatch custom events when is called — all in vanilla JavaScript, no frameworks, no proxies. --- 🧪 The Goal We want to monitor this: And react like this: --- 🛠 Step 1: Custom Array Wrapper --- 🚀 Usage --- 🎯 Why This Works We&#39;re overriding on a per-array basis We preserve original functionality via We dispatch a with rich detail --- 🧠 Bonus: Generalizing for Other Methods Want to observe , , or even ? Here’s a sketch: --- 🧬 Alternative: Using Proxies (Advanced) Want a more general-purpose reactive array? Use a . It’s more powerful but less performant: --- 🔚 Conclusion You don’t need Vue or MobX to detect array changes. With just a few lines of JavaScript, you can: Intercept native behavior Dispatch clean, custom events Build observability into data structures This pattern is a foundation for reactive state systems, event-driven logic, or any scenario where &quot;changes should trigger actions.&quot; --- Want a React-compatible or Svelte-integrated version? Ask and I’ll tailor one....
+      </div>
+    </article>
+  </noscript>
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {
