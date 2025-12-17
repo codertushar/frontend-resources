@@ -3,13 +3,14 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="google-site-verification" content="b8q0hZ6RhVoBR0_7jvr2AZJh0RltnvxPx5YgZRqzQdY" />
+  <meta name="google-site-verification" content="5SHdrMjztB1eQ2mqKZmDLmg6yx-kJMHaDwZZuLSPmU0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#8b5cf6" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="FE Resources" />
 
+  <!-- Asset paths use Vite's BASE_URL which is set based on deployment target -->
   <link rel="icon" type="image/svg+xml" href="/frontend-resources/favicon.svg" />
   <link rel="apple-touch-icon" href="/frontend-resources/android-launchericon-192-192.png" />
   <link rel="manifest" href="/frontend-resources/manifest.json" />
@@ -27,16 +28,18 @@
       var path = params.get('p');
       var hash = params.get('h');
       if (path) {
-        // Restore the full path (path already excludes /frontend-resources)
-        // React Router with basename="/frontend-resources" expects paths like /library, /resource/...
+        // Detect base path - GitHub Pages uses /frontend-resources, Vercel uses /
+        var base = window./frontend-resources/ || '/';
+        var basePath = base === '/' ? '' : base.replace(/\/$/, '');
         window.history.replaceState(null, '',
-          '/frontend-resources' + path + (hash ? '#' + hash : '')
+          basePath + path + (hash ? '#' + hash : '')
         );
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-B49wXFDC.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-RzJCthbl.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
+<script>window.__VITE_BASE__="/frontend-resources/";</script>
 
   <!-- SEO Meta Tags -->
   <meta property="og:title" content="🎯 Critical Rendering Path: Deep Dive into Browser Rendering Cycle | Frontend Resources">
@@ -71,15 +74,17 @@
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/frontend-resources/service-worker.js')
+        // Use dynamic base path for service worker
+        var base = window./frontend-resources/ || '/';
+        navigator.serviceWorker.register(base + 'service-worker.js')
           .then((registration) => {
             console.log('Service Worker registered successfully');
-            
+
             // Check for updates every 30 minutes
             setInterval(() => {
               registration.update();
             }, 30 * 60 * 1000);
-            
+
             // Manual content check trigger
             window.checkForNewArticles = () => {
               if (registration.active) {
