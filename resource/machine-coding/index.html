@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-<script>window./frontend-resources/="/frontend-resources/";</script>
+<script>window.__VITE_BASE__="/frontend-resources/";</script>
   <meta charset="UTF-8" />
   <meta name="google-site-verification" content="5SHdrMjztB1eQ2mqKZmDLmg6yx-kJMHaDwZZuLSPmU0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -30,7 +30,7 @@
       var hash = params.get('h');
       if (path) {
         // Detect base path - GitHub Pages uses /frontend-resources, Vercel uses /
-        var base = window./frontend-resources/ || '/';
+        var base = window.__VITE_BASE__ || '/';
         var basePath = base === '/' ? '' : base.replace(/\/$/, '');
         window.history.replaceState(null, '',
           basePath + path + (hash ? '#' + hash : '')
@@ -38,7 +38,7 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/frontend-resources/assets/index-B1brcASH.js"></script>
+  <script type="module" crossorigin src="/frontend-resources/assets/index-ByxkiWVe.js"></script>
   <link rel="stylesheet" crossorigin href="/frontend-resources/assets/index-B_dCruIS.css">
 
   <!-- SEO Meta Tags -->
@@ -59,7 +59,7 @@
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {
         // Use dynamic base path for service worker
-        var base = window./frontend-resources/ || '/';
+        var base = window.__VITE_BASE__ || '/';
         navigator.serviceWorker.register(base + 'service-worker.js')
           .then((registration) => {
             console.log('Service Worker registered successfully');
