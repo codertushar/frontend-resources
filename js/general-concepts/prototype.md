@@ -18,23 +18,23 @@ JavaScript uses **prototype-based inheritance**, meaning objects inherit propert
 Every JavaScript object has an internal link to another object called its **prototype**. When you access a property on an object, JavaScript first looks at the object itself. If not found, it looks up the prototype chain until it finds the property or reaches `null`.
 
 ```
-┌─────────────────┐
-│   Your Object   │
-│  { name: "X" }  │
-└────────┬────────┘
-         │ [[Prototype]]
++-----------------+
+|   Your Object   |
+|  { name: "X" }  |
++--------+--------+
+         | [[Prototype]]
          ▼
-┌─────────────────┐
-│ Parent Prototype│
-│  { greet() }    │
-└────────┬────────┘
-         │ [[Prototype]]
++-----------------+
+| Parent Prototype|
+|  { greet() }    |
++--------+--------+
+         | [[Prototype]]
          ▼
-┌─────────────────┐
-│ Object.prototype│
-│ { toString() }  │
-└────────┬────────┘
-         │ [[Prototype]]
++-----------------+
+| Object.prototype|
+| { toString() }  |
++--------+--------+
+         | [[Prototype]]
          ▼
         null
 ```
@@ -107,16 +107,16 @@ person2.greet(); // Hello, I'm Bob and I'm 30 years old.
 
 ```
 Step 1: JavaScript looks for `greet` on person1 object
-        → person1 = { name: "Alice", age: 25 }
-        → `greet` NOT found on person1
+        -> person1 = { name: "Alice", age: 25 }
+        -> `greet` NOT found on person1
 
 Step 2: JavaScript looks up the prototype chain
-        → person1.__proto__ === Person.prototype
-        → Person.prototype = { greet: function() {...} }
-        → `greet` FOUND!
+        -> person1.__proto__ === Person.prototype
+        -> Person.prototype = { greet: function() {...} }
+        -> `greet` FOUND!
 
 Step 3: Execute greet() with `this` = person1
-        → Output: "Hello, I'm Alice and I'm 25 years old."
+        -> Output: "Hello, I'm Alice and I'm 25 years old."
 ```
 
 ### 3.2 The `__proto__` Property (Objects)
@@ -136,9 +136,9 @@ const person1 = new Person("Alice", 25);
 
 // The prototype chain:
 person1
-  └── __proto__ → Person.prototype
-                    └── __proto__ → Object.prototype
-                                      └── __proto__ → null
+  +-- __proto__ -> Person.prototype
+                    +-- __proto__ -> Object.prototype
+                                      +-- __proto__ -> null
 ```
 
 ---
@@ -183,18 +183,18 @@ emp.work();   // "Charlie is working as a Engineer" (own method)
 
 ```
 emp (instance)
-│   { name: "Charlie", age: 28, job: "Engineer" }
-│
-└── __proto__ → Employee.prototype
-                │   { constructor: Employee, work: fn }
-                │
-                └── __proto__ → Person.prototype
-                                │   { constructor: Person, greet: fn }
-                                │
-                                └── __proto__ → Object.prototype
-                                                │   { toString, hasOwnProperty, ... }
-                                                │
-                                                └── __proto__ → null
+|   { name: "Charlie", age: 28, job: "Engineer" }
+|
++-- __proto__ -> Employee.prototype
+                |   { constructor: Employee, work: fn }
+                |
+                +-- __proto__ -> Person.prototype
+                                |   { constructor: Person, greet: fn }
+                                |
+                                +-- __proto__ -> Object.prototype
+                                                |   { toString, hasOwnProperty, ... }
+                                                |
+                                                +-- __proto__ -> null
 ```
 
 ### Why Each Step Matters
@@ -322,13 +322,13 @@ dog.speakBoth();  // "Animal speaks" then "Dog barks"
 dog.speak() is called
 
 Step 1: Look for `speak` on dog instance
-        → dog = {} (no own properties)
-        → NOT found
+        -> dog = {} (no own properties)
+        -> NOT found
 
 Step 2: Look on Dog.prototype
-        → Dog.prototype = { speak: fn, speakBoth: fn }
-        → FOUND! Execute Dog.prototype.speak()
-        → Output: "Dog barks"
+        -> Dog.prototype = { speak: fn, speakBoth: fn }
+        -> FOUND! Execute Dog.prototype.speak()
+        -> Output: "Dog barks"
 
 Note: Animal.prototype.speak is never reached
       because Dog.prototype.speak shadows it

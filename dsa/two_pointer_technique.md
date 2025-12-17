@@ -17,7 +17,7 @@ The **Two-Pointer Technique** is an algorithmic pattern that uses two pointers (
 
 ```
 Array:  [1, 2, 3, 4, 5, 6, 7, 8, 9]
-         ↑                       ↑
+         ^                       ^
        left                   right
         
 Two pointers moving towards each other or in the same direction
@@ -74,25 +74,25 @@ const isPalindrome = (arr) => {
 
 ```
 Step 1: Initialize pointers
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   arr = [1, 2, 3, 2, 1]
   left = 0 (points to 1)
   right = 4 (points to 1)
-  Condition: left < right → true
-  Compare: arr[0] (1) === arr[4] (1) → Match!
+  Condition: left < right -> true
+  Compare: arr[0] (1) === arr[4] (1) -> Match!
   
 Step 2: Move pointers inward
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   left = 1 (points to 2)
   right = 3 (points to 2)
-  Condition: left < right → true
-  Compare: arr[1] (2) === arr[3] (2) → Match!
+  Condition: left < right -> true
+  Compare: arr[1] (2) === arr[3] (2) -> Match!
   
 Step 3: Final check
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   left = 2 (points to 3)
   right = 2 (points to 3)
-  Condition: left < right → false (pointers met)
+  Condition: left < right -> false (pointers met)
   Exit loop
   
 Result: true (palindrome confirmed)
@@ -124,47 +124,47 @@ const removeDuplicates = (nums) => {
 
 ```
 Initial State:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   nums = [1, 1, 2, 2, 3, 4, 4]
   slow = 0
   fast = 1
 
 Iteration 1: fast = 1
-─────────────────────────────────────────────────────────
-  Compare: nums[1] (1) !== nums[0] (1) → false
+---------------------------------------------------------
+  Compare: nums[1] (1) !== nums[0] (1) -> false
   Action: Skip (duplicate)
   State: slow = 0, fast = 2
 
 Iteration 2: fast = 2
-─────────────────────────────────────────────────────────
-  Compare: nums[2] (2) !== nums[0] (1) → true
-  Action: slow++ → 1, nums[1] = 2
+---------------------------------------------------------
+  Compare: nums[2] (2) !== nums[0] (1) -> true
+  Action: slow++ -> 1, nums[1] = 2
   State: nums = [1, 2, 2, 2, 3, 4, 4]
          slow = 1, fast = 3
 
 Iteration 3: fast = 3
-─────────────────────────────────────────────────────────
-  Compare: nums[3] (2) !== nums[1] (2) → false
+---------------------------------------------------------
+  Compare: nums[3] (2) !== nums[1] (2) -> false
   Action: Skip (duplicate)
   State: slow = 1, fast = 4
 
 Iteration 4: fast = 4
-─────────────────────────────────────────────────────────
-  Compare: nums[4] (3) !== nums[1] (2) → true
-  Action: slow++ → 2, nums[2] = 3
+---------------------------------------------------------
+  Compare: nums[4] (3) !== nums[1] (2) -> true
+  Action: slow++ -> 2, nums[2] = 3
   State: nums = [1, 2, 3, 2, 3, 4, 4]
          slow = 2, fast = 5
 
 Iteration 5: fast = 5
-─────────────────────────────────────────────────────────
-  Compare: nums[5] (4) !== nums[2] (3) → true
-  Action: slow++ → 3, nums[3] = 4
+---------------------------------------------------------
+  Compare: nums[5] (4) !== nums[2] (3) -> true
+  Action: slow++ -> 3, nums[3] = 4
   State: nums = [1, 2, 3, 4, 3, 4, 4]
          slow = 3, fast = 6
 
 Iteration 6: fast = 6
-─────────────────────────────────────────────────────────
-  Compare: nums[6] (4) !== nums[3] (4) → false
+---------------------------------------------------------
+  Compare: nums[6] (4) !== nums[3] (4) -> false
   Action: Skip (duplicate)
   Final: slow = 3
 
@@ -176,8 +176,8 @@ Result: slow + 1 = 4 (unique elements: [1, 2, 3, 4])
 ## 4️⃣ Understanding Key Concepts
 
 **Why use TWO pointers instead of one?**
-- **Single pointer:** Would require nested loops to compare elements → O(n²)
-- **Two pointers:** Can process relationships between elements in one pass → O(n)
+- **Single pointer:** Would require nested loops to compare elements -> O(n²)
+- **Two pointers:** Can process relationships between elements in one pass -> O(n)
 
 **Why does `while (left < right)` work for palindromes?**
 - When `left === right`, we're at the middle element (odd-length array)
@@ -445,13 +445,13 @@ const prioritizeActiveItems = (items) => {
 
 ```
 Is the data sorted?
-├─ YES → Use Two-Pointer (best choice)
-│         ├─ Need pairs/triplets? → Converging pointers
-│         └─ Need to remove duplicates? → Fast/slow pointers
-│
-└─ NO → Can you sort it?
-          ├─ YES → Sort + Two-Pointer (O(n log n) + O(n))
-          └─ NO → Use Hash Map (O(n) time, O(n) space)
++- YES -> Use Two-Pointer (best choice)
+|         +- Need pairs/triplets? -> Converging pointers
+|         +- Need to remove duplicates? -> Fast/slow pointers
+|
++- NO -> Can you sort it?
+          +- YES -> Sort + Two-Pointer (O(n log n) + O(n))
+          +- NO -> Use Hash Map (O(n) time, O(n) space)
 ```
 
 ---

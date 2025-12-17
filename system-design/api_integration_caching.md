@@ -58,64 +58,64 @@ Before diving in, ask these questions to scope the problem:
 ## 2. High-Level Architecture (Draw This!)
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                     Frontend Application                         │
-│                                                                  │
-│  ┌────────────────────────────────────────────────────────────┐ │
-│  │                   UI Components Layer                       │ │
-│  │  • Product List  • User Profile  • Cart  • Reviews        │ │
-│  └────────────────────────────────────────────────────────────┘ │
-│                           ↕                                      │
-│  ┌────────────────────────────────────────────────────────────┐ │
-│  │              Data Orchestration Layer                       │ │
-│  │  ┌──────────────────────────────────────────────────────┐  │ │
-│  │  │    Query Manager (React Query / SWR / Relay)        │  │ │
-│  │  │  • Query Deduplication  • Request Batching          │  │ │
-│  │  │  • Parallel Fetching    • Waterfall Prevention      │  │ │
-│  │  └──────────────────────────────────────────────────────┘  │ │
-│  │                           ↕                                 │ │
-│  │  ┌──────────────────────────────────────────────────────┐  │ │
-│  │  │           Cache Layer (Multi-Level)                  │  │ │
-│  │  │  ┌───────────┬───────────┬────────────┐             │  │ │
-│  │  │  │  Memory   │ IndexedDB │  Service   │             │  │ │
-│  │  │  │  Cache    │   Cache   │  Worker    │             │  │ │
-│  │  │  │  (L1)     │   (L2)    │  (L3)      │             │  │ │
-│  │  │  └───────────┴───────────┴────────────┘             │  │ │
-│  │  │  • TTL-based Expiration  • LRU Eviction             │  │ │
-│  │  │  • Tag-based Invalidation                           │  │ │
-│  │  └──────────────────────────────────────────────────────┘  │ │
-│  └────────────────────────────────────────────────────────────┘ │
-│                           ↕                                      │
-│  ┌────────────────────────────────────────────────────────────┐ │
-│  │              API Client Layer                               │ │
-│  │  ┌──────────────────────────────────────────────────────┐  │ │
-│  │  │    Request Interceptor                               │  │ │
-│  │  │  • Authentication  • Rate Limiting  • Retry Logic   │  │ │
-│  │  └──────────────────────────────────────────────────────┘  │ │
-│  │                           ↕                                 │ │
-│  │  ┌──────────────────────────────────────────────────────┐  │ │
-│  │  │    Response Interceptor                              │  │ │
-│  │  │  • Error Handling  • Logging  • Metrics             │  │ │
-│  │  └──────────────────────────────────────────────────────┘  │ │
-│  └────────────────────────────────────────────────────────────┘ │
-│                           ↕                                      │
-│  ┌────────────────────────────────────────────────────────────┐ │
-│  │          Observability Layer                                │ │
-│  │  • Error Tracking (Sentry)  • Metrics (DataDog)           │ │
-│  │  • Logging (Structured)     • Tracing (OpenTelemetry)     │ │
-│  └────────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------+
+|                     Frontend Application                         |
+|                                                                  |
+|  +------------------------------------------------------------+ |
+|  |                   UI Components Layer                       | |
+|  |  • Product List  • User Profile  • Cart  • Reviews        | |
+|  +------------------------------------------------------------+ |
+|                           ↕                                      |
+|  +------------------------------------------------------------+ |
+|  |              Data Orchestration Layer                       | |
+|  |  +------------------------------------------------------+  | |
+|  |  |    Query Manager (React Query / SWR / Relay)        |  | |
+|  |  |  • Query Deduplication  • Request Batching          |  | |
+|  |  |  • Parallel Fetching    • Waterfall Prevention      |  | |
+|  |  +------------------------------------------------------+  | |
+|  |                           ↕                                 | |
+|  |  +------------------------------------------------------+  | |
+|  |  |           Cache Layer (Multi-Level)                  |  | |
+|  |  |  +-----------+-----------+------------+             |  | |
+|  |  |  |  Memory   | IndexedDB |  Service   |             |  | |
+|  |  |  |  Cache    |   Cache   |  Worker    |             |  | |
+|  |  |  |  (L1)     |   (L2)    |  (L3)      |             |  | |
+|  |  |  +-----------+-----------+------------+             |  | |
+|  |  |  • TTL-based Expiration  • LRU Eviction             |  | |
+|  |  |  • Tag-based Invalidation                           |  | |
+|  |  +------------------------------------------------------+  | |
+|  +------------------------------------------------------------+ |
+|                           ↕                                      |
+|  +------------------------------------------------------------+ |
+|  |              API Client Layer                               | |
+|  |  +------------------------------------------------------+  | |
+|  |  |    Request Interceptor                               |  | |
+|  |  |  • Authentication  • Rate Limiting  • Retry Logic   |  | |
+|  |  +------------------------------------------------------+  | |
+|  |                           ↕                                 | |
+|  |  +------------------------------------------------------+  | |
+|  |  |    Response Interceptor                              |  | |
+|  |  |  • Error Handling  • Logging  • Metrics             |  | |
+|  |  +------------------------------------------------------+  | |
+|  +------------------------------------------------------------+ |
+|                           ↕                                      |
+|  +------------------------------------------------------------+ |
+|  |          Observability Layer                                | |
+|  |  • Error Tracking (Sentry)  • Metrics (DataDog)           | |
+|  |  • Logging (Structured)     • Tracing (OpenTelemetry)     | |
+|  +------------------------------------------------------------+ |
++-----------------------------------------------------------------+
                            ↕
-        ┌──────────────────────────────────────┐
-        │         Backend Services              │
-        │  ┌────────────┬─────────────────┐   │
-        │  │  User API  │  Product API    │   │
-        │  ├────────────┼─────────────────┤   │
-        │  │  Cart API  │  Inventory API  │   │
-        │  ├────────────┼─────────────────┤   │
-        │  │  Order API │  Review API     │   │
-        │  └────────────┴─────────────────┘   │
-        └──────────────────────────────────────┘
+        +--------------------------------------+
+        |         Backend Services              |
+        |  +------------+-----------------+   |
+        |  |  User API  |  Product API    |   |
+        |  +------------+-----------------+   |
+        |  |  Cart API  |  Inventory API  |   |
+        |  +------------+-----------------+   |
+        |  |  Order API |  Review API     |   |
+        |  +------------+-----------------+   |
+        +--------------------------------------+
 ```
 
 **Key Talking Points:**
@@ -193,7 +193,7 @@ const fetchWithSWR = async (key, fetcher, cache) => {
 Scenario: User visits product page
 
 Step 1: fetchWithSWR('product:123', fetchProduct, cache)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   cached = cache.get('product:123') = {
     data: { id: 123, name: 'Laptop' },
     timestamp: 1700000000000,
@@ -206,7 +206,7 @@ Step 1: fetchWithSWR('product:123', fetchProduct, cache)
   Result: { id: 123, name: 'Laptop' }
 
 Step 2: User revisits after 90 minutes
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   cached = (same as above)
   Date.now() = 1700008400000
   isFresh(cached) = false ❌
@@ -402,17 +402,17 @@ const likePost = async (postId) => {
 
 ```
 ❌ BAD: Sequential Waterfall
-─────────────────────────────
-GET /user          ──────────►  200ms
-                              GET /cart  ──────────►  200ms
-                                                    GET /products  ──────────►  200ms
+-----------------------------
+GET /user          ----------►  200ms
+                              GET /cart  ----------►  200ms
+                                                    GET /products  ----------►  200ms
 Total: 600ms
 
 ✅ GOOD: Parallel Fetching
-─────────────────────────────
-GET /user      ──────────►  200ms
-GET /cart      ──────────►  200ms
-GET /products  ──────────►  200ms
+-----------------------------
+GET /user      ----------►  200ms
+GET /cart      ----------►  200ms
+GET /products  ----------►  200ms
 Total: 200ms (3x faster!)
 ```
 
@@ -821,28 +821,28 @@ const fetchWithRetry = async (url) => {
 Scenario: Fetching product data with transient 503 errors
 
 Step 1: Initial request (attempt 0)
-─────────────────────────────────────────────────────────
-  fn() → fetch('/product/123')
+---------------------------------------------------------
+  fn() -> fetch('/product/123')
   Result: 503 Service Unavailable
-  isRetryable(error) → true (503 in retryableErrors)
-  attempt (0) < maxRetries (3) → true, continue
+  isRetryable(error) -> true (503 in retryableErrors)
+  attempt (0) < maxRetries (3) -> true, continue
   delay = calculateDelay(0) = 1000ms * 2^0 = 1000ms
   With jitter: 1000 * (0.5 + 0.7) = 1200ms
   Action: Sleep 1200ms, then retry
 
 Step 2: Retry 1 (attempt 1)
-─────────────────────────────────────────────────────────
-  fn() → fetch('/product/123')
+---------------------------------------------------------
+  fn() -> fetch('/product/123')
   Result: 503 Service Unavailable
-  isRetryable(error) → true
-  attempt (1) < maxRetries (3) → true, continue
+  isRetryable(error) -> true
+  attempt (1) < maxRetries (3) -> true, continue
   delay = calculateDelay(1) = 1000ms * 2^1 = 2000ms
   With jitter: 2000 * (0.5 + 0.6) = 2200ms
   Action: Sleep 2200ms, then retry
 
 Step 3: Retry 2 (attempt 2)
-─────────────────────────────────────────────────────────
-  fn() → fetch('/product/123')
+---------------------------------------------------------
+  fn() -> fetch('/product/123')
   Result: 200 OK { id: 123, name: 'Laptop' }
   Action: Return success, log "succeeded after 2 retries"
   Final result: { id: 123, name: 'Laptop' }

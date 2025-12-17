@@ -21,17 +21,17 @@ Think of an elevator door:
 
 ```
 Without Debounce:          With Debounce:
-─────────────────          ─────────────────
+-----------------          -----------------
 User types: H              User types: H
-  → API call               User types: e
+  -> API call               User types: e
 User types: e              User types: l
-  → API call               User types: l
+  -> API call               User types: l
 User types: l              User types: o
-  → API call               ... waits 300ms ...
-User types: l                → ONE API call for "Hello"
-  → API call
+  -> API call               ... waits 300ms ...
+User types: l                -> ONE API call for "Hello"
+  -> API call
 User types: o
-  → API call
+  -> API call
 
 5 API calls!               1 API call!
 ```
@@ -98,16 +98,16 @@ debouncedLog("C");   // t = 600ms
 Time     | Action                           | timerId State
 ---------|----------------------------------|------------------
 0ms      | debouncedLog("A") called         | timerId = undefined
-         | clearTimeout(undefined) → no-op  |
-         | setTimeout → timer1 for t=1000ms | timerId = timer1
+         | clearTimeout(undefined) -> no-op  |
+         | setTimeout -> timer1 for t=1000ms | timerId = timer1
          |                                  |
 300ms    | debouncedLog("B") called         |
-         | clearTimeout(timer1) → CANCELLED |
-         | setTimeout → timer2 for t=1300ms | timerId = timer2
+         | clearTimeout(timer1) -> CANCELLED |
+         | setTimeout -> timer2 for t=1300ms | timerId = timer2
          |                                  |
 600ms    | debouncedLog("C") called         |
-         | clearTimeout(timer2) → CANCELLED |
-         | setTimeout → timer3 for t=1600ms | timerId = timer3
+         | clearTimeout(timer2) -> CANCELLED |
+         | setTimeout -> timer3 for t=1600ms | timerId = timer3
          |                                  |
 1000ms   | timer1 would fire (CANCELLED)    | (already cancelled)
 1300ms   | timer2 would fire (CANCELLED)    | (already cancelled)
@@ -390,16 +390,16 @@ function SearchComponent() {
 ### Visual Comparison
 
 ```
-Events:     ──●──●●●●●──────●●●──────●──────────●────────
+Events:     --●--●●●●●------●●●------●----------●--------
             0  50        500       700        900ms
 
 Debounce (200ms):
-            ─────────────────●─────────────●────────────●
+            -----------------●-------------●------------●
                             500ms        900ms       1100ms
             (fires 200ms after last event in each burst)
 
 Throttle (200ms):
-            ──●────●────●────●────●────●────●────●──────
+            --●----●----●----●----●----●----●----●------
             0   200  400  500  700  800  900 1000ms
             (fires at most every 200ms)
 ```

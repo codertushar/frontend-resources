@@ -192,10 +192,10 @@ import { square } from './math.mjs';
 
 ```
 project/
-├── index.html
-├── main.js
-├── utils/
-│   └── math.js
++-- index.html
++-- main.js
++-- utils/
+|   +-- math.js
 ```
 
 **math.js**

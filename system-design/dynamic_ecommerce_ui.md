@@ -40,40 +40,40 @@ Dynamic eCommerce UIs are interfaces that **automatically adapt** their appearan
 ### Visual Example
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│              Same eCommerce Site - Different Views               │
-└─────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------+
+|              Same eCommerce Site - Different Views               |
++-----------------------------------------------------------------+
 
 October 15 (Normal Day):
-┌──────────────────────────────────────┐
-│  🛍️ ShopMax                          │
-│  ┌────────────┐  ┌────────────┐     │
-│  │  Product   │  │  Product   │     │  ← Standard blue theme
-│  │   Card     │  │   Card     │     │  ← Simple layout
-│  └────────────┘  └────────────┘     │  ← Generic CTAs
-└──────────────────────────────────────┘
++--------------------------------------+
+|  🛍️ ShopMax                          |
+|  +------------+  +------------+     |
+|  |  Product   |  |  Product   |     |  <-- Standard blue theme
+|  |   Card     |  |   Card     |     |  <-- Simple layout
+|  +------------+  +------------+     |  <-- Generic CTAs
++--------------------------------------+
 
 October 20 (Diwali Festival):
-┌──────────────────────────────────────┐
-│  🪔 ShopMax DIWALI DHAMAKA 🎆       │
-│  ┌────────────┐  ┌────────────┐     │
-│  │ 🎁 50% OFF │  │ 💥 FLASH   │     │  ← Orange/gold theme
-│  │  Product   │  │  DEAL      │     │  ← Festival banners
-│  │   Card     │  │  Product   │     │  ← Urgency timers
-│  └────────────┘  └────────────┘     │  ← Hindi translations
-│                                      │
-│  🎊 FREE Gift Wrapping Available    │
-└──────────────────────────────────────┘
++--------------------------------------+
+|  🪔 ShopMax DIWALI DHAMAKA 🎆       |
+|  +------------+  +------------+     |
+|  | 🎁 50% OFF |  | 💥 FLASH   |     |  <-- Orange/gold theme
+|  |  Product   |  |  DEAL      |     |  <-- Festival banners
+|  |   Card     |  |  Product   |     |  <-- Urgency timers
+|  +------------+  +------------+     |  <-- Hindi translations
+|                                      |
+|  🎊 FREE Gift Wrapping Available    |
++--------------------------------------+
 
 December 25 (Christmas):
-┌──────────────────────────────────────┐
-│  🎄 ShopMax Holiday Special ❄️       │
-│  ┌────────────┐  ┌────────────┐     │
-│  │ 🎅 Gift    │  │ ⛄ Winter  │     │  ← Red/green theme
-│  │  Bundles   │  │  Sale      │     │  ← Holiday imagery
-│  │  Product   │  │  Product   │     │  ← Gift recommendations
-│  └────────────┘  └────────────┘     │  ← Christmas messaging
-└──────────────────────────────────────┘
++--------------------------------------+
+|  🎄 ShopMax Holiday Special ❄️       |
+|  +------------+  +------------+     |
+|  | 🎅 Gift    |  | ⛄ Winter  |     |  <-- Red/green theme
+|  |  Bundles   |  |  Sale      |     |  <-- Holiday imagery
+|  |  Product   |  |  Product   |     |  <-- Gift recommendations
+|  +------------+  +------------+     |  <-- Christmas messaging
++--------------------------------------+
 ```
 
 **Real-World Analogy:** Think of your favorite streaming app's homepage. Netflix shows different content based on your viewing history. Similarly, eCommerce sites show different products, themes, and layouts based on who you are and when you visit.
@@ -104,46 +104,46 @@ December 25 (Christmas):
 ### High-Level System Design
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        Client (Browser/App)                      │
-│  ┌────────────────────────────────────────────────────────────┐ │
-│  │              React App (Config-Driven)                      │ │
-│  │  • Renders UI based on configuration                       │ │
-│  │  • No hardcoded themes/layouts                             │ │
-│  └────────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
-                              ↓ HTTPS
-┌─────────────────────────────────────────────────────────────────┐
-│                   Backend for Frontend (BFF)                     │
-│                     (Node.js / Next.js)                          │
-│  ┌────────────────────────────────────────────────────────────┐ │
-│  │            API Orchestration Layer                          │ │
-│  │  GET /api/page-config?page=home&userId=123                │ │
-│  │  • Aggregates data from multiple microservices            │ │
-│  │  • Personalizes response based on user context            │ │
-│  │  • Reduces client-side API calls (N+1 problem)            │ │
-│  └────────────────────────────────────────────────────────────┘ │
-│                              ↓                                   │
-│  ┌────────────────────────────────────────────────────────────┐ │
-│  │          Response Transformation Layer                      │ │
-│  │  {                                                          │ │
-│  │    theme: { colors, fonts, layout },                       │ │
-│  │    components: [ Banner, ProductGrid, Carousel ],          │ │
-│  │    content: { headline, cta, images },                     │ │
-│  │    forms: { checkoutForm: {...} }                          │ │
-│  │  }                                                          │ │
-│  └────────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
-                   ↓                ↓                ↓
-    ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
-    │  Config Service  │  │  User Service    │  │ Product Service  │
-    │  (Theme/Layout)  │  │ (Personalization)│  │   (Inventory)    │
-    └──────────────────┘  └──────────────────┘  └──────────────────┘
-                   ↓                ↓                ↓
-    ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
-    │  Feature Flags   │  │  A/B Test        │  │   CDN Cache      │
-    │  (LaunchDarkly)  │  │  (Optimizely)    │  │  (CloudFlare)    │
-    └──────────────────┘  └──────────────────┘  └──────────────────┘
++-----------------------------------------------------------------+
+|                        Client (Browser/App)                      |
+|  +------------------------------------------------------------+ |
+|  |              React App (Config-Driven)                      | |
+|  |  • Renders UI based on configuration                       | |
+|  |  • No hardcoded themes/layouts                             | |
+|  +------------------------------------------------------------+ |
++-----------------------------------------------------------------+
+                              v HTTPS
++-----------------------------------------------------------------+
+|                   Backend for Frontend (BFF)                     |
+|                     (Node.js / Next.js)                          |
+|  +------------------------------------------------------------+ |
+|  |            API Orchestration Layer                          | |
+|  |  GET /api/page-config?page=home&userId=123                | |
+|  |  • Aggregates data from multiple microservices            | |
+|  |  • Personalizes response based on user context            | |
+|  |  • Reduces client-side API calls (N+1 problem)            | |
+|  +------------------------------------------------------------+ |
+|                              v                                   |
+|  +------------------------------------------------------------+ |
+|  |          Response Transformation Layer                      | |
+|  |  {                                                          | |
+|  |    theme: { colors, fonts, layout },                       | |
+|  |    components: [ Banner, ProductGrid, Carousel ],          | |
+|  |    content: { headline, cta, images },                     | |
+|  |    forms: { checkoutForm: {...} }                          | |
+|  |  }                                                          | |
+|  +------------------------------------------------------------+ |
++-----------------------------------------------------------------+
+                   v                v                v
+    +------------------+  +------------------+  +------------------+
+    |  Config Service  |  |  User Service    |  | Product Service  |
+    |  (Theme/Layout)  |  | (Personalization)|  |   (Inventory)    |
+    +------------------+  +------------------+  +------------------+
+                   v                v                v
+    +------------------+  +------------------+  +------------------+
+    |  Feature Flags   |  |  A/B Test        |  |   CDN Cache      |
+    |  (LaunchDarkly)  |  |  (Optimizely)    |  |  (CloudFlare)    |
+    +------------------+  +------------------+  +------------------+
 ```
 
 ### Why Use BFF for Dynamic UIs?
@@ -269,7 +269,7 @@ const DynamicPage = ({ config }) => {
 ```
 
 **Why This Works:**
-- Marketing team updates JSON in CMS → Changes live instantly
+- Marketing team updates JSON in CMS -> Changes live instantly
 - Zero code deployment for theme changes
 - Easy to A/B test (serve different configs to different users)
 - Rollback = revert to previous config (instant)
@@ -410,7 +410,7 @@ const getActiveTheme = async (userId) => {
 
 **Benefits:**
 - Theme activates automatically at midnight (no human intervention)
-- Gradual rollout: 10% users → 50% → 100%
+- Gradual rollout: 10% users -> 50% -> 100%
 - Instant rollback if issues detected
 - A/B test: 50% see Diwali theme, 50% see standard (measure conversion)
 
@@ -666,43 +666,43 @@ export default DynamicForm;
 
 ```
 Initial State:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   formData = {}
   visibleFields = [email, country, shippingMethod, paymentMethod]
   
 Step 1: User enters country = "IN"
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   formData = { country: "IN" }
   getVisibleFields() checks conditionals
-  → gstNumber field has: dependsOn: 'country', showWhen: ['IN']
-  → Condition matches! Show gstNumber field
+  -> gstNumber field has: dependsOn: 'country', showWhen: ['IN']
+  -> Condition matches! Show gstNumber field
   visibleFields = [email, country, gstNumber, shippingMethod, paymentMethod]
 
 Step 2: User selects shippingMethod = "express"
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   formData = { country: "IN", shippingMethod: "express" }
   getVisibleFields() checks conditionals
-  → phone field has: dependsOn: 'shippingMethod', showWhen: ['express']
-  → Condition matches! Show phone field
+  -> phone field has: dependsOn: 'shippingMethod', showWhen: ['express']
+  -> Condition matches! Show phone field
   visibleFields = [email, country, gstNumber, phone, shippingMethod, paymentMethod]
 
 Step 3: User selects paymentMethod = "card"
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   formData = { country: "IN", shippingMethod: "express", paymentMethod: "card" }
   getVisibleFields() checks conditionals
-  → cardNumber field has: dependsOn: 'paymentMethod', showWhen: ['card']
-  → Condition matches! Show cardNumber field
+  -> cardNumber field has: dependsOn: 'paymentMethod', showWhen: ['card']
+  -> Condition matches! Show cardNumber field
   visibleFields = [email, country, gstNumber, phone, shippingMethod, paymentMethod, cardNumber]
 
 Step 4: User submits form
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Validation runs on all visible fields
-  → email: required ✓, pattern check ✓
-  → phone: required ✓, 10 digits ✓
-  → cardNumber: required ✓, luhnCheck() ✓
-  → All valid!
+  -> email: required ✓, pattern check ✓
+  -> phone: required ✓, 10 digits ✓
+  -> cardNumber: required ✓, luhnCheck() ✓
+  -> All valid!
   POST /api/checkout with formData
-  → Success! Redirect to /order-confirmation
+  -> Success! Redirect to /order-confirmation
 ```
 
 ---
@@ -823,48 +823,48 @@ const FlashSaleProduct = ({ productId }) => {
 
 ```
 User Opens Homepage
-        ↓
-┌───────────────────────────────────────────────────────┐
-│  1. Browser Request                                   │
-│  GET /api/bff/page-config?page=home&userId=abc123    │
-└───────────────────────────────────────────────────────┘
-        ↓
-┌───────────────────────────────────────────────────────┐
-│  2. BFF Orchestration (Parallel Calls)                │
-│  ┌─────────────────────────────────────────────────┐ │
-│  │ Promise.all([                                   │ │
-│  │   configService.getTheme(),    // 50ms         │ │
-│  │   userService.getProfile(),    // 80ms         │ │
-│  │   productService.getFeatured(), // 120ms       │ │
-│  │   cmsService.getBanners()      // 60ms         │ │
-│  │ ])                                              │ │
-│  └─────────────────────────────────────────────────┘ │
-│  Total Time: 120ms (longest request)                 │
-└───────────────────────────────────────────────────────┘
-        ↓
-┌───────────────────────────────────────────────────────┐
-│  3. BFF Response (Single JSON)                        │
-│  {                                                    │
-│    "theme": {                                         │
-│      "name": "diwali",                                │
-│      "colors": { "primary": "#FF6600" }              │
-│    },                                                 │
-│    "components": [                                    │
-│      { "type": "Banner", "data": {...} },            │
-│      { "type": "ProductGrid", "data": {...} }        │
-│    ],                                                 │
-│    "forms": {                                         │
-│      "checkout": { "fields": [...] }                 │
-│    }                                                  │
-│  }                                                    │
-└───────────────────────────────────────────────────────┘
-        ↓
-┌───────────────────────────────────────────────────────┐
-│  4. Client Renders Dynamic UI                         │
-│  • Apply theme (colors, fonts)                        │
-│  • Render components from registry                    │
-│  • Store form schema for checkout later               │
-└───────────────────────────────────────────────────────┘
+        v
++-------------------------------------------------------+
+|  1. Browser Request                                   |
+|  GET /api/bff/page-config?page=home&userId=abc123    |
++-------------------------------------------------------+
+        v
++-------------------------------------------------------+
+|  2. BFF Orchestration (Parallel Calls)                |
+|  +-------------------------------------------------+ |
+|  | Promise.all([                                   | |
+|  |   configService.getTheme(),    // 50ms         | |
+|  |   userService.getProfile(),    // 80ms         | |
+|  |   productService.getFeatured(), // 120ms       | |
+|  |   cmsService.getBanners()      // 60ms         | |
+|  | ])                                              | |
+|  +-------------------------------------------------+ |
+|  Total Time: 120ms (longest request)                 |
++-------------------------------------------------------+
+        v
++-------------------------------------------------------+
+|  3. BFF Response (Single JSON)                        |
+|  {                                                    |
+|    "theme": {                                         |
+|      "name": "diwali",                                |
+|      "colors": { "primary": "#FF6600" }              |
+|    },                                                 |
+|    "components": [                                    |
+|      { "type": "Banner", "data": {...} },            |
+|      { "type": "ProductGrid", "data": {...} }        |
+|    ],                                                 |
+|    "forms": {                                         |
+|      "checkout": { "fields": [...] }                 |
+|    }                                                  |
+|  }                                                    |
++-------------------------------------------------------+
+        v
++-------------------------------------------------------+
+|  4. Client Renders Dynamic UI                         |
+|  • Apply theme (colors, fonts)                        |
+|  • Render components from registry                    |
+|  • Store form schema for checkout later               |
++-------------------------------------------------------+
 ```
 
 ### API Contract Example
@@ -965,9 +965,9 @@ interface FormSchema {
 Calling microservices directly has several problems:
 
 1. **Network Waterfalls:** Client makes 5 sequential requests (1 second total)
-   Client → Service A (200ms) → Service B (200ms) → Service C (200ms)
+   Client -> Service A (200ms) -> Service B (200ms) -> Service C (200ms)
    
-   With BFF: Client → BFF → [A, B, C in parallel] (200ms total)
+   With BFF: Client -> BFF -> [A, B, C in parallel] (200ms total)
    BFF reduces round trips by 5x!
 
 2. **Over-fetching:** Product API returns 50 fields, UI needs 5
@@ -1021,7 +1021,7 @@ const getThemeConfig = async () => {
   const cached = await redis.get('theme:current');
   if (cached) return JSON.parse(cached);
   
-  // Cache miss → fetch from database
+  // Cache miss -> fetch from database
   const theme = await db.themes.findActive();
   
   // Store in Redis for 5 minutes
@@ -1069,7 +1069,7 @@ featureFlags.enable('diwali-2024', {
 });
 
 // 3. Gradual rollout to real users
-// 1% → 10% → 50% → 100% over 1 hour
+// 1% -> 10% -> 50% -> 100% over 1 hour
 const rolloutSchedule = [
   { time: '00:00', percentage: 1 },
   { time: '00:15', percentage: 10 },
@@ -1203,10 +1203,10 @@ const getCheckoutForm = (userContext) => {
 
 // Client receives custom form for their context:
 // Indian user buying phone with express delivery:
-// → email, name, gstNumber, pincode, warranty, phone
+// -> email, name, gstNumber, pincode, warranty, phone
 
 // US user buying book with standard delivery:
-// → email, name, zipCode
+// -> email, name, zipCode
 ```
 
 ---
@@ -1280,8 +1280,8 @@ const abTest = {
   duration: '24 hours'
 };
 
-// If treatment performs 5% better → roll out to 100%
-// If treatment performs worse → rollback immediately
+// If treatment performs 5% better -> roll out to 100%
+// If treatment performs worse -> rollback immediately
 ```
 
 ---
@@ -1329,7 +1329,7 @@ const getPageConfig = async (page, userId) => {
   const cached = await redis.get(cacheKey);
   if (cached) return JSON.parse(cached);
   
-  // Cache miss → generate config
+  // Cache miss -> generate config
   const config = await generatePageConfig(page, userSegment);
   
   // Store in Redis (TTL based on segment)
@@ -1636,7 +1636,7 @@ const getCacheKey = (page, userId) => {
 
 4. **Feature flags are critical for zero-downtime** — Deploy configs disabled, test internally, gradually roll out, instant rollback if issues arise
 
-5. **Caching strategy makes or breaks performance** — Segment users into groups (not individual caching) to maintain 90%+ CDN hit rates. Multi-layer cache (CDN → Redis → Memory) ensures sub-100ms responses
+5. **Caching strategy makes or breaks performance** — Segment users into groups (not individual caching) to maintain 90%+ CDN hit rates. Multi-layer cache (CDN -> Redis -> Memory) ensures sub-100ms responses
 
 ---
 

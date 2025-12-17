@@ -20,13 +20,13 @@ Think of a machine gun with a rate limiter:
 
 ```
 Without Throttle:           With Throttle (100ms):
-──────────────────          ──────────────────────
-Scroll event at 0ms  → fn   Scroll event at 0ms   → fn ✓
-Scroll event at 10ms → fn   Scroll event at 10ms  → (ignored)
-Scroll event at 20ms → fn   Scroll event at 20ms  → (ignored)
-Scroll event at 30ms → fn   ...
-...                         Scroll event at 100ms → fn ✓
-Scroll event at 100ms → fn  Scroll event at 110ms → (ignored)
+------------------          ----------------------
+Scroll event at 0ms  -> fn   Scroll event at 0ms   -> fn ✓
+Scroll event at 10ms -> fn   Scroll event at 10ms  -> (ignored)
+Scroll event at 20ms -> fn   Scroll event at 20ms  -> (ignored)
+Scroll event at 30ms -> fn   ...
+...                         Scroll event at 100ms -> fn ✓
+Scroll event at 100ms -> fn  Scroll event at 110ms -> (ignored)
                             ...
 100 calls in 1 second!      10 calls in 1 second!
 ```
@@ -125,10 +125,10 @@ Output: "A" at ~0ms, "D" at ~1000ms
 Executes **immediately** on first call, then waits:
 
 ```
-Events:    ──●──●──●──●──●──●──────────●──●──●──
+Events:    --●--●--●--●--●--●----------●--●--●--
            0                500ms            1000ms
 
-Execution: ──●──────────────●──────────●────────
+Execution: --●--------------●----------●--------
            0                500ms      1000ms
            (immediate)      (after 500ms delay)
 ```
@@ -371,16 +371,16 @@ function MouseTracker() {
 ### Visual Comparison
 
 ```
-Events:     ──●──●●●●●──────●●●──────●──────────●────────
+Events:     --●--●●●●●------●●●------●----------●--------
             0  50        500       700        900ms
 
 Throttle (200ms):
-            ──●────●────●────●────●────●────●────●──────
+            --●----●----●----●----●----●----●----●------
             0   200  400  500  700  800  900 1000ms
             (fires at regular 200ms intervals during activity)
 
 Debounce (200ms):
-            ─────────────────●─────────────●────────────●
+            -----------------●-------------●------------●
                             700ms        1100ms      (after)
             (fires 200ms after each pause)
 ```

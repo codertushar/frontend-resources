@@ -12,18 +12,18 @@ The Singleton pattern ensures a class has only one instance and provides a globa
 ## 1️⃣ Core Idea
 
 ```
-┌───────────────┐
-│  Application  │
-├───────────────┤       getInstance()
-│ Component A ──┼───────────────────┐
-│ Component B ──┼───────────────────┤
-│ Component C ──┼───────────────────┘
-└───────────────┘
++---------------+
+|  Application  |
++---------------+       getInstance()
+| Component A --+-------------------+
+| Component B --+-------------------+
+| Component C --+-------------------+
++---------------+
         ▲
-        │ single shared object
-┌───────────────────┐
-│   SINGLETON 🔑    │  ← exactly one, globally accessible
-└───────────────────┘
+        | single shared object
++-------------------+
+|   SINGLETON 🔑    |  <-- exactly one, globally accessible
++-------------------+
 ```
 
  *Guarantee* : only **one** object exists, and it’s easily accessible across the codebase.
@@ -67,7 +67,7 @@ class ThemeStore {
   }
   toggle() { this.mode = this.mode === "light" ? "dark" : "light"; }
 }
-export default ThemeStore; // `new ThemeStore()` anywhere → same object
+export default ThemeStore; // `new ThemeStore()` anywhere -> same object
 ```
 
 ### 3.3 Factory‑Wrapped Singleton (Test‑Friendly)
@@ -121,7 +121,7 @@ console.log(object1 === object2); // true
 
 | ✅ Advantages                    | ⚠️ Drawbacks                              |
 | -------------------------------- | ------------------------------------------- |
-| Easy shared state                | Hidden global → hard to trace dependencies |
+| Easy shared state                | Hidden global -> hard to trace dependencies |
 | Resource efficiency (one socket) | Unit tests need mocking / reset state       |
 | Simplifies configuration         | Tight coupling: swapping impl is harder     |
 | Controlled access (centralised)  | Cannot subclass easily (sealed)             |
@@ -142,7 +142,7 @@ console.log(object1 === object2); // true
 
 | Question                                           | Key Ideas                                                                     |
 | -------------------------------------------------- | ----------------------------------------------------------------------------- |
-| *"How does ES module system enable singletons?"* | Module executed once, live bindings cached → every import gets same exports. |
+| *"How does ES module system enable singletons?"* | Module executed once, live bindings cached -> every import gets same exports. |
 | *"How would you make a singleton thread‑safe?"* | JS main thread is single; in workers use atomics / message passing.           |
 | *"Why can Singleton hinder SSR?"*                | State leaks between user requests; solve via factory per request.             |
 | *"Alternatives to Singleton?"*                   | Dependency Injection containers, passing props, context providers.            |

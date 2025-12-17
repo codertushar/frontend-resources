@@ -12,15 +12,15 @@ MVC is a software architectural pattern that separates an application into three
 ## 1️⃣ High‑Level Idea
 
 ```
-  ┌─────────────┐    user intent    ┌──────────────┐
-  │    VIEW     │ ◀─────────────── │  CONTROLLER  │
-  └─────────────┘                  └──────────────┘
-          ▲                               │
-          │ render                        │ mutates / queries
-          │                               ▼
-  ┌─────────────┐   change notification  ┌─────────────┐
-  │   BROWSER   │◀────────────────────── │   MODEL     │
-  └─────────────┘                        └─────────────┘
+  +-------------+    user intent    +--------------+
+  |    VIEW     | ◀--------------- |  CONTROLLER  |
+  +-------------+                  +--------------+
+          ▲                               |
+          | render                        | mutates / queries
+          |                               ▼
+  +-------------+   change notification  +-------------+
+  |   BROWSER   |◀---------------------- |   MODEL     |
+  +-------------+                        +-------------+
 ```
 
 * **Model** = data + business rules
@@ -122,7 +122,7 @@ controller.init();
 
 ### ✅ Pros
 
-* Clear **separation of concerns** → easier unit testing.
+* Clear **separation of concerns** -> easier unit testing.
 * Multiple Views can observe same Model (e.g., list + chart).
 * Scales well when Controllers remain slim (thin glue layer).
 
@@ -149,9 +149,9 @@ controller.init();
 | --------------------------------------------------------- | ------------------------------------------------------------------------------------- |
 | *"How is React not true MVC?"*                          | Show that React collapses C+V in a component; external store (Redux) acts as Model.   |
 | *"Why avoid fat controllers?"*                          | Hurts reusability, testability; push rules to Model, formatting to View.              |
-| *"How does two‑way binding in Angular relate to MVC?"* | It shortcuts Controller; View ↔ Model updates auto, which can cause hidden coupling. |
+| *"How does two‑way binding in Angular relate to MVC?"* | It shortcuts Controller; View <-> Model updates auto, which can cause hidden coupling. |
 
-> **Pro‑Tip:** Walk through a bug trace: *“A checkbox click toggles state → Controller dispatches action → Model updates store → View re‑renders via subscription.”* Interviewers like end‑to‑end clarity.
+> **Pro‑Tip:** Walk through a bug trace: *“A checkbox click toggles state -> Controller dispatches action -> Model updates store -> View re‑renders via subscription.”* Interviewers like end‑to‑end clarity.
 
 ---
 

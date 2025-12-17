@@ -12,14 +12,14 @@ description: Promise.all waits for all promises to resolve and returns their res
 
 `Promise.all` takes an **iterable** (usually an array) of promises and returns a single promise that:
 
-- **Resolves** when **ALL** input promises resolve → returns array of results in order
-- **Rejects** immediately when **ANY** promise rejects → returns the first rejection reason
+- **Resolves** when **ALL** input promises resolve -> returns array of results in order
+- **Rejects** immediately when **ANY** promise rejects -> returns the first rejection reason
 
 ```
 Input:  [Promise1, Promise2, Promise3]
-                ↓
+                v
            Promise.all()
-                ↓
+                v
 Output: Promise<[result1, result2, result3]>
 ```
 
@@ -27,21 +27,21 @@ Output: Promise<[result1, result2, result3]>
 
 ```
 Scenario 1: All Resolve
-─────────────────────────────────────────────────────────
-Promise 1: ────────●───────────────────────────────────→ resolves "A" at 100ms
-Promise 2: ──────────────────●─────────────────────────→ resolves "B" at 200ms
-Promise 3: ────────────────────────────●───────────────→ resolves "C" at 300ms
-                                       ↓
-Promise.all: ──────────────────────────●───────────────→ resolves ["A", "B", "C"]
+---------------------------------------------------------
+Promise 1: --------●------------------------------------> resolves "A" at 100ms
+Promise 2: ------------------●--------------------------> resolves "B" at 200ms
+Promise 3: ----------------------------●----------------> resolves "C" at 300ms
+                                       v
+Promise.all: --------------------------●----------------> resolves ["A", "B", "C"]
                                     (at 300ms - waits for slowest)
 
 Scenario 2: One Rejects
-─────────────────────────────────────────────────────────
-Promise 1: ────────●───────────────────────────────────→ resolves "A" at 100ms
-Promise 2: ──────────────✗─────────────────────────────→ REJECTS "error" at 150ms
-Promise 3: ────────────────────────────●───────────────→ (ignored - would resolve at 300ms)
-                         ↓
-Promise.all: ────────────✗─────────────────────────────→ REJECTS "error"
+---------------------------------------------------------
+Promise 1: --------●------------------------------------> resolves "A" at 100ms
+Promise 2: --------------✗------------------------------> REJECTS "error" at 150ms
+Promise 3: ----------------------------●----------------> (ignored - would resolve at 300ms)
+                         v
+Promise.all: ------------✗------------------------------> REJECTS "error"
                       (at 150ms - fails fast)
 ```
 
@@ -68,9 +68,9 @@ const c = await fetchC();  // 300ms
 
 // ✅ Parallel - takes ~300ms (max of all)
 const [a, b, c] = await Promise.all([
-  fetchA(),  // 100ms ─┐
-  fetchB(),  // 200ms ─┼─→ All run in parallel
-  fetchC()   // 300ms ─┘
+  fetchA(),  // 100ms -+
+  fetchB(),  // 200ms -+--> All run in parallel
+  fetchC()   // 300ms -+
 ]);
 ```
 
@@ -127,31 +127,31 @@ promiseAll([
 
 ```
 Initial State:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 promises = [Promise(1), Promise(2), Promise(3)]
 results = []
 resolvedCount = 0
 
 Step 1: Process index 0 - Promise.resolve(1)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 Promise resolves immediately with value: 1
-results[0] = 1    →  results = [1, empty, empty]
+results[0] = 1    ->  results = [1, empty, empty]
 resolvedCount = 1
-Check: 1 === 3?   →  No, continue waiting
+Check: 1 === 3?   ->  No, continue waiting
 
 Step 2: Process index 2 - Promise.resolve(3)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 Promise resolves immediately with value: 3
-results[2] = 3    →  results = [1, empty, 3]
+results[2] = 3    ->  results = [1, empty, 3]
 resolvedCount = 2
-Check: 2 === 3?   →  No, continue waiting
+Check: 2 === 3?   ->  No, continue waiting
 
 Step 3: Process index 1 - setTimeout Promise (at t=100ms)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 Promise resolves with value: 2
-results[1] = 2    →  results = [1, 2, 3]
+results[1] = 2    ->  results = [1, 2, 3]
 resolvedCount = 3
-Check: 3 === 3?   →  Yes! resolve(results)
+Check: 3 === 3?   ->  Yes! resolve(results)
 
 Output: [1, 2, 3]
 
@@ -171,19 +171,19 @@ promiseAll([
 
 ```
 Step 1: Process index 0 - Promise.resolve(1)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 resolves with 1
 results = [1, empty, empty]
 resolvedCount = 1
 
 Step 2: Process index 1 - Promise.reject('Error!')
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 REJECTS with 'Error!'
-→ reject('Error!') is called
-→ Promise.all IMMEDIATELY rejects
+-> reject('Error!') is called
+-> Promise.all IMMEDIATELY rejects
 
 Step 3: Index 2's setTimeout would resolve at t=100ms
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 But Promise.all already rejected!
 (Promise still runs to completion, but result is ignored)
 
@@ -258,10 +258,10 @@ console.log(arr.length);  // 6, but only 1 actual value!
 
 | Edge Case | Behavior | Example |
 |-----------|----------|---------|
-| **Empty array** | Resolves immediately with `[]` | `Promise.all([])` → `[]` |
-| **Non-promise values** | Wrapped in `Promise.resolve()` | `Promise.all([1, 2])` → `[1, 2]` |
-| **Mixed values** | All work together | `Promise.all([1, Promise.resolve(2)])` → `[1, 2]` |
-| **Already rejected** | Rejects immediately | `Promise.all([Promise.reject('x')])` → rejects |
+| **Empty array** | Resolves immediately with `[]` | `Promise.all([])` -> `[]` |
+| **Non-promise values** | Wrapped in `Promise.resolve()` | `Promise.all([1, 2])` -> `[1, 2]` |
+| **Mixed values** | All work together | `Promise.all([1, Promise.resolve(2)])` -> `[1, 2]` |
+| **Already rejected** | Rejects immediately | `Promise.all([Promise.reject('x')])` -> rejects |
 | **Multiple rejections** | First rejection wins | Only first error returned |
 
 ### Edge Case Implementation Test

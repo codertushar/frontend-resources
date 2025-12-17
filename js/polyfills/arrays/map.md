@@ -88,32 +88,32 @@ Array.prototype.myMap = function(callback, thisArg) {
 
 ```
 Initial State:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 this = [1, 2, 3]
 callback = x => x * 2
 thisArg = undefined
 result = []
 
 Iteration 1 (i = 0):
-─────────────────────────────────────────────────────────
-hasOwnProperty(0)? → true
+---------------------------------------------------------
+hasOwnProperty(0)? -> true
 callback.call(undefined, 1, 0, [1,2,3])
-  → callback(1) returns 1 * 2 = 2
-result.push(2) → result = [2]
+  -> callback(1) returns 1 * 2 = 2
+result.push(2) -> result = [2]
 
 Iteration 2 (i = 1):
-─────────────────────────────────────────────────────────
-hasOwnProperty(1)? → true
+---------------------------------------------------------
+hasOwnProperty(1)? -> true
 callback.call(undefined, 2, 1, [1,2,3])
-  → callback(2) returns 2 * 2 = 4
-result.push(4) → result = [2, 4]
+  -> callback(2) returns 2 * 2 = 4
+result.push(4) -> result = [2, 4]
 
 Iteration 3 (i = 2):
-─────────────────────────────────────────────────────────
-hasOwnProperty(2)? → true
+---------------------------------------------------------
+hasOwnProperty(2)? -> true
 callback.call(undefined, 3, 2, [1,2,3])
-  → callback(3) returns 3 * 2 = 6
-result.push(6) → result = [2, 4, 6]
+  -> callback(3) returns 3 * 2 = 6
+result.push(6) -> result = [2, 4, 6]
 
 Loop ends (i = 3 >= length 3)
 Return: [2, 4, 6]
@@ -138,7 +138,7 @@ console.log(2 in sparse);    // true
 sparse.map(x => x * 2);  // [2, empty, 6]
 
 // Without hasOwnProperty check:
-// Would process undefined at index 1 → [2, NaN, 6] (wrong!)
+// Would process undefined at index 1 -> [2, NaN, 6] (wrong!)
 ```
 
 ### 🔍 Dry Run: Sparse Array
@@ -151,15 +151,15 @@ sparse.map(x => x * 2);  // [2, empty, 6]
 this = [1, empty, 3]  (length = 3)
 result = []
 
-i = 0: hasOwnProperty(0)? → true
-       result.push(1 * 2) → result = [2]
+i = 0: hasOwnProperty(0)? -> true
+       result.push(1 * 2) -> result = [2]
 
-i = 1: hasOwnProperty(1)? → false (HOLE!)
+i = 1: hasOwnProperty(1)? -> false (HOLE!)
        SKIP this iteration
        result stays [2]
 
-i = 2: hasOwnProperty(2)? → true
-       result.push(3 * 2) → result = [2, 6]
+i = 2: hasOwnProperty(2)? -> true
+       result.push(3 * 2) -> result = [2, 6]
 
 Return: [2, 6]  // Wait, but native returns [2, empty, 6]!
 ```
@@ -223,19 +223,19 @@ const obj = { multiplier: 10 };
 this (array) = [1, 2]
 callback = function(x) { return x * this.multiplier; }
 thisArg = { multiplier: 10 }
-result = new Array(2) → [empty, empty]
+result = new Array(2) -> [empty, empty]
 
-i = 0: hasOwnProperty(0)? → true
+i = 0: hasOwnProperty(0)? -> true
        callback.call(obj, 1, 0, [1,2])
          Inside callback: this = obj, x = 1
          Returns: 1 * obj.multiplier = 1 * 10 = 10
-       result[0] = 10 → result = [10, empty]
+       result[0] = 10 -> result = [10, empty]
 
-i = 1: hasOwnProperty(1)? → true
+i = 1: hasOwnProperty(1)? -> true
        callback.call(obj, 2, 1, [1,2])
          Inside callback: this = obj, x = 2
          Returns: 2 * obj.multiplier = 2 * 10 = 20
-       result[1] = 20 → result = [10, 20]
+       result[1] = 20 -> result = [10, 20]
 
 Return: [10, 20]
 ```
@@ -284,7 +284,7 @@ Handles edge cases where `map` is called on primitives:
 // This is valid (though weird)
 Array.prototype.myMap.call('abc', x => x.toUpperCase());
 // Without Object(this): might fail
-// With Object(this): works → ['A', 'B', 'C']
+// With Object(this): works -> ['A', 'B', 'C']
 ```
 
 ### Why `length >>> 0`?
@@ -306,8 +306,8 @@ Checks both own and inherited numeric properties (spec-compliant):
 const obj = Object.create({ 0: 'inherited' });
 obj.length = 1;
 
-// hasOwnProperty(0) → false
-// 0 in obj → true
+// hasOwnProperty(0) -> false
+// 0 in obj -> true
 
 // Spec says to include inherited numeric properties
 Array.prototype.myMap.call(obj, x => x);  // ['inherited']

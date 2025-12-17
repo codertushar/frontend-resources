@@ -53,43 +53,43 @@ Before diving in, ask these questions to scope the problem:
 
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Browser (Client)                          │
-│                                                              │
-│  ┌────────────────────────────────────────────────────────┐ │
-│  │           UI Layer (React/ContentEditable)             │ │
-│  │  • Editor Canvas  • Toolbar  • Comments Panel         │ │
-│  └────────────────────────────────────────────────────────┘ │
-│                         ↕                                    │
-│  ┌────────────────────────────────────────────────────────┐ │
-│  │         Local State (CRDT/OT Document Model)           │ │
-│  │  • Text Content  • Formatting  • Cursor Positions     │ │
-│  └────────────────────────────────────────────────────────┘ │
-│                         ↕                                    │
-│  ┌────────────────────────────────────────────────────────┐ │
-│  │        Synchronization Engine (WebSocket Client)       │ │
-│  │  • Operation Queue  • Conflict Resolution  • ACK      │ │
-│  └────────────────────────────────────────────────────────┘ │
-│                         ↕                                    │
-│  ┌────────────────────────────────────────────────────────┐ │
-│  │              Offline Queue (IndexedDB)                 │ │
-│  │  • Pending Operations  • Checkpoints  • Recovery      │ │
-│  └────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+|                    Browser (Client)                          |
+|                                                              |
+|  +--------------------------------------------------------+ |
+|  |           UI Layer (React/ContentEditable)             | |
+|  |  • Editor Canvas  • Toolbar  • Comments Panel         | |
+|  +--------------------------------------------------------+ |
+|                         ↕                                    |
+|  +--------------------------------------------------------+ |
+|  |         Local State (CRDT/OT Document Model)           | |
+|  |  • Text Content  • Formatting  • Cursor Positions     | |
+|  +--------------------------------------------------------+ |
+|                         ↕                                    |
+|  +--------------------------------------------------------+ |
+|  |        Synchronization Engine (WebSocket Client)       | |
+|  |  • Operation Queue  • Conflict Resolution  • ACK      | |
+|  +--------------------------------------------------------+ |
+|                         ↕                                    |
+|  +--------------------------------------------------------+ |
+|  |              Offline Queue (IndexedDB)                 | |
+|  |  • Pending Operations  • Checkpoints  • Recovery      | |
+|  +--------------------------------------------------------+ |
++-------------------------------------------------------------+
                           ↕
-               ┌──────────────────────┐
-               │   WebSocket Server   │
-               │  • Operation Broker  │
-               │  • Presence Service  │
-               │  • Persistence       │
-               └──────────────────────┘
+               +----------------------+
+               |   WebSocket Server   |
+               |  • Operation Broker  |
+               |  • Presence Service  |
+               |  • Persistence       |
+               +----------------------+
                           ↕
-               ┌──────────────────────┐
-               │   Database           │
-               │  • Document Store    │
-               │  • Operation Log     │
-               │  • User Sessions     │
-               └──────────────────────┘
+               +----------------------+
+               |   Database           |
+               |  • Document Store    |
+               |  • Operation Log     |
+               |  • User Sessions     |
+               +----------------------+
 ```
 
 **Key Talking Points:**
@@ -129,8 +129,8 @@ Before diving in, ask these questions to scope the problem:
 >
 > **Initial state:** `'Hello'`
 >
-> **User A:** Inserts `'!'` at position 5 → `'Hello!'`
-> **User B:** Inserts `'World'` at position 5 → `'HelloWorld'`
+> **User A:** Inserts `'!'` at position 5 -> `'Hello!'`
+> **User B:** Inserts `'World'` at position 5 -> `'HelloWorld'`
 >
 > When User A receives User B's operation:
 > - Original operation: Insert 'World' at position 5
@@ -294,11 +294,11 @@ console.log(doc.content); // 'Say Hello World'
 > 7. `SNAPSHOT` - Full document state (for new clients)
 >
 > **Flow:**
-> 1. Client makes local edit → Apply optimistically
+> 1. Client makes local edit -> Apply optimistically
 > 2. Send operation to server via WebSocket
-> 3. Server receives → Transform against concurrent operations → Persist → Broadcast
-> 4. Other clients receive → Transform against local pending operations → Apply
-> 5. Original client receives ACK → Commit operation (remove from pending queue)"
+> 3. Server receives -> Transform against concurrent operations -> Persist -> Broadcast
+> 4. Other clients receive -> Transform against local pending operations -> Apply
+> 5. Original client receives ACK -> Commit operation (remove from pending queue)"
 
 **Code Example:**
 ```javascript

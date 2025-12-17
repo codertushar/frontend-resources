@@ -16,38 +16,38 @@ The **Event Loop** is JavaScript's mechanism for handling asynchronous operation
 **Visual Representation:**
 
 ```
-┌───────────────────────────────────────────────────────────────┐
-│                    JAVASCRIPT RUNTIME                         │
-│                                                               │
-│  ┌─────────────────────┐    ┌───────────────────────────┐   │
-│  │    Call Stack       │    │   Web APIs / Node APIs     │   │
-│  │                     │    │                            │   │
-│  │  main()             │    │  • setTimeout()            │   │
-│  │  ↓ foo()            │    │  • fetch()                 │   │
-│  │  ↓ bar()            │    │  • DOM events              │   │
-│  │                     │    │  • Promises                │   │
-│  └─────────────────────┘    └───────────────────────────┘   │
-│            ↑                            ↓                     │
-│            │                            │                     │
-│            │                   Callbacks Ready                │
-│            │                            ↓                     │
-│  ┌─────────┴────────────────────────────┴──────────────┐    │
-│  │              EVENT LOOP (Coordinator)                │    │
-│  │                                                      │    │
-│  │  Checks: Is call stack empty?                       │    │
-│  │  Yes? → Move task from queue to call stack          │    │
-│  └──────────────────────────────────────────────────────┘    │
-│            ↑                                                  │
-│  ┌─────────┴─────────────┐    ┌──────────────────────────┐  │
-│  │  Microtask Queue      │    │   Macrotask Queue        │  │
-│  │  (Higher Priority)    │    │   (Lower Priority)       │  │
-│  │                       │    │                          │  │
-│  │  • Promise callbacks  │    │  • setTimeout callbacks  │  │
-│  │  • queueMicrotask()   │    │  • setInterval callbacks │  │
-│  │  • MutationObserver   │    │  • I/O operations        │  │
-│  │  • process.nextTick() │    │  • UI rendering          │  │
-│  └───────────────────────┘    └──────────────────────────┘  │
-└───────────────────────────────────────────────────────────────┘
++---------------------------------------------------------------+
+|                    JAVASCRIPT RUNTIME                         |
+|                                                               |
+|  +---------------------+    +---------------------------+   |
+|  |    Call Stack       |    |   Web APIs / Node APIs     |   |
+|  |                     |    |                            |   |
+|  |  main()             |    |  • setTimeout()            |   |
+|  |  v foo()            |    |  • fetch()                 |   |
+|  |  v bar()            |    |  • DOM events              |   |
+|  |                     |    |  • Promises                |   |
+|  +---------------------+    +---------------------------+   |
+|            ^                            v                     |
+|            |                            |                     |
+|            |                   Callbacks Ready                |
+|            |                            v                     |
+|  +---------+----------------------------+--------------+    |
+|  |              EVENT LOOP (Coordinator)                |    |
+|  |                                                      |    |
+|  |  Checks: Is call stack empty?                       |    |
+|  |  Yes? -> Move task from queue to call stack          |    |
+|  +------------------------------------------------------+    |
+|            ^                                                  |
+|  +---------+-------------+    +--------------------------+  |
+|  |  Microtask Queue      |    |   Macrotask Queue        |  |
+|  |  (Higher Priority)    |    |   (Lower Priority)       |  |
+|  |                       |    |                          |  |
+|  |  • Promise callbacks  |    |  • setTimeout callbacks  |  |
+|  |  • queueMicrotask()   |    |  • setInterval callbacks |  |
+|  |  • MutationObserver   |    |  • I/O operations        |  |
+|  |  • process.nextTick() |    |  • UI rendering          |  |
+|  +-----------------------+    +--------------------------+  |
++---------------------------------------------------------------+
 ```
 
 ### Real-World Analogy: Restaurant Kitchen 🍳
@@ -55,25 +55,25 @@ The **Event Loop** is JavaScript's mechanism for handling asynchronous operation
 Imagine a restaurant kitchen with one chef (single-threaded JavaScript):
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│  🧑‍🍳 CHEF (Call Stack)                                         │
-│  Currently cooking dishes one at a time                      │
-│                                                              │
-│  📋 ORDER SLIPS (Task Queues)                                │
-│  ┌────────────────────┐    ┌────────────────────────────┐   │
-│  │  VIP Orders        │    │  Regular Orders            │   │
-│  │  (Microtasks)      │    │  (Macrotasks)              │   │
-│  │  • Appetizers      │    │  • Main courses            │   │
-│  │  • Quick fixes     │    │  • Desserts                │   │
-│  └────────────────────┘    └────────────────────────────┘   │
-│                                                              │
-│  🔄 MANAGER (Event Loop)                                     │
-│  Watches chef and decides what to cook next:                 │
-│  1. Let chef finish current dish                            │
-│  2. Check VIP orders first (microtasks)                     │
-│  3. Then regular orders (macrotasks)                        │
-│  4. Repeat                                                  │
-└──────────────────────────────────────────────────────────────┘
++--------------------------------------------------------------+
+|  🧑‍🍳 CHEF (Call Stack)                                         |
+|  Currently cooking dishes one at a time                      |
+|                                                              |
+|  📋 ORDER SLIPS (Task Queues)                                |
+|  +--------------------+    +----------------------------+   |
+|  |  VIP Orders        |    |  Regular Orders            |   |
+|  |  (Microtasks)      |    |  (Macrotasks)              |   |
+|  |  • Appetizers      |    |  • Main courses            |   |
+|  |  • Quick fixes     |    |  • Desserts                |   |
+|  +--------------------+    +----------------------------+   |
+|                                                              |
+|  🔄 MANAGER (Event Loop)                                     |
+|  Watches chef and decides what to cook next:                 |
+|  1. Let chef finish current dish                            |
+|  2. Check VIP orders first (microtasks)                     |
+|  3. Then regular orders (macrotasks)                        |
+|  4. Repeat                                                  |
++--------------------------------------------------------------+
 ```
 
 The chef can't cook multiple dishes simultaneously, but the manager ensures orders are handled efficiently by prioritizing and coordinating work.
@@ -97,12 +97,12 @@ The chef can't cook multiple dishes simultaneously, but the manager ensures orde
 
 ```
 Without Event Loop (Blocking):
-User clicks button → Wait 5s for API → UI frozen → User frustrated
+User clicks button -> Wait 5s for API -> UI frozen -> User frustrated
 
 With Event Loop (Non-blocking):
-User clicks button → API request sent to Web API → UI stays responsive
-→ User can scroll, type → API response ready → Callback executes
-→ UI updates → Happy user!
+User clicks button -> API request sent to Web API -> UI stays responsive
+-> User can scroll, type -> API response ready -> Callback executes
+-> UI updates -> Happy user!
 ```
 
 ---
@@ -153,7 +153,7 @@ console.log('End');
 
 ```
 INITIAL STATE:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 Call Stack:        [global execution context]
 Microtask Queue:   []
 Macrotask Queue:   []
@@ -161,30 +161,30 @@ Output:            []
 
 
 STEP 1: console.log('Start')
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 Call Stack:        [global, console.log]
 Action:            Execute synchronous code
 Output:            ['Start']
 
 
 STEP 2: setTimeout(..., 0)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 Call Stack:        [global, setTimeout]
 Action:            Register callback with Web API, returns immediately
 Macrotask Queue:   [() => console.log('Timeout 1')]
-Call Stack:        [global]  ← setTimeout popped off
+Call Stack:        [global]  <-- setTimeout popped off
 
 
 STEP 3: Promise.resolve().then(...)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 Call Stack:        [global, Promise.resolve().then]
 Action:            Promise already resolved, queue microtask
 Microtask Queue:   [() => console.log('Promise 1')]
-Call Stack:        [global]  ← Promise.then popped off
+Call Stack:        [global]  <-- Promise.then popped off
 
 
 STEP 4: Second setTimeout
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 Call Stack:        [global, setTimeout]
 Action:            Register second callback
 Macrotask Queue:   [
@@ -195,7 +195,7 @@ Call Stack:        [global]
 
 
 STEP 5: console.log('End')
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 Call Stack:        [global, console.log]
 Action:            Execute synchronous code
 Output:            ['Start', 'End']
@@ -203,14 +203,14 @@ Call Stack:        [global]
 
 
 STEP 6: Global execution context completes
-─────────────────────────────────────────────────────────
-Call Stack:        []  ← NOW EMPTY!
+---------------------------------------------------------
+Call Stack:        []  <-- NOW EMPTY!
 Event Loop:        Checks call stack, finds it empty
                    Checks Microtask Queue FIRST
 
 
 STEP 7: Execute all microtasks
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 Microtask Queue:   [() => console.log('Promise 1')]
 Call Stack:        [() => console.log('Promise 1')]
 Action:            Execute microtask
@@ -225,7 +225,7 @@ Call Stack:        []
 
 
 STEP 8: Microtask queue empty, check Macrotask queue
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 Macrotask Queue:   [
                      () => console.log('Timeout 1'),
                      () => console.log('Timeout 2')
@@ -237,7 +237,7 @@ Call Stack:        []
 
 
 STEP 9: Check microtasks again (none), execute next macrotask
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 Call Stack:        [() => console.log('Timeout 2')]
 Output:            ['Start', 'End', 'Promise 1', 'Promise 2', 
                     'Timeout 1', 'Timeout 2']
@@ -245,7 +245,7 @@ Call Stack:        []
 
 
 FINAL STATE:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 All queues empty, event loop continues monitoring...
 ```
 
@@ -280,13 +280,13 @@ first();
 // Step 1: [first]
 // Step 2: [first, second]
 // Step 3: [first, second, third]
-// Step 4: [first, second]         ← third completes
-// Step 5: [first]                 ← second completes
-// Step 6: []                      ← first completes
+// Step 4: [first, second]         <-- third completes
+// Step 5: [first]                 <-- second completes
+// Step 6: []                      <-- first completes
 ```
 
 **What happens if the call stack is never empty?**
-→ Infinite loop! The event loop can't process queued tasks.
+-> Infinite loop! The event loop can't process queued tasks.
 
 ```javascript
 // ❌ BAD: Blocks event loop
@@ -321,9 +321,9 @@ console.log('Sync 2');
 // Output:
 // Sync 1
 // Sync 2
-// Microtask     ← Both microtasks run together
-// Promise       ← Before any macrotask
-// Timeout       ← Macrotask runs last
+// Microtask     <-- Both microtasks run together
+// Promise       <-- Before any macrotask
+// Timeout       <-- Macrotask runs last
 ```
 
 ### Macrotask Queue (Task Queue)
@@ -363,7 +363,7 @@ console.log('This runs first!');
 ```
 
 **What breaks if you remove the event loop?**
-→ JavaScript becomes synchronous! Every async operation would block execution until complete. Your web page would freeze during API calls, file reads, or any I/O.
+-> JavaScript becomes synchronous! Every async operation would block execution until complete. Your web page would freeze during API calls, file reads, or any I/O.
 
 ---
 
@@ -372,54 +372,54 @@ console.log('This runs first!');
 ### Complete Event Loop Cycle
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                   EVENT LOOP CYCLE                      │
-└─────────────────────────────────────────────────────────┘
-         │
++---------------------------------------------------------+
+|                   EVENT LOOP CYCLE                      |
++---------------------------------------------------------+
+         |
          ▼
-    ┌─────────┐
-    │ Start   │
-    └────┬────┘
-         │
+    +---------+
+    | Start   |
+    +----+----+
+         |
          ▼
-    ┌────────────────────────┐
-    │ 1. Execute Script      │
-    │    (Synchronous Code)  │
-    └────────┬───────────────┘
-         │
+    +------------------------+
+    | 1. Execute Script      |
+    |    (Synchronous Code)  |
+    +--------+---------------+
+         |
          ▼
-    ┌────────────────────────┐
-    │ 2. Process All         │
-    │    Microtasks          │───┐ Keep processing until
-    └────────┬───────────────┘   │ microtask queue is empty
-         │   ▲                   │
-         │   └───────────────────┘
+    +------------------------+
+    | 2. Process All         |
+    |    Microtasks          |---+ Keep processing until
+    +--------+---------------+   | microtask queue is empty
+         |   ▲                   |
+         |   +-------------------+
          ▼
-    ┌────────────────────────┐
-    │ 3. Render UI           │
-    │    (if needed)         │
-    └────────┬───────────────┘
-         │
+    +------------------------+
+    | 3. Render UI           |
+    |    (if needed)         |
+    +--------+---------------+
+         |
          ▼
-    ┌────────────────────────┐
-    │ 4. Execute ONE         │
-    │    Macrotask           │
-    └────────┬───────────────┘
-         │
+    +------------------------+
+    | 4. Execute ONE         |
+    |    Macrotask           |
+    +--------+---------------+
+         |
          ▼
-    ┌────────────────────────┐
-    │ 5. Process All         │───┐ After each macrotask,
-    │    Microtasks Again    │   │ process all microtasks
-    └────────┬───────────────┘   │
-         │   ▲                   │
-         │   └───────────────────┘
-         │
-         └──────────┐
-                    │
+    +------------------------+
+    | 5. Process All         |---+ After each macrotask,
+    |    Microtasks Again    |   | process all microtasks
+    +--------+---------------+   |
+         |   ▲                   |
+         |   +-------------------+
+         |
+         +----------+
+                    |
                     ▼
-              ┌──────────┐
-              │ Repeat   │
-              └──────────┘
+              +----------+
+              | Repeat   |
+              +----------+
 ```
 
 ### Production-Ready Example: Task Scheduler
@@ -556,11 +556,11 @@ console.log('Script end');
 // Output:
 // Script start
 // Script end
-// Promise 1              ← Microtasks run first
-// Promise 2              ← All microtasks complete
-// setTimeout 1           ← First macrotask
-// Promise inside setTimeout  ← Microtask from first macrotask
-// setTimeout inside Promise  ← Second macrotask
+// Promise 1              <-- Microtasks run first
+// Promise 2              <-- All microtasks complete
+// setTimeout 1           <-- First macrotask
+// Promise inside setTimeout  <-- Microtask from first macrotask
+// setTimeout inside Promise  <-- Second macrotask
 ```
 
 ### Example 2: React useEffect Timing
@@ -697,24 +697,24 @@ process.nextTick(() => console.log('2: nextTick'));
 EXECUTION ORDER:
 
 Synchronous Code
-    ↓
+    v
 Microtask 1
 Microtask 2
 Microtask 3...
 (ALL microtasks)
-    ↓
+    v
 Render (if needed)
-    ↓
+    v
 Macrotask 1
-    ↓
+    v
 Microtask 4
 Microtask 5...
 (ALL microtasks)
-    ↓
+    v
 Render (if needed)
-    ↓
+    v
 Macrotask 2
-    ↓
+    v
 ...repeat
 ```
 
@@ -723,7 +723,7 @@ Macrotask 2
 | Aspect | Browser | Node.js |
 |--------|---------|---------|
 | **Implementation** | HTML spec | libuv library |
-| **Phases** | Simpler (microtasks → macrotask → render) | Complex (6 phases: timers, I/O, idle, poll, check, close) |
+| **Phases** | Simpler (microtasks -> macrotask -> render) | Complex (6 phases: timers, I/O, idle, poll, check, close) |
 | **nextTick** | Not available | Highest priority (even above microtasks) |
 | **setImmediate** | Not available | Runs in Check phase |
 | **Rendering** | Scheduled between tasks | No rendering |
@@ -744,7 +744,7 @@ console.log('End');
 // Output:
 // Start
 // End
-// Timeout ← Delayed!
+// Timeout <-- Delayed!
 ```
 
 Because `setTimeout` schedules a **macrotask**, which only executes after:
@@ -766,11 +766,11 @@ console.log('E');
 
 **Answer:**
 ```
-E  ← Synchronous first
-A  ← Microtasks execute in order (Promise)
-B  ← queueMicrotask
-D  ← Promise
-C  ← Macrotask last
+E  <-- Synchronous first
+A  <-- Microtasks execute in order (Promise)
+B  <-- queueMicrotask
+D  <-- Promise
+C  <-- Macrotask last
 ```
 
 ### Q3: Can you explain this async/await behavior?
@@ -854,15 +854,15 @@ Promise.resolve().then(() => console.log('B'));
 **Answer:**
 
 **Version B executes first** because:
-- `setTimeout` → Macrotask queue
-- `Promise.then` → Microtask queue
+- `setTimeout` -> Macrotask queue
+- `Promise.then` -> Microtask queue
 - Event loop prioritizes microtasks over macrotasks
 
 ```
 Event Loop Order:
 1. Execute synchronous code
-2. Process ALL microtasks → 'B' prints
-3. Process ONE macrotask → 'A' prints
+2. Process ALL microtasks -> 'B' prints
+3. Process ONE macrotask -> 'A' prints
 ```
 
 ---
@@ -915,7 +915,7 @@ requestAnimationFrame(animate);
 function processQueue() {
   queueMicrotask(() => {
     console.log('Processing...');
-    processQueue(); // ← Infinite recursion!
+    processQueue(); // <-- Infinite recursion!
   });
 }
 
@@ -1062,7 +1062,7 @@ console.log('2: After call (continues synchronously)');
 | **Call Stack** | LIFO execution of functions, must empty before tasks execute |
 | **Microtasks** | High priority (Promises, queueMicrotask), ALL execute before next macrotask |
 | **Macrotasks** | Lower priority (setTimeout, I/O), ONE executes per event loop cycle |
-| **Execution Order** | Sync code → All microtasks → Render → One macrotask → Repeat |
+| **Execution Order** | Sync code -> All microtasks -> Render -> One macrotask -> Repeat |
 | **async/await** | Runs sync until await, then queues continuation as microtask |
 | **Starvation** | Infinite microtasks block macrotasks and rendering |
 
@@ -1084,7 +1084,7 @@ console.log('2: After call (continues synchronously)');
 - ✅ Use setTimeout for deferred work (macrotasks)
 - ✅ Avoid long-running synchronous code that blocks the event loop
 - ✅ Break heavy computations into chunks with setTimeout or requestIdleCallback
-- ✅ Remember: Microtasks → Rendering → Macrotask (one cycle)
+- ✅ Remember: Microtasks -> Rendering -> Macrotask (one cycle)
 - ❌ Don't create infinite microtasks (causes UI freeze)
 - ❌ Don't assume setTimeout timing is precise
 - ❌ Don't mix async primitives without understanding execution order

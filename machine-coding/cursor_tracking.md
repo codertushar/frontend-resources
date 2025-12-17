@@ -17,21 +17,21 @@ description: Build cursor tracking systems with position monitoring, visual effe
 
 ```
 Browser Window (viewport)
-┌─────────────────────────────────────────┐
-│  (0,0)                                  │
-│    ↘                                    │
-│                                         │
-│           🖱️ (x: 450, y: 320)          │
-│              Cursor Position            │
-│                                         │
-│                                         │
-│                              (1920,1080)│
-└─────────────────────────────────────────┘
++-----------------------------------------+
+|  (0,0)                                  |
+|    \                                    |
+|                                         |
+|           🖱️ (x: 450, y: 320)          |
+|              Cursor Position            |
+|                                         |
+|                                         |
+|                              (1920,1080)|
++-----------------------------------------+
 
 Coordinate System:
 - Origin (0,0) = Top-left corner
-- X increases → right
-- Y increases → down
+- X increases -> right
+- Y increases -> down
 - clientX/Y = relative to viewport
 - pageX/Y = relative to document (includes scroll)
 ```
@@ -120,13 +120,13 @@ const cleanup = createCursorTracker();
 
 ```
 Step 1: Initialize tracker
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   display element created and appended to body
   Event listener attached to document
   State: Waiting for mouse movement
   
 Step 2: User moves cursor to (100, 100)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Event: mousemove fired
   event.clientX = 100
   event.clientY = 100
@@ -136,7 +136,7 @@ Step 2: User moves cursor to (100, 100)
   Display shows: "Client: (100, 100), Page: (100, 100)"
   
 Step 3: User moves cursor to (150, 125)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Event: mousemove fired again
   event.clientX = 150
   event.clientY = 125
@@ -146,7 +146,7 @@ Step 3: User moves cursor to (150, 125)
   Display shows: "Client: (150, 125), Page: (150, 125)"
   
 Step 4: User moves cursor to (200, 150)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Event: mousemove fired again
   event.clientX = 200
   event.clientY = 150
@@ -156,7 +156,7 @@ Step 4: User moves cursor to (200, 150)
   Display shows: "Client: (200, 150), Page: (200, 150)"
   
 Step 5: User scrolls page down by 500px, cursor at same viewport position
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Event: mousemove fired (cursor technically moved in document)
   event.clientX = 200  (viewport position unchanged)
   event.clientY = 150  (viewport position unchanged)

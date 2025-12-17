@@ -14,10 +14,10 @@ description: Notifies observers automatically when a subject changes state. Use 
 The **Observer Pattern** (also known as the  **Pub/Sub Pattern** ) is a behavioral design pattern in which a **subject (publisher)** maintains a list of **observers (subscribers)** and **notifies them automatically** whenever a state change or event occurs.
 
 ```
-┌──────────────┐       update()       ┌──────────────┐
-│  Subject 🔔  │ ───────────────────▶ │ Observer 👁  │
-│ (Notifier)  │ ◀─────────────────── │ (Listener)   │
-└──────────────┘       subscribe()    └──────────────┘
++--------------+       update()       +--------------+
+|  Subject 🔔  | -------------------▶ | Observer 👁  |
+| (Notifier)  | ◀------------------- | (Listener)   |
++--------------+       subscribe()    +--------------+
 ```
 
 This pattern promotes **loose coupling** between the subject and the observers, facilitating clean, modular design — a fundamental principle of event-driven programming.

@@ -19,15 +19,15 @@ The **Sliding Window Technique** is an algorithmic pattern that maintains a "win
 String: "abcabcbb"
 
 Window of size 3 sliding right:
-Step 1:  [a b c] a b c b b    → "abc"
-Step 2:   a [b c a] b c b b   → "bca"
-Step 3:   a b [c a b] c b b   → "cab"
-Step 4:   a b c [a b c] b b   → "abc"
+Step 1:  [a b c] a b c b b    -> "abc"
+Step 2:   a [b c a] b c b b   -> "bca"
+Step 3:   a b [c a b] c b b   -> "cab"
+Step 4:   a b c [a b c] b b   -> "abc"
 
 Dynamic window (expands/contracts):
-Step 1:  [a b c]               → unique chars: 3
-Step 2:  [a b c a]             → duplicate! shrink from left
-Step 3:   [b c a]              → unique chars: 3
+Step 1:  [a b c]               -> unique chars: 3
+Step 2:  [a b c a]             -> duplicate! shrink from left
+Step 3:   [b c a]              -> unique chars: 3
 ```
 
 **Real-World Analogy:**
@@ -89,34 +89,34 @@ const maxSumSubarray = (arr, k) => {
 
 ```
 Step 1: Initialize first window of size 3
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   arr = [2, 1, 5, 1, 3, 2]
-        [─────]              ← window
+        [-----]              <-- window
   windowSum = 2 + 1 + 5 = 8
   maxSum = 8
 
 Step 2: Slide window right (remove arr[0], add arr[3])
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   arr = [2, 1, 5, 1, 3, 2]
-           [─────]           ← window
+           [-----]           <-- window
   Remove: arr[0] = 2
   Add: arr[3] = 1
   windowSum = 8 - 2 + 1 = 7
   maxSum = Math.max(8, 7) = 8
 
 Step 3: Slide window right (remove arr[1], add arr[4])
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   arr = [2, 1, 5, 1, 3, 2]
-              [─────]        ← window
+              [-----]        <-- window
   Remove: arr[1] = 1
   Add: arr[4] = 3
   windowSum = 7 - 1 + 3 = 9
   maxSum = Math.max(8, 9) = 9  ✓ New maximum!
 
 Step 4: Slide window right (remove arr[2], add arr[5])
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   arr = [2, 1, 5, 1, 3, 2]
-                 [─────]     ← window
+                 [-----]     <-- window
   Remove: arr[2] = 5
   Add: arr[5] = 2
   windowSum = 9 - 5 + 2 = 6
@@ -180,7 +180,7 @@ These checks prevent:
 ```javascript
 /**
  * Find the length of longest substring without repeating characters
- * Example: "abcabcbb" → "abc" (length 3)
+ * Example: "abcabcbb" -> "abc" (length 3)
  * 
  * @param {string} s - Input string
  * @returns {number} Length of longest unique substring
@@ -219,36 +219,36 @@ const lengthOfLongestSubstring = (s) => {
 
 ```
 Step 1: Start with empty window
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   s = "abcabcbb"
-      ↑
+      ^
     left=0, right=0
   charSet = {}
   Add 'a': charSet = {a}
   maxLength = 1
 
 Step 2: Expand window (right moves)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   s = "abcabcbb"
-      ↑ ↑
+      ^ ^
     left=0, right=1
   charSet = {a}
   Add 'b': charSet = {a, b}
   maxLength = max(1, 2) = 2
 
 Step 3: Continue expanding
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   s = "abcabcbb"
-      ↑   ↑
+      ^   ^
     left=0, right=2
   charSet = {a, b}
   Add 'c': charSet = {a, b, c}
   maxLength = max(2, 3) = 3  ✓ "abc"
 
 Step 4: Duplicate found! Shrink from left
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   s = "abcabcbb"
-      ↑     ↑
+      ^     ^
     left=0, right=3
   charSet = {a, b, c}
   char='a' already exists!
@@ -262,9 +262,9 @@ Step 4: Duplicate found! Shrink from left
   maxLength = max(3, 3) = 3
 
 Step 5: Another duplicate 'b'
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   s = "abcabcbb"
-       ↑      ↑
+       ^      ^
     left=1, right=4
   charSet = {b, c, a}
   char='b' already exists!
@@ -277,9 +277,9 @@ Step 5: Another duplicate 'b'
   maxLength = max(3, 3) = 3
 
 Step 6: Another duplicate 'c'
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   s = "abcabcbb"
-         ↑     ↑
+         ^     ^
     left=2, right=5
   charSet = {c, a, b}
   char='c' already exists!
@@ -292,7 +292,7 @@ Step 6: Another duplicate 'c'
   maxLength = max(3, 3) = 3
 
 Step 7-8: Process remaining 'b's (shrinking continues)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Final maxLength = 3
 
 Result: 3 (substring "abc" or "bca" or "cab")
@@ -303,7 +303,7 @@ Result: 3 (substring "abc" or "bca" or "cab")
 ```javascript
 /**
  * Count occurrences of anagrams of pattern in text
- * Example: countAnagrams("cbaebabacd", "abc") → 2
+ * Example: countAnagrams("cbaebabacd", "abc") -> 2
  * Windows "cba" and "bac" are anagrams of "abc"
  */
 const countAnagrams = (text, pattern) => {
@@ -415,7 +415,7 @@ const getSearchSuggestions = (query, maxResults = 5) => {
 
 // Usage
 console.log(getSearchSuggestions("java"));
-// → ["JavaScript Developer", "Java Backend Engineer", "Senior JavaScript"]
+// -> ["JavaScript Developer", "Java Backend Engineer", "Senior JavaScript"]
 ```
 
 ### Example 2: React Hook for Debounced Search

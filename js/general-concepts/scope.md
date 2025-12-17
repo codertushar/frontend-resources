@@ -16,24 +16,23 @@ date: 2025-12-17T09:32:00+05:30
 ### The Core Concept
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    GLOBAL SCOPE                             │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │                  FUNCTION SCOPE                     │   │
-│  │  ┌─────────────────────────────────────────────┐    │   │
-│  │  │              BLOCK SCOPE                   │    │   │
-│  │  │                                           │    │   │
-│  │  │  Variables here                           │    │   │
-│  │  │  Can access:                              │    │   │
-│  │  │  ✅ Own variables                         │    │   │
-│  │  │  ✅ Parent function variables              │    │   │
-│  │  │  ✅ Global variables                       │    │   │
-│  │  │  ❌ Sibling blocks                         │    │   │
-│  │  └─────────────────────────────────────────────┘    │   │
-│  └─────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------+
+|                      GLOBAL SCOPE                         |
+|  +-----------------------------------------------------+  |
+|  |                   FUNCTION SCOPE                    |  |
+|  |  +-----------------------------------------------+  |  |
+|  |  |                 BLOCK SCOPE                   |  |  |
+|  |  |                                               |  |  |
+|  |  |  Variables here can access:                   |  |  |
+|  |  |  [Y] Own variables                            |  |  |
+|  |  |  [Y] Parent function variables                |  |  |
+|  |  |  [Y] Global variables                         |  |  |
+|  |  |  [X] Sibling blocks                           |  |  |
+|  |  +-----------------------------------------------+  |  |
+|  +-----------------------------------------------------+  |
++-----------------------------------------------------------+
 
-Direction: Inner → Outer (never reverse!)
+Direction: Inner -> Outer (never reverse!)
 ```
 
 ### Real-World Analogy: The House 🏠
@@ -41,19 +40,19 @@ Direction: Inner → Outer (never reverse!)
 Think of scope like a house with different rooms:
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                     🌍 Global House                         │
-│                                                              │
-│  🏠 Function House (Living Room)                            │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │  🚪 Block Room (Kitchen)                           │    │
-│  │                                                     │    │
-│  │  Kitchen items (let, const) stay in kitchen        │    │
-│  │  Living room items (var) accessible from kitchen   │    │
-│  │  House items (global) accessible everywhere        │    │
-│  │  Neighbor's rooms (other functions) - PRIVATE!      │    │
-│  └─────────────────────────────────────────────────────┘    │
-└──────────────────────────────────────────────────────────────┘
++------------------------------------------------------------+
+|                     GLOBAL (House)                         |
+|                                                            |
+|  FUNCTION (Living Room)                                    |
+|  +------------------------------------------------------+  |
+|  |  BLOCK (Kitchen)                                     |  |
+|  |                                                      |  |
+|  |  - Kitchen items (let, const) stay in kitchen        |  |
+|  |  - Living room items (var) accessible from kitchen   |  |
+|  |  - House items (global) accessible everywhere        |  |
+|  |  - Neighbor's rooms (other functions) = PRIVATE!     |  |
+|  +------------------------------------------------------+  |
++------------------------------------------------------------+
 ```
 
 ### Simple Example
@@ -106,16 +105,16 @@ console.log(globalVar); // ✅ Accessible
 ### Benefits
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     SCOPE BENEFITS                          │
-├─────────────────────────────────────────────────────────────┤
-│  ✅ Prevents naming conflicts                              │
-│  ✅ Enables proper memory management                       │
-│  ✅ Provides code organization                             │
-│  ✅ Enhances security through encapsulation                 │
-│  ✅ Improves debugging and maintainability                 │
-│  ✅ Foundation for closures and advanced patterns          │
-└─────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------+
+|                     SCOPE BENEFITS                        |
++-----------------------------------------------------------+
+|  [Y] Prevents naming conflicts                            |
+|  [Y] Enables proper memory management                     |
+|  [Y] Provides code organization                           |
+|  [Y] Enhances security through encapsulation              |
+|  [Y] Improves debugging and maintainability               |
+|  [Y] Foundation for closures and advanced patterns        |
++-----------------------------------------------------------+
 ```
 
 ---
@@ -177,52 +176,52 @@ function outer() {
 outer();
 
 EXECUTION TRACE:
-═══════════════════════════════════════════════════════════════
+===============================================================
 
 Step 1: Global Execution Context Created
-───────────────────────────────────────────────────────────────
+-----------------------------------------------------------
   Variable Environment: { outer: function }
   Scope Chain: [Global]
 
 Step 2: outer() is called
-───────────────────────────────────────────────────────────────
+-----------------------------------------------------------
   Create outer Execution Context:
   Variable Environment: { outerVar: 'outer', inner: function }
   Scope Chain: [outer, Global]
   [[Scope]]: points to Global context
 
 Step 3: inner() is defined within outer()
-───────────────────────────────────────────────────────────────
+-----------------------------------------------------------
   inner.[[Scope]] = [outer context, Global context]
   This creates the closure chain!
 
 Step 4: inner() is called
-───────────────────────────────────────────────────────────────
+-----------------------------------------------------------
   Create inner Execution Context:
   Variable Environment: { innerVar: 'inner' }
   Scope Chain: [inner, outer, Global]
 
 Step 5: console.log(outerVar) execution
-───────────────────────────────────────────────────────────────
+-----------------------------------------------------------
   Variable lookup process:
   1. Check inner scope: 'outerVar' not found
-  2. Check outer scope: 'outerVar' found = 'outer' ✅
+  2. Check outer scope: 'outerVar' found = 'outer' [Y]
   3. Stop lookup, use 'outer'
 
   Console output: "outer"
 
 Step 6: inner() completes
-───────────────────────────────────────────────────────────────
+-----------------------------------------------------------
   Inner execution context destroyed
   innerVar is garbage collected
 
 Step 7: outer() completes
-───────────────────────────────────────────────────────────────
+-----------------------------------------------------------
   Outer execution context destroyed
   outerVar is garbage collected
 
 FINAL STATE:
-═══════════════════════════════════════════════════════════════
+===============================================================
   All local variables garbage collected
   Global context remains with outer function definition
 ```
@@ -823,9 +822,9 @@ let moduleLet = 'Module scoped';  // NOT on global object
 ES modules (`import`/`export`) create their own scope, which is crucial for modern JavaScript development:
 
 ```javascript
-// ─────────────────────────────────────────────────────────────
+// -----------------------------------------------------------
 // utils.js - Module scope
-// ─────────────────────────────────────────────────────────────
+// -----------------------------------------------------------
 
 // Private to this module (not exported)
 const SECRET_KEY = 'abc123';
@@ -846,9 +845,9 @@ export function getRequestCount() {
   return requestCount;
 }
 
-// ─────────────────────────────────────────────────────────────
+// -----------------------------------------------------------
 // app.js - Importing module
-// ─────────────────────────────────────────────────────────────
+// -----------------------------------------------------------
 
 import { API_URL, fetchData, getRequestCount } from './utils.js';
 
@@ -863,16 +862,16 @@ console.log(getRequestCount()); // ✅ 0
 **Module Scope Benefits:**
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                   ES MODULE SCOPE                            │
-├─────────────────────────────────────────────────────────────┤
-│  ✅ Automatic strict mode                                   │
-│  ✅ Top-level variables are module-private by default       │
-│  ✅ Explicit exports control public API                     │
-│  ✅ No global namespace pollution                           │
-│  ✅ Static analysis enables tree-shaking                    │
-│  ✅ Each module runs once (singleton pattern built-in)      │
-└─────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------+
+|                   ES MODULE SCOPE                         |
++-----------------------------------------------------------+
+|  [Y] Automatic strict mode                                |
+|  [Y] Top-level variables are module-private by default    |
+|  [Y] Explicit exports control public API                  |
+|  [Y] No global namespace pollution                        |
+|  [Y] Static analysis enables tree-shaking                 |
+|  [Y] Each module runs once (singleton pattern built-in)   |
++-----------------------------------------------------------+
 ```
 
 ---
@@ -907,15 +906,15 @@ Explanation:
 6. After function ends, global 'a' is unchanged (1)
 
 Visual:
-┌─────────────────────────────────────────────────────────────┐
-│ Global Scope: var a = 1                                       │
-│                                                               │
-│ test() Function Scope (after hoisting):                       │
-│   var a = undefined; // ← Shadowing global                    │
-│   console.log(a); // → undefined                              │
-│   a = 2; // Assignment                                        │
-│   console.log(a); // → 2                                      │
-└─────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------+
+| Global Scope: var a = 1                                   |
+|                                                           |
+| test() Function Scope (after hoisting):                   |
+|   var a = undefined;  // <-- Shadowing global             |
+|   console.log(a);     // --> undefined                    |
+|   a = 2;              // Assignment                       |
+|   console.log(a);     // --> 2                            |
++-----------------------------------------------------------+
 ```
 
 ---
@@ -941,19 +940,19 @@ Loop 2 output: 0, 1, 2
 
 Why?
 Loop 1 (var):
-┌─────────────────────────────────────────────────────────────┐
-│ var is function-scoped, not block-scoped                      │
-│ Single 'i' variable shared across all iterations             │
-│ When setTimeout runs (100ms later), i = 3 (loop completed)    │
-│ All callbacks reference the same 'i' variable                 │
-└─────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------+
+| var is function-scoped, not block-scoped                  |
+| Single 'i' variable shared across all iterations          |
+| When setTimeout runs (100ms later), i = 3 (loop done)     |
+| All callbacks reference the same 'i' variable             |
++-----------------------------------------------------------+
 
 Loop 2 (let):
-┌─────────────────────────────────────────────────────────────┐
-│ let is block-scoped, creates new binding each iteration      │
-│ Each setTimeout callback captures its own 'i' value           │
-│ First callback has i=0, second i=1, third i=2                │
-└─────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------+
+| let is block-scoped, creates new binding each iteration   |
+| Each setTimeout callback captures its own 'i' value       |
+| First callback has i=0, second i=1, third i=2             |
++-----------------------------------------------------------+
 ```
 
 ---
@@ -974,13 +973,13 @@ Temporal Dead Zone (TDZ) is the period between:
 2. When it's actually declared in the code
 
 Timeline:
-┌─────────────────────────────────────────────────────────────┐
-│ 1. JavaScript enters scope                                  │
-│ 2. 'let myLet' is hoisted (in TDZ)                          │
-│ 3. typeof myLet → ReferenceError (TDZ active)               │
-│ 4. let myLet = '...' declaration reached                    │
-│ 5. TDZ ends, myLet becomes accessible                        │
-└─────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------+
+| 1. JavaScript enters scope                                |
+| 2. 'let myLet' is hoisted (in TDZ)                        |
+| 3. typeof myLet --> ReferenceError (TDZ active)           |
+| 4. let myLet = '...' declaration reached                  |
+| 5. TDZ ends, myLet becomes accessible                     |
++-----------------------------------------------------------+
 
 var doesn't have TDZ - it's initialized as undefined during hoisting.
 ```
@@ -1048,22 +1047,22 @@ false
 Explanation:
 The statement `var a = b = 3;` is actually two operations:
 
-1. `b = 3` - Assignment to undeclared variable → becomes GLOBAL
+1. `b = 3` - Assignment to undeclared variable -> becomes GLOBAL
 2. `var a = b` - Declaration of local variable, assignment of global b
 
 Breaking it down:
-┌─────────────────────────────────────────────────────────────┐
-│ (function() {                                                │
-│   var a = b = 3; // ← Right to left evaluation               │
-│   // Equivalent to:                                          │
-│   b = 3;      // Global variable (no var/let/const)         │
-│   var a = b;  // Local variable inside IIFE                  │
-│ })();                                                         │
-│                                                               │
-│ // After IIFE executes:                                      │
-│ // 'a' is local to IIFE → destroyed                          │
-│ // 'b' is global → accessible                               │
-└─────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------+
+| (function() {                                             |
+|   var a = b = 3; // <-- Right to left evaluation          |
+|   // Equivalent to:                                       |
+|   b = 3;      // Global variable (no var/let/const)       |
+|   var a = b;  // Local variable inside IIFE               |
+| })();                                                     |
+|                                                           |
+| // After IIFE executes:                                   |
+| // 'a' is local to IIFE --> destroyed                     |
+| // 'b' is global --> accessible                           |
++-----------------------------------------------------------+
 
 So:
 typeof a === 'undefined' // true (a doesn't exist globally)
@@ -1264,31 +1263,31 @@ const objFixed2 = {
 ### Memory Layout Visualization
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    MEMORY ALLOCATION                           │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  Each execution context contains:                              │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │ Variable Environment:                                   │   │
-│  │ • Local variables (var, let, const)                    │   │
-│  │ • Function arguments                                     │   │
-│  │ • 'this' binding                                        │   │
-│  │                                                         │   │
-│  │ Scope Chain:                                            │   │
-│  │ • [[Scope]] → Parent context → Grandparent → ...        │   │
-│  └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│  Memory grows with:                                           │
-│  • Nested function calls (call stack)                         │
-│  • Closures retaining outer scopes                            │
-│  • Long-lived objects in global scope                         │
-│                                                                 │
-│  Memory freed when:                                            │
-│  • Function calls return (stack unwinding)                    │
-│  • No more references to objects exist                        │
-│  • Closures are garbage collected                             │
-└─────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------+
+|                    MEMORY ALLOCATION                      |
++-----------------------------------------------------------+
+|                                                           |
+|  Each execution context contains:                         |
+|  +-----------------------------------------------------+  |
+|  | Variable Environment:                               |  |
+|  |   - Local variables (var, let, const)               |  |
+|  |   - Function arguments                              |  |
+|  |   - 'this' binding                                  |  |
+|  |                                                     |  |
+|  | Scope Chain:                                        |  |
+|  |   - [[Scope]] -> Parent context -> Grandparent...   |  |
+|  +-----------------------------------------------------+  |
+|                                                           |
+|  Memory grows with:                                       |
+|    - Nested function calls (call stack)                   |
+|    - Closures retaining outer scopes                      |
+|    - Long-lived objects in global scope                   |
+|                                                           |
+|  Memory freed when:                                       |
+|    - Function calls return (stack unwinding)              |
+|    - No more references to objects exist                  |
+|    - Closures are garbage collected                       |
++-----------------------------------------------------------+
 ```
 
 ---
@@ -1302,7 +1301,7 @@ const objFixed2 = {
 | **Global Scope** | Top-level scope accessible everywhere | Avoid pollution, use modules |
 | **Function Scope** | Function-wide scope (var, declarations) | Hoisting applies to var |
 | **Block Scope** | Limited to {} blocks (let, const) | Temporal Dead Zone |
-| **Scope Chain** | Nested lookup mechanism | Inner → Outer direction |
+| **Scope Chain** | Nested lookup mechanism | Inner -> Outer direction |
 | **Lexical Scope** | Scope determined at write-time | JavaScript's scoping model |
 | **Hoisting** | Declarations moved to top | var vs let/const behavior |
 

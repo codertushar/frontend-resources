@@ -16,20 +16,20 @@ A **closure** is a function that **remembers** and **has access to** variables f
 ### The Core Concept
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    OUTER FUNCTION                           │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │  Variables: count, name, config                     │   │
-│  │                                                     │   │
-│  │  ┌─────────────────────────────────────────────┐   │   │
-│  │  │           INNER FUNCTION                    │   │   │
-│  │  │                                             │   │   │
-│  │  │  Can ACCESS all variables from outer scope  │   │   │
-│  │  │  Even AFTER outer function returns! ←───────┼───┼───┤
-│  │  │                                             │   │   │
-│  │  └─────────────────────────────────────────────┘   │   │
-│  └─────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+|                    OUTER FUNCTION                           |
+|  +-----------------------------------------------------+   |
+|  |  Variables: count, name, config                     |   |
+|  |                                                     |   |
+|  |  +---------------------------------------------+   |   |
+|  |  |           INNER FUNCTION                    |   |   |
+|  |  |                                             |   |   |
+|  |  |  Can ACCESS all variables from outer scope  |   |   |
+|  |  |  Even AFTER outer function returns! <---------+---+---+
+|  |  |                                             |   |   |
+|  |  +---------------------------------------------+   |   |
+|  +-----------------------------------------------------+   |
++-------------------------------------------------------------+
 ```
 
 ### Real-World Analogy: The Backpack 🎒
@@ -37,19 +37,19 @@ A **closure** is a function that **remembers** and **has access to** variables f
 Think of a closure like a **backpack** that a function carries with it:
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│  👤 Inner Function walks out of Outer Function's house       │
-│                                                              │
-│  But carries a BACKPACK containing:                          │
-│  🎒 ┌─────────────────────────────┐                          │
-│     │ • Reference to 'count'       │                         │
-│     │ • Reference to 'multiplier'  │                         │
-│     │ • Reference to 'secretKey'   │                         │
-│     └─────────────────────────────┘                          │
-│                                                              │
-│  The function can open this backpack ANYTIME                 │
-│  and use these variables, even though it left home!          │
-└──────────────────────────────────────────────────────────────┘
++--------------------------------------------------------------+
+|  👤 Inner Function walks out of Outer Function's house       |
+|                                                              |
+|  But carries a BACKPACK containing:                          |
+|  🎒 +-----------------------------+                          |
+|     | • Reference to 'count'       |                         |
+|     | • Reference to 'multiplier'  |                         |
+|     | • Reference to 'secretKey'   |                         |
+|     +-----------------------------+                          |
+|                                                              |
+|  The function can open this backpack ANYTIME                 |
+|  and use these variables, even though it left home!          |
++--------------------------------------------------------------+
 ```
 
 ### Simple Example
@@ -92,16 +92,16 @@ greetJane(); // "Hello, Jane!"
 ### Benefits
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                   CLOSURE BENEFITS                          │
-├─────────────────────────────────────────────────────────────┤
-│  ✅ Data Privacy      → Variables can't be accessed from    │
-│                         outside                             │
-│  ✅ State Persistence → Data survives function execution    │
-│  ✅ Function Factories → Create specialized functions       │
-│  ✅ Encapsulation     → Hide implementation details         │
-│  ✅ Memory Efficient  → Share methods, keep separate state  │
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+|                   CLOSURE BENEFITS                          |
++-------------------------------------------------------------+
+|  ✅ Data Privacy      -> Variables can't be accessed from    |
+|                         outside                             |
+|  ✅ State Persistence -> Data survives function execution    |
+|  ✅ Function Factories -> Create specialized functions       |
+|  ✅ Encapsulation     -> Hide implementation details         |
+|  ✅ Memory Efficient  -> Share methods, keep separate state  |
++-------------------------------------------------------------+
 ```
 
 ---
@@ -145,71 +145,71 @@ console.log(counter.count); // undefined
 
 ```
 INITIAL STATE:
-═══════════════════════════════════════════════════════════════
+===============================================================
 
 Step 1: createCounter() is called
-───────────────────────────────────────────────────────────────
+---------------------------------------------------------------
   Memory allocation:
-  ┌─────────────────────────────────┐
-  │ createCounter Execution Context │
-  │ ─────────────────────────────── │
-  │ count = 0                       │
-  └─────────────────────────────────┘
+  +---------------------------------+
+  | createCounter Execution Context |
+  | ------------------------------- |
+  | count = 0                       |
+  +---------------------------------+
 
   Action: Initialize 'count' to 0
   Return: Object with increment, decrement, getCount methods
 
   Each method has a [[Scope]] property pointing to:
-  ┌─────────────────────────────────┐
-  │ Closure (createCounter)         │
-  │ ─────────────────────────────── │
-  │ count: 0                        │
-  └─────────────────────────────────┘
+  +---------------------------------+
+  | Closure (createCounter)         |
+  | ------------------------------- |
+  | count: 0                        |
+  +---------------------------------+
 
 Step 2: counter.increment() called
-───────────────────────────────────────────────────────────────
+---------------------------------------------------------------
   Before: count = 0
   Operation: count += 1
   After: count = 1
   Return value: 1
 
   Closure state:
-  ┌─────────────────────────────────┐
-  │ count: 0 → 1                    │
-  └─────────────────────────────────┘
+  +---------------------------------+
+  | count: 0 -> 1                    |
+  +---------------------------------+
 
 Step 3: counter.increment() called again
-───────────────────────────────────────────────────────────────
+---------------------------------------------------------------
   Before: count = 1
   Operation: count += 1
   After: count = 2
   Return value: 2
 
   Closure state:
-  ┌─────────────────────────────────┐
-  │ count: 1 → 2                    │
-  └─────────────────────────────────┘
+  +---------------------------------+
+  | count: 1 -> 2                    |
+  +---------------------------------+
 
 Step 4: counter.decrement() called
-───────────────────────────────────────────────────────────────
+---------------------------------------------------------------
   Before: count = 2
   Operation: count -= 1
   After: count = 1
   Return value: 1
 
   Closure state:
-  ┌─────────────────────────────────┐
-  │ count: 2 → 1                    │
-  └─────────────────────────────────┘
+  +---------------------------------+
+  | count: 2 -> 1                    |
+  +---------------------------------+
 
 Step 5: counter.getCount() called
-───────────────────────────────────────────────────────────────
+---------------------------------------------------------------
   Current: count = 1
   Action: Read only, no modification
   Return value: 1
 
 FINAL STATE:
-═══════════════════════════════════════════════════════════════
+===============================================================
   counter object methods still have access to: count = 1
   Direct access to count: IMPOSSIBLE (undefined)
 ```
@@ -246,30 +246,30 @@ function outer() {
 ### Scope Chain Visualization
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│ GLOBAL SCOPE                                                 │
-│ ┌──────────────────────────────────────────────────────────┐ │
-│ │ outer() SCOPE                                            │ │
-│ │ Variables: outerVar                                      │ │
-│ │ ┌──────────────────────────────────────────────────────┐ │ │
-│ │ │ middle() SCOPE                                       │ │ │
-│ │ │ Variables: middleVar                                 │ │ │
-│ │ │ ┌──────────────────────────────────────────────────┐ │ │ │
-│ │ │ │ inner() SCOPE                                    │ │ │ │
-│ │ │ │ Variables: innerVar                              │ │ │ │
-│ │ │ │                                                  │ │ │ │
-│ │ │ │ Can access: innerVar ✅                          │ │ │ │
-│ │ │ │             middleVar ✅ (via closure)           │ │ │ │
-│ │ │ │             outerVar ✅ (via closure)            │ │ │ │
-│ │ │ └──────────────────────────────────────────────────┘ │ │ │
-│ │ └──────────────────────────────────────────────────────┘ │ │
-│ └──────────────────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────────────────┘
++--------------------------------------------------------------+
+| GLOBAL SCOPE                                                 |
+| +----------------------------------------------------------+ |
+| | outer() SCOPE                                            | |
+| | Variables: outerVar                                      | |
+| | +------------------------------------------------------+ | |
+| | | middle() SCOPE                                       | | |
+| | | Variables: middleVar                                 | | |
+| | | +--------------------------------------------------+ | | |
+| | | | inner() SCOPE                                    | | | |
+| | | | Variables: innerVar                              | | | |
+| | | |                                                  | | | |
+| | | | Can access: innerVar ✅                          | | | |
+| | | |             middleVar ✅ (via closure)           | | | |
+| | | |             outerVar ✅ (via closure)            | | | |
+| | | +--------------------------------------------------+ | | |
+| | +------------------------------------------------------+ | |
+| +----------------------------------------------------------+ |
++--------------------------------------------------------------+
 
-      Variable Lookup Direction: INSIDE → OUTSIDE (never reverse!)
-                                    ↑
-                                    │
-                                    │
+      Variable Lookup Direction: INSIDE -> OUTSIDE (never reverse!)
+                                    ^
+                                    |
+                                    |
                               Inner looks UP
                               the scope chain
 ```
@@ -309,7 +309,7 @@ function createCounter() {
 
 const counter = createCounter();
 // If closures didn't exist:
-// counter.increment() → ERROR! 'count' would be garbage collected
+// counter.increment() -> ERROR! 'count' would be garbage collected
 // after createCounter() finished executing
 ```
 
@@ -438,7 +438,7 @@ const userState = createStateContainer(
 );
 
 const unsubscribe = userState.subscribe((newState, oldState) => {
-  console.log('State changed:', oldState, '→', newState);
+  console.log('State changed:', oldState, '->', newState);
 });
 
 userState.setState({ name: 'John', loggedIn: true });
@@ -683,52 +683,52 @@ console.log(UserModule.users); // undefined - private!
 ### Visual Comparison
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    CLOSURE-BASED                                │
-├─────────────────────────────────────────────────────────────────┤
-│  function createThing() {                                       │
-│    let privateData = 'secret';     ← TRUE private              │
-│    return {                                                     │
-│      getPrivate() { return privateData; }                       │
-│    };                                                           │
-│  }                                                              │
-│                                                                 │
-│  const thing = createThing();                                   │
-│  thing.privateData   → undefined  ✅ Cannot access             │
-└─────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------+
+|                    CLOSURE-BASED                                |
++-----------------------------------------------------------------+
+|  function createThing() {                                       |
+|    let privateData = 'secret';     <-- TRUE private              |
+|    return {                                                     |
+|      getPrivate() { return privateData; }                       |
+|    };                                                           |
+|  }                                                              |
+|                                                                 |
+|  const thing = createThing();                                   |
+|  thing.privateData   -> undefined  ✅ Cannot access             |
++-----------------------------------------------------------------+
 
-┌─────────────────────────────────────────────────────────────────┐
-│                    CLASS-BASED                                  │
-├─────────────────────────────────────────────────────────────────┤
-│  class Thing {                                                  │
-│    #privateData = 'secret';        ← Private field (ES2022)    │
-│    _conventionPrivate = 'not really private';                   │
-│                                                                 │
-│    getPrivate() { return this.#privateData; }                   │
-│  }                                                              │
-│                                                                 │
-│  const thing = new Thing();                                     │
-│  thing.#privateData     → SyntaxError  ✅                       │
-│  thing._conventionPrivate → 'not really private'  ⚠️           │
-└─────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------+
+|                    CLASS-BASED                                  |
++-----------------------------------------------------------------+
+|  class Thing {                                                  |
+|    #privateData = 'secret';        <-- Private field (ES2022)    |
+|    _conventionPrivate = 'not really private';                   |
+|                                                                 |
+|    getPrivate() { return this.#privateData; }                   |
+|  }                                                              |
+|                                                                 |
+|  const thing = new Thing();                                     |
+|  thing.#privateData     -> SyntaxError  ✅                       |
+|  thing._conventionPrivate -> 'not really private'  ⚠️           |
++-----------------------------------------------------------------+
 ```
 
 ### When to Use Which
 
 ```
 Use CLOSURES when:
-├── You need true private state
-├── You want to avoid 'this' binding issues
-├── Creating factory functions
-├── Building functional programming patterns
-└── Need simple, one-off encapsulation
++-- You need true private state
++-- You want to avoid 'this' binding issues
++-- Creating factory functions
++-- Building functional programming patterns
++-- Need simple, one-off encapsulation
 
 Use CLASSES when:
-├── You need inheritance
-├── Working with frameworks expecting classes (React class components)
-├── Building complex hierarchies
-├── TypeScript static typing is important
-└── You need instanceof checks
++-- You need inheritance
++-- Working with frameworks expecting classes (React class components)
++-- Building complex hierarchies
++-- TypeScript static typing is important
++-- You need instanceof checks
 ```
 
 ---
@@ -773,10 +773,10 @@ Why? 'var' is function-scoped, not block-scoped.
 By the time setTimeout callbacks execute, the loop has finished
 and 'i' is 3. All callbacks share the same 'i' reference.
 
-┌────────────────────────────────────────────────────────────┐
-│  Loop executes:  i = 0 → 1 → 2 → 3 (exits)                │
-│  100ms later:    All callbacks run, all see i = 3         │
-└────────────────────────────────────────────────────────────┘
++------------------------------------------------------------+
+|  Loop executes:  i = 0 -> 1 -> 2 -> 3 (exits)                |
+|  100ms later:    All callbacks run, all see i = 3         |
++------------------------------------------------------------+
 
 Fix 1: Use 'let' (block-scoped)
 for (let i = 0; i < 3; i++) {
@@ -876,17 +876,17 @@ Version B: funcsB[0]() = 0, funcsB[1]() = 1, funcsB[2]() = 2
   - Each function closes over its own 'j' value
   - 'j' captures the value of 'i' at that moment
 
-┌─────────────────────────────────────────────────────────────┐
-│ Version A (shared reference):                               │
-│                                                             │
-│   All functions ─────→ [i = 3]                              │
-│                                                             │
-│ Version B (captured values):                                │
-│                                                             │
-│   funcsB[0] ─→ [j = 0]                                     │
-│   funcsB[1] ─→ [j = 1]                                     │
-│   funcsB[2] ─→ [j = 2]                                     │
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+| Version A (shared reference):                               |
+|                                                             |
+|   All functions ------> [i = 3]                              |
+|                                                             |
+| Version B (captured values):                                |
+|                                                             |
+|   funcsB[0] --> [j = 0]                                     |
+|   funcsB[1] --> [j = 1]                                     |
+|   funcsB[2] --> [j = 2]                                     |
++-------------------------------------------------------------+
 ```
 
 ---
@@ -1079,25 +1079,25 @@ function CounterFixed() {
 ### Memory Considerations
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    MEMORY LAYOUT                                │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  Each closure instance holds:                                   │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │ • Reference to function code (shared across instances)  │   │
-│  │ • Reference to [[Scope]] environment (unique per call)  │   │
-│  └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│  Memory grows when:                                             │
-│  • Creating many closure instances (many createCounter calls)   │
-│  • Closing over large objects                                   │
-│  • Never releasing references (memory leak)                     │
-│                                                                 │
-│  Memory is freed when:                                          │
-│  • No more references to the closure exist                      │
-│  • Closed-over variables become unreachable                     │
-└─────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------+
+|                    MEMORY LAYOUT                                |
++-----------------------------------------------------------------+
+|                                                                 |
+|  Each closure instance holds:                                   |
+|  +---------------------------------------------------------+   |
+|  | • Reference to function code (shared across instances)  |   |
+|  | • Reference to [[Scope]] environment (unique per call)  |   |
+|  +---------------------------------------------------------+   |
+|                                                                 |
+|  Memory grows when:                                             |
+|  • Creating many closure instances (many createCounter calls)   |
+|  • Closing over large objects                                   |
+|  • Never releasing references (memory leak)                     |
+|                                                                 |
+|  Memory is freed when:                                          |
+|  • No more references to the closure exist                      |
+|  • Closed-over variables become unreachable                     |
++-----------------------------------------------------------------+
 ```
 
 ---

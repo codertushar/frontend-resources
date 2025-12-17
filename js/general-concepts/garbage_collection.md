@@ -16,22 +16,22 @@ date: 2025-12-16T01:30:00+05:30
 ### The Core Concept
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                    JAVASCRIPT HEAP MEMORY                    │
-│                                                              │
-│  ┌─────────┐    ┌─────────┐    ┌─────────┐                 │
-│  │ Object A│◄───┤ Object B│    │ Object C│ (unreachable)   │
-│  │ (root)  │    │(reachable)   └─────────┘                 │
-│  └────┬────┘    └─────────┘         ↑                       │
-│       │                              │                       │
-│       │         ┌─────────┐          │                       │
-│       └────────►│ Object D│          │                       │
-│                 │(reachable)         │                       │
-│                 └─────────┘          │                       │
-│                                      │                       │
-│                         GC MARKS C AS GARBAGE ───────────────┤
-│                         AND RECLAIMS ITS MEMORY              │
-└──────────────────────────────────────────────────────────────┘
++--------------------------------------------------------------+
+|                    JAVASCRIPT HEAP MEMORY                    |
+|                                                              |
+|  +---------+    +---------+    +---------+                 |
+|  | Object A|◄---+ Object B|    | Object C| (unreachable)   |
+|  | (root)  |    |(reachable)   +---------+                 |
+|  +----+----+    +---------+         ^                       |
+|       |                              |                       |
+|       |         +---------+          |                       |
+|       +--------►| Object D|          |                       |
+|                 |(reachable)         |                       |
+|                 +---------+          |                       |
+|                                      |                       |
+|                         GC MARKS C AS GARBAGE ---------------+
+|                         AND RECLAIMS ITS MEMORY              |
++--------------------------------------------------------------+
 ```
 
 ### Real-World Analogy: The Office Cleaning Service 🧹
@@ -39,22 +39,22 @@ date: 2025-12-16T01:30:00+05:30
 Think of GC like an **automated office cleaning service**:
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│  🏢 Your JavaScript Program = Office Building                │
-│                                                              │
-│  Active Workers (Variables) = Desks with People              │
-│  ├─ CEO Desk (Global Scope)                                  │
-│  ├─ Manager Desks (Function Scopes)                          │
-│  └─ Employee Desks (Local Variables)                         │
-│                                                              │
-│  Files on Desks (Objects) = Memory Being Used               │
-│                                                              │
-│  🧹 Cleaning Service (GC) comes at night and:                │
-│     1. Checks which desks are occupied (reachable)           │
-│     2. Identifies empty desks with leftover files            │
-│     3. Throws away files on empty desks (reclaims memory)    │
-│     4. Keeps files on occupied desks (preserves data)        │
-└──────────────────────────────────────────────────────────────┘
++--------------------------------------------------------------+
+|  🏢 Your JavaScript Program = Office Building                |
+|                                                              |
+|  Active Workers (Variables) = Desks with People              |
+|  +- CEO Desk (Global Scope)                                  |
+|  +- Manager Desks (Function Scopes)                          |
+|  +- Employee Desks (Local Variables)                         |
+|                                                              |
+|  Files on Desks (Objects) = Memory Being Used               |
+|                                                              |
+|  🧹 Cleaning Service (GC) comes at night and:                |
+|     1. Checks which desks are occupied (reachable)           |
+|     2. Identifies empty desks with leftover files            |
+|     3. Throws away files on empty desks (reclaims memory)    |
+|     4. Keeps files on occupied desks (preserves data)        |
++--------------------------------------------------------------+
 ```
 
 ### Simple Example
@@ -186,18 +186,18 @@ global.temp = null;
 
 ```
 Initial State:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Heap: [user_obj, profile_obj, temp_obj]
   Roots: [global]
   
   Object Graph:
-  global ──┬──> user_obj ──> profile_obj
-           └──> null (was temp_obj)
+  global --+--> user_obj --> profile_obj
+           +--> null (was temp_obj)
   
   temp_obj: UNREACHABLE (no references)
 
 PHASE 1: MARK (Starting from roots)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 Step 1: Visit global (root)
   marked = [global]
   toVisit = [user_obj]
@@ -213,17 +213,17 @@ Step 3: Visit profile_obj
 Mark phase complete: 3 objects marked as reachable
 
 PHASE 2: SWEEP (Clean unmarked objects)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 Step 1: Check heap objects
-  user_obj: MARKED ✓ → Keep
-  profile_obj: MARKED ✓ → Keep
-  temp_obj: UNMARKED ✗ → GARBAGE!
+  user_obj: MARKED ✓ -> Keep
+  profile_obj: MARKED ✓ -> Keep
+  temp_obj: UNMARKED ✗ -> GARBAGE!
 
 Step 2: Reclaim memory
-  Free temp_obj → Memory returned to heap
+  Free temp_obj -> Memory returned to heap
 
 Final State:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Heap: [user_obj, profile_obj]
   Freed: 1 object (temp_obj)
   Memory reclaimed: ~100 bytes
@@ -266,7 +266,7 @@ let obj = { data: "test" }; // refCount = 1
 let copy = obj;              // refCount = 2
 
 copy = null;                 // refCount = 1
-obj = null;                  // refCount = 0 → FREED immediately
+obj = null;                  // refCount = 0 -> FREED immediately
 ```
 
 **Problem with Reference Counting: Circular References**
@@ -337,19 +337,19 @@ button.addEventListener('click', function handler() {
 Modern engines optimize GC using the **generational hypothesis**: most objects die young.
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                  GENERATIONAL GC STRATEGY                    │
-│                                                              │
-│  Young Generation (Nursery)     Old Generation (Tenured)    │
-│  ┌─────────────────────┐       ┌──────────────────────┐    │
-│  │ New objects         │       │ Long-lived objects   │    │
-│  │ Short-lived         │────▶  │ Survived multiple GCs│    │
-│  │ GC runs frequently  │       │ GC runs rarely       │    │
-│  │ ~90% of allocations │       │ ~10% promoted here   │    │
-│  └─────────────────────┘       └──────────────────────┘    │
-│   Minor GC (fast, frequent)     Major GC (slow, rare)       │
-│   ~10ms every few seconds       ~100ms every few minutes    │
-└──────────────────────────────────────────────────────────────┘
++--------------------------------------------------------------+
+|                  GENERATIONAL GC STRATEGY                    |
+|                                                              |
+|  Young Generation (Nursery)     Old Generation (Tenured)    |
+|  +---------------------+       +----------------------+    |
+|  | New objects         |       | Long-lived objects   |    |
+|  | Short-lived         |----▶  | Survived multiple GCs|    |
+|  | GC runs frequently  |       | GC runs rarely       |    |
+|  | ~90% of allocations |       | ~10% promoted here   |    |
+|  +---------------------+       +----------------------+    |
+|   Minor GC (fast, frequent)     Major GC (slow, rare)       |
+|   ~10ms every few seconds       ~100ms every few minutes    |
++--------------------------------------------------------------+
 ```
 
 **Why This Matters:**
@@ -359,12 +359,12 @@ Modern engines optimize GC using the **generational hypothesis**: most objects d
 function render() {
   const tempData = processInput(); // Allocated in young gen
   updateUI(tempData);               // Used briefly
-  // tempData becomes unreachable → Minor GC collects quickly
+  // tempData becomes unreachable -> Minor GC collects quickly
 }
 
 // Old generation (long-lived)
 const appState = { user: {}, config: {} }; // Survives many GCs
-// Promoted to old generation → Major GC handles eventually
+// Promoted to old generation -> Major GC handles eventually
 ```
 
 ### Weak References — Breaking the Reachability Chain
@@ -450,7 +450,7 @@ function startUpdatesFixed() {
 }
 
 const cleanup = startUpdatesFixed();
-// Later: cleanup(); → data can be garbage collected
+// Later: cleanup(); -> data can be garbage collected
 ```
 
 #### Leak 2: Forgotten Event Listeners
@@ -494,7 +494,7 @@ class DataViewerFixed {
 }
 
 const viewer2 = new DataViewerFixed(document.getElementById('btn'));
-// Later: viewer2.destroy(); → Everything can be GC'd
+// Later: viewer2.destroy(); -> Everything can be GC'd
 ```
 
 #### Leak 3: Detached DOM Nodes
@@ -522,7 +522,7 @@ function addToCacheFixed() {
   weakCache.set(element, { data: 'cached' });
   
   element.parentNode.removeChild(element);
-  // No strong reference → GC can collect it
+  // No strong reference -> GC can collect it
 }
 ```
 
@@ -554,7 +554,7 @@ function processDataFixed() {
   return function getCount() {
     return count; // Only captures small primitive
   };
-  // largeData goes out of scope → Can be GC'd
+  // largeData goes out of scope -> Can be GC'd
 }
 ```
 
@@ -566,7 +566,7 @@ function createData() {
   // Missing 'const'/'let' creates global!
   userData = { name: "Alice", data: new Array(1000000) };
   
-  // userData is now window.userData → NEVER garbage collected!
+  // userData is now window.userData -> NEVER garbage collected!
 }
 
 createData();
@@ -579,7 +579,7 @@ function createDataFixed() {
 }
 
 const data = createDataFixed();
-// Later: data = null; → Can be GC'd
+// Later: data = null; -> Can be GC'd
 ```
 
 #### Leak 6: Circular References (Historical Issue)
@@ -601,7 +601,7 @@ function createCircular() {
 // ❌ POTENTIAL ISSUE: DOM + JS circular references (old browsers)
 const element = document.getElementById('myDiv');
 const data = { element: element };
-element.userData = data; // Circular: DOM ↔ JS
+element.userData = data; // Circular: DOM <-> JS
 
 // ✅ GOOD: Break circles explicitly (defensive)
 function cleanup() {
@@ -707,7 +707,7 @@ class VirtualScroll {
     // Remove items outside viewport
     for (const [idx, element] of this.visibleItems) {
       if (idx < startIdx || idx > endIdx) {
-        element.remove(); // DOM removed → GC can collect
+        element.remove(); // DOM removed -> GC can collect
         this.visibleItems.delete(idx);
       }
     }
@@ -763,7 +763,7 @@ class LRUCache {
     // Evict oldest if over limit
     if (this.cache.size > this.maxSize) {
       const firstKey = this.cache.keys().next().value;
-      this.cache.delete(firstKey); // Oldest item → GC can collect
+      this.cache.delete(firstKey); // Oldest item -> GC can collect
     }
   }
 
@@ -836,7 +836,7 @@ class WorkerPool {
   }
 
   destroy() {
-    // Terminate all workers → Allow GC
+    // Terminate all workers -> Allow GC
     this.workers.forEach(({ worker }) => worker.terminate());
     this.workers = [];
     this.tasks = [];
@@ -846,7 +846,7 @@ class WorkerPool {
 // Usage
 const pool = new WorkerPool('processor.js', 4);
 await pool.execute({ data: 'process this' });
-// Later: pool.destroy(); → All workers and references cleaned up
+// Later: pool.destroy(); -> All workers and references cleaned up
 ```
 
 ---
@@ -858,11 +858,11 @@ await pool.execute({ data: 'process this' });
 **Chrome DevTools Memory Profiler:**
 
 ```
-1. Open DevTools → Memory Tab
+1. Open DevTools -> Memory Tab
 2. Take Heap Snapshot
 3. Perform actions (navigate, interact)
 4. Take another Heap Snapshot
-5. Compare snapshots → Look for:
+5. Compare snapshots -> Look for:
    - Growing arrays/objects
    - Detached DOM nodes
    - Event listeners not removed
@@ -872,13 +872,13 @@ await pool.execute({ data: 'process this' });
 
 ```
 Snapshot Comparison:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 Constructor         | Delta | Size Delta | # New | # Deleted
-────────────────────|-------|------------|-------|----------
-Array               | +250  | +2.5 MB    | 300   | 50     ← LEAK!
-HTMLDivElement      | +100  | +500 KB    | 150   | 50     ← Detached?
-Closure             | +50   | +100 KB    | 75    | 25     ← Check!
-Object              | +10   | +50 KB     | 20    | 10     ← Normal
+--------------------|-------|------------|-------|----------
+Array               | +250  | +2.5 MB    | 300   | 50     <-- LEAK!
+HTMLDivElement      | +100  | +500 KB    | 150   | 50     <-- Detached?
+Closure             | +50   | +100 KB    | 75    | 25     <-- Check!
+Object              | +10   | +50 KB     | 20    | 10     <-- Normal
 ```
 
 ### Programmatic Detection
@@ -1192,7 +1192,7 @@ function ChatWidget() {
 }
 
 // Every time component mounts, adds listener
-// Old listeners never removed → memory leak
+// Old listeners never removed -> memory leak
 
 // ✅ GOOD: Always cleanup in useEffect
 function ChatWidget() {

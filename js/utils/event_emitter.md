@@ -14,12 +14,12 @@ An **EventEmitter** (or Event Bus) is a pattern that allows objects to subscribe
 
 ```
 Publisher (Emitter)          Subscribers (Listeners)
-       │                            │
-       │ ────── event ─────────────►│ Listener 1
-       │                            │
-       │ ────── event ─────────────►│ Listener 2
-       │                            │
-       │ ────── event ─────────────►│ Listener 3
+       |                            |
+       | ------ event -------------►| Listener 1
+       |                            |
+       | ------ event -------------►| Listener 2
+       |                            |
+       | ------ event -------------►| Listener 3
 ```
 
 ### Real-World Examples
@@ -127,27 +127,27 @@ emitter.emit('greet', 'Alice');
 
 ```
 Step 1: emitter.on('greet', greet)
-─────────────────────────────────────────────────────────
-  events.has('greet')? → false
+---------------------------------------------------------
+  events.has('greet')? -> false
   Create: events.set('greet', new Set())
   Add: events.get('greet').add(greet)
 
   events = Map { 'greet' => Set { greet } }
 
 Step 2: emitter.on('greet', farewell)
-─────────────────────────────────────────────────────────
-  events.has('greet')? → true
+---------------------------------------------------------
+  events.has('greet')? -> true
   Add: events.get('greet').add(farewell)
 
   events = Map { 'greet' => Set { greet, farewell } }
 
 Step 3: emitter.emit('greet', 'Alice')
-─────────────────────────────────────────────────────────
-  events.has('greet')? → true
+---------------------------------------------------------
+  events.has('greet')? -> true
 
   Iterate over Set { greet, farewell }:
-    → greet('Alice')     Output: "Hello, Alice!"
-    → farewell('Alice')  Output: "Goodbye, Alice!"
+    -> greet('Alice')     Output: "Hello, Alice!"
+    -> farewell('Alice')  Output: "Goodbye, Alice!"
 
 Output:
   Hello, Alice!
@@ -168,7 +168,7 @@ emitter.emit('event');  // No output (listener removed)
 
 ```
 Step 1: emitter.once('event', runOnce)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Creates onceWrapper function:
     function onceWrapper(...args) {
       this.off('event', onceWrapper);  // Remove itself
@@ -180,19 +180,19 @@ Step 1: emitter.once('event', runOnce)
   events = Map { 'event' => Set { onceWrapper } }
 
 Step 2: First emitter.emit('event')
-─────────────────────────────────────────────────────────
-  events.has('event')? → true
+---------------------------------------------------------
+  events.has('event')? -> true
 
   For listener onceWrapper:
-    → this.off('event', onceWrapper)  // Remove from set
-    → runOnce()                       // Execute original
+    -> this.off('event', onceWrapper)  // Remove from set
+    -> runOnce()                       // Execute original
 
   Output: "This runs once"
   events = Map { } (empty after cleanup)
 
 Step 3: Second emitter.emit('event')
-─────────────────────────────────────────────────────────
-  events.has('event')? → false
+---------------------------------------------------------
+  events.has('event')? -> false
 
   No listeners to call
   Output: (nothing)

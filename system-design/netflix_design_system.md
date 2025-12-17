@@ -53,65 +53,65 @@ Before diving in, ask these questions to scope the problem:
 ## 2. High-Level Architecture (Draw This!)
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                     Netflix Design System                        │
-│                        (Hawkins UI)                              │
-└─────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------+
+|                     Netflix Design System                        |
+|                        (Hawkins UI)                              |
++-----------------------------------------------------------------+
 
-┌─────────────────────────────────────────────────────────────────┐
-│                    Design Token Layer                            │
-│  ┌────────────┬────────────┬────────────┬────────────┐         │
-│  │   Colors   │ Typography │  Spacing   │  Shadows   │         │
-│  │  Palette   │   Scale    │   Scale    │   Depths   │         │
-│  └────────────┴────────────┴────────────┴────────────┘         │
-│                          ↓                                       │
-│              Theme Provider (Context API)                        │
-│         • Light/Dark Mode  • Regional Variants                  │
-│         • Platform Tokens (Web, TV, Mobile)                     │
-└─────────────────────────────────────────────────────────────────┘
-                          ↓
-┌─────────────────────────────────────────────────────────────────┐
-│                   Component Library                              │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │         Primitive Components (Atoms)                      │  │
-│  │  Button  Input  Text  Icon  Badge  Spinner  Tooltip      │  │
-│  └──────────────────────────────────────────────────────────┘  │
-│                          ↓                                       │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │      Composite Components (Molecules)                     │  │
-│  │  Card  Modal  Dropdown  Tabs  Navigation  Form           │  │
-│  └──────────────────────────────────────────────────────────┘  │
-│                          ↓                                       │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │       Pattern Components (Organisms)                      │  │
-│  │  VideoPlayer  ContentRow  Billboard  SearchBar  Header   │  │
-│  └──────────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────┘
-                          ↓
-┌─────────────────────────────────────────────────────────────────┐
-│                   Platform Adapters                              │
-│  ┌──────────┬──────────┬──────────┬──────────┐                 │
-│  │   Web    │    TV    │  Mobile  │  React   │                 │
-│  │  (DOM)   │  (React  │   Web    │  Native  │                 │
-│  │          │   TV)    │          │          │                 │
-│  └──────────┴──────────┴──────────┴──────────┘                 │
-└─────────────────────────────────────────────────────────────────┘
-                          ↓
-┌─────────────────────────────────────────────────────────────────┐
-│              Build & Distribution Layer                          │
-│  ┌────────────────────────────────────────────────────────┐    │
-│  │  • Tree-shakeable ESM modules                          │    │
-│  │  • CommonJS for legacy support                         │    │
-│  │  • TypeScript definitions                              │    │
-│  │  • CSS extraction (for performance)                    │    │
-│  │  • Component documentation (Storybook/Docsite)         │    │
-│  └────────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------+
+|                    Design Token Layer                            |
+|  +------------+------------+------------+------------+         |
+|  |   Colors   | Typography |  Spacing   |  Shadows   |         |
+|  |  Palette   |   Scale    |   Scale    |   Depths   |         |
+|  +------------+------------+------------+------------+         |
+|                          v                                       |
+|              Theme Provider (Context API)                        |
+|         • Light/Dark Mode  • Regional Variants                  |
+|         • Platform Tokens (Web, TV, Mobile)                     |
++-----------------------------------------------------------------+
+                          v
++-----------------------------------------------------------------+
+|                   Component Library                              |
+|  +----------------------------------------------------------+  |
+|  |         Primitive Components (Atoms)                      |  |
+|  |  Button  Input  Text  Icon  Badge  Spinner  Tooltip      |  |
+|  +----------------------------------------------------------+  |
+|                          v                                       |
+|  +----------------------------------------------------------+  |
+|  |      Composite Components (Molecules)                     |  |
+|  |  Card  Modal  Dropdown  Tabs  Navigation  Form           |  |
+|  +----------------------------------------------------------+  |
+|                          v                                       |
+|  +----------------------------------------------------------+  |
+|  |       Pattern Components (Organisms)                      |  |
+|  |  VideoPlayer  ContentRow  Billboard  SearchBar  Header   |  |
+|  +----------------------------------------------------------+  |
++-----------------------------------------------------------------+
+                          v
++-----------------------------------------------------------------+
+|                   Platform Adapters                              |
+|  +----------+----------+----------+----------+                 |
+|  |   Web    |    TV    |  Mobile  |  React   |                 |
+|  |  (DOM)   |  (React  |   Web    |  Native  |                 |
+|  |          |   TV)    |          |          |                 |
+|  +----------+----------+----------+----------+                 |
++-----------------------------------------------------------------+
+                          v
++-----------------------------------------------------------------+
+|              Build & Distribution Layer                          |
+|  +--------------------------------------------------------+    |
+|  |  • Tree-shakeable ESM modules                          |    |
+|  |  • CommonJS for legacy support                         |    |
+|  |  • TypeScript definitions                              |    |
+|  |  • CSS extraction (for performance)                    |    |
+|  |  • Component documentation (Storybook/Docsite)         |    |
+|  +--------------------------------------------------------+    |
++-----------------------------------------------------------------+
 ```
 
 **Key Talking Points:**
 - **Token-First Design:** All visual properties derive from tokens, making global changes easy
-- **Atomic Design Principles:** Components are organized by complexity (atoms → molecules → organisms)
+- **Atomic Design Principles:** Components are organized by complexity (atoms -> molecules -> organisms)
 - **Platform Agnostic Core:** Adapters handle platform-specific rendering (DOM, React TV, etc.)
 - **Performance Optimized:** Tree-shaking eliminates unused code, CSS extraction reduces bundle size
 
@@ -457,7 +457,7 @@ export const ContentRow = ({
         <h2 className="nf-content-row__title">{title}</h2>
         {onSeeAll && (
           <Button variant="link" onClick={onSeeAll}>
-            See All →
+            See All ->
           </Button>
         )}
       </div>
@@ -1447,7 +1447,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
 | Aspect | Implementation | Benefits |
 |--------|---------------|----------|
 | **Design Tokens** | Single source of truth for all design decisions | Easy theme changes, consistency |
-| **Atomic Design** | Components organized by complexity (atoms → organisms) | Reusability, maintainability |
+| **Atomic Design** | Components organized by complexity (atoms -> organisms) | Reusability, maintainability |
 | **Theme Provider** | Context API for global theme access | No prop drilling, better DX |
 | **Performance** | Tree-shaking, code-splitting, CSS extraction | Smaller bundles, faster loads |
 | **Accessibility** | WCAG 2.1 AA compliance by default | Inclusive, legally compliant |

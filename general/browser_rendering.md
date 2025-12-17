@@ -42,17 +42,17 @@ Here's the **full detailed flow** of how a browser renders a webpage, from recei
 
 ---
 
-### 3. **HTML Parsing → DOM Tree**
+### 3. **HTML Parsing -> DOM Tree**
 
 * HTML is parsed **token by token** by the  **HTML parser** .
 * Browser builds the  **DOM tree** :
-  * `<html> → <head> + <body> → nested elements`
+  * `<html> -> <head> + <body> -> nested elements`
   * Each tag becomes a  **node** .
 * **Render-blocking factor:** HTML parsing **does NOT block rendering by itself** unless a render-blocking resource is encountered (CSS or JS).
 
 ---
 
-### 4. **CSS Parsing → CSSOM Tree** ⚠️ RENDER-BLOCKING
+### 4. **CSS Parsing -> CSSOM Tree** ⚠️ RENDER-BLOCKING
 
 * `<link rel="stylesheet">` or `<style>` tags trigger **CSS download** and parsing.
 * Builds a **CSSOM** (CSS Object Model) representing styles.
@@ -110,7 +110,7 @@ Default behavior (no attributes):
 Flow:
 1. Download starts **in parallel** with HTML parsing
 2. HTML parsing **continues uninterrupted**
-3. After HTML parsing complete → Script executes
+3. After HTML parsing complete -> Script executes
 4. Does NOT block rendering
 
 **With `async` attribute - Does NOT block HTML parsing:**
@@ -122,7 +122,7 @@ Flow:
 Flow:
 1. Download starts **in parallel**
 2. HTML parsing **continues**
-3. When download completes → Script executes immediately
+3. When download completes -> Script executes immediately
 4. May interrupt rendering if not yet complete
 
 **Comparison:**
@@ -139,7 +139,7 @@ Flow:
 
 ---
 
-### 6. **DOM + CSSOM → Render Tree**
+### 6. **DOM + CSSOM -> Render Tree**
 
 * Combines structure (DOM) + styles (CSSOM) into  **render tree** :
   * Excludes invisible elements (`display: none`)
@@ -216,77 +216,77 @@ Here's a diagram capturing the above flow:
 ## 🧭 Browser Rendering Timeline (Text Diagram)
 
 ```plaintext
-Time → →
+Time -> ->
 
-1. ┌──────────────────────────┐
-   │ Browser sends HTTP GET   │
-   └──────────────────────────┘
+1. +--------------------------+
+   | Browser sends HTTP GET   |
+   +--------------------------+
 
-2. ┌──────────────────────────┐
-   │ Starts receiving HTML     │
-   └──────────────────────────┘
-            ↓
-3. ┌──────────────────────────┐
-   │ HTML Parsing Starts       │
-   └──────────────────────────┘
-            ↓
-4. ┌──────────────┐     ┌────────────────────┐
-   │ <link> tag   │ --> │ CSS fetch & parse  │
-   └──────────────┘     └────────────────────┘
-            ↓
-5. ┌──────────────┐     ┌────────────────────────────┐
-   │ <script> tag │ --> │ Depends on attributes:     │
-   └──────────────┘     │                            │
-                        │ • No attr:                 │
-                        │   - Block HTML parsing     │
-                        │   - Fetch JS               │
-                        │   - Execute immediately    │
-                        │                            │
-                        │ • defer:                   │
-                        │   - Fetch in parallel      │
-                        │   - Wait until DOM ready   │
-                        │   - Execute *in order*     │
-                        │                            │
-                        │ • async:                   │
-                        │   - Fetch in parallel      │
-                        │   - Execute *as soon* as   │
-                        │     downloaded             │
-                        │   - Does NOT wait for DOM  │
-                        │   - Executes out-of-order  │
-                        └────────────────────────────┘
-            ↓
-6. ┌──────────────────────────────┐
-   │ HTML Parsing Finishes        │
-   │ DOM Tree is complete         │
-   └──────────────────────────────┘
-            ↓
-7. ┌──────────────────────────────┐
-   │ CSSOM Construction Complete  │
-   └──────────────────────────────┘
-            ↓
-8. ┌──────────────────────────────┐
-   │ Render Tree Built (DOM + CSS)│
-   └──────────────────────────────┘
-            ↓
-9. ┌──────────────────────────────┐
-   │ Layout (Reflow)              │
-   └──────────────────────────────┘
-            ↓
-10.┌──────────────────────────────┐
-   │ Paint                        │
-   └──────────────────────────────┘
-            ↓
-11.┌──────────────────────────────┐
-   │ Compositing (layers, GPU)    │
-   └──────────────────────────────┘
-            ↓
-12.┌──────────────────────────────┐
-   │ First Pixels Displayed       │
-   └──────────────────────────────┘
+2. +--------------------------+
+   | Starts receiving HTML     |
+   +--------------------------+
+            v
+3. +--------------------------+
+   | HTML Parsing Starts       |
+   +--------------------------+
+            v
+4. +--------------+     +--------------------+
+   | <link> tag   | --> | CSS fetch & parse  |
+   +--------------+     +--------------------+
+            v
+5. +--------------+     +----------------------------+
+   | <script> tag | --> | Depends on attributes:     |
+   +--------------+     |                            |
+                        | • No attr:                 |
+                        |   - Block HTML parsing     |
+                        |   - Fetch JS               |
+                        |   - Execute immediately    |
+                        |                            |
+                        | • defer:                   |
+                        |   - Fetch in parallel      |
+                        |   - Wait until DOM ready   |
+                        |   - Execute *in order*     |
+                        |                            |
+                        | • async:                   |
+                        |   - Fetch in parallel      |
+                        |   - Execute *as soon* as   |
+                        |     downloaded             |
+                        |   - Does NOT wait for DOM  |
+                        |   - Executes out-of-order  |
+                        +----------------------------+
+            v
+6. +------------------------------+
+   | HTML Parsing Finishes        |
+   | DOM Tree is complete         |
+   +------------------------------+
+            v
+7. +------------------------------+
+   | CSSOM Construction Complete  |
+   +------------------------------+
+            v
+8. +------------------------------+
+   | Render Tree Built (DOM + CSS)|
+   +------------------------------+
+            v
+9. +------------------------------+
+   | Layout (Reflow)              |
+   +------------------------------+
+            v
+10.+------------------------------+
+   | Paint                        |
+   +------------------------------+
+            v
+11.+------------------------------+
+   | Compositing (layers, GPU)    |
+   +------------------------------+
+            v
+12.+------------------------------+
+   | First Pixels Displayed       |
+   +------------------------------+
 
-──────────── EVENTS & TIMING ─────────────
-- Scripts with no attr **block parsing** → also block rendering.
-- CSS blocks rendering → Creates FOUC risk if not handled.
+------------ EVENTS & TIMING -------------
+- Scripts with no attr **block parsing** -> also block rendering.
+- CSS blocks rendering -> Creates FOUC risk if not handled.
 - `defer` scripts run **after DOM complete**, before `DOMContentLoaded`.
 - `async` scripts can interrupt rendering, run **as soon as ready**.
 - `DOMContentLoaded` fires **after DOM is ready**, **before** `load`.
@@ -395,7 +395,7 @@ Time → →
 
     <div class="demo-section">
         <h3>🧪 Test Different Loading Strategies</h3>
-        <p>Open DevTools → Network tab → Check "Disable cache" → Reload</p>
+        <p>Open DevTools -> Network tab -> Check "Disable cache" -> Reload</p>
         <p>Watch how different resources affect First Contentful Paint!</p>
     </div>
 </body>

@@ -16,23 +16,23 @@ description: Master JavaScript's 'this' keyword - understand all binding rules, 
 ### The Core Concept
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    THE 'this' KEYWORD                        │
-│                                                              │
-│  Regular Function:                                           │
-│  ┌───────────────────────────────────────────────────┐      │
-│  │  'this' = WHO CALLED ME?                          │      │
-│  │                                                   │      │
-│  │  Different caller → Different 'this' ✓            │      │
-│  └───────────────────────────────────────────────────┘      │
-│                                                              │
-│  Arrow Function:                                             │
-│  ┌───────────────────────────────────────────────────┐      │
-│  │  'this' = INHERITED FROM PARENT SCOPE             │      │
-│  │                                                   │      │
-│  │  Same 'this' regardless of caller ✓               │      │
-│  └───────────────────────────────────────────────────┘      │
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+|                    THE 'this' KEYWORD                        |
+|                                                              |
+|  Regular Function:                                           |
+|  +---------------------------------------------------+      |
+|  |  'this' = WHO CALLED ME?                          |      |
+|  |                                                   |      |
+|  |  Different caller -> Different 'this' ✓            |      |
+|  +---------------------------------------------------+      |
+|                                                              |
+|  Arrow Function:                                             |
+|  +---------------------------------------------------+      |
+|  |  'this' = INHERITED FROM PARENT SCOPE             |      |
+|  |                                                   |      |
+|  |  Same 'this' regardless of caller ✓               |      |
+|  +---------------------------------------------------+      |
++-------------------------------------------------------------+
 ```
 
 ### Real-World Analogy: The Pronoun "You" 👤
@@ -41,10 +41,10 @@ Think of `this` like the pronoun **"you"** in English:
 
 ```
 Scenario 1: Teacher to Student
-"You need to study harder."  → 'You' refers to the student
+"You need to study harder."  -> 'You' refers to the student
 
 Scenario 2: Student to Teacher  
-"You explained it well."     → 'You' refers to the teacher
+"You explained it well."     -> 'You' refers to the teacher
 
 The word "you" doesn't change, but WHO it refers to 
 depends on the CONTEXT of the conversation!
@@ -63,10 +63,10 @@ const user = {
   }
 };
 
-user.greet();  // "Hello, I'm Alice" → 'this' refers to 'user'
+user.greet();  // "Hello, I'm Alice" -> 'this' refers to 'user'
 
 const greetFunc = user.greet;
-greetFunc();   // "Hello, I'm undefined" → 'this' is now window/undefined!
+greetFunc();   // "Hello, I'm undefined" -> 'this' is now window/undefined!
 
 // Same function, different 'this'!
 ```
@@ -89,15 +89,15 @@ greetFunc();   // "Hello, I'm undefined" → 'this' is now window/undefined!
 ### Why `this` is Confusing
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│               THE 'this' CONFUSION                            │
-├──────────────────────────────────────────────────────────────┤
-│  ⚠️  Dynamic Binding    → Value changes at runtime           │
-│  ⚠️  Multiple Rules     → 4 different binding rules          │
-│  ⚠️  Implicit Behavior  → Easy to lose binding accidentally  │
-│  ⚠️  Arrow Functions    → Different behavior entirely        │
-│  ⚠️  Strict Mode        → Changes default binding            │
-└──────────────────────────────────────────────────────────────┘
++--------------------------------------------------------------+
+|               THE 'this' CONFUSION                            |
++--------------------------------------------------------------+
+|  ⚠️  Dynamic Binding    -> Value changes at runtime           |
+|  ⚠️  Multiple Rules     -> 4 different binding rules          |
+|  ⚠️  Implicit Behavior  -> Easy to lose binding accidentally  |
+|  ⚠️  Arrow Functions    -> Different behavior entirely        |
+|  ⚠️  Strict Mode        -> Changes default binding            |
++--------------------------------------------------------------+
 ```
 
 **Common Pain Points:**
@@ -122,7 +122,7 @@ function User(name, age) {
 }
 
 const user1 = new User('Alice', 25);
-console.log(user1.name);  // "Alice" → 'this' was the new object
+console.log(user1.name);  // "Alice" -> 'this' was the new object
 ```
 
 ### Rule 2: Explicit Binding (call, apply, bind)
@@ -134,11 +134,11 @@ function greet(greeting) {
   console.log(`${greeting}, ${this.name}`);
 }
 
-greet.call(person, 'Hello');   // "Hello, Bob" → 'this' = person
-greet.apply(person, ['Hi']);   // "Hi, Bob"    → 'this' = person
+greet.call(person, 'Hello');   // "Hello, Bob" -> 'this' = person
+greet.apply(person, ['Hi']);   // "Hi, Bob"    -> 'this' = person
 
 const boundGreet = greet.bind(person);
-boundGreet('Hey');             // "Hey, Bob"   → 'this' locked to person
+boundGreet('Hey');             // "Hey, Bob"   -> 'this' locked to person
 ```
 
 ### Rule 3: Implicit Binding (Method Call)
@@ -151,7 +151,7 @@ const user = {
   }
 };
 
-user.greet();  // "Hello, Charlie" → 'this' = user (left of the dot)
+user.greet();  // "Hello, Charlie" -> 'this' = user (left of the dot)
 ```
 
 ### Rule 4: Default Binding (Lowest Priority)
@@ -189,28 +189,28 @@ calculator.add(5).multiply(2);
 
 ```
 Step 1: calculator.add(5)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Call site: calculator.add(5)
   Rule applied: Implicit Binding (Rule 3)
   'this' = calculator (object before the dot)
   
   Inside add():
     this.value += 5
-    → calculator.value = 0 + 5 = 5
+    -> calculator.value = 0 + 5 = 5
   Returns: this (calculator object)
 
 Step 2: .multiply(2)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Call site: (result from step 1).multiply(2)
   Since step 1 returned calculator:
-    → calculator.multiply(2)
+    -> calculator.multiply(2)
   
   Rule applied: Implicit Binding (Rule 3)
   'this' = calculator
   
   Inside multiply():
     this.value *= 2
-    → calculator.value = 5 * 2 = 10
+    -> calculator.value = 5 * 2 = 10
   Returns: this (calculator object)
 
 Final Result: calculator.value = 10
@@ -242,13 +242,13 @@ greetFunc();   // "Hi, undefined" (or error in strict mode)
 **What's happening:**
 ```
 user.greet();
-└─> 'this' = user (implicit binding)
++-> 'this' = user (implicit binding)
 
 const greetFunc = user.greet;
-└─> Just copying the function, not the context!
++-> Just copying the function, not the context!
 
 greetFunc();
-└─> No object before the dot → default binding → 'this' = window/undefined
++-> No object before the dot -> default binding -> 'this' = window/undefined
 ```
 
 **The fix:** Use `bind`, arrow functions, or preserve context:
@@ -296,9 +296,9 @@ team.printMembersArrow();
 
 **Why this works:**
 ```
-printMembersArrow: function() {         ← 'this' = team
-    this.members.forEach((member) => {  ← Arrow function: inherits 'this'
-      console.log(this.name);           ← Still 'team'!
+printMembersArrow: function() {         <-- 'this' = team
+    this.members.forEach((member) => {  <-- Arrow function: inherits 'this'
+      console.log(this.name);           <-- Still 'team'!
     });
 }
 ```
@@ -821,8 +821,8 @@ console.log(calculator.value);
 
 **Explanation:** 
 1. `calc` and `calculator` reference the same object
-2. `calc.add(10)` → implicit binding, `this` = calculator, value becomes 10, returns `this`
-3. `.multiply(2)` → called on returned object (calculator), `this` = calculator, value becomes 20
+2. `calc.add(10)` -> implicit binding, `this` = calculator, value becomes 10, returns `this`
+3. `.multiply(2)` -> called on returned object (calculator), `this` = calculator, value becomes 20
 4. Since `calc` and `calculator` are the same object, `calculator.value` is 20
 
 This is **method chaining** pattern. Each method returns `this` to allow chaining.
@@ -1119,9 +1119,9 @@ greetWrapper();  // "Hello, Dave" ✓
 3. **Arrow functions don't have their own `this`** - they inherit it lexically from the enclosing scope. Never use them for object methods!
 
 4. **Common pitfalls:**
-   - Passing methods as callbacks loses `this` → use bind or arrow wrappers
-   - Arrow functions in object literals don't work → use regular functions
-   - Nested functions lose outer `this` → use arrows for inner functions
+   - Passing methods as callbacks loses `this` -> use bind or arrow wrappers
+   - Arrow functions in object literals don't work -> use regular functions
+   - Nested functions lose outer `this` -> use arrows for inner functions
 
 5. **Best practices:**
    - Bind methods in constructor for class components

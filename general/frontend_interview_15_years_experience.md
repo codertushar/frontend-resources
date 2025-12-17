@@ -21,18 +21,18 @@ At this level, you're not interviewing for an individual contributor role—you'
 
 ```
 Junior (0-3 years)          Mid (4-7 years)           Senior (8-12 years)       Staff+ (15+ years)
-─────────────────           ───────────────           ──────────────────        ──────────────────
-│                           │                         │                         │
-│ • Can you code?           │ • How well do you       │ • Can you design        │ • Can you architect
-│ • Do you know JS?         │   solve problems?       │   systems?              │   at scale?
-│ • Can you debug?          │ • Can you mentor?       │ • Do you lead teams?    │ • Do you set technical
-│                           │ • Framework mastery?    │ • Architecture skills?  │   direction?
-│                           │                         │                         │ • Can you drive org-
-└─────────────────          └───────────────          └──────────────────       │   wide initiatives?
-                                                                                 │ • Do you influence
-  Focus: Execution            Focus: Ownership          Focus: Leadership       │   product strategy?
-  Scope: Features             Scope: Products           Scope: Systems          │
-                                                                                 └──────────────────
+-----------------           ---------------           ------------------        ------------------
+|                           |                         |                         |
+| • Can you code?           | • How well do you       | • Can you design        | • Can you architect
+| • Do you know JS?         |   solve problems?       |   systems?              |   at scale?
+| • Can you debug?          | • Can you mentor?       | • Do you lead teams?    | • Do you set technical
+|                           | • Framework mastery?    | • Architecture skills?  |   direction?
+|                           |                         |                         | • Can you drive org-
++-----------------          +---------------          +------------------       |   wide initiatives?
+                                                                                 | • Do you influence
+  Focus: Execution            Focus: Ownership          Focus: Leadership       |   product strategy?
+  Scope: Features             Scope: Products           Scope: Systems          |
+                                                                                 +------------------
                                                                                    Focus: Strategy
                                                                                    Scope: Organization
 ```
@@ -75,42 +75,42 @@ At 15 years, interviewers assume you can code. They're assessing whether you can
 
 ```
 Round 1: System Design (60-90 min)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Topics: Design Twitter, Netflix, Google Docs, E-commerce
   Evaluating: Architecture, trade-offs, scalability
   Depth: Detailed implementation, capacity planning
   Red flags: Jumping to solutions, ignoring constraints
 
 Round 2: Deep-Dive Technical (45-60 min)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Topics: Past projects, architecture decisions
   Evaluating: Technical depth, decision-making process
   Depth: Why specific choices? What would you change?
   Red flags: Surface-level answers, no trade-off analysis
 
 Round 3: Coding/Algorithms (45-60 min)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Topics: Medium/Hard LeetCode, frontend-specific problems
   Evaluating: Can still code, clean implementation
   Depth: Optimal solutions, edge cases, time complexity
   Red flags: Can't code, rusty fundamentals
 
 Round 4: Leadership & Behavioral (45-60 min)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Topics: Conflict resolution, mentoring, project failures
   Evaluating: Team impact, communication, influence
   Depth: STAR format, measurable outcomes
   Red flags: No leadership examples, blame others
 
 Round 5: Domain Expertise (45-60 min)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Topics: Performance, accessibility, security, tooling
   Evaluating: Specialized knowledge in your strength area
   Depth: Industry best practices, cutting-edge solutions
   Red flags: Outdated knowledge, no depth
 
 Round 6: Bar Raiser / Hiring Manager (30-45 min)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   Topics: Culture fit, values alignment, career goals
   Evaluating: Long-term fit, motivation, collaboration
   Depth: Why this company? What drives you?
@@ -161,15 +161,15 @@ Round 6: Bar Raiser / Hiring Manager (30-45 min)
 
 ```
 Situation:  Context (team size, timeline, business impact)
-            ↓
+            v
 Task:       Your specific role and responsibility
-            ↓
+            v
 Action:     Technical decisions, architecture choices, code samples
-            ↓
+            v
 Result:     Measurable impact (metrics, scale, performance)
-            ↓
+            v
 Reflection: What you learned, what you'd change
-            ↓
+            v
 Trade-offs: Why you chose X over Y, constraints considered
 ```
 
@@ -221,14 +221,14 @@ const findComponentPath = (root, targetId) => {
 
 ```
 Week 1-2: Foundations
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   □ Read "Designing Data-Intensive Applications" (Kleppmann)
   □ Study CAP theorem, consistency models, partitioning
   □ Learn capacity estimation (QPS, bandwidth, storage formulas)
   □ Practice drawing architecture diagrams on whiteboards
 
 Week 3-4: Frontend System Design
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   □ Design 5 major systems (Twitter, Netflix, Google Docs, etc.)
   □ Focus on CDN strategies, caching, real-time sync
   □ Study BFF pattern, micro-frontends, module federation
@@ -239,28 +239,28 @@ Week 3-4: Frontend System Design
 
 ```
 Week 1: Performance Optimization
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   □ Core Web Vitals (LCP, FID, CLS) optimization strategies
   □ Code splitting, lazy loading, tree shaking
   □ Bundle analysis, critical CSS, font optimization
   □ React performance (memo, useMemo, useCallback, Profiler)
 
 Week 2: Architecture Patterns
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   □ Micro-frontends (pros/cons, implementation strategies)
   □ Monorepo strategies (Nx, Turborepo, Lerna)
   □ State management at scale (Redux, Zustand, Jotai)
   □ Design systems and component libraries
 
 Week 3: Advanced Topics
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   □ Web Workers, Service Workers, PWA strategies
   □ Server-Side Rendering (Next.js, Remix patterns)
   □ Edge computing, edge functions
   □ WebAssembly use cases in production
 
 Week 4: Security & Accessibility
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   □ XSS, CSRF, CSP, CORS deep dive
   □ OAuth 2.0, JWT, session management
   □ WCAG 2.1 AA compliance, ARIA patterns
@@ -271,14 +271,14 @@ Week 4: Security & Accessibility
 
 ```
 Week 1-2: Algorithm Refresher
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   □ Solve 50 Medium LeetCode (focus on sliding window, DFS/BFS)
   □ Practice on whiteboard or paper (no IDE autocomplete)
   □ Time yourself: 30 min per Medium, 45 min per Hard
   □ Review: Arrays, Strings, Trees, Graphs, Hash Maps, Heaps
 
 Week 3: Behavioral Stories (STAR Format)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   □ Write 10 STAR stories covering:
     - Technical leadership (led architecture decision)
     - Conflict resolution (disagreement with PM/EM)
@@ -288,7 +288,7 @@ Week 3: Behavioral Stories (STAR Format)
     - Innovation (introduced new technology/process)
 
 Week 4: Mock Interviews & Polish
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   □ 3 mock system design interviews (Interviewing.io, Pramp)
   □ 2 mock coding interviews
   □ 1 mock behavioral interview
@@ -311,39 +311,39 @@ Week 4: Mock Interviews & Polish
 
 ```
 Clarifying Questions (2 min):
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 1. Scale: 200M+ users, 1M concurrent, personalized for each user
 2. Latency: <500ms p99, international users
 3. Data: 10K movies, 50K shows, personalized recommendations
 4. Features: Personalization, previews, A/B testing, SEO
 
 High-Level Architecture (5 min):
-─────────────────────────────────────────────────────────
-┌─────────────────────────────────────────────────────────┐
-│                    Edge / CDN Layer                      │
-│  • CloudFlare/Fastly for static assets (JS, CSS, images)│
-│  • Edge caching for anonymous users (cache-control: 1h) │
-│  • Regional POPs reduce latency (CDN in 50+ countries)  │
-└───────────────────────┬─────────────────────────────────┘
-                        │
-         ┌──────────────┴──────────────┐
-         │    API Gateway / BFF         │
-         │  • Personalization API       │
-         │  • A/B test assignment       │
-         │  • Auth/session validation   │
-         └──────────────┬───────────────┘
-                        │
-         ┌──────────────┴──────────────────┐
-         │                                  │
-    ┌────▼─────┐                    ┌──────▼────┐
-    │ Metadata │                    │ Recommend │
-    │  Service │                    │  Service  │
-    │ (titles, │                    │ (ML-based │
-    │  images) │                    │  ranking) │
-    └──────────┘                    └───────────┘
+---------------------------------------------------------
++---------------------------------------------------------+
+|                    Edge / CDN Layer                      |
+|  • CloudFlare/Fastly for static assets (JS, CSS, images)|
+|  • Edge caching for anonymous users (cache-control: 1h) |
+|  • Regional POPs reduce latency (CDN in 50+ countries)  |
++-----------------------+---------------------------------+
+                        |
+         +--------------+--------------+
+         |    API Gateway / BFF         |
+         |  • Personalization API       |
+         |  • A/B test assignment       |
+         |  • Auth/session validation   |
+         +--------------+---------------+
+                        |
+         +--------------+------------------+
+         |                                  |
+    +----▼-----+                    +------▼----+
+    | Metadata |                    | Recommend |
+    |  Service |                    |  Service  |
+    | (titles, |                    | (ML-based |
+    |  images) |                    |  ranking) |
+    +----------+                    +-----------+
 
 Deep Dive: Personalization Strategy (10 min):
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 • Server-Side Rendering (SSR) for initial page load
   - Pre-render with user's personalized row (from cache)
   - Hydrate on client with React
@@ -357,27 +357,27 @@ Deep Dive: Personalization Strategy (10 min):
 • Progressive Enhancement:
   - Initial render: Top 3 rows (above fold)
   - Lazy load: Remaining rows on scroll (Intersection Observer)
-  - Prefetch: Hover intent → prefetch detail page
+  - Prefetch: Hover intent -> prefetch detail page
 
 Trade-offs Discussed (5 min):
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 • SSR vs CSR: Chose SSR for SEO, slower TTFB acceptable
 • Microservices vs Monolith: BFF layer aggregates microservices
 • Real-time vs Batch: User preferences updated async (eventual consistency OK)
 • A/B Testing: Server-side assignment (consistent across devices)
 
 Capacity Estimation (3 min):
-─────────────────────────────────────────────────────────
-• 200M users, 50% active monthly, 20% daily → 40M DAU
-• Average session: 30 min, 3 sessions/day → 120M requests/day
+---------------------------------------------------------
+• 200M users, 50% active monthly, 20% daily -> 40M DAU
+• Average session: 30 min, 3 sessions/day -> 120M requests/day
 • QPS: 120M / 86400 = 1400 QPS (peak 5x = 7000 QPS)
 • Bandwidth: 1MB payload × 7000 QPS = 7 GB/s
 • Storage: 10K movies × 10MB metadata = 100GB (negligible)
 
 Failure Modes & Monitoring (2 min):
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 • Circuit breaker on recommendation service (fallback to popular titles)
-• Health checks, canary deployments (5% traffic → 100%)
+• Health checks, canary deployments (5% traffic -> 100%)
 • Alerts: p99 latency >500ms, error rate >0.1%
 • Distributed tracing (OpenTelemetry) for waterfall debugging
 ```
@@ -404,14 +404,14 @@ Failure Modes & Monitoring (2 min):
 
 ```
 Situation:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 "At [Company], we were building a redesigned checkout flow. The PM 
 wanted to add a 'Save for Later' feature that would allow users to 
 bookmark items and resume checkout on any device. Timeline: 6 weeks, 
 team size: 5 engineers, 2 designers, 1 PM."
 
 Task:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 "As the tech lead, I was responsible for the architecture and ensuring 
 we shipped on time. I believed this feature would:
   1. Delay the core checkout improvement by 3 weeks
@@ -419,7 +419,7 @@ we shipped on time. I believed this feature would:
   3. Overlap with existing 'Cart' functionality (user confusion)"
 
 Action:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 "Instead of saying no, I proposed a data-driven approach:
 
 1. **Gathered Evidence:**
@@ -443,15 +443,15 @@ Action:
    - Scheduled 'Save for Later' for next quarter"
 
 Result:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 "✅ Shipped on time (6 weeks)
- ✅ Conversion rate improved 12% (baseline: 65% → 73%)
+ ✅ Conversion rate improved 12% (baseline: 65% -> 73%)
  ✅ Cart abandonment dropped to 3% (below threshold)
  ✅ 'Save for Later' was deprioritized—data showed it wasn't needed
  ✅ PM and I maintained strong relationship, collaborated on next project"
 
 Reflection:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 "I learned that disagreements aren't about being right—they're about 
 aligning on goals. By reframing the discussion around data and user 
 outcomes, we found a solution that satisfied both engineering and product 
@@ -459,7 +459,7 @@ constraints. If I could redo it, I would have involved the PM earlier in
 the technical spike to build shared understanding."
 
 Trade-offs:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 "We could have built 'Save for Later' immediately, but it would have:
   - Delayed the proven improvement (checkout friction reduction)
   - Introduced complexity without validating user need
@@ -496,14 +496,14 @@ The phased approach let us validate assumptions and optimize for impact."
 
 ```
 Staff Engineer                    Principal Engineer
-──────────────────                ─────────────────────────
-┌──────────────┐                  ┌────────────────────────────┐
-│   Product A  │                  │    Entire Frontend Org      │
-│  ┌────────┐  │                  │  ┌──────┬──────┬──────┐    │
-│  │ System │  │                  │  │Prod A│Prod B│Prod C│    │
-│  └────────┘  │                  │  └──────┴──────┴──────┘    │
-│    5 teams   │                  │         20 teams            │
-└──────────────┘                  └────────────────────────────┘
+------------------                -------------------------
++--------------+                  +----------------------------+
+|   Product A  |                  |    Entire Frontend Org      |
+|  +--------+  |                  |  +------+------+------+    |
+|  | System |  |                  |  |Prod A|Prod B|Prod C|    |
+|  +--------+  |                  |  +------+------+------+    |
+|    5 teams   |                  |         20 teams            |
++--------------+                  +----------------------------+
 
 Focus: Deep technical                Focus: Broad influence
        expertise in domain                   across organization
@@ -681,33 +681,33 @@ invalidateByTag('user:123'); // Invalidates profile + orders
 Onboarding Plan (4-week program):
 
 Week 1: Foundation
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 □ Day 1: Welcome doc, architecture overview (1-hour presentation)
 □ Day 2-3: Set up local environment (pair with buddy)
 □ Day 4-5: First bug fix (pre-selected "good first issue")
 □ Outcome: Deployed first PR to production
 
 Week 2: Depth
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 □ Code walkthrough sessions (2 hours/day with senior engineers)
 □ Read Architecture Decision Records (ADRs)
 □ Shadow on-call engineer (observe incident response)
 □ Small feature: Self-contained, non-critical path
 
 Week 3: Ownership
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 □ Assigned medium-sized feature (with mentor support)
 □ Participate in design review (observe first, present next)
 □ Pair programming sessions with team members
 
 Week 4: Autonomy
-─────────────────────────────────────────────────────────
-□ Own a feature end-to-end (design → code → deploy)
+---------------------------------------------------------
+□ Own a feature end-to-end (design -> code -> deploy)
 □ Present in team demo (build confidence)
 □ Retrospective: What went well, what to improve
 
 Ongoing:
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
 □ Assign "buddy" for first 3 months
 □ Bi-weekly 1:1s to check progress
 □ Document tribal knowledge (turn questions into wiki pages)
@@ -765,16 +765,16 @@ At Staff level, you're expected to **balance complexity with business needs**. O
 ```
 "I led a performance initiative that reduced Time to Interactive from 
 4.2s to 1.8s (57% improvement), increasing mobile conversion rate by 
-9% (baseline: 58% → 67%). 
+9% (baseline: 58% -> 67%). 
 
 Changes:
-  - Code splitting with React.lazy (bundle size: 2MB → 800KB)
+  - Code splitting with React.lazy (bundle size: 2MB -> 800KB)
   - Image optimization with next/image (lazy load + WebP)
-  - Removed unused dependencies (lodash → lodash-es)
+  - Removed unused dependencies (lodash -> lodash-es)
 
 Impact: 
   - $2.4M additional annual revenue (9% conversion lift)
-  - Lighthouse score: 65 → 92
+  - Lighthouse score: 65 -> 92
   - Reduced support tickets by 15% (faster load = fewer complaints)"
 ```
 

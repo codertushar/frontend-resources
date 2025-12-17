@@ -126,7 +126,7 @@ boundGreet('!');  // ?
 
 ```
 Step 1: greet.myBind(person, 'Hello') is called
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   this = greet (the function)
   context = { name: 'Alice' }
   boundArgs = ['Hello']
@@ -135,7 +135,7 @@ Step 1: greet.myBind(person, 'Hello') is called
   Returns: new function(...args) { ... }
 
 Step 2: boundGreet('!') is called
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   args = ['!']
   Combined args: [...boundArgs, ...args] = ['Hello', '!']
 
@@ -179,17 +179,17 @@ addTwo(3, 4);
 
 ```
 myBind(context, boundArg1, boundArg2)
-                    ↓          ↓
+                    v          v
               [boundArg1, boundArg2]
-                        ↓
+                        v
 boundFunction(callArg1, callArg2)
-                  ↓         ↓
+                  v         v
                 [callArg1, callArg2]
-                        ↓
+                        v
               [...boundArgs, ...args]
-                        ↓
+                        v
         [boundArg1, boundArg2, callArg1, callArg2]
-                        ↓
+                        v
        originalFunction.apply(context, combinedArgs)
 ```
 
@@ -268,7 +268,7 @@ const p = new BoundPerson(25);
 
 ```
 Step 1: Person.myBind({ ignored: true }, 'Alice')
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   originalFunction = Person
   context = { ignored: true }
   boundArgs = ['Alice']
@@ -279,12 +279,12 @@ Step 1: Person.myBind({ ignored: true }, 'Alice')
   Returns: boundFunction
 
 Step 2: new BoundPerson(25)
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   JavaScript creates new object: newObj = {}
   Sets: newObj.__proto__ = boundFunction.prototype
 
   Calls boundFunction with this = newObj:
-    isNewCall = newObj instanceof boundFunction → true
+    isNewCall = newObj instanceof boundFunction -> true
     args = [25]
     combinedArgs = ['Alice', 25]
 
@@ -298,10 +298,10 @@ Step 2: new BoundPerson(25)
     newObj is now { name: 'Alice', age: 25 }
 
 Step 3: Result
-─────────────────────────────────────────────────────────
+---------------------------------------------------------
   p = { name: 'Alice', age: 25 }
-  p instanceof Person → true (prototype chain preserved)
-  p instanceof BoundPerson → true
+  p instanceof Person -> true (prototype chain preserved)
+  p instanceof BoundPerson -> true
 ```
 
 ---
@@ -335,9 +335,9 @@ bound(2);                // 13
 ### Memory Aid
 
 ```
-call   → Comma separated, Calls immediately
-apply  → Array of arguments, Applies immediately
-bind   → Binds context, returns Bound function
+call   -> Comma separated, Calls immediately
+apply  -> Array of arguments, Applies immediately
+bind   -> Binds context, returns Bound function
 ```
 
 ---

@@ -45,13 +45,13 @@ The CRP directly impacts **First Contentful Paint (FCP)** and **Largest Contentf
 
 ```
 Without Optimization:
-[CSS Download] → [Parse CSS] → [Render] = Delayed FCP
+[CSS Download] -> [Parse CSS] -> [Render] = Delayed FCP
 
 With defer/async JS:
-[JS Download] → [HTML Parse] → [CSS] → [Render] = Early FCP + JS runs later
+[JS Download] -> [HTML Parse] -> [CSS] -> [Render] = Early FCP + JS runs later
 
 With Critical CSS:
-[Critical CSS inline] → [Render quickly] + [Non-critical async] = Optimized FCP
+[Critical CSS inline] -> [Render quickly] + [Non-critical async] = Optimized FCP
 ```
 
 ---
@@ -61,7 +61,7 @@ With Critical CSS:
 ### Stage 1: **Network & Resource Loading**
 
 ```
-Browser → DNS Lookup → TCP Handshake → HTTP Request → Server Response
+Browser -> DNS Lookup -> TCP Handshake -> HTTP Request -> Server Response
 ```
 
 **Key Points:**
@@ -84,10 +84,10 @@ Browser → DNS Lookup → TCP Handshake → HTTP Request → Server Response
 
 ---
 
-### Stage 2: **HTML Parsing → DOM Tree**
+### Stage 2: **HTML Parsing -> DOM Tree**
 
 ```
-HTML Bytes → Tokenization → Tree Construction → DOM Tree
+HTML Bytes -> Tokenization -> Tree Construction -> DOM Tree
 ```
 
 **Process:**
@@ -113,23 +113,23 @@ HTML Bytes → Tokenization → Tree Construction → DOM Tree
 **Results in DOM tree:**
 ```
 Document
-├── html
-│   ├── head
-│   │   ├── title: "Page"
-│   │   └── link (stylesheet reference)
-│   └── body
-│       ├── h1: "Hello"
-│       └── p: "Content"
++-- html
+|   +-- head
+|   |   +-- title: "Page"
+|   |   +-- link (stylesheet reference)
+|   +-- body
+|       +-- h1: "Hello"
+|       +-- p: "Content"
 ```
 
 **Key Point:** Parsing is **streamlined** - visible content can render before entire HTML is parsed.
 
 ---
 
-### Stage 3: **CSS Parsing → CSSOM Tree**
+### Stage 3: **CSS Parsing -> CSSOM Tree**
 
 ```
-CSS Bytes → Tokenization → Parse Rules → CSSOM Tree
+CSS Bytes -> Tokenization -> Parse Rules -> CSSOM Tree
 ```
 
 **Process:**
@@ -149,17 +149,17 @@ p { color: gray; }
 **Results in CSSOM tree:**
 ```
 StyleSheetList
-├── body
-│   ├── font-size: 16px
-│   ├── margin: 0 (inherited default)
-│   └── padding: 0 (inherited default)
-├── h1
-│   ├── color: blue
-│   ├── font-size: 32px
-│   └── (inherits font-size override)
-└── p
-    ├── color: gray
-    └── (inherits font-size from body)
++-- body
+|   +-- font-size: 16px
+|   +-- margin: 0 (inherited default)
+|   +-- padding: 0 (inherited default)
++-- h1
+|   +-- color: blue
+|   +-- font-size: 32px
+|   +-- (inherits font-size override)
++-- p
+    +-- color: gray
+    +-- (inherits font-size from body)
 ```
 
 **Critical Detail:** CSS is **render-blocking**. The browser waits for CSS before rendering because it needs all styles to avoid re-rendering.
@@ -191,11 +191,11 @@ StyleSheetList
 
 ```
 ❌ WITHOUT CSS blocking:
-[HTML Parse] → [Render unstyled] → [CSS arrives] → [Paint with styles]
-                ↑ FOUC (Flash) - bad experience
+[HTML Parse] -> [Render unstyled] -> [CSS arrives] -> [Paint with styles]
+                ^ FOUC (Flash) - bad experience
 
 ✅ WITH CSS blocking (current approach):
-[HTML Parse] → [Wait for CSS] → [CSS arrives] → [Render with styles]
+[HTML Parse] -> [Wait for CSS] -> [CSS arrives] -> [Render with styles]
 ```
 
 **Mitigation Strategies:**
@@ -231,12 +231,12 @@ JavaScript can **significantly impact** the rendering pipeline. This is one of t
 
 **Flow:**
 ```
-Parsing → <script> tag → [STOP PARSING]
-          ↓
+Parsing -> <script> tag -> [STOP PARSING]
+          v
           Download app.js
-          ↓
+          v
           Execute app.js (can modify DOM/styles)
-          ↓
+          v
           Resume parsing
 ```
 
@@ -251,8 +251,8 @@ Parsing → <script> tag → [STOP PARSING]
 
 **Flow:**
 ```
-[Parsing continues] → [CSS done] → [Render happens] → [defer scripts run]
-                                        ↓
+[Parsing continues] -> [CSS done] -> [Render happens] -> [defer scripts run]
+                                        v
                           DOMContentLoaded fired
 ```
 
@@ -269,7 +269,7 @@ Parsing → <script> tag → [STOP PARSING]
 
 **Flow:**
 ```
-[Parsing continues] → Downloaded → [STOP & Execute] → [Resume rendering]
+[Parsing continues] -> Downloaded -> [STOP & Execute] -> [Resume rendering]
 ```
 
 **Order NOT guaranteed:** Multiple `async` scripts run independently.
@@ -356,7 +356,7 @@ Parsing → <script> tag → [STOP PARSING]
 ### Stage 5: **Render Tree Construction (DOM + CSSOM)**
 
 ```
-DOM Tree + CSSOM Tree → Render Tree
+DOM Tree + CSSOM Tree -> Render Tree
 ```
 
 **Process:**
@@ -385,8 +385,8 @@ DOM Tree + CSSOM Tree → Render Tree
 **Resulting Render Tree:**
 ```
 Render Tree
-├── div: "Visible"
-└── div: (invisible, space reserved)
++-- div: "Visible"
++-- div: (invisible, space reserved)
     // .hidden div is NOT in render tree
 ```
 
@@ -397,14 +397,14 @@ Render Tree
 ### Stage 6: **Layout Calculation (Reflow)**
 
 ```
-Render Tree → Calculate Positions & Sizes → Layout Boxes
+Render Tree -> Calculate Positions & Sizes -> Layout Boxes
 ```
 
 **Process:**
 - Browser calculates exact **position** and **size** for each element
 - Considers viewport dimensions
 - Applies box model (margin, border, padding, content)
-- Hierarchical calculation (parent → children)
+- Hierarchical calculation (parent -> children)
 
 **Example:**
 ```javascript
@@ -473,7 +473,7 @@ function optimizedUpdate() {
 ### Stage 7: **Painting**
 
 ```
-Layout Boxes → Rasterization → Paint Records → Display List
+Layout Boxes -> Rasterization -> Paint Records -> Display List
 ```
 
 **Process:**
@@ -514,7 +514,7 @@ Less Expensive (composite-only):
 ### Stage 8: **Compositing**
 
 ```
-Paint Records + Layers → Composite → GPU Rendering → Display
+Paint Records + Layers -> Composite -> GPU Rendering -> Display
 ```
 
 **Process:**
@@ -548,44 +548,44 @@ element.style.willChange = 'transform, opacity';
 
 ```
 1. Parse HTML
-   ├─ Stream tokenization
-   ├─ Create DOM nodes
-   └─ Encounter <link> (CSS) and <script> (JS)
+   +- Stream tokenization
+   +- Create DOM nodes
+   +- Encounter <link> (CSS) and <script> (JS)
 
 2. Fetch & Parse CSS
-   ├─ Download stylesheet
-   ├─ Parse selectors, rules, cascade
-   └─ Build CSSOM
-   └─ ⚠️ Blocks rendering until complete
+   +- Download stylesheet
+   +- Parse selectors, rules, cascade
+   +- Build CSSOM
+   +- ⚠️ Blocks rendering until complete
 
 3. Fetch & Execute JavaScript (depends on attributes)
-   ├─ Default: Blocks HTML parsing
-   ├─ defer: Executes after parsing
-   └─ async: Executes when ready
+   +- Default: Blocks HTML parsing
+   +- defer: Executes after parsing
+   +- async: Executes when ready
 
 4. Construct Render Tree
-   ├─ Combine DOM + CSSOM
-   ├─ Remove display:none elements
-   └─ Include computed styles
+   +- Combine DOM + CSSOM
+   +- Remove display:none elements
+   +- Include computed styles
 
 5. Layout (Reflow)
-   ├─ Calculate positions & sizes
-   ├─ Build box model
-   └─ Compute viewport constraints
+   +- Calculate positions & sizes
+   +- Build box model
+   +- Compute viewport constraints
 
 6. Paint
-   ├─ Rasterize layout into pixels
-   ├─ Create paint records
-   └─ Build display list
+   +- Rasterize layout into pixels
+   +- Create paint records
+   +- Build display list
 
 7. Composite
-   ├─ Blend layers
-   ├─ GPU acceleration
-   └─ Final display bitmap
+   +- Blend layers
+   +- GPU acceleration
+   +- Final display bitmap
 
 8. Display on Screen
-   ├─ First Contentful Paint (FCP)
-   └─ Largest Contentful Paint (LCP)
+   +- First Contentful Paint (FCP)
+   +- Largest Contentful Paint (LCP)
 ```
 
 ---
@@ -597,39 +597,39 @@ The **JavaScript event loop** is intrinsically connected to the browser's render
 ### **How Event Loop Interacts with Rendering**
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│           Browser Event Loop & Render Cycle            │
-└─────────────────────────────────────────────────────────┘
++---------------------------------------------------------+
+|           Browser Event Loop & Render Cycle            |
++---------------------------------------------------------+
 
 1. Execute JavaScript
-   ├─ Call Stack processes synchronous code
-   └─ setTimeout, Promises, event listeners queued
+   +- Call Stack processes synchronous code
+   +- setTimeout, Promises, event listeners queued
 
 2. Execute Microtasks (⚡ High Priority)
-   ├─ Promise.then()
-   ├─ Promise.catch()
-   ├─ Promise.finally()
-   ├─ queueMicrotask()
-   ├─ MutationObserver callbacks
-   └─ Process all until queue empty
+   +- Promise.then()
+   +- Promise.catch()
+   +- Promise.finally()
+   +- queueMicrotask()
+   +- MutationObserver callbacks
+   +- Process all until queue empty
 
 3. Check for Rendering Opportunity
-   ├─ Is there visual update needed?
-   ├─ If YES: Proceed to rendering
-   └─ If NO: Skip to next task
+   +- Is there visual update needed?
+   +- If YES: Proceed to rendering
+   +- If NO: Skip to next task
 
 4. Rendering Phase (if needed)
-   ├─ recalcStyle() - Apply CSS
-   ├─ layout() - Reflow
-   ├─ paint() - Rasterize
-   └─ composite() - GPU blend
+   +- recalcStyle() - Apply CSS
+   +- layout() - Reflow
+   +- paint() - Rasterize
+   +- composite() - GPU blend
 
 5. Execute Macrotasks (Lower Priority)
-   ├─ setTimeout callbacks
-   ├─ setInterval callbacks
-   ├─ I/O operations
-   ├─ UI events (click, scroll)
-   └─ requestAnimationFrame (actually executes BEFORE rendering)
+   +- setTimeout callbacks
+   +- setInterval callbacks
+   +- I/O operations
+   +- UI events (click, scroll)
+   +- requestAnimationFrame (actually executes BEFORE rendering)
 
 6. Back to Step 1
 ```
@@ -729,23 +729,23 @@ The browser checks for rendering work between **every** macrotask:
 setTimeout(() => {
   console.log('Task 1');
   element.style.backgroundColor = 'red';
-  // After this macrotask → Browser checks for rendering
-  // → Rendering happens (if needed)
+  // After this macrotask -> Browser checks for rendering
+  // -> Rendering happens (if needed)
 }, 0);
 
 // Task 2: Macrotask
 setTimeout(() => {
   console.log('Task 2');
   element.style.backgroundColor = 'blue';
-  // After this macrotask → Browser checks for rendering again
-  // → Rendering happens (if needed)
+  // After this macrotask -> Browser checks for rendering again
+  // -> Rendering happens (if needed)
 }, 0);
 
 /* Timeline:
    1. Execute Task 1
-   2. Check rendering → Render with red background
+   2. Check rendering -> Render with red background
    3. Execute Task 2
-   4. Check rendering → Render with blue background
+   4. Check rendering -> Render with blue background
 */
 ```
 
@@ -1149,7 +1149,7 @@ element.style.top = '100px';
 ### **Chrome DevTools Performance Tab**
 
 ```javascript
-// 1. Open DevTools (F12) → Performance tab
+// 1. Open DevTools (F12) -> Performance tab
 // 2. Click "Start profiling and reload page"
 // 3. Look for red bars in the timeline (blocking resources)
 
@@ -1163,7 +1163,7 @@ element.style.top = '100px';
 ### **Network Tab Analysis**
 
 ```javascript
-// 1. Open DevTools → Network tab
+// 1. Open DevTools -> Network tab
 // 2. Check "Disable cache" for first-visit simulation
 // 3. Look for "Blocking" column (shows render-blocking time)
 
@@ -1177,7 +1177,7 @@ element.style.top = '100px';
 
 ```javascript
 // Run Lighthouse audit:
-// 1. DevTools → Lighthouse tab
+// 1. DevTools -> Lighthouse tab
 // 2. Check "Performance" category
 // 3. Look for:
 //    - "Eliminate render-blocking resources"
@@ -1431,7 +1431,7 @@ observer.observe(document.querySelector('.content-section'));
 
 ## 📈 Real-World Case Studies
 
-### **Case Study 1: E-commerce Site (2.1s → 0.8s FCP)**
+### **Case Study 1: E-commerce Site (2.1s -> 0.8s FCP)**
 
 **Before:**
 ```html
@@ -1466,11 +1466,11 @@ observer.observe(document.querySelector('.content-section'));
 ```
 
 **Results:**
-- FCP: 2.1s → 0.8s (62% improvement)
-- LCP: 3.2s → 1.5s (53% improvement)
-- Total blocking time: 1.8s → 0.2s (89% reduction)
+- FCP: 2.1s -> 0.8s (62% improvement)
+- LCP: 3.2s -> 1.5s (53% improvement)
+- Total blocking time: 1.8s -> 0.2s (89% reduction)
 
-### **Case Study 2: News Website (3.5s → 1.2s FCP)**
+### **Case Study 2: News Website (3.5s -> 1.2s FCP)**
 
 **Problem:** Heavy third-party scripts blocking rendering.
 
@@ -1490,7 +1490,7 @@ observer.observe(document.querySelector('.content-section'));
 ```
 
 **Results:**
-- FCP: 3.5s → 1.2s (66% improvement)
+- FCP: 3.5s -> 1.2s (66% improvement)
 - User engagement: +40%
 - Bounce rate: -25%
 
