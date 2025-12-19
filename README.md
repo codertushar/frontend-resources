@@ -41,6 +41,7 @@ For the best reading experience, we highly recommend visiting our **[Live Websit
 ### 🧮 dsa
 
 <pre>
+├── 📄 <a href="dsa/30_day_dsa_guide_senior_frontend.md">30_day_dsa_guide_senior_frontend.md</a>
 ├── 📊 <a href="dsa/merge_two_sorted_arrays.md">merge_two_sorted_arrays.md</a>
 ├── 📄 <a href="dsa/sliding_window.md">sliding_window.md</a>
 └── 📄 <a href="dsa/two_pointer_technique.md">two_pointer_technique.md</a>
