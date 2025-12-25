@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import Layout from './components/Layout';
@@ -8,10 +7,12 @@ import Home from './pages/Home';
 import Library from './pages/Library';
 import LearningPath from './pages/LearningPath';
 import ResourceDetail from './pages/ResourceDetail';
+import Pricing from './pages/Pricing';
 import { useCanonical } from './hooks/useCanonical';
 
 import { ThemeProvider } from './context/ThemeContext';
 import { ProgressProvider } from './context/ProgressContext';
+import { SubscriptionProvider } from './context/SubscriptionContext';
 
 
 function AppContent() {
@@ -24,6 +25,7 @@ function AppContent() {
           <Route path="/" element={<Home />} />
           <Route path="/library" element={<Library />} />
           <Route path="/learning-path" element={<LearningPath />} />
+          <Route path="/pricing" element={<Pricing />} />
           <Route path="/resource/*" element={<ResourceDetail />} />
         </Routes>
       </Layout>
@@ -35,10 +37,12 @@ function App() {
   return (
     <ThemeProvider>
       <ProgressProvider>
-        <Router>
-          <AppContent />
-        </Router>
-        <Analytics />
+        <SubscriptionProvider>
+          <Router>
+            <AppContent />
+          </Router>
+          <Analytics />
+        </SubscriptionProvider>
       </ProgressProvider>
     </ThemeProvider>
   );

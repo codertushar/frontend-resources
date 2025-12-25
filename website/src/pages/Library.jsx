@@ -1,10 +1,11 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, ChevronRight, LayoutGrid, List, X, CheckCircle, Circle } from 'lucide-react';
+import { Search, ChevronRight, LayoutGrid, List, X, CheckCircle, Crown } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import contentData from '../data/content.json';
 import { useProgress } from '../context/ProgressContext';
+import { useSubscription } from '../context/SubscriptionContext';
 
 const CATEGORIES = [
   { id: 'all', label: 'All Resources' },
@@ -57,6 +58,7 @@ const fuseOptions = {
 const Library = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { isRead, getStats } = useProgress();
+  const { isPremium } = useSubscription();
 
   const initialQuery = searchParams.get('q') || '';
   const initialCategory = searchParams.get('category') || 'all';
@@ -261,11 +263,16 @@ const Library = () => {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
             >
-              <Link to={`/resource/${item.id}`} className="resource-card glass-panel">
+              <Link to={`/resource/${item.id}`} className={`resource-card glass-panel ${item.premium && !isPremium() ? 'is-premium-locked' : ''}`}>
                 <div className="card-header">
                   {isRead(item.id) && (
                     <span className="read-indicator" title="Read">
                       <CheckCircle size={16} />
+                    </span>
+                  )}
+                  {item.premium && (
+                    <span className={`badge premium ${isPremium() ? 'unlocked' : ''}`} title={isPremium() ? 'Premium (Unlocked)' : 'Premium'}>
+                      <Crown size={12} />
                     </span>
                   )}
                   <span className="badge">{item.category}</span>
@@ -600,6 +607,30 @@ const Library = () => {
         .badge.difficulty.hard {
           background: rgba(239, 68, 68, 0.15);
           color: #ef4444;
+        }
+
+        .badge.premium {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+          color: #a78bfa;
+          border: 1px solid rgba(139, 92, 246, 0.3);
+          padding: 0.2rem 0.4rem;
+        }
+
+        .badge.premium.unlocked {
+          background: rgba(34, 197, 94, 0.15);
+          color: #22c55e;
+          border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .resource-card.is-premium-locked {
+          border-color: rgba(139, 92, 246, 0.2);
+        }
+
+        .resource-card.is-premium-locked:hover {
+          border-color: rgba(139, 92, 246, 0.5);
         }
 
         .resource-card h3 {

@@ -5,16 +5,21 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, Check, Circle } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, Check, Circle, Crown } from 'lucide-react';
 import contentData from '../data/content.json';
 import { useProgress } from '../context/ProgressContext';
+import { useSubscription } from '../context/SubscriptionContext';
+import Paywall from '../components/Paywall';
 
 const ResourceDetail = () => {
   const location = useLocation();
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(true);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [premiumContentLoading, setPremiumContentLoading] = useState(false);
+  const [premiumContentError, setPremiumContentError] = useState(null);
   const { isRead, toggleRead, isInitialized } = useProgress();
+  const { isPremium, fetchPremiumContent, isInitialized: subInitialized } = useSubscription();
 
   // Extract and decode the resource ID from the pathname
   // Remove /resource/ prefix and trailing slash
@@ -49,11 +54,41 @@ const ResourceDetail = () => {
       .slice(0, 3);
   }, [resource, resourceId]);
 
+  // Determine if we should show paywall
+  const showPaywall = resource?.premium && !isPremium();
+
+  // Load premium content if user has access
+  useEffect(() => {
+    if (!resource || !subInitialized) return;
+
+    const loadContent = async () => {
+      // If it's premium content and user has access, fetch full content
+      if (resource.premium && isPremium()) {
+        setPremiumContentLoading(true);
+        setPremiumContentError(null);
+        try {
+          const fullContent = await fetchPremiumContent(resource.id);
+          setContent(fullContent);
+        } catch (error) {
+          console.error('Error loading premium content:', error);
+          setPremiumContentError(error.message);
+          // Fall back to preview content
+          setContent(resource.fullContent);
+        } finally {
+          setPremiumContentLoading(false);
+        }
+      } else {
+        // Use the content from JSON (full for free, preview for premium)
+        setContent(resource.fullContent);
+      }
+      setLoading(false);
+    };
+
+    loadContent();
+  }, [resource, subInitialized, isPremium, fetchPremiumContent]);
+
   useEffect(() => {
     if (resource) {
-      setContent(resource.fullContent);
-      setLoading(false);
-
       // Update document title and meta tags for SEO during client-side navigation
       document.title = `${resource.title} | Frontend Resources`;
 
@@ -163,6 +198,12 @@ const ResourceDetail = () => {
           })()}
         </h1>
         <div className="meta-tags">
+          {resource.premium && (
+            <span className="meta-tag premium">
+              <Crown size={14} />
+              Premium
+            </span>
+          )}
           <Link to={`/library?category=${resource.category}`} className="meta-tag category">
             {resource.category}
           </Link>
@@ -197,41 +238,49 @@ const ResourceDetail = () => {
         </div>
       </div>
 
-      <div className="article-content glass-panel">
-        {loading ? (
+      <div className={`article-content glass-panel ${showPaywall ? 'has-paywall' : ''}`}>
+        {loading || premiumContentLoading ? (
           <div className="loading">Loading content...</div>
         ) : (
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            components={{
-              code({ node, inline, className, children, ...props }) {
-                const match = /language-(\w+)/.exec(className || '')
-                return !inline && match ? (
-                  <SyntaxHighlighter
-                    style={vscDarkPlus}
-                    language={match[1]}
-                    PreTag="div"
-                    {...props}
-                  >
-                    {String(children).replace(/\n$/, '')}
-                  </SyntaxHighlighter>
-                ) : (
-                  <code className={className} {...props}>
-                    {children}
-                  </code>
-                )
-              },
-              table({ node, children, ...props }) {
-                return (
-                  <div className="table-wrapper">
-                    <table {...props}>{children}</table>
-                  </div>
-                )
-              }
-            }}
-          >
-            {content}
-          </ReactMarkdown>
+          <>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                code({ node, inline, className, children, ...props }) {
+                  const match = /language-(\w+)/.exec(className || '')
+                  return !inline && match ? (
+                    <SyntaxHighlighter
+                      style={vscDarkPlus}
+                      language={match[1]}
+                      PreTag="div"
+                      {...props}
+                    >
+                      {String(children).replace(/\n$/, '')}
+                    </SyntaxHighlighter>
+                  ) : (
+                    <code className={className} {...props}>
+                      {children}
+                    </code>
+                  )
+                },
+                table({ node, children, ...props }) {
+                  return (
+                    <div className="table-wrapper">
+                      <table {...props}>{children}</table>
+                    </div>
+                  )
+                }
+              }}
+            >
+              {content}
+            </ReactMarkdown>
+            {showPaywall && <Paywall articleTitle={resource.title} />}
+            {premiumContentError && !showPaywall && (
+              <div className="premium-error">
+                Failed to load full content. Showing preview instead.
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -421,6 +470,16 @@ const ResourceDetail = () => {
           border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
+        .meta-tag.premium {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+          color: #a78bfa;
+          border: 1px solid rgba(139, 92, 246, 0.4);
+          font-weight: 600;
+        }
+
         .btn-mark-read {
           display: flex;
           align-items: center;
@@ -463,6 +522,20 @@ const ResourceDetail = () => {
           line-height: 1.8;
           overflow: visible;
           max-width: 100%;
+          position: relative;
+        }
+
+        .article-content.has-paywall {
+          padding-bottom: 1rem;
+        }
+
+        .premium-error {
+          background: rgba(239, 68, 68, 0.1);
+          color: #ef4444;
+          padding: 0.75rem 1rem;
+          border-radius: 8px;
+          margin-top: 1rem;
+          font-size: 0.9rem;
         }
 
         .article-content * {

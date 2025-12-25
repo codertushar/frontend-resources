@@ -12,8 +12,66 @@ const WEBSITE_ROOT = path.resolve(__dirname, '../');
 const PUBLIC_CONTENT_DIR = path.join(WEBSITE_ROOT, 'public', 'content');
 const OUTPUT_JSON = path.join(WEBSITE_ROOT, 'src', 'data', 'content.json');
 const PUBLIC_JSON = path.join(WEBSITE_ROOT, 'public', 'content.json'); // For service worker access
+const PREMIUM_CONTENT_JSON = path.join(WEBSITE_ROOT, 'src', 'data', 'premium-content.json'); // Full premium content (server-side only)
 
 const CONTENT_DIRS = ['js', 'dsa', 'ai', 'general', 'machine-coding', 'system-design'];
+
+// Premium content configuration
+// ~70% of content should be premium
+const PREMIUM_CONFIG = {
+    // Categories that are fully premium
+    fullyPremiumCategories: ['system-design', 'ai'],
+    // Categories that are partially premium (hard + medium difficulty)
+    partiallyPremiumCategories: ['machine-coding', 'dsa'],
+    // Categories with only hard content as premium
+    hardOnlyPremiumCategories: ['js', 'general'],
+};
+
+function isPremiumContent(category, difficulty, subcategory) {
+    // System design and AI are fully premium
+    if (PREMIUM_CONFIG.fullyPremiumCategories.includes(category)) {
+        return true;
+    }
+
+    // Machine coding and DSA: medium and hard are premium
+    if (PREMIUM_CONFIG.partiallyPremiumCategories.includes(category)) {
+        return difficulty === 'hard' || difficulty === 'medium';
+    }
+
+    // JS and General: only hard content is premium
+    if (PREMIUM_CONFIG.hardOnlyPremiumCategories.includes(category)) {
+        return difficulty === 'hard';
+    }
+
+    return false;
+}
+
+// Generate preview content for premium articles (first ~300 words)
+function generatePreviewContent(fullContent) {
+    const lines = fullContent.split('\n');
+    let wordCount = 0;
+    let previewLines = [];
+
+    for (const line of lines) {
+        previewLines.push(line);
+        wordCount += line.split(/\s+/).filter(w => w.length > 0).length;
+
+        // Stop after ~300 words but ensure we end at a paragraph break
+        if (wordCount >= 300) {
+            // Try to end at a paragraph break
+            const nextLineIndex = lines.indexOf(line) + 1;
+            if (nextLineIndex < lines.length && lines[nextLineIndex].trim() === '') {
+                break;
+            }
+            // If next line is not empty, continue until paragraph break
+            if (wordCount >= 400) {
+                break;
+            }
+        }
+    }
+
+    return previewLines.join('\n');
+}
 
 // Smart tags based on subcategory, path, and content patterns
 const SMART_TAGS = {
@@ -499,7 +557,7 @@ function extractTitleAndContent(content, filename) {
     return { title, processedContent, metadata };
 }
 
-function processDirectory(dirPath, relativePath, resources) {
+function processDirectory(dirPath, relativePath, resources, premiumFullContent = {}) {
     const items = fs.readdirSync(dirPath, { withFileTypes: true });
 
     for (const item of items) {
@@ -508,7 +566,7 @@ function processDirectory(dirPath, relativePath, resources) {
 
         if (item.isDirectory()) {
             if (item.name === 'node_modules' || item.name === '.git') continue;
-            processDirectory(itemPath, itemRelativePath, resources);
+            processDirectory(itemPath, itemRelativePath, resources, premiumFullContent);
         } else if (item.isFile() && item.name.endsWith('.md')) {
             // Ignore README/AGENTS at root if strictly looking for resources,
             // but maybe we want them? Let's stick to CONTENT_DIRS for now.
@@ -536,6 +594,11 @@ function processDirectory(dirPath, relativePath, resources) {
                 ? parseInt(metadata.order, 10)
                 : normalizedScore;
 
+            // Determine if content is premium
+            const premium = metadata.premium !== undefined
+                ? metadata.premium === 'true' || metadata.premium === true
+                : isPremiumContent(category, difficulty, subcategory);
+
             // Build resource object with frontmatter metadata
             const resource = {
                 id: itemRelativePath.replace('.md', ''),
@@ -544,10 +607,15 @@ function processDirectory(dirPath, relativePath, resources) {
                 subcategory,
                 difficulty,
                 difficultyScore, // Numeric score for granular sorting (lower = easier)
+                premium, // Whether this is premium content
                 createdAt: fileStats.birthtime.toISOString(), // File creation timestamp for sorting
                 filePath: `/content/${itemRelativePath}`,
                 content: stripMarkdown(processedContent).slice(0, 300), // Preview for search/display
-                fullContent: processedContent // H1 title stripped - displayed in page header instead
+                // For premium content, only include preview in the public JSON
+                // Full content will be fetched via API for authorized users
+                fullContent: premium ? generatePreviewContent(processedContent) : processedContent,
+                // Store a flag indicating if full content is available in this JSON
+                hasFullContent: !premium
             };
 
             // Generate smart tags, merge with frontmatter tags if present
@@ -566,6 +634,11 @@ function processDirectory(dirPath, relativePath, resources) {
             // Use frontmatter description or auto-generate one
             resource.description = metadata.description || generateDescription(processedContent, title);
 
+            // If premium, store full content separately for API access
+            if (premium) {
+                premiumFullContent[resource.id] = processedContent;
+            }
+
             resources.push(resource);
         }
     }
@@ -573,25 +646,34 @@ function processDirectory(dirPath, relativePath, resources) {
 
 function generateContent() {
     const resources = [];
+    const premiumFullContent = {}; // Map of id -> full content for premium articles
 
     for (const dir of CONTENT_DIRS) {
         const fullPath = path.join(PROJECT_ROOT, dir);
         if (fs.existsSync(fullPath)) {
-            processDirectory(fullPath, dir, resources);
+            processDirectory(fullPath, dir, resources, premiumFullContent);
         }
     }
 
     const jsonContent = JSON.stringify(resources, null, 2);
-    
+
     // Write JSON to src/data for React imports
     fs.writeFileSync(OUTPUT_JSON, jsonContent);
-    
+
     // Also write to public directory for service worker access
     fs.writeFileSync(PUBLIC_JSON, jsonContent);
-    
-    console.log(`Generated ${resources.length} resources.`);
+
+    // Write premium content separately (this should NOT be in public folder)
+    // It will be used by API routes only
+    fs.writeFileSync(PREMIUM_CONTENT_JSON, JSON.stringify(premiumFullContent, null, 2));
+
+    const premiumCount = resources.filter(r => r.premium).length;
+    const freeCount = resources.length - premiumCount;
+
+    console.log(`Generated ${resources.length} resources (${freeCount} free, ${premiumCount} premium).`);
     console.log(`  → ${OUTPUT_JSON}`);
     console.log(`  → ${PUBLIC_JSON}`);
+    console.log(`  → ${PREMIUM_CONTENT_JSON} (${Object.keys(premiumFullContent).length} premium articles)`);
 }
 
 // Initial generation
