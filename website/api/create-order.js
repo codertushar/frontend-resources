@@ -1,5 +1,5 @@
 import Razorpay from 'razorpay';
-import { clerkClient } from '@clerk/clerk-sdk-node';
+import { createClerkClient, verifyToken } from '@clerk/clerk-sdk-node';
 
 export const config = {
   runtime: 'nodejs',
@@ -19,8 +19,15 @@ export default async function handler(req, res) {
   const token = authHeader.substring(7);
 
   try {
-    // Verify the session token and get user
-    const { sub: userId } = await clerkClient.verifyToken(token);
+    // Initialize Clerk client
+    const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
+
+    // Verify the session token
+    const verifiedToken = await verifyToken(token, {
+      secretKey: process.env.CLERK_SECRET_KEY,
+    });
+
+    const userId = verifiedToken.sub;
 
     if (!userId) {
       return res.status(401).json({ error: 'Invalid token' });
@@ -68,6 +75,6 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error('Error creating order:', error);
-    return res.status(500).json({ error: 'Failed to create order' });
+    return res.status(500).json({ error: 'Failed to create order', details: error.message });
   }
 }

@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { clerkClient } from '@clerk/clerk-sdk-node';
+import { createClerkClient } from '@clerk/clerk-sdk-node';
 
 export const config = {
   runtime: 'nodejs',
@@ -7,6 +7,9 @@ export const config = {
     bodyParser: false, // We need raw body for signature verification
   },
 };
+
+// Initialize Clerk client
+const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
 
 // Helper to get raw body
 async function getRawBody(req) {

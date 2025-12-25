@@ -1,9 +1,22 @@
-import { clerkClient } from '@clerk/clerk-sdk-node';
-import premiumContent from '../src/data/premium-content.json' assert { type: 'json' };
+import { createClerkClient, verifyToken } from '@clerk/clerk-sdk-node';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export const config = {
   runtime: 'nodejs',
 };
+
+// Load premium content at runtime
+function getPremiumContent() {
+  try {
+    const filePath = join(process.cwd(), 'src', 'data', 'premium-content.json');
+    const content = readFileSync(filePath, 'utf-8');
+    return JSON.parse(content);
+  } catch (error) {
+    console.error('Error loading premium content:', error);
+    return {};
+  }
+}
 
 export default async function handler(req, res) {
   // Only allow GET requests
@@ -16,6 +29,8 @@ export default async function handler(req, res) {
   if (!articleId) {
     return res.status(400).json({ error: 'Article ID is required' });
   }
+
+  const premiumContent = getPremiumContent();
 
   // Check if article exists in premium content
   if (!premiumContent[articleId]) {
@@ -31,8 +46,15 @@ export default async function handler(req, res) {
   const token = authHeader.substring(7);
 
   try {
-    // Verify the session token and get user
-    const { sub: userId } = await clerkClient.verifyToken(token);
+    // Initialize Clerk client
+    const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
+
+    // Verify the session token
+    const verifiedToken = await verifyToken(token, {
+      secretKey: process.env.CLERK_SECRET_KEY,
+    });
+
+    const userId = verifiedToken.sub;
 
     if (!userId) {
       return res.status(401).json({ error: 'Invalid token' });
