@@ -106,8 +106,9 @@ export const SubscriptionProvider = ({ children }) => {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to create order');
+        const errorData = await response.json();
+        console.error('API Error:', errorData);
+        throw new Error(errorData.details || errorData.error || 'Failed to create order');
       }
 
       return await response.json();

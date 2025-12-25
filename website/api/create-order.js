@@ -89,6 +89,10 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error('Error creating order:', error);
-    return res.status(500).json({ error: 'Failed to create order', details: error.message });
+    return res.status(500).json({
+      error: 'Failed to create order',
+      details: error.message,
+      stack: process.env.NODE_ENV !== 'production' ? error.stack : undefined
+    });
   }
 }
