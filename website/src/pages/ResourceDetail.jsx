@@ -17,10 +17,9 @@ const ResourceDetail = () => {
   const { isRead, toggleRead, isInitialized } = useProgress();
 
   // Extract and decode the resource ID from the pathname
-  // Remove basename (/frontend-resources), /resource/ prefix, and trailing slash
+  // Remove /resource/ prefix and trailing slash
   const resourceId = decodeURIComponent(
     location.pathname
-      .replace('/frontend-resources', '')
       .replace('/resource/', '')
       .replace(/^\//, '')
       .replace(/\/$/, '')
@@ -79,7 +78,7 @@ const ResourceDetail = () => {
       const twitterDescription = document.querySelector('meta[name="twitter:description"]');
       const canonical = document.querySelector('link[rel="canonical"]');
 
-      const url = `https://codertushar.github.io/frontend-resources/resource/${resource.id}`;
+      const url = `https://frontend-resources-chi.vercel.app/resource/${resource.id}`;
       const title = `${resource.title} | Frontend Resources`;
       const desc = resource.fullContent
         .replace(/```[\s\S]*?```/g, '')

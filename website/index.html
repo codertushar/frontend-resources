@@ -10,10 +10,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="FE Resources" />
 
-  <!-- Asset paths use Vite's BASE_URL which is set based on deployment target -->
-  <link rel="icon" type="image/svg+xml" href="__VITE_BASE__favicon.svg" />
-  <link rel="apple-touch-icon" href="__VITE_BASE__android-launchericon-192-192.png" />
-  <link rel="manifest" href="__VITE_BASE__manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/android-launchericon-192-192.png" />
+  <link rel="manifest" href="/manifest.json" />
 
   <meta name="description"
     content="A curated collection of frontend engineering resources – from JS fundamentals to system design and interview‑ready challenges.">
@@ -22,22 +21,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
   <title>Frontend Resources</title>
-  <!-- SPA redirect script for GitHub Pages - handles 404.html redirects -->
-  <script>
-    (function() {
-      var params = new URLSearchParams(window.location.search);
-      var path = params.get('p');
-      var hash = params.get('h');
-      if (path) {
-        // Detect base path - GitHub Pages uses /frontend-resources, Vercel uses /
-        var base = window.__VITE_BASE__ || '/';
-        var basePath = base === '/' ? '' : base.replace(/\/$/, '');
-        window.history.replaceState(null, '',
-          basePath + path + (hash ? '#' + hash : '')
-        );
-      }
-    })();
-  </script>
 </head>
 
 <body>
@@ -46,9 +29,7 @@
   <script>
     if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
       window.addEventListener('load', () => {
-        // Use dynamic base path for service worker
-        var base = window.__VITE_BASE__ || '/';
-        navigator.serviceWorker.register(base + 'service-worker.js')
+        navigator.serviceWorker.register('/service-worker.js')
           .then((registration) => {
             console.log('Service Worker registered successfully');
 

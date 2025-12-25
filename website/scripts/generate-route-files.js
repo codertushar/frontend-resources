@@ -14,11 +14,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, '../dist');
 const contentPath = path.resolve(__dirname, '../src/data/content.json');
 
-// Use different base URLs for different deployment targets
-const isVercel = !!process.env.VERCEL;
-const BASE_URL = isVercel
-    ? 'https://frontend-resources-chi.vercel.app'
-    : 'https://codertushar.github.io/frontend-resources';
+// Base URL of the deployed site
+const BASE_URL = 'https://frontend-resources-chi.vercel.app';
 
 // Read content.json to get all routes
 const content = JSON.parse(fs.readFileSync(contentPath, 'utf-8'));

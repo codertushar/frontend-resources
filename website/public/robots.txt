@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://codertushar.github.io/frontend-resources/sitemap.xml
+Sitemap: https://frontend-resources-chi.vercel.app/sitemap.xml
