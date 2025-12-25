@@ -24,6 +24,12 @@ const DIFFICULTIES = [
   { id: 'hard', label: 'Hard', color: '#ef4444' },
 ];
 
+const ACCESS_OPTIONS = [
+  { id: 'all', label: 'Pricing' },
+  { id: 'free', label: 'Free' },
+  { id: 'premium', label: 'Premium' },
+];
+
 const SORT_OPTIONS = [
   { id: 'default', label: 'Newest First' },
   { id: 'difficulty-asc', label: 'Difficulty (Easy → Hard)' },
@@ -65,12 +71,14 @@ const Library = () => {
   const initialDifficulty = searchParams.get('difficulty') || 'all';
   const initialSort = searchParams.get('sort') || 'default';
   const initialTag = searchParams.get('tag') || 'all';
+  const initialAccess = searchParams.get('access') || 'all';
 
   const [query, setQuery] = useState(initialQuery);
   const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [activeDifficulty, setActiveDifficulty] = useState(initialDifficulty);
   const [sortBy, setSortBy] = useState(initialSort);
   const [activeTag, setActiveTag] = useState(initialTag);
+  const [activeAccess, setActiveAccess] = useState(initialAccess);
   const [viewMode, setViewMode] = useState('detailed'); // 'detailed' or 'compact'
 
   // Get progress stats
@@ -84,8 +92,9 @@ const Library = () => {
     if (activeDifficulty !== 'all') params.difficulty = activeDifficulty;
     if (sortBy !== 'default') params.sort = sortBy;
     if (activeTag !== 'all') params.tag = activeTag;
+    if (activeAccess !== 'all') params.access = activeAccess;
     setSearchParams(params, { replace: true });
-  }, [query, activeCategory, activeDifficulty, sortBy, activeTag, setSearchParams]);
+  }, [query, activeCategory, activeDifficulty, sortBy, activeTag, activeAccess, setSearchParams]);
 
   const fuse = useMemo(() => new Fuse(contentData, fuseOptions), []);
 
@@ -106,6 +115,12 @@ const Library = () => {
 
     if (activeTag !== 'all') {
       result = result.filter(item => item.tags?.includes(activeTag));
+    }
+
+    if (activeAccess !== 'all') {
+      result = result.filter(item =>
+        activeAccess === 'free' ? !item.premium : item.premium
+      );
     }
 
     // Apply sorting
@@ -145,7 +160,7 @@ const Library = () => {
     }
 
     return result;
-  }, [query, activeCategory, activeDifficulty, activeTag, sortBy, fuse]);
+  }, [query, activeCategory, activeDifficulty, activeTag, activeAccess, sortBy, fuse]);
 
   return (
     <div className="container page-container">
@@ -207,6 +222,18 @@ const Library = () => {
             </select>
 
             <select
+              value={activeAccess}
+              onChange={(e) => setActiveAccess(e.target.value)}
+              className={`filter-select ${activeAccess !== 'all' ? 'active' : ''}`}
+            >
+              {ACCESS_OPTIONS.map(option => (
+                <option key={option.id} value={option.id}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+
+            <select
               value={activeTag}
               onChange={(e) => setActiveTag(e.target.value)}
               className={`filter-select ${activeTag !== 'all' ? 'active' : ''}`}
@@ -241,6 +268,7 @@ const Library = () => {
               onClick={() => {
                 setActiveCategory(cat.id);
                 setActiveDifficulty('all');
+                setActiveAccess('all');
                 setActiveTag('all');
                 setSortBy('default');
                 setQuery('');
@@ -756,7 +784,7 @@ const Library = () => {
           .filter-dropdowns {
             width: 100%;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 0.5rem;
           }
 
