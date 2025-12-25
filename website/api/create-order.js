@@ -66,10 +66,13 @@ export default async function handler(req, res) {
     });
 
     // Create order for ₹2000 (amount in paise)
+    // Receipt must be max 40 chars
+    const shortUserId = userId.slice(-8);
+    const timestamp = Date.now().toString().slice(-10);
     const order = await razorpay.orders.create({
       amount: 200000, // ₹2000 in paise
       currency: 'INR',
-      receipt: `receipt_${userId}_${Date.now()}`,
+      receipt: `rcpt_${shortUserId}_${timestamp}`,
       notes: {
         clerk_user_id: userId,
         user_email: user.emailAddresses[0]?.emailAddress,
