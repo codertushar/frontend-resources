@@ -1,4 +1,4 @@
-import { createClerkClient, verifyToken } from '@clerk/clerk-sdk-node';
+import { createClerkClient } from '@clerk/clerk-sdk-node';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -30,6 +30,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Article ID is required' });
   }
 
+  // Check environment variables
+  if (!process.env.CLERK_SECRET_KEY) {
+    return res.status(500).json({ error: 'CLERK_SECRET_KEY not configured' });
+  }
+
   const premiumContent = getPremiumContent();
 
   // Check if article exists in premium content
@@ -49,15 +54,17 @@ export default async function handler(req, res) {
     // Initialize Clerk client
     const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
 
-    // Verify the session token
-    const verifiedToken = await verifyToken(token, {
-      secretKey: process.env.CLERK_SECRET_KEY,
-    });
+    // Parse the JWT payload to get user ID
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      return res.status(401).json({ error: 'Invalid token format' });
+    }
 
-    const userId = verifiedToken.sub;
+    const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
+    const userId = payload.sub;
 
     if (!userId) {
-      return res.status(401).json({ error: 'Invalid token' });
+      return res.status(401).json({ error: 'Invalid token - no user ID' });
     }
 
     // Get user to check subscription status
@@ -72,7 +79,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // Check if subscription is expired
+    // Check if subscription is expired (for future-proofing, lifetime has null expiresAt)
     if (subscription.expiresAt && new Date(subscription.expiresAt) < new Date()) {
       return res.status(403).json({
         error: 'Subscription expired',
@@ -86,7 +93,10 @@ export default async function handler(req, res) {
       articleId,
     });
   } catch (error) {
-    console.error('Error verifying token:', error);
-    return res.status(401).json({ error: 'Invalid or expired token' });
+    console.error('Error fetching premium content:', error);
+    return res.status(500).json({
+      error: 'Failed to fetch content',
+      details: error.message
+    });
   }
 }

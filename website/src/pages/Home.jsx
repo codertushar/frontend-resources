@@ -33,7 +33,7 @@ const Home = () => {
       >
         <motion.div variants={item} className="hero-badge">
           <Sparkles size={14} />
-          <span>Open Source & Free Forever</span>
+          <span>Curated Resources for Frontend Interviews</span>
         </motion.div>
 
         <motion.h1 variants={item} className="hero-title heading-gradient">
@@ -73,8 +73,8 @@ const Home = () => {
           <div className="stat-item">
             <Users size={20} />
             <div className="stat-content">
-              <span className="stat-value">Free</span>
-              <span className="stat-label">For Everyone</span>
+              <span className="stat-value">30%</span>
+              <span className="stat-label">Free Content</span>
             </div>
           </div>
         </motion.div>
