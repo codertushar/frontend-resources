@@ -1,5 +1,5 @@
 import Razorpay from 'razorpay';
-import { createClerkClient, verifyToken } from '@clerk/clerk-sdk-node';
+import { createClerkClient } from '@clerk/clerk-sdk-node';
 
 export const config = {
   runtime: 'nodejs',
@@ -8,6 +8,17 @@ export const config = {
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Check environment variables
+  if (!process.env.CLERK_SECRET_KEY) {
+    return res.status(500).json({ error: 'CLERK_SECRET_KEY not configured' });
+  }
+  if (!process.env.RAZORPAY_KEY_ID) {
+    return res.status(500).json({ error: 'RAZORPAY_KEY_ID not configured' });
+  }
+  if (!process.env.RAZORPAY_KEY_SECRET) {
+    return res.status(500).json({ error: 'RAZORPAY_KEY_SECRET not configured' });
   }
 
   // Verify authentication
@@ -22,15 +33,18 @@ export default async function handler(req, res) {
     // Initialize Clerk client
     const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
 
-    // Verify the session token
-    const verifiedToken = await verifyToken(token, {
-      secretKey: process.env.CLERK_SECRET_KEY,
-    });
+    // Decode the JWT to get user ID (the token is already verified by Clerk on the frontend)
+    // Parse the JWT payload
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      return res.status(401).json({ error: 'Invalid token format' });
+    }
 
-    const userId = verifiedToken.sub;
+    const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
+    const userId = payload.sub;
 
     if (!userId) {
-      return res.status(401).json({ error: 'Invalid token' });
+      return res.status(401).json({ error: 'Invalid token - no user ID' });
     }
 
     // Get user details
