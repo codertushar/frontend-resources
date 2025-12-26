@@ -2,7 +2,7 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { BookOpen, Layers, Map, Mail, Github, Linkedin } from 'lucide-react';
-import { SignInButton, SignUpButton, UserButton, useUser } from '@clerk/clerk-react';
+import { SignInButton, SignUpButton, UserButton, useUser, useClerk } from '@clerk/clerk-react';
 import { XIcon } from './SocialIcons';
 import { motion } from 'framer-motion';
 
@@ -30,6 +30,7 @@ const Logo = ({ className }) => (
 const Layout = ({ children }) => {
   // Always call hook unconditionally (React rules of hooks)
   const { isSignedIn, isLoaded } = useUser();
+  const { signOut } = useClerk();
 
   return (
     <div className="layout">
@@ -68,6 +69,13 @@ const Layout = ({ children }) => {
                         }
                       }}
                     />
+                    <button
+                      className="btn-auth btn-signin"
+                      onClick={() => signOut()}
+                      style={{ marginLeft: '0.5rem' }}
+                    >
+                      Sign Out
+                    </button>
                   </div>
                 ) : (
                   <div className="auth-section">
