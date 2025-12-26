@@ -134,15 +134,10 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       setSession(null);
 
-      // Then sign out from Supabase
-      await supabase.auth.signOut({ scope: 'local' });
-
-      // Force reload to clear any cached state
-      window.location.reload();
+      // Sign out globally so other tabs also get signed out
+      await supabase.auth.signOut({ scope: 'global' });
     } catch (error) {
       console.error('Error signing out:', error);
-      // Still reload even if there's an error
-      window.location.reload();
     }
   };
 
