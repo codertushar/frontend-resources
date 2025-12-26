@@ -38,10 +38,18 @@ const Admin = () => {
 
   // Check admin status
   useEffect(() => {
-    if (!isLoaded || !isSignedIn) {
+    if (!isLoaded) {
+      return; // Wait for auth to load
+    }
+
+    if (!isSignedIn) {
       setIsCheckingAdmin(false);
+      setIsAdmin(false);
       return;
     }
+
+    // User is signed in, check admin status
+    setIsCheckingAdmin(true);
 
     const checkAdmin = async () => {
       try {
@@ -52,6 +60,8 @@ const Admin = () => {
           setIsAdmin(true);
           const data = await res.json();
           setCoupons(data.coupons || []);
+        } else {
+          setIsAdmin(false);
         }
       } catch (error) {
         console.error('Admin check error:', error);
@@ -172,10 +182,38 @@ const Admin = () => {
   };
 
   // Show loading while auth is loading OR while checking admin status
-  if (!isLoaded || (isSignedIn && isCheckingAdmin)) {
+  if (!isLoaded || isCheckingAdmin) {
     return (
       <div className="admin-container">
-        <div className="admin-loading">Loading...</div>
+        <div className="loading-wrapper">
+          <div className="loading-spinner" />
+          <p>Verifying access...</p>
+        </div>
+        <style>{`
+          .loading-wrapper {
+            min-height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+          }
+          .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+          }
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+          .loading-wrapper p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+          }
+        `}</style>
       </div>
     );
   }
@@ -183,11 +221,75 @@ const Admin = () => {
   if (!isSignedIn) {
     return (
       <div className="admin-container">
-        <div className="admin-error glass-panel">
-          <AlertCircle size={48} />
-          <h2>Authentication Required</h2>
-          <p>Please sign in to access the admin panel.</p>
+        <div className="auth-required-wrapper">
+          <div className="auth-required-card">
+            <div className="auth-required-icon">
+              <AlertCircle size={32} />
+            </div>
+            <h2>Authentication Required</h2>
+            <p>Please sign in to access the admin panel.</p>
+            <a href="/" className="back-home-btn">
+              Back to Home
+            </a>
+          </div>
         </div>
+        <style>{`
+          .auth-required-wrapper {
+            min-height: calc(100vh - 200px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+          }
+          .auth-required-card {
+            text-align: center;
+            padding: 3rem;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            max-width: 420px;
+            box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.25);
+          }
+          .auth-required-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: #f59e0b;
+          }
+          .auth-required-card h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-main);
+          }
+          .auth-required-card p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+          }
+          .back-home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 2rem;
+            background: linear-gradient(135deg, var(--primary), #a78bfa);
+            color: white !important;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+          }
+          .back-home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -4px rgba(139, 92, 246, 0.4);
+          }
+        `}</style>
       </div>
     );
   }
@@ -195,11 +297,75 @@ const Admin = () => {
   if (!isAdmin) {
     return (
       <div className="admin-container">
-        <div className="admin-error glass-panel">
-          <Lock size={48} />
-          <h2>Access Denied</h2>
-          <p>You don&apos;t have admin privileges to access this page.</p>
+        <div className="access-denied-wrapper">
+          <div className="access-denied-card">
+            <div className="access-denied-icon">
+              <Lock size={32} />
+            </div>
+            <h2>Access Denied</h2>
+            <p>You don&apos;t have admin privileges to access this page.</p>
+            <a href="/" className="back-home-btn">
+              Back to Home
+            </a>
+          </div>
         </div>
+        <style>{`
+          .access-denied-wrapper {
+            min-height: calc(100vh - 200px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+          }
+          .access-denied-card {
+            text-align: center;
+            padding: 3rem;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            max-width: 420px;
+            box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.25);
+          }
+          .access-denied-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: #ef4444;
+          }
+          .access-denied-card h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-main);
+          }
+          .access-denied-card p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+          }
+          .back-home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 2rem;
+            background: linear-gradient(135deg, var(--primary), #a78bfa);
+            color: white !important;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+          }
+          .back-home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -4px rgba(139, 92, 246, 0.4);
+          }
+        `}</style>
       </div>
     );
   }
