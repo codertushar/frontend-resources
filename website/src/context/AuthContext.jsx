@@ -119,15 +119,21 @@ export const AuthProvider = ({ children }) => {
   const signOut = async () => {
     if (!supabase) return;
 
+    // Clear React state immediately
+    setUser(null);
+    setSession(null);
+
     try {
-      // Let Supabase handle signOut - it will clear tokens and broadcast to other tabs
-      await supabase.auth.signOut();
+      // Sign out globally (invalidates session on server + all tabs)
+      await supabase.auth.signOut({ scope: 'global' });
     } catch (error) {
       console.error('Error signing out:', error);
-      // Fallback: manually clear state if signOut fails
-      setUser(null);
-      setSession(null);
     }
+
+    // Clear all Supabase tokens from localStorage
+    Object.keys(localStorage)
+      .filter(key => key.startsWith('sb-'))
+      .forEach(key => localStorage.removeItem(key));
   };
 
   const getAccessToken = async () => {
