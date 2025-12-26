@@ -22,37 +22,47 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    // Handle OAuth callback - detect hash tokens and clean URL
-    const handleAuthCallback = async () => {
-      const hash = window.location.hash;
-      if (hash && hash.includes('access_token')) {
-        // Let Supabase process the hash
-        const { data, error } = await supabase.auth.getSession();
-        if (data?.session) {
-          setSession(data.session);
-          setUser(data.session.user);
-          // Clean URL by removing hash
-          window.history.replaceState(null, '', window.location.pathname);
+    // Initialize auth state
+    const initializeAuth = async () => {
+      try {
+        // Handle OAuth callback - detect hash tokens
+        const hash = window.location.hash;
+        if (hash && hash.includes('access_token')) {
+          // Let Supabase process the hash first
+          const { data, error } = await supabase.auth.getSession();
+          if (data?.session) {
+            setSession(data.session);
+            setUser(data.session.user);
+            // Clean URL by removing hash
+            window.history.replaceState(null, '', window.location.pathname);
+          }
+          if (error) {
+            console.error('Auth callback error:', error);
+          }
+          setIsLoading(false);
+          return; // Exit early, session already handled
         }
+
+        // Get initial session (no OAuth callback)
+        const { data: { session }, error } = await supabase.auth.getSession();
         if (error) {
-          console.error('Auth callback error:', error);
+          console.error('Error getting session:', error);
         }
+        setSession(session);
+        setUser(session?.user ?? null);
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    handleAuthCallback();
+    initializeAuth();
 
-    // Get initial session
-    supabase.auth.getSession()
-      .then(({ data: { session } }) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error getting session:', error);
-        setIsLoading(false);
-      });
+    // Failsafe: ensure loading state is cleared even if Supabase hangs
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 5000);
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -72,7 +82,10 @@ export const AuthProvider = ({ children }) => {
       }
     );
 
-    return () => subscription.unsubscribe();
+    return () => {
+      clearTimeout(timeout);
+      subscription.unsubscribe();
+    };
   }, []);
 
   // Ensure user profile exists in profiles table
