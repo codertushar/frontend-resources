@@ -1,5 +1,5 @@
 import Razorpay from 'razorpay';
-import { createClerkClient } from '@clerk/clerk-sdk-node';
+import { createClient } from '@supabase/supabase-js';
 
 export const config = {
   runtime: 'nodejs',
@@ -11,8 +11,11 @@ export default async function handler(req, res) {
   }
 
   // Check environment variables
-  if (!process.env.CLERK_SECRET_KEY) {
-    return res.status(500).json({ error: 'CLERK_SECRET_KEY not configured' });
+  const supabaseUrl = process.env.VITE_SUPABASE_URL;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseServiceKey) {
+    return res.status(500).json({ error: 'Supabase not configured' });
   }
   if (!process.env.RAZORPAY_KEY_ID) {
     return res.status(500).json({ error: 'RAZORPAY_KEY_ID not configured' });
@@ -30,32 +33,28 @@ export default async function handler(req, res) {
   const token = authHeader.substring(7);
 
   try {
-    // Initialize Clerk client
-    const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
+    // Create Supabase client
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Decode the JWT to get user ID (the token is already verified by Clerk on the frontend)
-    // Parse the JWT payload
-    const parts = token.split('.');
-    if (parts.length !== 3) {
-      return res.status(401).json({ error: 'Invalid token format' });
+    // Verify the JWT token and get user
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token' });
     }
 
-    const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
-    const userId = payload.sub;
-
-    if (!userId) {
-      return res.status(401).json({ error: 'Invalid token - no user ID' });
-    }
-
-    // Get user details
-    const user = await clerkClient.users.getUser(userId);
+    // Get user profile to check existing subscription
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('subscription_status, email, full_name')
+      .eq('id', user.id)
+      .single();
 
     // Check if user already has active subscription
-    const existingSubscription = user.publicMetadata?.subscription;
-    if (existingSubscription?.status === 'active') {
+    if (profile?.subscription_status === 'active') {
       return res.status(400).json({
         error: 'Already subscribed',
-        subscription: existingSubscription,
+        subscription: { status: profile.subscription_status },
       });
     }
 
@@ -66,16 +65,15 @@ export default async function handler(req, res) {
     });
 
     // Create order for ₹2000 (amount in paise)
-    // Receipt must be max 40 chars
-    const shortUserId = userId.slice(-8);
+    const shortUserId = user.id.slice(-8);
     const timestamp = Date.now().toString().slice(-10);
     const order = await razorpay.orders.create({
       amount: 200000, // ₹2000 in paise
       currency: 'INR',
       receipt: `rcpt_${shortUserId}_${timestamp}`,
       notes: {
-        clerk_user_id: userId,
-        user_email: user.emailAddresses[0]?.emailAddress,
+        supabase_user_id: user.id,
+        user_email: user.email,
         plan: 'lifetime',
       },
     });
@@ -86,8 +84,8 @@ export default async function handler(req, res) {
       currency: order.currency,
       keyId: process.env.RAZORPAY_KEY_ID,
       user: {
-        name: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
-        email: user.emailAddresses[0]?.emailAddress,
+        name: profile?.full_name || user.user_metadata?.full_name || '',
+        email: user.email,
       },
     });
   } catch (error) {
@@ -95,7 +93,6 @@ export default async function handler(req, res) {
     return res.status(500).json({
       error: 'Failed to create order',
       details: error.message,
-      stack: process.env.NODE_ENV !== 'production' ? error.stack : undefined
     });
   }
 }

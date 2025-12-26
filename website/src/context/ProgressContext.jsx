@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useUser } from '@clerk/clerk-react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { useAuth } from './AuthContext';
 
 const ProgressContext = createContext();
 
@@ -14,55 +14,55 @@ export const useProgress = () => {
 };
 
 export const ProgressProvider = ({ children }) => {
-  // Check if Clerk is available
-  let user, isLoaded, isSignedIn;
-  try {
-    const clerkUser = useUser();
-    user = clerkUser.user;
-    isLoaded = clerkUser.isLoaded;
-    isSignedIn = clerkUser.isSignedIn;
-  } catch (error) {
-    // Clerk is not configured, use localStorage only
-    user = null;
-    isLoaded = true;
-    isSignedIn = false;
-  }
-
+  const { user, isSignedIn, isLoaded, supabase } = useAuth();
   const [readArticles, setReadArticles] = useState(new Set());
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Load progress from localStorage or Clerk unsafeMetadata
+  // Load progress from localStorage or Supabase
   useEffect(() => {
     if (!isLoaded) return;
 
     const loadProgress = async () => {
-      if (isSignedIn && user) {
-        // Load from Clerk unsafeMetadata
-        const clerkProgress = user.unsafeMetadata?.readArticles || [];
-        const localProgress = getLocalProgress();
-        
-        // Merge local and Clerk progress
-        const mergedProgress = new Set([...clerkProgress, ...localProgress]);
-        setReadArticles(mergedProgress);
+      if (isSignedIn && user && supabase) {
+        try {
+          // Load from Supabase user_progress table
+          const { data: progressData, error } = await supabase
+            .from('user_progress')
+            .select('article_id')
+            .eq('user_id', user.id);
 
-        // Sync merged progress back to Clerk if there were local articles
-        if (localProgress.length > 0 && mergedProgress.size > clerkProgress.length) {
-          await syncToClerk(Array.from(mergedProgress));
-          // Clear local storage after successful sync
-          localStorage.removeItem(STORAGE_KEY);
+          if (error && error.code !== 'PGRST116') {
+            console.error('Error loading progress:', error);
+          }
+
+          const supabaseProgress = progressData?.map(p => p.article_id) || [];
+          const localProgress = getLocalProgress();
+
+          // Merge local and Supabase progress
+          const mergedProgress = new Set([...supabaseProgress, ...localProgress]);
+          setReadArticles(mergedProgress);
+
+          // Sync local progress to Supabase if there were local articles
+          if (localProgress.length > 0) {
+            const newArticles = localProgress.filter(id => !supabaseProgress.includes(id));
+            if (newArticles.length > 0) {
+              await syncToSupabase(newArticles);
+              localStorage.removeItem(STORAGE_KEY);
+            }
+          }
+        } catch (error) {
+          console.error('Error loading progress:', error);
+          setReadArticles(new Set(getLocalProgress()));
         }
       } else {
-        // Load from localStorage for unauthenticated users
-        const localProgress = getLocalProgress();
-        setReadArticles(new Set(localProgress));
+        setReadArticles(new Set(getLocalProgress()));
       }
       setIsInitialized(true);
     };
 
     loadProgress();
-  }, [isLoaded, isSignedIn, user]);
+  }, [isLoaded, isSignedIn, user, supabase]);
 
-  // Helper to get progress from localStorage
   const getLocalProgress = () => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -73,7 +73,6 @@ export const ProgressProvider = ({ children }) => {
     }
   };
 
-  // Helper to save progress to localStorage
   const saveToLocalStorage = (articles) => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(articles));
@@ -82,54 +81,53 @@ export const ProgressProvider = ({ children }) => {
     }
   };
 
-  // Sync progress to Clerk unsafeMetadata
-  const syncToClerk = async (articles) => {
-    if (!isSignedIn || !user) return;
+  const syncToSupabase = async (articleIds) => {
+    if (!isSignedIn || !user || !supabase) return;
 
     try {
-      await user.update({
-        unsafeMetadata: {
-          ...user.unsafeMetadata,
-          readArticles: articles,
-          lastUpdated: new Date().toISOString(),
-        },
-      });
+      const records = articleIds.map(articleId => ({
+        user_id: user.id,
+        article_id: articleId,
+      }));
+
+      await supabase
+        .from('user_progress')
+        .upsert(records, { onConflict: 'user_id,article_id' });
     } catch (error) {
-      console.error('Error syncing progress to Clerk:', error);
+      console.error('Error syncing progress to Supabase:', error);
     }
   };
 
-  // Mark an article as read
   const markAsRead = useCallback(async (articleId) => {
     const updatedArticles = new Set(readArticles);
     updatedArticles.add(articleId);
     setReadArticles(updatedArticles);
 
-    const articlesArray = Array.from(updatedArticles);
-    
-    if (isSignedIn) {
-      await syncToClerk(articlesArray);
+    if (isSignedIn && supabase && user) {
+      await supabase
+        .from('user_progress')
+        .upsert({ user_id: user.id, article_id: articleId }, { onConflict: 'user_id,article_id' });
     } else {
-      saveToLocalStorage(articlesArray);
+      saveToLocalStorage(Array.from(updatedArticles));
     }
-  }, [readArticles, isSignedIn]);
+  }, [readArticles, isSignedIn, supabase, user]);
 
-  // Mark an article as unread
   const markAsUnread = useCallback(async (articleId) => {
     const updatedArticles = new Set(readArticles);
     updatedArticles.delete(articleId);
     setReadArticles(updatedArticles);
 
-    const articlesArray = Array.from(updatedArticles);
-    
-    if (isSignedIn) {
-      await syncToClerk(articlesArray);
+    if (isSignedIn && supabase && user) {
+      await supabase
+        .from('user_progress')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('article_id', articleId);
     } else {
-      saveToLocalStorage(articlesArray);
+      saveToLocalStorage(Array.from(updatedArticles));
     }
-  }, [readArticles, isSignedIn]);
+  }, [readArticles, isSignedIn, supabase, user]);
 
-  // Toggle read status
   const toggleRead = useCallback((articleId) => {
     if (readArticles.has(articleId)) {
       return markAsUnread(articleId);
@@ -138,16 +136,14 @@ export const ProgressProvider = ({ children }) => {
     }
   }, [readArticles, markAsRead, markAsUnread]);
 
-  // Check if an article is read
   const isRead = useCallback((articleId) => {
     return readArticles.has(articleId);
   }, [readArticles]);
 
-  // Get progress statistics
   const getStats = useCallback((totalArticles = 0) => {
     const readCount = readArticles.size;
     const percentage = totalArticles > 0 ? Math.round((readCount / totalArticles) * 100) : 0;
-    
+
     return {
       readCount,
       totalArticles,
@@ -156,16 +152,18 @@ export const ProgressProvider = ({ children }) => {
     };
   }, [readArticles]);
 
-  // Clear all progress (useful for testing or reset)
   const clearProgress = useCallback(async () => {
     setReadArticles(new Set());
-    
-    if (isSignedIn) {
-      await syncToClerk([]);
+
+    if (isSignedIn && supabase && user) {
+      await supabase
+        .from('user_progress')
+        .delete()
+        .eq('user_id', user.id);
     } else {
       localStorage.removeItem(STORAGE_KEY);
     }
-  }, [isSignedIn]);
+  }, [isSignedIn, supabase, user]);
 
   const value = {
     readArticles: Array.from(readArticles),

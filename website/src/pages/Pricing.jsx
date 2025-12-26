@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check, Star, Zap, BookOpen, Code, Sparkles, Shield } from 'lucide-react';
-import { useUser, SignInButton } from '@clerk/clerk-react';
+import { useAuth } from '../context/AuthContext';
 import { useSubscription } from '../context/SubscriptionContext';
 import contentData from '../data/content.json';
 
@@ -10,18 +10,7 @@ const Pricing = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  let user, isSignedIn, isLoaded;
-  try {
-    const clerkUser = useUser();
-    user = clerkUser.user;
-    isSignedIn = clerkUser.isSignedIn;
-    isLoaded = clerkUser.isLoaded;
-  } catch {
-    user = null;
-    isSignedIn = false;
-    isLoaded = true;
-  }
-
+  const { isSignedIn, isLoaded, signInWithGoogle } = useAuth();
   const { isPremium, initiatePayment, refreshSubscription } = useSubscription();
 
   // Calculate stats
@@ -47,6 +36,13 @@ const Pricing = () => {
       }
     } finally {
       setIsProcessing(false);
+    }
+  };
+
+  const handleSignIn = async () => {
+    const { error } = await signInWithGoogle();
+    if (error) {
+      setError('Sign in failed. Please try again.');
     }
   };
 
@@ -208,11 +204,9 @@ const Pricing = () => {
           {!isLoaded ? (
             <div className="loading-btn">Loading...</div>
           ) : !isSignedIn ? (
-            <SignInButton mode="modal">
-              <button className="purchase-btn">
-                Sign In to Purchase
-              </button>
-            </SignInButton>
+            <button className="purchase-btn" onClick={handleSignIn}>
+              Sign In to Purchase
+            </button>
           ) : (
             <button
               className="purchase-btn"

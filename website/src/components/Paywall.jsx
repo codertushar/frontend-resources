@@ -1,11 +1,15 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Lock, Sparkles, ArrowRight } from 'lucide-react';
-import { SignInButton } from '@clerk/clerk-react';
+import { useAuth } from '../context/AuthContext';
 import { useSubscription } from '../context/SubscriptionContext';
 
 const Paywall = ({ articleTitle }) => {
+  const { signInWithGoogle } = useAuth();
   const { isSignedIn } = useSubscription();
+
+  const handleSignIn = async () => {
+    await signInWithGoogle();
+  };
 
   return (
     <div className="paywall-container">
@@ -54,12 +58,10 @@ const Paywall = ({ articleTitle }) => {
 
         {!isSignedIn ? (
           <div className="paywall-actions">
-            <SignInButton mode="modal">
-              <button className="btn-primary">
-                Sign In to Unlock
-                <ArrowRight size={18} />
-              </button>
-            </SignInButton>
+            <button className="btn-primary" onClick={handleSignIn}>
+              Sign In to Unlock
+              <ArrowRight size={18} />
+            </button>
             <p className="signin-note">Already purchased? Sign in to access.</p>
           </div>
         ) : (

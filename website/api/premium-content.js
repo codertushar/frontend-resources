@@ -1,4 +1,4 @@
-import { createClerkClient } from '@clerk/clerk-sdk-node';
+import { createClient } from '@supabase/supabase-js';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -10,7 +10,6 @@ export const config = {
 // Load premium content at runtime
 function getPremiumContent() {
   try {
-    // Try multiple paths to handle both local dev and Vercel deployment
     const possiblePaths = [
       join(process.cwd(), 'src', 'data', 'premium-content.json'),
       join(process.cwd(), 'website', 'src', 'data', 'premium-content.json'),
@@ -20,14 +19,13 @@ function getPremiumContent() {
     for (const filePath of possiblePaths) {
       try {
         const content = readFileSync(filePath, 'utf-8');
-        console.log('Loaded premium content from:', filePath);
         return JSON.parse(content);
       } catch (e) {
         // Try next path
       }
     }
 
-    console.error('Could not find premium-content.json in any expected location');
+    console.error('Could not find premium-content.json');
     return {};
   } catch (error) {
     console.error('Error loading premium content:', error);
@@ -36,7 +34,6 @@ function getPremiumContent() {
 }
 
 export default async function handler(req, res) {
-  // Only allow GET requests
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -47,17 +44,18 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Article ID is required' });
   }
 
-  // Decode the article ID (handles URL-encoded slashes like %2F)
   const articleId = decodeURIComponent(rawArticleId);
 
   // Check environment variables
-  if (!process.env.CLERK_SECRET_KEY) {
-    return res.status(500).json({ error: 'CLERK_SECRET_KEY not configured' });
+  const supabaseUrl = process.env.VITE_SUPABASE_URL;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseServiceKey) {
+    return res.status(500).json({ error: 'Supabase not configured' });
   }
 
   const premiumContent = getPremiumContent();
 
-  // Check if article exists in premium content
   if (!premiumContent[articleId]) {
     return res.status(404).json({ error: 'Article not found or is not premium' });
   }
@@ -71,39 +69,44 @@ export default async function handler(req, res) {
   const token = authHeader.substring(7);
 
   try {
-    // Initialize Clerk client
-    const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
+    // Create Supabase client with service role for admin operations
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Parse the JWT payload to get user ID
-    const parts = token.split('.');
-    if (parts.length !== 3) {
-      return res.status(401).json({ error: 'Invalid token format' });
+    // Verify the JWT token
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token' });
     }
 
-    const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
-    const userId = payload.sub;
+    // Get user's subscription from profiles table
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('subscription_status, subscription_plan, subscription_expires_at')
+      .eq('id', user.id)
+      .single();
 
-    if (!userId) {
-      return res.status(401).json({ error: 'Invalid token - no user ID' });
+    if (profileError && profileError.code !== 'PGRST116') {
+      console.error('Error fetching profile:', profileError);
+      return res.status(500).json({ error: 'Failed to verify subscription' });
     }
-
-    // Get user to check subscription status
-    const user = await clerkClient.users.getUser(userId);
-    const subscription = user.publicMetadata?.subscription;
 
     // Check if user has active premium subscription
-    if (!subscription || subscription.status !== 'active') {
+    const subscription = profile || { subscription_status: 'free' };
+
+    if (subscription.subscription_status !== 'active') {
       return res.status(403).json({
         error: 'Premium subscription required',
-        subscriptionStatus: subscription?.status || 'none',
+        subscriptionStatus: subscription.subscription_status || 'none',
       });
     }
 
-    // Check if subscription is expired (for future-proofing, lifetime has null expiresAt)
-    if (subscription.expiresAt && new Date(subscription.expiresAt) < new Date()) {
+    // Check if subscription is expired
+    if (subscription.subscription_expires_at &&
+        new Date(subscription.subscription_expires_at) < new Date()) {
       return res.status(403).json({
         error: 'Subscription expired',
-        expiresAt: subscription.expiresAt,
+        expiresAt: subscription.subscription_expires_at,
       });
     }
 

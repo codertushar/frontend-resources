@@ -1,13 +1,10 @@
-
-import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { BookOpen, Layers, Map, Mail, Github, Linkedin } from 'lucide-react';
-import { SignInButton, SignUpButton, UserButton, useUser, useClerk } from '@clerk/clerk-react';
+import { BookOpen, Layers, Map, Mail, Github, Linkedin, LogOut, User } from 'lucide-react';
 import { XIcon } from './SocialIcons';
-import { motion } from 'framer-motion';
 
 import ThemeToggle from './ThemeToggle';
 import NotificationPrompt from './NotificationPrompt';
+import { useAuth } from '../context/AuthContext';
 
 const Logo = ({ className }) => (
   <svg
@@ -28,9 +25,14 @@ const Logo = ({ className }) => (
 );
 
 const Layout = ({ children }) => {
-  // Always call hook unconditionally (React rules of hooks)
-  const { isSignedIn, isLoaded } = useUser();
-  const { signOut } = useClerk();
+  const { user, isSignedIn, isLoaded, signInWithGoogle, signOut } = useAuth();
+
+  const handleSignIn = async () => {
+    const { error } = await signInWithGoogle();
+    if (error) {
+      console.error('Sign in error:', error);
+    }
+  };
 
   return (
     <div className="layout">
@@ -62,29 +64,30 @@ const Layout = ({ children }) => {
               <>
                 {isSignedIn ? (
                   <div className="auth-section">
-                    <UserButton
-                      appearance={{
-                        elements: {
-                          avatarBox: "w-8 h-8"
-                        }
-                      }}
-                    />
+                    <div className="user-avatar">
+                      {(user?.user_metadata?.avatar_url || user?.user_metadata?.picture) ? (
+                        <img
+                          src={user.user_metadata.avatar_url || user.user_metadata.picture}
+                          alt="Profile"
+                          className="avatar-img"
+                        />
+                      ) : (
+                        <User size={18} />
+                      )}
+                    </div>
                     <button
                       className="btn-auth btn-signin"
-                      onClick={() => signOut()}
-                      style={{ marginLeft: '0.5rem' }}
+                      onClick={signOut}
                     >
-                      Sign Out
+                      <LogOut size={16} />
+                      <span>Sign Out</span>
                     </button>
                   </div>
                 ) : (
                   <div className="auth-section">
-                    <SignInButton mode="modal">
-                      <button className="btn-auth btn-signin">Sign In</button>
-                    </SignInButton>
-                    <SignUpButton mode="modal">
-                      <button className="btn-auth btn-signup">Sign Up</button>
-                    </SignUpButton>
+                    <button className="btn-auth btn-signup" onClick={handleSignIn}>
+                      Sign In
+                    </button>
                   </div>
                 )}
               </>
@@ -212,7 +215,28 @@ const Layout = ({ children }) => {
           margin-left: 0.5rem;
         }
 
+        .user-avatar {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--surface-hover);
+          border: 2px solid var(--primary);
+        }
+
+        .avatar-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
         .btn-auth {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
           padding: 0.5rem 1rem;
           border-radius: 99px;
           font-size: 0.875rem;
@@ -335,6 +359,10 @@ const Layout = ({ children }) => {
           .btn-auth {
             font-size: 0.75rem;
             padding: 0.4rem 0.6rem;
+          }
+
+          .btn-auth span {
+            display: none;
           }
 
           .main-content {

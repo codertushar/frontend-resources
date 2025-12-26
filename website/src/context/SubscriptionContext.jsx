@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useUser, useAuth } from '@clerk/clerk-react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { useAuth } from './AuthContext';
 
 const SubscriptionContext = createContext();
 
@@ -12,38 +12,48 @@ export const useSubscription = () => {
 };
 
 export const SubscriptionProvider = ({ children }) => {
-  // Check if Clerk is available
-  let user, isLoaded, isSignedIn, getToken;
-  try {
-    const clerkUser = useUser();
-    const clerkAuth = useAuth();
-    user = clerkUser.user;
-    isLoaded = clerkUser.isLoaded;
-    isSignedIn = clerkUser.isSignedIn;
-    getToken = clerkAuth.getToken;
-  } catch (error) {
-    // Clerk is not configured
-    user = null;
-    isLoaded = true;
-    isSignedIn = false;
-    getToken = null;
-  }
-
+  const { user, isSignedIn, isLoaded, getAccessToken, supabase } = useAuth();
   const [subscription, setSubscription] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Load subscription from Clerk publicMetadata
+  // Load subscription from Supabase profiles table
   useEffect(() => {
     if (!isLoaded) return;
 
-    if (isSignedIn && user) {
-      const sub = user.publicMetadata?.subscription;
-      setSubscription(sub || { status: 'free', plan: 'free' });
-    } else {
-      setSubscription({ status: 'free', plan: 'free' });
-    }
-    setIsInitialized(true);
-  }, [isLoaded, isSignedIn, user]);
+    const loadSubscription = async () => {
+      if (isSignedIn && user && supabase) {
+        try {
+          const { data: profile, error } = await supabase
+            .from('profiles')
+            .select('subscription_status, subscription_plan, subscription_expires_at')
+            .eq('id', user.id)
+            .single();
+
+          if (error && error.code !== 'PGRST116') {
+            console.error('Error loading subscription:', error);
+          }
+
+          if (profile) {
+            setSubscription({
+              status: profile.subscription_status || 'free',
+              plan: profile.subscription_plan || 'free',
+              expiresAt: profile.subscription_expires_at,
+            });
+          } else {
+            setSubscription({ status: 'free', plan: 'free' });
+          }
+        } catch (error) {
+          console.error('Error loading subscription:', error);
+          setSubscription({ status: 'free', plan: 'free' });
+        }
+      } else {
+        setSubscription({ status: 'free', plan: 'free' });
+      }
+      setIsInitialized(true);
+    };
+
+    loadSubscription();
+  }, [isLoaded, isSignedIn, user, supabase]);
 
   // Check if user has premium access
   const isPremium = useCallback(() => {
@@ -60,7 +70,7 @@ export const SubscriptionProvider = ({ children }) => {
 
   // Fetch premium content from API
   const fetchPremiumContent = useCallback(async (articleId) => {
-    if (!isSignedIn || !getToken) {
+    if (!isSignedIn) {
       throw new Error('Authentication required');
     }
 
@@ -69,7 +79,7 @@ export const SubscriptionProvider = ({ children }) => {
     }
 
     try {
-      const token = await getToken();
+      const token = await getAccessToken();
       const response = await fetch(`/api/premium-content?articleId=${encodeURIComponent(articleId)}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -87,16 +97,16 @@ export const SubscriptionProvider = ({ children }) => {
       console.error('Error fetching premium content:', error);
       throw error;
     }
-  }, [isSignedIn, getToken, isPremium]);
+  }, [isSignedIn, getAccessToken, isPremium]);
 
   // Create Razorpay order
   const createOrder = useCallback(async () => {
-    if (!isSignedIn || !getToken) {
+    if (!isSignedIn) {
       throw new Error('Please sign in to purchase');
     }
 
     try {
-      const token = await getToken();
+      const token = await getAccessToken();
       const response = await fetch('/api/create-order', {
         method: 'POST',
         headers: {
@@ -116,7 +126,7 @@ export const SubscriptionProvider = ({ children }) => {
       console.error('Error creating order:', error);
       throw error;
     }
-  }, [isSignedIn, getToken]);
+  }, [isSignedIn, getAccessToken]);
 
   // Initiate Razorpay payment
   const initiatePayment = useCallback(async () => {
@@ -142,9 +152,6 @@ export const SubscriptionProvider = ({ children }) => {
           color: '#8b5cf6',
         },
         handler: function (response) {
-          // Payment successful
-          // The webhook will update Clerk metadata
-          // Refresh user to get updated metadata
           resolve({
             success: true,
             paymentId: response.razorpay_payment_id,
@@ -169,13 +176,22 @@ export const SubscriptionProvider = ({ children }) => {
 
   // Refresh subscription status (after payment)
   const refreshSubscription = useCallback(async () => {
-    if (user) {
-      // Force reload user data
-      await user.reload();
-      const sub = user.publicMetadata?.subscription;
-      setSubscription(sub || { status: 'free', plan: 'free' });
+    if (user && supabase) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('subscription_status, subscription_plan, subscription_expires_at')
+        .eq('id', user.id)
+        .single();
+
+      if (profile) {
+        setSubscription({
+          status: profile.subscription_status || 'free',
+          plan: profile.subscription_plan || 'free',
+          expiresAt: profile.subscription_expires_at,
+        });
+      }
     }
-  }, [user]);
+  }, [user, supabase]);
 
   const value = {
     subscription,
