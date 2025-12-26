@@ -11,14 +11,36 @@ export const useAuth = () => {
   return context;
 };
 
+// Ensure user profile exists in profiles table
+const ensureProfile = async (user) => {
+  if (!supabase) return;
+
+  const { data: existingProfile } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('id', user.id)
+    .single();
+
+  if (!existingProfile) {
+    await supabase.from('profiles').insert({
+      id: user.id,
+      email: user.email,
+      full_name: user.user_metadata?.full_name || user.user_metadata?.name || '',
+      avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || '',
+      subscription_status: 'free',
+      subscription_plan: 'free',
+    });
+  }
+};
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [session, setSession] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // If Supabase isn't configured, don't show loading state
+  const [isLoading, setIsLoading] = useState(isSupabaseConfigured());
 
   useEffect(() => {
     if (!isSupabaseConfigured()) {
-      setIsLoading(false);
       return;
     }
 
@@ -45,21 +67,6 @@ export const AuthProvider = ({ children }) => {
       }
     );
 
-    // Listen for storage changes from other tabs (cross-tab logout sync)
-    const handleStorageChange = async (event) => {
-      // Detect when Supabase auth token is removed in another tab
-      if (event.key?.startsWith('sb-') && event.newValue === null) {
-        // Another tab logged out - check current session
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session && isMounted) {
-          setSession(null);
-          setUser(null);
-        }
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-
     // Failsafe: ensure loading state is cleared even if Supabase hangs
     const timeout = setTimeout(() => {
       if (isMounted) {
@@ -71,31 +78,8 @@ export const AuthProvider = ({ children }) => {
       isMounted = false;
       clearTimeout(timeout);
       subscription.unsubscribe();
-      window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
-
-  // Ensure user profile exists in profiles table
-  const ensureProfile = async (user) => {
-    if (!supabase) return;
-
-    const { data: existingProfile } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('id', user.id)
-      .single();
-
-    if (!existingProfile) {
-      await supabase.from('profiles').insert({
-        id: user.id,
-        email: user.email,
-        full_name: user.user_metadata?.full_name || user.user_metadata?.name || '',
-        avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || '',
-        subscription_status: 'free',
-        subscription_plan: 'free',
-      });
-    }
-  };
 
   const signInWithGoogle = async () => {
     if (!supabase) {
@@ -116,20 +100,14 @@ export const AuthProvider = ({ children }) => {
   const signOut = async () => {
     if (!supabase) return;
 
-    // Clear React state first
-    setUser(null);
-    setSession(null);
-
-    // Clear Supabase tokens from localStorage BEFORE calling signOut
-    // This ensures tokens are gone even if signOut fails
-    const keysToRemove = Object.keys(localStorage).filter(key => key.startsWith('sb-'));
-    keysToRemove.forEach(key => localStorage.removeItem(key));
-
     try {
-      // Sign out from Supabase (this also notifies the server)
+      // Let Supabase handle signOut - it will clear tokens and broadcast to other tabs
       await supabase.auth.signOut();
     } catch (error) {
       console.error('Error signing out:', error);
+      // Fallback: manually clear state if signOut fails
+      setUser(null);
+      setSession(null);
     }
   };
 
