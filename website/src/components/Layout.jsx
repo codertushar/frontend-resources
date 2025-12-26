@@ -61,8 +61,7 @@ const Layout = ({ children }) => {
               <>
                 {isSignedIn ? (
                   <div className="auth-section">
-                    <UserButton 
-                      afterSignOutUrl="/"
+                    <UserButton
                       appearance={{
                         elements: {
                           avatarBox: "w-8 h-8"
