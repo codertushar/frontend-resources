@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Code, Database, Brain, Layout, Sparkles, BookOpen, Users, Trophy } from 'lucide-react';
+import { ArrowRight, Code, Database, Brain, Layout, Sparkles, BookOpen, Crown, Trophy } from 'lucide-react';
 import contentData from '../data/content.json';
 
 const container = {
@@ -22,6 +22,7 @@ const item = {
 
 const Home = () => {
   const resourceCount = contentData.length;
+  const premiumCount = contentData.filter(item => item.premium).length;
 
   return (
     <div className="container">
@@ -71,10 +72,10 @@ const Home = () => {
           </div>
           <div className="stat-divider"></div>
           <div className="stat-item">
-            <Users size={20} />
+            <Crown size={20} />
             <div className="stat-content">
-              <span className="stat-value">30%</span>
-              <span className="stat-label">Free Content</span>
+              <span className="stat-value">{premiumCount}+</span>
+              <span className="stat-label">Premium Guides</span>
             </div>
           </div>
         </motion.div>
