@@ -156,8 +156,61 @@ const cache = new Map(); // Create a new Map
 │   │   └── /general       # Function polyfills (call, bind, apply)
 │   ├── /promises          # Promise patterns & utilities
 │   └── /utils             # Utility functions (debounce, deep_clone, etc.)
-└── /machine-coding        # Practical real-world implementations
+├── /machine-coding        # Practical real-world implementations
+└── /system-design         # System design resources
 ```
+
+---
+
+## 💎 Premium Content Strategy
+
+The website uses a freemium model with ~40-50% premium content. The premium status is automatically determined by `generate-content.js` based on these rules:
+
+### Premium Content Rules
+
+| Rule | Description | Premium? |
+|------|-------------|----------|
+| **Hard difficulty** | All articles with `difficulty: hard` | ✅ Yes |
+| **System Design** | All system-design category content | ✅ Yes (100%) |
+| **Machine Coding** | All machine-coding category content | ✅ Yes (100%) |
+| **AI** | All AI category content | ✅ Yes (100%) |
+| **DSA** | Medium and hard difficulty | ✅ Yes (except easy) |
+| **Advanced utilities** | debounce, throttle, deep_clone, map_limit, sequential promises, prototype | ✅ Yes |
+| **Browser/rendering** | Articles about browser internals, rendering | ✅ Yes |
+| **Easy difficulty** | All easy articles | ❌ No (always free) |
+| **Basic polyfills** | Simple array methods, basic concepts | ❌ No |
+| **Design patterns** | General design patterns | ❌ No |
+| **Intro guides** | Articles with "guide", "30-day", "introduction" in name | ❌ No |
+
+### Overriding Premium Status
+
+You can override the automatic premium detection by adding `premium: true` or `premium: false` in the markdown frontmatter:
+
+```yaml
+---
+date: 2025-03-27T07:19:24+05:30
+description: Article description here
+premium: true  # Force this article to be premium
+---
+```
+
+### Current Distribution Target
+
+- **Free**: ~50-60% (for SEO, user acquisition, demonstrating value)
+- **Premium**: ~40-50% (monetization, high-value interview prep content)
+
+### Running Content Generation
+
+After adding or modifying content, run:
+
+```bash
+cd website && node scripts/generate-content.js
+```
+
+This regenerates:
+- `website/src/data/content.json` - Main content data
+- `website/public/content.json` - For service worker/PWA
+- `website/src/data/premium-content.json` - Full premium content (server-side only)
 
 ### Adding New Content
 1. **Determine Category**: Select the appropriate folder based on content type

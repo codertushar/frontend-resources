@@ -17,32 +17,79 @@ const PREMIUM_CONTENT_JSON = path.join(WEBSITE_ROOT, 'src', 'data', 'premium-con
 const CONTENT_DIRS = ['js', 'dsa', 'ai', 'general', 'machine-coding', 'system-design'];
 
 // Premium content configuration
-// ~70% of content should be premium
+// Strategy: ~40-50% premium, high-value content behind paywall
+// - All hard difficulty = premium
+// - System Design, Machine Coding, AI = 100% premium
+// - DSA = mostly premium (except intro guides)
+// - JS/General = hard difficulty + specific advanced utilities
 const PREMIUM_CONFIG = {
-    // Categories that are fully premium
-    fullyPremiumCategories: ['system-design', 'ai'],
-    // Categories that are partially premium (hard + medium difficulty)
-    partiallyPremiumCategories: ['machine-coding', 'dsa'],
-    // Categories with only hard content as premium
-    hardOnlyPremiumCategories: ['js', 'general'],
+    // Categories that are fully premium (100%)
+    fullyPremiumCategories: ['system-design', 'machine-coding', 'ai'],
+    // Categories that are mostly premium (except easy intro content)
+    mostlyPremiumCategories: ['dsa'],
+    // Specific files/topics that should be premium regardless of difficulty
+    premiumTopics: [
+        'debounce',
+        'throttle',
+        'deep_clone',
+        'deep-clone',
+        'map_limit',
+        'maplimit',
+        'fire_on_push',
+        'observable_array',
+        'sequential',
+        'prototype',  // prototype inheritance article
+    ],
+    // Files that should always be FREE (intro/guide content)
+    freeTopics: [
+        '30-day',
+        'guide',
+        'introduction',
+        'getting-started',
+    ],
 };
 
-function isPremiumContent(category, difficulty, subcategory) {
-    // System design and AI are fully premium
+function isPremiumContent(category, difficulty, subcategory, filePath = '') {
+    const filePathLower = filePath.toLowerCase();
+    const fileName = filePathLower.split('/').pop().replace('.md', '');
+
+    // Rule 0: Check if explicitly marked as free (intro guides)
+    for (const topic of PREMIUM_CONFIG.freeTopics) {
+        if (filePathLower.includes(topic)) {
+            return false;
+        }
+    }
+
+    // Rule 1: All hard difficulty = premium
+    if (difficulty === 'hard') {
+        return true;
+    }
+
+    // Rule 2: Fully premium categories (system-design, machine-coding, ai)
     if (PREMIUM_CONFIG.fullyPremiumCategories.includes(category)) {
         return true;
     }
 
-    // Machine coding and DSA: medium and hard are premium
-    if (PREMIUM_CONFIG.partiallyPremiumCategories.includes(category)) {
-        return difficulty === 'hard' || difficulty === 'medium';
+    // Rule 3: DSA - mostly premium except easy difficulty
+    if (PREMIUM_CONFIG.mostlyPremiumCategories.includes(category)) {
+        return difficulty !== 'easy';
     }
 
-    // JS and General: only hard content is premium
-    if (PREMIUM_CONFIG.hardOnlyPremiumCategories.includes(category)) {
-        return difficulty === 'hard';
+    // Rule 4: Check specific premium topics (advanced utilities)
+    for (const topic of PREMIUM_CONFIG.premiumTopics) {
+        if (fileName.includes(topic) || filePathLower.includes(topic)) {
+            return true;
+        }
     }
 
+    // Rule 5: General - browser/rendering topics = premium
+    if (category === 'general') {
+        if (filePathLower.includes('browser') || filePathLower.includes('rendering') || filePathLower.includes('interview')) {
+            return true;
+        }
+    }
+
+    // Default: free
     return false;
 }
 
@@ -597,7 +644,7 @@ function processDirectory(dirPath, relativePath, resources, premiumFullContent =
             // Determine if content is premium
             const premium = metadata.premium !== undefined
                 ? metadata.premium === 'true' || metadata.premium === true
-                : isPremiumContent(category, difficulty, subcategory);
+                : isPremiumContent(category, difficulty, subcategory, itemRelativePath);
 
             // Build resource object with frontmatter metadata
             const resource = {

@@ -110,6 +110,52 @@ const cache = new Map(); // Prevent redundant calculations
 
 ---
 
+## 💎 Premium Content Strategy
+
+The website uses a freemium model. Premium status is automatically determined by `website/scripts/generate-content.js`:
+
+### What's Premium (Paywalled)
+
+| Category | Rule |
+|----------|------|
+| **Hard difficulty** | All hard articles are premium |
+| **System Design** | 100% premium |
+| **Machine Coding** | 100% premium |
+| **AI** | 100% premium |
+| **DSA** | Premium except easy difficulty |
+| **Advanced utilities** | debounce, throttle, deep_clone, map_limit, sequential, prototype |
+| **Browser/rendering** | Browser internals, rendering pipeline |
+
+### What's Free
+
+| Category | Rule |
+|----------|------|
+| **Easy difficulty** | Always free |
+| **Basic polyfills** | Simple array methods (filter, map, push, etc.) |
+| **Design patterns** | General patterns (singleton, factory, etc.) |
+| **Intro guides** | Articles with "guide", "30-day", "introduction" |
+
+### Override with Frontmatter
+
+Add `premium: true` or `premium: false` in markdown frontmatter to override:
+
+```yaml
+---
+date: 2025-03-27
+premium: true  # Force premium
+---
+```
+
+### After Adding Content
+
+Run content generation to update JSON files:
+
+```bash
+cd website && node scripts/generate-content.js
+```
+
+---
+
 ## 🔍 Content Quality Checklist
 
 Before completing any task, verify:
