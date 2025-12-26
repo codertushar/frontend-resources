@@ -1,6 +1,7 @@
 import { createClerkClient } from '@clerk/clerk-sdk-node';
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 export const config = {
   runtime: 'nodejs',
@@ -9,9 +10,25 @@ export const config = {
 // Load premium content at runtime
 function getPremiumContent() {
   try {
-    const filePath = join(process.cwd(), 'src', 'data', 'premium-content.json');
-    const content = readFileSync(filePath, 'utf-8');
-    return JSON.parse(content);
+    // Try multiple paths to handle both local dev and Vercel deployment
+    const possiblePaths = [
+      join(process.cwd(), 'src', 'data', 'premium-content.json'),
+      join(process.cwd(), 'website', 'src', 'data', 'premium-content.json'),
+      join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'data', 'premium-content.json'),
+    ];
+
+    for (const filePath of possiblePaths) {
+      try {
+        const content = readFileSync(filePath, 'utf-8');
+        console.log('Loaded premium content from:', filePath);
+        return JSON.parse(content);
+      } catch (e) {
+        // Try next path
+      }
+    }
+
+    console.error('Could not find premium-content.json in any expected location');
+    return {};
   } catch (error) {
     console.error('Error loading premium content:', error);
     return {};
@@ -24,11 +41,14 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { articleId } = req.query;
+  const { articleId: rawArticleId } = req.query;
 
-  if (!articleId) {
+  if (!rawArticleId) {
     return res.status(400).json({ error: 'Article ID is required' });
   }
+
+  // Decode the article ID (handles URL-encoded slashes like %2F)
+  const articleId = decodeURIComponent(rawArticleId);
 
   // Check environment variables
   if (!process.env.CLERK_SECRET_KEY) {
