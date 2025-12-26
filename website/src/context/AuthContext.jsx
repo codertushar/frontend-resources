@@ -129,16 +129,26 @@ export const AuthProvider = ({ children }) => {
   const signOut = async () => {
     if (!supabase) return;
 
-    try {
-      // Clear local state first
-      setUser(null);
-      setSession(null);
+    // Clear local state first
+    setUser(null);
+    setSession(null);
 
-      // Sign out globally so other tabs also get signed out
-      await supabase.auth.signOut({ scope: 'global' });
+    try {
+      // Sign out from Supabase
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Supabase sign out error:', error);
+      }
     } catch (error) {
       console.error('Error signing out:', error);
     }
+
+    // Clear any Supabase tokens from localStorage as fallback
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith('sb-')) {
+        localStorage.removeItem(key);
+      }
+    });
   };
 
   const getAccessToken = async () => {
