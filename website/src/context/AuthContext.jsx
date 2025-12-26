@@ -11,8 +11,8 @@ export const useAuth = () => {
   return context;
 };
 
-// Ensure user profile exists in profiles table (called outside of onAuthStateChange)
-const ensureProfile = async (user) => {
+// Create user profile if it doesn't exist (defined outside component to avoid hook issues)
+const createProfileIfNeeded = async (user) => {
   if (!supabase) return;
 
   try {
@@ -32,15 +32,14 @@ const ensureProfile = async (user) => {
         subscription_plan: 'free',
       });
     }
-  } catch (error) {
-    console.error('Error ensuring profile:', error);
+  } catch {
+    // Profile might already exist, ignore error
   }
 };
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [session, setSession] = useState(null);
-  // If Supabase isn't configured, don't show loading state
   const [isLoading, setIsLoading] = useState(isSupabaseConfigured());
 
   useEffect(() => {
@@ -48,48 +47,23 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    // Handle OAuth callback hash - must be done before getSession
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = hashParams.get('access_token');
-    const refreshToken = hashParams.get('refresh_token');
+    // 1. Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setIsLoading(false);
+    });
 
-    if (accessToken && refreshToken) {
-      // Process OAuth tokens from URL hash
-      supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      }).then(({ data: { session }, error }) => {
-        if (error) {
-          console.error('Error setting session from hash:', error);
-        }
-        if (session) {
-          setSession(session);
-          setUser(session.user);
-        }
-        setIsLoading(false);
-        // Clean URL
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-      });
-    } else {
-      // No hash tokens - get existing session
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setIsLoading(false);
-      });
-    }
-
-    // Listen for auth state changes (cross-tab sync, sign in, sign out, token refresh)
-    // IMPORTANT: Don't use async callback - defer Supabase calls with setTimeout
+    // 2. Listen for auth changes (this handles OAuth redirects automatically)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(false);
 
-        // Defer profile creation to avoid deadlock (don't call Supabase inside callback)
+        // Create profile on first sign in (deferred to avoid deadlock)
         if (event === 'SIGNED_IN' && session?.user) {
-          setTimeout(() => ensureProfile(session.user), 0);
+          setTimeout(() => createProfileIfNeeded(session.user), 0);
         }
       }
     );
@@ -99,16 +73,15 @@ export const AuthProvider = ({ children }) => {
 
   const signInWithGoogle = async () => {
     if (!supabase) {
-      console.error('Supabase not configured');
       return { error: new Error('Supabase not configured') };
     }
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.href,
+        redirectTo: window.location.origin + window.location.pathname,
         queryParams: {
-          prompt: 'select_account', // Always show account picker
+          prompt: 'select_account',
         },
       },
     });
@@ -118,22 +91,7 @@ export const AuthProvider = ({ children }) => {
 
   const signOut = async () => {
     if (!supabase) return;
-
-    // Clear React state immediately
-    setUser(null);
-    setSession(null);
-
-    try {
-      // Sign out globally (invalidates session on server + all tabs)
-      await supabase.auth.signOut({ scope: 'global' });
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
-
-    // Clear all Supabase tokens from localStorage
-    Object.keys(localStorage)
-      .filter(key => key.startsWith('sb-'))
-      .forEach(key => localStorage.removeItem(key));
+    await supabase.auth.signOut();
   };
 
   const getAccessToken = async () => {
