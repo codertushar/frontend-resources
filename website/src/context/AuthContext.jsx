@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 const AuthContext = createContext();
@@ -10,6 +10,22 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within AuthProvider');
   }
   return context;
+};
+
+// Helper to clear all Supabase storage
+const clearSupabaseStorage = () => {
+  // Clear localStorage
+  Object.keys(localStorage).forEach(key => {
+    if (key.startsWith('sb-')) {
+      localStorage.removeItem(key);
+    }
+  });
+  // Clear sessionStorage
+  Object.keys(sessionStorage).forEach(key => {
+    if (key.startsWith('sb-')) {
+      sessionStorage.removeItem(key);
+    }
+  });
 };
 
 export const AuthProvider = ({ children }) => {
@@ -47,34 +63,46 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    // Set up auth state listener (this handles OAuth redirects automatically)
+    // Set up auth state listener FIRST - this handles OAuth redirects
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
-        console.log('[Auth] onAuthStateChange:', {
-          event,
-          email: currentSession?.user?.email,
-        });
+        console.log('[Auth] onAuthStateChange:', { event, email: currentSession?.user?.email });
+
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         setIsLoading(false);
 
-        // Create profile on first sign in (deferred to avoid deadlock)
+        // Create profile on sign in (deferred to avoid Supabase deadlock)
         if (event === 'SIGNED_IN' && currentSession?.user) {
           setTimeout(() => createProfileIfNeeded(currentSession.user), 0);
         }
       }
     );
 
-    // Get initial session
-    console.log('[Auth] Getting initial session...');
-    supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
-      console.log('[Auth] getSession result:', {
-        hasSession: !!initialSession,
-        email: initialSession?.user?.email,
+    // IMPORTANT: Use getUser() instead of getSession() to verify server-side
+    // getSession() only reads from localStorage (can be stale)
+    // getUser() actually validates the session with Supabase server
+    console.log('[Auth] Verifying session with server...');
+    supabase.auth.getUser().then(({ data: { user: verifiedUser }, error }) => {
+      console.log('[Auth] getUser result:', {
+        hasUser: !!verifiedUser,
+        email: verifiedUser?.email,
+        error: error?.message
       });
-      setSession(initialSession);
-      setUser(initialSession?.user ?? null);
-      setIsLoading(false);
+
+      if (error || !verifiedUser) {
+        // No valid session or session is stale - clear everything
+        setSession(null);
+        setUser(null);
+        setIsLoading(false);
+      } else {
+        // Valid user - now get the full session
+        supabase.auth.getSession().then(({ data: { session: validSession } }) => {
+          setSession(validSession);
+          setUser(verifiedUser);
+          setIsLoading(false);
+        });
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -87,12 +115,18 @@ export const AuthProvider = ({ children }) => {
 
     console.log('[Auth] signInWithGoogle called');
 
+    // Step 1: Clear any existing local session to prevent stale data
+    await supabase.auth.signOut({ scope: 'local' });
+    clearSupabaseStorage();
+
+    // Step 2: Start OAuth flow with forced account selection
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: window.location.origin + window.location.pathname,
         queryParams: {
-          prompt: 'select_account',
+          prompt: 'consent',  // Force consent screen (stronger than select_account)
+          access_type: 'offline',
         },
       },
     });
@@ -106,15 +140,18 @@ export const AuthProvider = ({ children }) => {
 
     console.log('[Auth] signOut called');
 
-    // Clear React state first
+    // Step 1: Clear React state immediately for responsive UI
     setUser(null);
     setSession(null);
 
-    // Sign out from Supabase (local scope to avoid server issues)
-    const { error } = await supabase.auth.signOut();
+    // Step 2: Sign out from Supabase (global scope terminates all sessions)
+    const { error } = await supabase.auth.signOut({ scope: 'global' });
     console.log('[Auth] signOut result:', { error });
 
-    console.log('[Auth] State cleared');
+    // Step 3: Clear all Supabase storage to ensure clean slate
+    clearSupabaseStorage();
+
+    console.log('[Auth] Complete sign out finished');
   }, []);
 
   const getAccessToken = useCallback(async () => {
@@ -122,7 +159,8 @@ export const AuthProvider = ({ children }) => {
     return session.access_token;
   }, [session]);
 
-  const value = {
+  // Memoize context value to prevent unnecessary re-renders
+  const value = useMemo(() => ({
     user,
     session,
     isLoading,
@@ -132,7 +170,7 @@ export const AuthProvider = ({ children }) => {
     signOut,
     getAccessToken,
     supabase,
-  };
+  }), [user, session, isLoading, signInWithGoogle, signOut, getAccessToken]);
 
   return (
     <AuthContext.Provider value={value}>
