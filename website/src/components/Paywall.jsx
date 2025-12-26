@@ -108,8 +108,9 @@ const Paywall = ({ articleTitle }) => {
         .paywall-blur-layer {
           position: absolute;
           top: 0;
-          left: -3rem;
-          right: -3rem;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 100vw;
           height: 120px;
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
@@ -123,8 +124,9 @@ const Paywall = ({ articleTitle }) => {
         .paywall-gradient {
           position: absolute;
           top: 0;
-          left: -3rem;
-          right: -3rem;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 100vw;
           height: 250px;
           background: linear-gradient(
             to bottom,
@@ -432,14 +434,10 @@ const Paywall = ({ articleTitle }) => {
           }
 
           .paywall-blur-layer {
-            left: -1.5rem;
-            right: -1.5rem;
             height: 80px;
           }
 
           .paywall-gradient {
-            left: -1.5rem;
-            right: -1.5rem;
             height: 180px;
           }
 

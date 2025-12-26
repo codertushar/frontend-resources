@@ -277,12 +277,16 @@ const Layout = ({ children }) => {
           top: calc(100% + 8px);
           right: 0;
           min-width: 200px;
-          background: var(--surface-card);
+          background: var(--surface-color);
           border: 1px solid var(--border-color);
           border-radius: 12px;
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-          z-index: 200;
+          z-index: 9999;
           overflow: hidden;
+        }
+
+        :root.light .user-dropdown {
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         .dropdown-header {
