@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { BookOpen, Layers, Map, Mail, Github, Linkedin, LogOut, User } from 'lucide-react';
 import { XIcon } from './SocialIcons';
@@ -26,12 +27,31 @@ const Logo = ({ className }) => (
 
 const Layout = ({ children }) => {
   const { user, isSignedIn, isLoaded, signInWithGoogle, signOut } = useAuth();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleSignIn = async () => {
     const { error } = await signInWithGoogle();
     if (error) {
       console.error('Sign in error:', error);
     }
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSignOut = () => {
+    setIsDropdownOpen(false);
+    signOut();
   };
 
   return (
@@ -63,8 +83,13 @@ const Layout = ({ children }) => {
             {isLoaded && (
               <>
                 {isSignedIn ? (
-                  <div className="auth-section">
-                    <div className="user-avatar">
+                  <div className="auth-section" ref={dropdownRef}>
+                    <button
+                      className="user-avatar-btn"
+                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                      aria-expanded={isDropdownOpen}
+                      aria-haspopup="true"
+                    >
                       {(user?.user_metadata?.avatar_url || user?.user_metadata?.picture) ? (
                         <img
                           src={user.user_metadata.avatar_url || user.user_metadata.picture}
@@ -74,14 +99,19 @@ const Layout = ({ children }) => {
                       ) : (
                         <User size={18} />
                       )}
-                    </div>
-                    <button
-                      className="btn-auth btn-signin"
-                      onClick={signOut}
-                    >
-                      <LogOut size={16} />
-                      <span>Sign Out</span>
                     </button>
+                    {isDropdownOpen && (
+                      <div className="user-dropdown">
+                        <div className="dropdown-header">
+                          <span className="dropdown-email">{user?.email}</span>
+                        </div>
+                        <div className="dropdown-divider"></div>
+                        <button className="dropdown-item" onClick={handleSignOut}>
+                          <LogOut size={16} />
+                          <span>Sign Out</span>
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="auth-section">
@@ -209,15 +239,16 @@ const Layout = ({ children }) => {
         }
 
         .auth-section {
+          position: relative;
           display: flex;
           align-items: center;
           gap: 0.5rem;
           margin-left: 0.5rem;
         }
 
-        .user-avatar {
-          width: 32px;
-          height: 32px;
+        .user-avatar-btn {
+          width: 36px;
+          height: 36px;
           border-radius: 50%;
           overflow: hidden;
           display: flex;
@@ -225,12 +256,66 @@ const Layout = ({ children }) => {
           justify-content: center;
           background: var(--surface-hover);
           border: 2px solid var(--primary);
+          cursor: pointer;
+          padding: 0;
+          transition: all 0.2s;
+        }
+
+        .user-avatar-btn:hover {
+          border-color: var(--primary-hover);
+          transform: scale(1.05);
         }
 
         .avatar-img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+        }
+
+        .user-dropdown {
+          position: absolute;
+          top: calc(100% + 8px);
+          right: 0;
+          min-width: 200px;
+          background: var(--surface-card);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+          z-index: 200;
+          overflow: hidden;
+        }
+
+        .dropdown-header {
+          padding: 12px 16px;
+        }
+
+        .dropdown-email {
+          font-size: 0.85rem;
+          color: var(--text-muted);
+          word-break: break-all;
+        }
+
+        .dropdown-divider {
+          height: 1px;
+          background: var(--border-color);
+        }
+
+        .dropdown-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          width: 100%;
+          padding: 12px 16px;
+          background: none;
+          border: none;
+          color: var(--text-main);
+          font-size: 0.9rem;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+
+        .dropdown-item:hover {
+          background: var(--surface-hover);
         }
 
         .btn-auth {
@@ -244,17 +329,6 @@ const Layout = ({ children }) => {
           border: none;
           cursor: pointer;
           transition: all 0.2s;
-        }
-
-        .btn-signin {
-          background: transparent;
-          color: var(--text-main);
-          border: 1px solid var(--border-color);
-        }
-
-        .btn-signin:hover {
-          background: var(--surface-hover);
-          border-color: var(--primary);
         }
 
         .btn-signup {
@@ -356,13 +430,18 @@ const Layout = ({ children }) => {
             gap: 0.25rem;
           }
 
+          .user-avatar-btn {
+            width: 32px;
+            height: 32px;
+          }
+
+          .user-dropdown {
+            min-width: 180px;
+          }
+
           .btn-auth {
             font-size: 0.75rem;
             padding: 0.4rem 0.6rem;
-          }
-
-          .btn-auth span {
-            display: none;
           }
 
           .main-content {

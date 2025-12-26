@@ -190,7 +190,7 @@ const Paywall = ({ articleTitle }) => {
           justify-content: center;
           gap: 0.5rem;
           background: linear-gradient(135deg, var(--primary), #a78bfa);
-          color: white;
+          color: white !important;
           padding: 0.875rem 1.75rem;
           border-radius: 10px;
           font-weight: 600;
