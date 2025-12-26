@@ -106,22 +106,14 @@ export const AuthProvider = ({ children }) => {
 
     console.log('[Auth] signOut called');
 
-    // Sign out from Supabase with global scope to invalidate all sessions
-    const { error } = await supabase.auth.signOut({ scope: 'global' });
-    console.log('[Auth] signOut result:', { error });
-
-    // Clear all Supabase tokens from localStorage to ensure clean state
-    const sbKeys = Object.keys(localStorage).filter(key => key.startsWith('sb-'));
-    console.log('[Auth] Clearing localStorage keys:', sbKeys);
-    sbKeys.forEach(key => localStorage.removeItem(key));
-
-    // Also clear sessionStorage
-    const sbSessionKeys = Object.keys(sessionStorage).filter(key => key.startsWith('sb-'));
-    sbSessionKeys.forEach(key => sessionStorage.removeItem(key));
-
-    // Clear React state
+    // Clear React state first
     setUser(null);
     setSession(null);
+
+    // Sign out from Supabase (local scope to avoid server issues)
+    const { error } = await supabase.auth.signOut();
+    console.log('[Auth] signOut result:', { error });
+
     console.log('[Auth] State cleared');
   }, []);
 
