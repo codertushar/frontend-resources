@@ -45,6 +45,21 @@ export const AuthProvider = ({ children }) => {
       }
     );
 
+    // Listen for storage changes from other tabs (cross-tab logout sync)
+    const handleStorageChange = async (event) => {
+      // Detect when Supabase auth token is removed in another tab
+      if (event.key?.startsWith('sb-') && event.newValue === null) {
+        // Another tab logged out - check current session
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session && isMounted) {
+          setSession(null);
+          setUser(null);
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
     // Failsafe: ensure loading state is cleared even if Supabase hangs
     const timeout = setTimeout(() => {
       if (isMounted) {
@@ -56,6 +71,7 @@ export const AuthProvider = ({ children }) => {
       isMounted = false;
       clearTimeout(timeout);
       subscription.unsubscribe();
+      window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
 
@@ -100,26 +116,21 @@ export const AuthProvider = ({ children }) => {
   const signOut = async () => {
     if (!supabase) return;
 
-    // Clear local state first
+    // Clear React state first
     setUser(null);
     setSession(null);
 
+    // Clear Supabase tokens from localStorage BEFORE calling signOut
+    // This ensures tokens are gone even if signOut fails
+    const keysToRemove = Object.keys(localStorage).filter(key => key.startsWith('sb-'));
+    keysToRemove.forEach(key => localStorage.removeItem(key));
+
     try {
-      // Sign out from Supabase
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.error('Supabase sign out error:', error);
-      }
+      // Sign out from Supabase (this also notifies the server)
+      await supabase.auth.signOut();
     } catch (error) {
       console.error('Error signing out:', error);
     }
-
-    // Clear any Supabase tokens from localStorage as fallback
-    Object.keys(localStorage).forEach((key) => {
-      if (key.startsWith('sb-')) {
-        localStorage.removeItem(key);
-      }
-    });
   };
 
   const getAccessToken = async () => {
