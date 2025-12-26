@@ -33,6 +33,9 @@ export const AuthProvider = ({ children }) => {
   const [session, setSession] = useState(null);
   const [isLoading, setIsLoading] = useState(isSupabaseConfigured());
 
+  // Storage cleanup delay to ensure all storage operations complete
+  const STORAGE_CLEANUP_DELAY_MS = 100;
+
   const createProfileIfNeeded = useCallback(async (authUser) => {
     if (!supabase) return;
 
@@ -70,6 +73,7 @@ export const AuthProvider = ({ children }) => {
       if (!isInitialized) {
         console.warn('[Auth] Loading timeout - forcing isLoading to false');
         setIsLoading(false);
+        isInitialized = true; // Prevent duplicate state updates
       }
     }, 10000);
 
@@ -196,8 +200,8 @@ export const AuthProvider = ({ children }) => {
     // Step 3: Clear all Supabase storage to ensure clean slate
     clearSupabaseStorage();
 
-    // Step 4: Small delay to ensure storage is fully cleared
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // Step 4: Small delay to ensure storage is fully cleared before next sign-in
+    await new Promise(resolve => setTimeout(resolve, STORAGE_CLEANUP_DELAY_MS));
 
     console.log('[Auth] Complete sign out finished');
   }, []);
