@@ -63,14 +63,26 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    // Set up auth state listener FIRST - this handles OAuth redirects
+    let isInitialized = false;
+
+    // Set up auth state listener - handles OAuth redirects and auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
         console.log('[Auth] onAuthStateChange:', { event, email: currentSession?.user?.email });
 
+        // IGNORE INITIAL_SESSION - it comes from stale localStorage
+        // We use getUser() below for accurate initial state
+        if (event === 'INITIAL_SESSION') {
+          console.log('[Auth] Ignoring INITIAL_SESSION (may be stale)');
+          return;
+        }
+
+        // For all other events (SIGNED_IN, SIGNED_OUT, TOKEN_REFRESHED, etc.)
+        // trust the event data
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         setIsLoading(false);
+        isInitialized = true;
 
         // Create profile on sign in (deferred to avoid Supabase deadlock)
         if (event === 'SIGNED_IN' && currentSession?.user) {
@@ -79,9 +91,8 @@ export const AuthProvider = ({ children }) => {
       }
     );
 
-    // IMPORTANT: Use getUser() instead of getSession() to verify server-side
-    // getSession() only reads from localStorage (can be stale)
-    // getUser() actually validates the session with Supabase server
+    // IMPORTANT: Use getUser() to verify session server-side
+    // This is the source of truth, not localStorage
     console.log('[Auth] Verifying session with server...');
     supabase.auth.getUser().then(({ data: { user: verifiedUser }, error }) => {
       console.log('[Auth] getUser result:', {
@@ -90,18 +101,22 @@ export const AuthProvider = ({ children }) => {
         error: error?.message
       });
 
-      if (error || !verifiedUser) {
-        // No valid session or session is stale - clear everything
-        setSession(null);
-        setUser(null);
+      // Only set state if onAuthStateChange hasn't already handled it
+      // (e.g., from a SIGNED_IN event during OAuth callback)
+      if (!isInitialized) {
+        if (error || !verifiedUser) {
+          // No valid session - clear everything
+          clearSupabaseStorage();
+          setSession(null);
+          setUser(null);
+        } else {
+          // Valid user from server - get the session
+          supabase.auth.getSession().then(({ data: { session: validSession } }) => {
+            setSession(validSession);
+            setUser(verifiedUser);
+          });
+        }
         setIsLoading(false);
-      } else {
-        // Valid user - now get the full session
-        supabase.auth.getSession().then(({ data: { session: validSession } }) => {
-          setSession(validSession);
-          setUser(verifiedUser);
-          setIsLoading(false);
-        });
       }
     });
 
