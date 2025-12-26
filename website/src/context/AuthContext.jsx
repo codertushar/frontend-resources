@@ -102,11 +102,16 @@ export const AuthProvider = ({ children }) => {
 
     console.log('[Auth] signInWithGoogle called');
 
+    // Force sign out first to clear any existing session on Supabase server
+    await supabase.auth.signOut({ scope: 'global' });
+
     // Clear any existing Supabase tokens before starting OAuth
     const sbKeys = Object.keys(localStorage).filter(key => key.startsWith('sb-'));
     sbKeys.forEach(key => localStorage.removeItem(key));
     const sbSessionKeys = Object.keys(sessionStorage).filter(key => key.startsWith('sb-'));
     sbSessionKeys.forEach(key => sessionStorage.removeItem(key));
+
+    console.log('[Auth] Cleared existing session, starting OAuth...');
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
