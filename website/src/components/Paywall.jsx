@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Lock, Sparkles, ArrowRight, Crown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -6,6 +7,23 @@ import { useSubscription } from '../context/SubscriptionContext';
 const Paywall = ({ articleTitle }) => {
   const { signInWithGoogle } = useAuth();
   const { isSignedIn } = useSubscription();
+  const [basePrice, setBasePrice] = useState(200000);
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data.basePrice) {
+          setBasePrice(data.basePrice);
+        }
+      })
+      .catch(err => console.error('Error fetching settings:', err));
+  }, []);
+
+  const formatPrice = (paise) => {
+    const rupees = paise / 100;
+    return rupees.toLocaleString('en-IN');
+  };
 
   const handleSignIn = async () => {
     await signInWithGoogle();
@@ -77,7 +95,7 @@ const Paywall = ({ articleTitle }) => {
         </div>
 
         <div className="paywall-price">
-          <span className="price-amount">₹2,000</span>
+          <span className="price-amount">₹{formatPrice(basePrice)}</span>
           <span className="price-note">one-time payment</span>
         </div>
 
