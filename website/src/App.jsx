@@ -8,6 +8,7 @@ import Library from './pages/Library';
 import LearningPath from './pages/LearningPath';
 import ResourceDetail from './pages/ResourceDetail';
 import Pricing from './pages/Pricing';
+import Admin from './pages/Admin';
 import { useCanonical } from './hooks/useCanonical';
 
 import { ThemeProvider } from './context/ThemeContext';
@@ -26,6 +27,7 @@ function AppContent() {
           <Route path="/library" element={<Library />} />
           <Route path="/learning-path" element={<LearningPath />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/resource/*" element={<ResourceDetail />} />
         </Routes>
       </Layout>

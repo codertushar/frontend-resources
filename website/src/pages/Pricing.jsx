@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Star, Zap, BookOpen, Code, Sparkles, Shield } from 'lucide-react';
+import { Check, Star, Zap, BookOpen, Code, Sparkles, Shield, Tag, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useSubscription } from '../context/SubscriptionContext';
 import contentData from '../data/content.json';
@@ -9,21 +9,68 @@ const Pricing = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponError, setCouponError] = useState(null);
+  const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
+  const [basePrice, setBasePrice] = useState(200000); // Default ₹2000
 
   const { isSignedIn, isLoaded, signInWithGoogle } = useAuth();
-  const { isPremium, initiatePayment, refreshSubscription } = useSubscription();
+  const { isPremium, validateCoupon, initiatePayment, refreshSubscription } = useSubscription();
+
+  // Fetch base price from settings
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data.basePrice) {
+          setBasePrice(data.basePrice);
+        }
+      })
+      .catch(err => console.error('Error fetching settings:', err));
+  }, []);
 
   // Calculate stats
   const totalArticles = contentData.length;
   const premiumArticles = contentData.filter(a => a.premium).length;
   const freeArticles = totalArticles - premiumArticles;
 
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) return;
+
+    setCouponError(null);
+    setIsValidatingCoupon(true);
+
+    try {
+      const result = await validateCoupon(couponCode.trim());
+      if (result.valid) {
+        setAppliedCoupon({
+          code: result.code,
+          discountAmount: result.discountAmount,
+          description: result.description,
+        });
+        setCouponCode('');
+      } else {
+        setCouponError(result.error || 'Invalid coupon code');
+      }
+    } catch (err) {
+      setCouponError('Failed to validate coupon');
+    } finally {
+      setIsValidatingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponError(null);
+  };
+
   const handlePurchase = async () => {
     setError(null);
     setIsProcessing(true);
 
     try {
-      await initiatePayment();
+      await initiatePayment(appliedCoupon?.code || null);
       setSuccess(true);
       // Refresh subscription status after successful payment
       // Wait a bit for webhook to process
@@ -37,6 +84,16 @@ const Pricing = () => {
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  // Calculate final price
+  const finalPrice = appliedCoupon
+    ? Math.max(basePrice - appliedCoupon.discountAmount, 100)
+    : basePrice;
+
+  const formatPrice = (paise) => {
+    const rupees = paise / 100;
+    return rupees.toLocaleString('en-IN');
   };
 
   const handleSignIn = async () => {
@@ -177,12 +234,57 @@ const Pricing = () => {
           <div className="card-badge">Best Value</div>
 
           <div className="price-section">
-            <div className="price">
-              <span className="currency">₹</span>
-              <span className="amount">2,000</span>
-            </div>
+            {appliedCoupon ? (
+              <>
+                <div className="price original-price">
+                  <span className="currency">₹</span>
+                  <span className="amount strikethrough">{formatPrice(basePrice)}</span>
+                </div>
+                <div className="price discounted-price">
+                  <span className="currency">₹</span>
+                  <span className="amount">{formatPrice(finalPrice)}</span>
+                </div>
+                <div className="discount-badge">
+                  <Tag size={14} />
+                  <span>₹{formatPrice(appliedCoupon.discountAmount)} off applied!</span>
+                  <button className="remove-coupon" onClick={handleRemoveCoupon}>
+                    <X size={14} />
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="price">
+                <span className="currency">₹</span>
+                <span className="amount">{formatPrice(basePrice)}</span>
+              </div>
+            )}
             <span className="price-note">One-time payment</span>
           </div>
+
+          {/* Coupon Input */}
+          {!appliedCoupon && (
+            <div className="coupon-section">
+              <div className="coupon-input-wrapper">
+                <Tag size={18} className="coupon-icon" />
+                <input
+                  type="text"
+                  placeholder="Enter coupon code"
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                  onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
+                  className="coupon-input"
+                />
+                <button
+                  className="apply-coupon-btn"
+                  onClick={handleApplyCoupon}
+                  disabled={isValidatingCoupon || !couponCode.trim()}
+                >
+                  {isValidatingCoupon ? 'Checking...' : 'Apply'}
+                </button>
+              </div>
+              {couponError && <div className="coupon-error">{couponError}</div>}
+            </div>
+          )}
 
           <div className="features-list">
             {features.map((feature, index) => (
@@ -377,6 +479,112 @@ const Pricing = () => {
         .price-note {
           color: var(--text-muted);
           font-size: 0.9rem;
+        }
+
+        .original-price .amount {
+          font-size: 2rem;
+          text-decoration: line-through;
+          opacity: 0.5;
+        }
+
+        .original-price .currency {
+          font-size: 1rem;
+        }
+
+        .discounted-price {
+          margin-top: -0.5rem;
+        }
+
+        .discount-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: linear-gradient(135deg, #22c55e, #16a34a);
+          color: white;
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          margin-top: 0.5rem;
+        }
+
+        .remove-coupon {
+          background: rgba(255, 255, 255, 0.2);
+          border: none;
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+
+        .remove-coupon:hover {
+          background: rgba(255, 255, 255, 0.3);
+        }
+
+        .coupon-section {
+          margin-bottom: 1.5rem;
+        }
+
+        .coupon-input-wrapper {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: var(--surface-hover);
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          padding: 0.5rem;
+        }
+
+        .coupon-icon {
+          color: var(--text-muted);
+          margin-left: 0.5rem;
+        }
+
+        .coupon-input {
+          flex: 1;
+          background: transparent;
+          border: none;
+          padding: 0.5rem;
+          color: var(--text-main);
+          font-size: 0.9rem;
+          outline: none;
+        }
+
+        .coupon-input::placeholder {
+          color: var(--text-muted);
+        }
+
+        .apply-coupon-btn {
+          background: var(--primary);
+          color: white;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 6px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: opacity 0.2s;
+        }
+
+        .apply-coupon-btn:hover:not(:disabled) {
+          opacity: 0.9;
+        }
+
+        .apply-coupon-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .coupon-error {
+          color: #ef4444;
+          font-size: 0.85rem;
+          margin-top: 0.5rem;
+          text-align: left;
+          padding-left: 0.5rem;
         }
 
         .features-list {

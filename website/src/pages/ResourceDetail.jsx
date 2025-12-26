@@ -13,8 +13,7 @@ import Paywall from '../components/Paywall';
 
 const ResourceDetail = () => {
   const location = useLocation();
-  const [content, setContent] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [premiumContent, setPremiumContent] = useState(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [premiumContentLoading, setPremiumContentLoading] = useState(false);
   const [premiumContentError, setPremiumContentError] = useState(null);
@@ -31,6 +30,18 @@ const ResourceDetail = () => {
   );
 
   const resource = contentData.find(r => r.id === resourceId);
+
+  // Derive content directly - no loading state needed for initial content
+  // Free articles: full content from JSON
+  // Premium articles: preview from JSON, or fetched premium content if available
+  const content = useMemo(() => {
+    if (!resource) return '';
+    if (premiumContent) return premiumContent;
+    return resource.fullContent;
+  }, [resource, premiumContent]);
+
+  // Derive loading state - only true when we have no content to show
+  const loading = !resource;
 
   // Find current index and prev/next articles in the same category
   const categoryArticles = useMemo(() => {
@@ -57,34 +68,42 @@ const ResourceDetail = () => {
   // Determine if we should show paywall
   const showPaywall = resource?.premium && !isPremium();
 
-  // Load premium content if user has access
+  // Reset premium content when resource changes
   useEffect(() => {
-    if (!resource || !subInitialized) return;
+    setPremiumContent(null);
+    setPremiumContentError(null);
+  }, [resourceId]);
 
-    const loadContent = async () => {
-      // If it's premium content and user has access, fetch full content
-      if (resource.premium && isPremium()) {
-        setPremiumContentLoading(true);
-        setPremiumContentError(null);
-        try {
-          const fullContent = await fetchPremiumContent(resource.id);
-          setContent(fullContent);
-        } catch (error) {
+  // For premium users, fetch full content after auth is ready
+  useEffect(() => {
+    if (!resource || !resource.premium || !subInitialized || !isPremium()) return;
+
+    let cancelled = false;
+
+    const loadPremiumContent = async () => {
+      try {
+        const fullContent = await fetchPremiumContent(resource.id);
+        if (!cancelled) {
+          setPremiumContent(fullContent);
+        }
+      } catch (error) {
+        if (!cancelled) {
           console.error('Error loading premium content:', error);
           setPremiumContentError(error.message);
-          // Fall back to preview content
-          setContent(resource.fullContent);
-        } finally {
+        }
+      } finally {
+        if (!cancelled) {
           setPremiumContentLoading(false);
         }
-      } else {
-        // Use the content from JSON (full for free, preview for premium)
-        setContent(resource.fullContent);
       }
-      setLoading(false);
     };
 
-    loadContent();
+    setPremiumContentLoading(true);
+    loadPremiumContent();
+
+    return () => {
+      cancelled = true;
+    };
   }, [resource, subInitialized, isPremium, fetchPremiumContent]);
 
   useEffect(() => {
@@ -129,8 +148,6 @@ const ResourceDetail = () => {
       if (twitterTitle) twitterTitle.setAttribute('content', title);
       if (twitterDescription) twitterDescription.setAttribute('content', desc);
       if (canonical) canonical.setAttribute('href', url);
-    } else {
-      setLoading(false);
     }
   }, [resource]);
 

@@ -99,8 +99,26 @@ export const SubscriptionProvider = ({ children }) => {
     }
   }, [isSignedIn, getAccessToken, isPremium]);
 
+  // Validate coupon code
+  const validateCoupon = useCallback(async (code) => {
+    try {
+      const response = await fetch('/api/validate-coupon', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error validating coupon:', error);
+      return { valid: false, error: 'Failed to validate coupon' };
+    }
+  }, []);
+
   // Create Razorpay order
-  const createOrder = useCallback(async () => {
+  const createOrder = useCallback(async (couponCode = null) => {
     if (!isSignedIn) {
       throw new Error('Please sign in to purchase');
     }
@@ -113,6 +131,7 @@ export const SubscriptionProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ couponCode }),
       });
 
       if (!response.ok) {
@@ -129,12 +148,12 @@ export const SubscriptionProvider = ({ children }) => {
   }, [isSignedIn, getAccessToken]);
 
   // Initiate Razorpay payment
-  const initiatePayment = useCallback(async () => {
+  const initiatePayment = useCallback(async (couponCode = null) => {
     if (!window.Razorpay) {
       throw new Error('Razorpay SDK not loaded');
     }
 
-    const orderData = await createOrder();
+    const orderData = await createOrder(couponCode);
 
     return new Promise((resolve, reject) => {
       const options = {
@@ -199,6 +218,7 @@ export const SubscriptionProvider = ({ children }) => {
     isInitialized,
     isSignedIn,
     fetchPremiumContent,
+    validateCoupon,
     initiatePayment,
     refreshSubscription,
   };
