@@ -87,13 +87,18 @@ export const AuthProvider = ({ children }) => {
 
     console.log('[Auth] signInWithGoogle called');
 
+    // Clear any existing Supabase tokens before starting OAuth
+    const sbKeys = Object.keys(localStorage).filter(key => key.startsWith('sb-'));
+    sbKeys.forEach(key => localStorage.removeItem(key));
+    const sbSessionKeys = Object.keys(sessionStorage).filter(key => key.startsWith('sb-'));
+    sbSessionKeys.forEach(key => sessionStorage.removeItem(key));
+
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: window.location.origin + window.location.pathname,
         queryParams: {
-          prompt: 'consent select_account',
-          access_type: 'offline',
+          prompt: 'select_account',
         },
       },
     });
@@ -107,14 +112,18 @@ export const AuthProvider = ({ children }) => {
 
     console.log('[Auth] signOut called');
 
-    // Sign out from Supabase
-    const { error } = await supabase.auth.signOut();
+    // Sign out from Supabase with global scope to invalidate all sessions
+    const { error } = await supabase.auth.signOut({ scope: 'global' });
     console.log('[Auth] signOut result:', { error });
 
     // Clear all Supabase tokens from localStorage to ensure clean state
     const sbKeys = Object.keys(localStorage).filter(key => key.startsWith('sb-'));
     console.log('[Auth] Clearing localStorage keys:', sbKeys);
     sbKeys.forEach(key => localStorage.removeItem(key));
+
+    // Also clear sessionStorage
+    const sbSessionKeys = Object.keys(sessionStorage).filter(key => key.startsWith('sb-'));
+    sbSessionKeys.forEach(key => sessionStorage.removeItem(key));
 
     // Clear React state
     setUser(null);
