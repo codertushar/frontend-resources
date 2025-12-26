@@ -65,6 +65,14 @@ export const AuthProvider = ({ children }) => {
 
     let isInitialized = false;
 
+    // Safety timeout: ensure loading state resolves within 10 seconds
+    const loadingTimeout = setTimeout(() => {
+      if (!isInitialized) {
+        console.warn('[Auth] Loading timeout - forcing isLoading to false');
+        setIsLoading(false);
+      }
+    }, 10000);
+
     // Set up auth state listener - handles OAuth redirects and auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
@@ -94,33 +102,49 @@ export const AuthProvider = ({ children }) => {
     // IMPORTANT: Use getUser() to verify session server-side
     // This is the source of truth, not localStorage
     console.log('[Auth] Verifying session with server...');
-    supabase.auth.getUser().then(({ data: { user: verifiedUser }, error }) => {
-      console.log('[Auth] getUser result:', {
-        hasUser: !!verifiedUser,
-        email: verifiedUser?.email,
-        error: error?.message
-      });
+    supabase.auth.getUser()
+      .then(({ data: { user: verifiedUser }, error }) => {
+        console.log('[Auth] getUser result:', {
+          hasUser: !!verifiedUser,
+          email: verifiedUser?.email,
+          error: error?.message
+        });
 
-      // Only set state if onAuthStateChange hasn't already handled it
-      // (e.g., from a SIGNED_IN event during OAuth callback)
-      if (!isInitialized) {
-        if (error || !verifiedUser) {
-          // No valid session - clear everything
+        // Only set state if onAuthStateChange hasn't already handled it
+        // (e.g., from a SIGNED_IN event during OAuth callback)
+        if (!isInitialized) {
+          if (error || !verifiedUser) {
+            // No valid session - clear everything
+            clearSupabaseStorage();
+            setSession(null);
+            setUser(null);
+          } else {
+            // Valid user from server - get the session
+            supabase.auth.getSession().then(({ data: { session: validSession } }) => {
+              setSession(validSession);
+              setUser(verifiedUser);
+            });
+          }
+          setIsLoading(false);
+          isInitialized = true;
+        }
+      })
+      .catch((err) => {
+        // Ensure loading state resolves even on unexpected errors
+        console.error('[Auth] Unexpected error during getUser:', err);
+        if (!isInitialized) {
           clearSupabaseStorage();
           setSession(null);
           setUser(null);
-        } else {
-          // Valid user from server - get the session
-          supabase.auth.getSession().then(({ data: { session: validSession } }) => {
-            setSession(validSession);
-            setUser(verifiedUser);
-          });
+          setIsLoading(false);
+          isInitialized = true;
         }
-        setIsLoading(false);
-      }
-    });
+      });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      clearTimeout(loadingTimeout);
+      subscription.unsubscribe();
+    };
   }, [createProfileIfNeeded]);
 
   const signInWithGoogle = useCallback(async () => {
@@ -140,7 +164,7 @@ export const AuthProvider = ({ children }) => {
       options: {
         redirectTo: window.location.origin + window.location.pathname,
         queryParams: {
-          prompt: 'consent',  // Force consent screen (stronger than select_account)
+          prompt: 'select_account',  // Force account picker - allows selecting different account
           access_type: 'offline',
         },
       },
@@ -159,12 +183,21 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setSession(null);
 
-    // Step 2: Sign out from Supabase (global scope terminates all sessions)
-    const { error } = await supabase.auth.signOut({ scope: 'global' });
-    console.log('[Auth] signOut result:', { error });
+    try {
+      // Step 2: Sign out from Supabase (global scope terminates all sessions)
+      const { error } = await supabase.auth.signOut({ scope: 'global' });
+      if (error) {
+        console.error('[Auth] signOut error:', error);
+      }
+    } catch (err) {
+      console.error('[Auth] signOut exception:', err);
+    }
 
     // Step 3: Clear all Supabase storage to ensure clean slate
     clearSupabaseStorage();
+
+    // Step 4: Small delay to ensure storage is fully cleared
+    await new Promise(resolve => setTimeout(resolve, 100));
 
     console.log('[Auth] Complete sign out finished');
   }, []);
