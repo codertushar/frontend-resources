@@ -1,8 +1,9 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 const AuthContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -11,36 +12,35 @@ export const useAuth = () => {
   return context;
 };
 
-// Create user profile if it doesn't exist (defined outside component to avoid hook issues)
-const createProfileIfNeeded = async (user) => {
-  if (!supabase) return;
-
-  try {
-    const { data: existingProfile } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('id', user.id)
-      .single();
-
-    if (!existingProfile) {
-      await supabase.from('profiles').insert({
-        id: user.id,
-        email: user.email,
-        full_name: user.user_metadata?.full_name || user.user_metadata?.name || '',
-        avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || '',
-        subscription_status: 'free',
-        subscription_plan: 'free',
-      });
-    }
-  } catch {
-    // Profile might already exist, ignore error
-  }
-};
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [session, setSession] = useState(null);
   const [isLoading, setIsLoading] = useState(isSupabaseConfigured());
+
+  const createProfileIfNeeded = useCallback(async (authUser) => {
+    if (!supabase) return;
+
+    try {
+      const { data: existingProfile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', authUser.id)
+        .single();
+
+      if (!existingProfile) {
+        await supabase.from('profiles').insert({
+          id: authUser.id,
+          email: authUser.email,
+          full_name: authUser.user_metadata?.full_name || authUser.user_metadata?.name || '',
+          avatar_url: authUser.user_metadata?.avatar_url || authUser.user_metadata?.picture || '',
+          subscription_status: 'free',
+          subscription_plan: 'free',
+        });
+      }
+    } catch {
+      // Profile might already exist, ignore error
+    }
+  }, []);
 
   useEffect(() => {
     if (!isSupabaseConfigured()) {
@@ -48,30 +48,30 @@ export const AuthProvider = ({ children }) => {
     }
 
     // 1. Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+    supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
+      setSession(initialSession);
+      setUser(initialSession?.user ?? null);
       setIsLoading(false);
     });
 
     // 2. Listen for auth changes (this handles OAuth redirects automatically)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
+      (event, currentSession) => {
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
         setIsLoading(false);
 
         // Create profile on first sign in (deferred to avoid deadlock)
-        if (event === 'SIGNED_IN' && session?.user) {
-          setTimeout(() => createProfileIfNeeded(session.user), 0);
+        if (event === 'SIGNED_IN' && currentSession?.user) {
+          setTimeout(() => createProfileIfNeeded(currentSession.user), 0);
         }
       }
     );
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [createProfileIfNeeded]);
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = useCallback(async () => {
     if (!supabase) {
       return { error: new Error('Supabase not configured') };
     }
@@ -87,17 +87,17 @@ export const AuthProvider = ({ children }) => {
     });
 
     return { data, error };
-  };
+  }, []);
 
-  const signOut = async () => {
+  const signOut = useCallback(async () => {
     if (!supabase) return;
     await supabase.auth.signOut();
-  };
+  }, []);
 
-  const getAccessToken = async () => {
+  const getAccessToken = useCallback(async () => {
     if (!session) return null;
     return session.access_token;
-  };
+  }, [session]);
 
   const value = {
     user,
