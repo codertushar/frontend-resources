@@ -22,51 +22,13 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    // Initialize auth state
-    const initializeAuth = async () => {
-      try {
-        // Handle OAuth callback - detect hash tokens
-        const hash = window.location.hash;
-        if (hash && hash.includes('access_token')) {
-          // Let Supabase process the hash first
-          const { data, error } = await supabase.auth.getSession();
-          if (data?.session) {
-            setSession(data.session);
-            setUser(data.session.user);
-            // Clean URL by removing hash
-            window.history.replaceState(null, '', window.location.pathname);
-          }
-          if (error) {
-            console.error('Auth callback error:', error);
-          }
-          setIsLoading(false);
-          return; // Exit early, session already handled
-        }
+    let isMounted = true;
 
-        // Get initial session (no OAuth callback)
-        const { data: { session }, error } = await supabase.auth.getSession();
-        if (error) {
-          console.error('Error getting session:', error);
-        }
-        setSession(session);
-        setUser(session?.user ?? null);
-      } catch (error) {
-        console.error('Error initializing auth:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    initializeAuth();
-
-    // Failsafe: ensure loading state is cleared even if Supabase hangs
-    const timeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 5000);
-
-    // Listen for auth changes
+    // Listen for auth changes - this handles INITIAL_SESSION, SIGNED_IN, SIGNED_OUT
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        if (!isMounted) return;
+
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(false);
@@ -74,15 +36,24 @@ export const AuthProvider = ({ children }) => {
         // Create profile on first sign in
         if (event === 'SIGNED_IN' && session?.user) {
           await ensureProfile(session.user);
-          // Clean URL after sign in
-          if (window.location.hash) {
-            window.history.replaceState(null, '', window.location.pathname);
-          }
+        }
+
+        // Clean URL after OAuth callback
+        if (window.location.hash?.includes('access_token')) {
+          window.history.replaceState(null, '', window.location.pathname);
         }
       }
     );
 
+    // Failsafe: ensure loading state is cleared even if Supabase hangs
+    const timeout = setTimeout(() => {
+      if (isMounted) {
+        setIsLoading(false);
+      }
+    }, 3000);
+
     return () => {
+      isMounted = false;
       clearTimeout(timeout);
       subscription.unsubscribe();
     };
