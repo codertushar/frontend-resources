@@ -11,25 +11,29 @@ export const useAuth = () => {
   return context;
 };
 
-// Ensure user profile exists in profiles table
+// Ensure user profile exists in profiles table (called outside of onAuthStateChange)
 const ensureProfile = async (user) => {
   if (!supabase) return;
 
-  const { data: existingProfile } = await supabase
-    .from('profiles')
-    .select('id')
-    .eq('id', user.id)
-    .single();
+  try {
+    const { data: existingProfile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('id', user.id)
+      .single();
 
-  if (!existingProfile) {
-    await supabase.from('profiles').insert({
-      id: user.id,
-      email: user.email,
-      full_name: user.user_metadata?.full_name || user.user_metadata?.name || '',
-      avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || '',
-      subscription_status: 'free',
-      subscription_plan: 'free',
-    });
+    if (!existingProfile) {
+      await supabase.from('profiles').insert({
+        id: user.id,
+        email: user.email,
+        full_name: user.user_metadata?.full_name || user.user_metadata?.name || '',
+        avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || '',
+        subscription_status: 'free',
+        subscription_plan: 'free',
+      });
+    }
+  } catch (error) {
+    console.error('Error ensuring profile:', error);
   }
 };
 
@@ -44,41 +48,34 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    let isMounted = true;
+    // 1. Get initial session first
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setIsLoading(false);
 
-    // Listen for auth changes - this handles INITIAL_SESSION, SIGNED_IN, SIGNED_OUT
+      // Clean URL after OAuth callback
+      if (window.location.hash?.includes('access_token')) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    });
+
+    // 2. Listen for auth state changes (cross-tab sync, sign in, sign out, token refresh)
+    // IMPORTANT: Don't use async callback - defer Supabase calls with setTimeout
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (!isMounted) return;
-
+      (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(false);
 
-        // Create profile on first sign in
+        // Defer profile creation to avoid deadlock (don't call Supabase inside callback)
         if (event === 'SIGNED_IN' && session?.user) {
-          await ensureProfile(session.user);
-        }
-
-        // Clean URL after OAuth callback
-        if (window.location.hash?.includes('access_token')) {
-          window.history.replaceState(null, '', window.location.pathname);
+          setTimeout(() => ensureProfile(session.user), 0);
         }
       }
     );
 
-    // Failsafe: ensure loading state is cleared even if Supabase hangs
-    const timeout = setTimeout(() => {
-      if (isMounted) {
-        setIsLoading(false);
-      }
-    }, 3000);
-
-    return () => {
-      isMounted = false;
-      clearTimeout(timeout);
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, []);
 
   const signInWithGoogle = async () => {
