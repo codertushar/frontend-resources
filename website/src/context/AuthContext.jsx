@@ -47,20 +47,7 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    // Check if this is an OAuth callback (has hash with access_token or error)
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const isOAuthCallback = hashParams.has('access_token') || hashParams.has('error');
-
-    console.log('[Auth] Initializing...', { isOAuthCallback, hash: window.location.hash.substring(0, 50) });
-
-    // If OAuth callback, clear any existing session first to prevent stale data
-    if (isOAuthCallback) {
-      console.log('[Auth] OAuth callback detected, clearing stale tokens...');
-      const sbKeys = Object.keys(localStorage).filter(key => key.startsWith('sb-'));
-      sbKeys.forEach(key => localStorage.removeItem(key));
-    }
-
-    // Set up auth state listener FIRST (this handles OAuth redirects)
+    // Set up auth state listener (this handles OAuth redirects automatically)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
         console.log('[Auth] onAuthStateChange:', {
@@ -78,19 +65,17 @@ export const AuthProvider = ({ children }) => {
       }
     );
 
-    // Then get initial session (only if not an OAuth callback)
-    if (!isOAuthCallback) {
-      console.log('[Auth] Getting initial session...');
-      supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
-        console.log('[Auth] getSession result:', {
-          hasSession: !!initialSession,
-          email: initialSession?.user?.email,
-        });
-        setSession(initialSession);
-        setUser(initialSession?.user ?? null);
-        setIsLoading(false);
+    // Get initial session
+    console.log('[Auth] Getting initial session...');
+    supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
+      console.log('[Auth] getSession result:', {
+        hasSession: !!initialSession,
+        email: initialSession?.user?.email,
       });
-    }
+      setSession(initialSession);
+      setUser(initialSession?.user ?? null);
+      setIsLoading(false);
+    });
 
     return () => subscription.unsubscribe();
   }, [createProfileIfNeeded]);
@@ -101,17 +86,6 @@ export const AuthProvider = ({ children }) => {
     }
 
     console.log('[Auth] signInWithGoogle called');
-
-    // Force sign out first to clear any existing session on Supabase server
-    await supabase.auth.signOut({ scope: 'global' });
-
-    // Clear any existing Supabase tokens before starting OAuth
-    const sbKeys = Object.keys(localStorage).filter(key => key.startsWith('sb-'));
-    sbKeys.forEach(key => localStorage.removeItem(key));
-    const sbSessionKeys = Object.keys(sessionStorage).filter(key => key.startsWith('sb-'));
-    sbSessionKeys.forEach(key => sessionStorage.removeItem(key));
-
-    console.log('[Auth] Cleared existing session, starting OAuth...');
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
