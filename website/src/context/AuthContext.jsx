@@ -107,6 +107,9 @@ export const AuthProvider = ({ children }) => {
       provider: 'google',
       options: {
         redirectTo: window.location.href,
+        queryParams: {
+          prompt: 'select_account', // Always show account picker
+        },
       },
     });
 
