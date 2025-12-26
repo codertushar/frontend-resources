@@ -22,6 +22,26 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
+    // Handle OAuth callback - detect hash tokens and clean URL
+    const handleAuthCallback = async () => {
+      const hash = window.location.hash;
+      if (hash && hash.includes('access_token')) {
+        // Let Supabase process the hash
+        const { data, error } = await supabase.auth.getSession();
+        if (data?.session) {
+          setSession(data.session);
+          setUser(data.session.user);
+          // Clean URL by removing hash
+          window.history.replaceState(null, '', window.location.pathname);
+        }
+        if (error) {
+          console.error('Auth callback error:', error);
+        }
+      }
+    };
+
+    handleAuthCallback();
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -39,6 +59,10 @@ export const AuthProvider = ({ children }) => {
         // Create profile on first sign in
         if (event === 'SIGNED_IN' && session?.user) {
           await ensureProfile(session.user);
+          // Clean URL after sign in
+          if (window.location.hash) {
+            window.history.replaceState(null, '', window.location.pathname);
+          }
         }
       }
     );
