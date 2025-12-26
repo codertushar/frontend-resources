@@ -48,7 +48,12 @@ export const AuthProvider = ({ children }) => {
     }
 
     // 1. Get initial session
+    console.log('[Auth] Getting initial session...');
     supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
+      console.log('[Auth] getSession result:', {
+        hasSession: !!initialSession,
+        email: initialSession?.user?.email,
+      });
       setSession(initialSession);
       setUser(initialSession?.user ?? null);
       setIsLoading(false);
@@ -57,6 +62,10 @@ export const AuthProvider = ({ children }) => {
     // 2. Listen for auth changes (this handles OAuth redirects automatically)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
+        console.log('[Auth] onAuthStateChange:', {
+          event,
+          email: currentSession?.user?.email,
+        });
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         setIsLoading(false);
@@ -76,33 +85,41 @@ export const AuthProvider = ({ children }) => {
       return { error: new Error('Supabase not configured') };
     }
 
+    console.log('[Auth] signInWithGoogle called');
+
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: window.location.origin + window.location.pathname,
         queryParams: {
-          prompt: 'select_account',
+          prompt: 'consent select_account',
+          access_type: 'offline',
         },
       },
     });
 
+    console.log('[Auth] signInWithOAuth result:', { data, error });
     return { data, error };
   }, []);
 
   const signOut = useCallback(async () => {
     if (!supabase) return;
 
+    console.log('[Auth] signOut called');
+
     // Sign out from Supabase
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+    console.log('[Auth] signOut result:', { error });
 
     // Clear all Supabase tokens from localStorage to ensure clean state
-    Object.keys(localStorage)
-      .filter(key => key.startsWith('sb-'))
-      .forEach(key => localStorage.removeItem(key));
+    const sbKeys = Object.keys(localStorage).filter(key => key.startsWith('sb-'));
+    console.log('[Auth] Clearing localStorage keys:', sbKeys);
+    sbKeys.forEach(key => localStorage.removeItem(key));
 
     // Clear React state
     setUser(null);
     setSession(null);
+    console.log('[Auth] State cleared');
   }, []);
 
   const getAccessToken = useCallback(async () => {
