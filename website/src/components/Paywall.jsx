@@ -102,6 +102,7 @@ const Paywall = ({ articleTitle }) => {
           position: relative;
           margin-top: -250px;
           padding-top: 250px;
+          width: 100%;
         }
 
         .paywall-blur-layer {
@@ -118,6 +119,7 @@ const Paywall = ({ articleTitle }) => {
           z-index: 1;
         }
 
+        /* Dark theme gradient */
         .paywall-gradient {
           position: absolute;
           top: 0;
@@ -127,13 +129,25 @@ const Paywall = ({ articleTitle }) => {
           background: linear-gradient(
             to bottom,
             transparent 0%,
-            rgba(var(--bg-primary-rgb, 15, 15, 26), 0.4) 20%,
-            rgba(var(--bg-primary-rgb, 15, 15, 26), 0.7) 40%,
-            rgba(var(--bg-primary-rgb, 15, 15, 26), 0.9) 60%,
-            var(--bg-primary, #0f0f1a) 80%
+            rgba(3, 7, 18, 0.4) 20%,
+            rgba(3, 7, 18, 0.7) 40%,
+            rgba(3, 7, 18, 0.9) 60%,
+            var(--bg-color) 80%
           );
           pointer-events: none;
           z-index: 2;
+        }
+
+        /* Light theme gradient override */
+        :root.light .paywall-gradient {
+          background: linear-gradient(
+            to bottom,
+            transparent 0%,
+            rgba(248, 250, 252, 0.5) 20%,
+            rgba(248, 250, 252, 0.8) 40%,
+            rgba(248, 250, 252, 0.95) 60%,
+            var(--bg-color) 80%
+          );
         }
 
         .paywall-glow {
@@ -141,16 +155,25 @@ const Paywall = ({ articleTitle }) => {
           top: 180px;
           left: 50%;
           transform: translateX(-50%);
-          width: 400px;
-          height: 200px;
+          width: 500px;
+          height: 250px;
           background: radial-gradient(
             ellipse at center,
-            rgba(139, 92, 246, 0.15) 0%,
-            rgba(139, 92, 246, 0.05) 40%,
+            rgba(139, 92, 246, 0.12) 0%,
+            rgba(139, 92, 246, 0.04) 40%,
             transparent 70%
           );
           pointer-events: none;
           z-index: 3;
+        }
+
+        :root.light .paywall-glow {
+          background: radial-gradient(
+            ellipse at center,
+            rgba(124, 58, 237, 0.08) 0%,
+            rgba(124, 58, 237, 0.02) 40%,
+            transparent 70%
+          );
         }
 
         .paywall-content {
@@ -158,21 +181,20 @@ const Paywall = ({ articleTitle }) => {
           z-index: 10;
           text-align: center;
           padding: 2.5rem;
-          background: linear-gradient(
-            145deg,
-            rgba(var(--surface-card-rgb, 30, 30, 46), 0.9),
-            rgba(var(--surface-card-rgb, 30, 30, 46), 0.95)
-          );
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border: 1px solid rgba(139, 92, 246, 0.2);
+          background: var(--surface-color);
+          border: 1px solid var(--border-color);
           border-radius: 24px;
-          max-width: 480px;
-          margin: 0 auto;
+          width: 100%;
           box-shadow:
             0 0 0 1px rgba(255, 255, 255, 0.05),
-            0 20px 50px -12px rgba(0, 0, 0, 0.4),
-            0 0 100px -20px rgba(139, 92, 246, 0.3);
+            0 20px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        :root.light .paywall-content {
+          box-shadow:
+            0 0 0 1px rgba(0, 0, 0, 0.03),
+            0 20px 50px -12px rgba(0, 0, 0, 0.1),
+            0 0 80px -20px rgba(124, 58, 237, 0.15);
         }
 
         .paywall-badge {
@@ -191,6 +213,12 @@ const Paywall = ({ articleTitle }) => {
           margin-bottom: 1.5rem;
         }
 
+        :root.light .paywall-badge {
+          background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(139, 92, 246, 0.1));
+          border-color: rgba(124, 58, 237, 0.25);
+          color: #7c3aed;
+        }
+
         .paywall-icon {
           position: relative;
           width: 72px;
@@ -207,12 +235,23 @@ const Paywall = ({ articleTitle }) => {
             inset 0 1px 1px rgba(255, 255, 255, 0.2);
         }
 
+        :root.light .paywall-icon {
+          background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+          box-shadow:
+            0 8px 24px -4px rgba(124, 58, 237, 0.35),
+            inset 0 1px 1px rgba(255, 255, 255, 0.3);
+        }
+
         .icon-ring {
           position: absolute;
           inset: -4px;
           border-radius: 24px;
           border: 2px solid rgba(139, 92, 246, 0.3);
           animation: pulse-ring 2s ease-in-out infinite;
+        }
+
+        :root.light .icon-ring {
+          border-color: rgba(124, 58, 237, 0.25);
         }
 
         @keyframes pulse-ring {
@@ -241,11 +280,18 @@ const Paywall = ({ articleTitle }) => {
           color: #a78bfa;
         }
 
+        :root.light .sparkle-icon {
+          color: #7c3aed;
+        }
+
         .paywall-description {
           color: var(--text-muted);
           line-height: 1.6;
           margin-bottom: 1.75rem;
           font-size: 0.95rem;
+          max-width: 400px;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         .paywall-features {
@@ -254,6 +300,9 @@ const Paywall = ({ articleTitle }) => {
           gap: 0.875rem;
           margin-bottom: 1.75rem;
           text-align: left;
+          max-width: 400px;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         .feature {
@@ -276,12 +325,25 @@ const Paywall = ({ articleTitle }) => {
           flex-shrink: 0;
         }
 
+        :root.light .check-icon {
+          background: rgba(124, 58, 237, 0.1);
+          color: #7c3aed;
+        }
+
         .paywall-price {
           margin-bottom: 1.75rem;
           padding: 1rem;
           background: rgba(139, 92, 246, 0.05);
           border-radius: 12px;
           border: 1px solid rgba(139, 92, 246, 0.1);
+          max-width: 300px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        :root.light .paywall-price {
+          background: rgba(124, 58, 237, 0.04);
+          border-color: rgba(124, 58, 237, 0.12);
         }
 
         .price-amount {
@@ -291,6 +353,12 @@ const Paywall = ({ articleTitle }) => {
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
+        }
+
+        :root.light .price-amount {
+          background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+          -webkit-background-clip: text;
+          background-clip: text;
         }
 
         .price-note {
@@ -328,11 +396,24 @@ const Paywall = ({ articleTitle }) => {
             inset 0 1px 1px rgba(255, 255, 255, 0.15);
         }
 
+        :root.light .btn-primary {
+          background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+          box-shadow:
+            0 4px 14px -2px rgba(124, 58, 237, 0.3),
+            inset 0 1px 1px rgba(255, 255, 255, 0.2);
+        }
+
         .btn-primary:hover {
           transform: translateY(-3px);
           box-shadow:
             0 12px 28px -4px rgba(139, 92, 246, 0.5),
             inset 0 1px 1px rgba(255, 255, 255, 0.2);
+        }
+
+        :root.light .btn-primary:hover {
+          box-shadow:
+            0 12px 28px -4px rgba(124, 58, 237, 0.35),
+            inset 0 1px 1px rgba(255, 255, 255, 0.25);
         }
 
         .btn-primary:active {
