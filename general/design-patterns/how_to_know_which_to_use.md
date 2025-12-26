@@ -1,6 +1,7 @@
 ---
 date: 2025-06-19T09:47:50+05:30
 description: Decision guide for choosing the right design pattern based on your problem. Maps real-world scenarios to specific patterns with examples.
+premium: false
 ---
 
 # 🧠 When to Use Which Design Pattern in JavaScript

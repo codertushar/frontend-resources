@@ -1,6 +1,7 @@
 ---
 date: 2025-06-16T09:14:37+05:30
 description: Executes a function once every N calls based on count. Perfect for rate-limiting logs, sampling telemetry, and reducing UI event overhead.
+premium: false
 ---
 # 📊 Sampling Function: Execute Once Every N Calls
 

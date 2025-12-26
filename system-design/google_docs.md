@@ -1,6 +1,7 @@
 ---
 date: 2025-12-10T00:33:19+05:30
 description: Design a real-time collaborative document editor with conflict resolution using Operational Transformation and CRDT algorithms.
+premium: true
 ---
 
 # 📝 System Design: Google Docs with Real-Time Collaboration (Frontend Interview Guide)

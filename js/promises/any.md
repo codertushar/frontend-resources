@@ -1,6 +1,7 @@
 ---
 date: 2025-03-27T08:09:10+05:30
 description: Promise.any resolves as soon as any promise succeeds. Rejects only if all promises fail, returning an AggregateError.
+premium: false
 ---
 # 🎯 Promise.any() Implementation
 

@@ -1,6 +1,7 @@
 ---
 date: 2025-03-15T00:35:56+05:30
 description: The reverse() method reverses an array in place and returns it. Efficiently swaps elements from both ends toward the center.
+premium: true
 ---
 # 🔄 Array.prototype.reverse() Polyfill
 

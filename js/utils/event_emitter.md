@@ -1,6 +1,7 @@
 ---
 date: 2025-03-20T09:40:40+05:30
 description: Pub-sub pattern implementation using Map and Set for efficient event handling. Foundation for reactive programming and event-driven architecture.
+premium: true
 ---
 # 📢 Custom EventEmitter Implementation
 

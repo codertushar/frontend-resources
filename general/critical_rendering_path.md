@@ -1,6 +1,7 @@
 ---
 date: 2025-11-03T07:06:19+05:30
 description: Optimize web performance by understanding the critical rendering path, including resource prioritization, async loading, and reducing render-blocking.
+premium: true
 ---
 
 # 🎯 Critical Rendering Path: Deep Dive into Browser Rendering Cycle

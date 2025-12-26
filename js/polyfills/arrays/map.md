@@ -1,6 +1,7 @@
 ---
 date: 2025-03-15T00:35:56+05:30
 description: The map() method creates a new array with results from calling a function on every element. Essential for transforming data without mutation.
+premium: true
 ---
 # 🗺️ Array.prototype.map() Polyfill
 

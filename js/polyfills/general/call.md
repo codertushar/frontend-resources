@@ -1,6 +1,7 @@
 ---
 date: 2025-03-20T09:40:40+05:30
 description: The call() method invokes a function with a specified this context and arguments. Essential for borrowing methods and controlling execution context.
+premium: false
 ---
 # 📞 Function.prototype.call() Polyfill
 

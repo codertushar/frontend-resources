@@ -1,6 +1,7 @@
 ---
 date: 2025-12-10T00:34:12+05:30
 description: Implement a smart pagination component with ellipsis for large datasets, showing relevant page numbers with proper spacing and navigation.
+premium: true
 ---
 
 # 🔢 React Pagination with Ellipsis

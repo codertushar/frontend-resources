@@ -29,7 +29,13 @@ const ResourceDetail = () => {
       .replace(/\/$/, '')
   );
 
-  const resource = contentData.find(r => r.id === resourceId);
+  // Get resource from content data
+  const resource = useMemo(() => {
+    return contentData.find(r => r.id === resourceId) || null;
+  }, [resourceId]);
+
+  // Determine if we should show paywall
+  const showPaywall = resource?.premium && !isPremium();
 
   // Derive content directly - no loading state needed for initial content
   // Free articles: full content from JSON
@@ -37,8 +43,22 @@ const ResourceDetail = () => {
   const content = useMemo(() => {
     if (!resource) return '';
     if (premiumContent) return premiumContent;
+    // If paywall should show and user doesn't have premium, only show preview
+    if (showPaywall) {
+      // Generate preview - first ~300 words
+      const fullContent = resource.fullContent || '';
+      const lines = fullContent.split('\n');
+      let wordCount = 0;
+      const previewLines = [];
+      for (const line of lines) {
+        previewLines.push(line);
+        wordCount += line.split(/\s+/).filter(w => w.length > 0).length;
+        if (wordCount >= 300) break;
+      }
+      return previewLines.join('\n');
+    }
     return resource.fullContent;
-  }, [resource, premiumContent]);
+  }, [resource, premiumContent, showPaywall]);
 
   // Derive loading state - only true when we have no content to show
   const loading = !resource;
@@ -64,9 +84,6 @@ const ResourceDetail = () => {
       )
       .slice(0, 3);
   }, [resource, resourceId]);
-
-  // Determine if we should show paywall
-  const showPaywall = resource?.premium && !isPremium();
 
   // Reset premium content when resource changes
   useEffect(() => {

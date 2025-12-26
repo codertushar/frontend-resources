@@ -1,6 +1,7 @@
 ---
 date: 2025-03-20T09:40:40+05:30
 description: Create a chainable calculator API that supports method chaining for arithmetic operations with a fluent interface pattern.
+premium: true
 ---
 
 # 🔢 Chained Calculator Implementation

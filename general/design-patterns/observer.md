@@ -1,6 +1,7 @@
 ---
 date: 2025-05-09T13:06:09+05:30
 description: Notifies observers automatically when a subject changes state. Use for event handling, UI state changes, and one-to-many update scenarios.
+premium: false
 ---
 
 # 👀 Observer Pattern — React to Change Automatically

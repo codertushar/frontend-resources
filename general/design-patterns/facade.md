@@ -1,6 +1,7 @@
 ---
 date: 2025-06-19T09:47:50+05:30
 description: Provides a simplified interface to complex subsystems. Use to hide complexity, decouple code from libraries, and create clean APIs.
+premium: false
 ---
 
 # 🎭 The Facade Pattern in JavaScript – Simplifying Complex Systems

@@ -1,6 +1,7 @@
 ---
 description: MutationObserver watches for DOM changes like added, removed, or modified elements. Essential for reactive UIs, debugging, and monitoring dynamic content.
 date: 2025-10-28T10:00:40+05:30
+premium: false
 ---
 
 # 👁️ MutationObserver: Watching DOM Changes in JavaScript

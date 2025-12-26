@@ -1,6 +1,7 @@
 ---
 date: 2025-03-27T08:09:10+05:30
 description: Promise.race settles as soon as the first promise settles, whether it resolves or rejects. Used for timeouts and fastest response patterns.
+premium: false
 ---
 # 🏁 Promise.race() Implementation
 

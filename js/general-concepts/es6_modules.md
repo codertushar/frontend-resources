@@ -1,6 +1,7 @@
 ---
 description: ES6 modules provide a native way to organize and share JavaScript code using import and export. Standard for modern JavaScript development and code organization.
 date: 2025-06-16T09:14:37+05:30
+premium: false
 ---
 
 # 📦 Understanding ES6 Modules in JavaScript

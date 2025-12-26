@@ -1,6 +1,7 @@
 ---
 date: 2025-12-16T01:37:00+00:00
 description: Master JavaScript's 'this' keyword - understand all binding rules, common pitfalls, and how 'this' behaves in different contexts. Critical for frontend interviews.
+premium: false
 ---
 
 # 🎯 The JavaScript `this` Keyword: Complete Guide to Context Binding

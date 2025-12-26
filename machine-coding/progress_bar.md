@@ -1,6 +1,7 @@
 ---
 date: 2025-03-28T10:00:16+05:30
 description: Build a customizable progress bar component with animations, color transitions, and accessibility features for tracking task completion.
+premium: true
 ---
 
 # 📊 Progress Bar with Controls

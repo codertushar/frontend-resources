@@ -1,6 +1,7 @@
 ---
 date: 2025-06-16T09:14:37+05:30
 description: Encapsulates code into self-contained units with private data and public APIs. Use to avoid global namespace pollution and organize code better.
+premium: false
 ---
 
 # 📦 The Module Pattern in JavaScript — A Deep Dive

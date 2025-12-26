@@ -1,6 +1,7 @@
 ---
 date: 2025-03-27T07:19:24+05:30
 description: Delays function execution until a pause in calls. Essential for search inputs, resize handlers, and reducing API calls.
+premium: true
 ---
 # ⏱️ Debounce Function in JavaScript
 

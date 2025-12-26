@@ -1,6 +1,7 @@
 ---
 date: 2025-05-06T06:50:41+05:30
 description: Controls concurrency for async operations on arrays with a specified limit. Prevents overwhelming resources while processing large datasets efficiently.
+premium: true
 ---
 # 🔄 mapLimit: Controlled Concurrency in JavaScript
 

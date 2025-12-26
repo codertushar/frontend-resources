@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   Tag, FileText, Settings, BarChart3, Plus, Trash2, ToggleLeft, ToggleRight,
-  Save, AlertCircle, CheckCircle, Crown, Lock, Unlock, RefreshCw
+  Save, AlertCircle, CheckCircle, Crown, Lock, Unlock
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import contentData from '../data/content.json';
@@ -23,11 +23,6 @@ const Admin = () => {
   const [settings, setSettings] = useState({ base_price: '200000' });
   const [settingsLoading, setSettingsLoading] = useState(false);
   const [settingsMessage, setSettingsMessage] = useState(null);
-
-  // Articles state
-  const [articleOverrides, setArticleOverrides] = useState({});
-  const [articleFilter, setArticleFilter] = useState('');
-  const [articlesLoading, setArticlesLoading] = useState(false);
 
   const fetchWithAuth = useCallback(async (url, options = {}) => {
     const token = await getAccessToken();
@@ -76,22 +71,6 @@ const Admin = () => {
         .then(res => res.json())
         .then(data => setSettings(data.settings || {}))
         .catch(err => console.error('Settings fetch error:', err));
-    }
-  }, [isAdmin, fetchWithAuth]);
-
-  // Fetch article overrides
-  useEffect(() => {
-    if (isAdmin) {
-      fetchWithAuth('/api/admin/articles')
-        .then(res => res.json())
-        .then(data => {
-          const overridesMap = {};
-          (data.overrides || []).forEach(o => {
-            overridesMap[o.article_id] = o.is_premium;
-          });
-          setArticleOverrides(overridesMap);
-        })
-        .catch(err => console.error('Articles fetch error:', err));
     }
   }, [isAdmin, fetchWithAuth]);
 
@@ -183,46 +162,6 @@ const Admin = () => {
     }
   };
 
-  // Article premium toggle handlers
-  const handleToggleArticlePremium = async (articleId, currentPremium) => {
-    setArticlesLoading(true);
-    const newPremiumStatus = articleOverrides[articleId] !== undefined
-      ? !articleOverrides[articleId]
-      : !currentPremium;
-
-    try {
-      const res = await fetchWithAuth('/api/admin/articles', {
-        method: 'POST',
-        body: JSON.stringify({ articleId, isPremium: newPremiumStatus }),
-      });
-
-      if (res.ok) {
-        setArticleOverrides({ ...articleOverrides, [articleId]: newPremiumStatus });
-      }
-    } catch (error) {
-      console.error('Toggle article error:', error);
-    } finally {
-      setArticlesLoading(false);
-    }
-  };
-
-  const handleResetArticleOverride = async (articleId) => {
-    try {
-      const res = await fetchWithAuth('/api/admin/articles', {
-        method: 'DELETE',
-        body: JSON.stringify({ articleId }),
-      });
-
-      if (res.ok) {
-        const newOverrides = { ...articleOverrides };
-        delete newOverrides[articleId];
-        setArticleOverrides(newOverrides);
-      }
-    } catch (error) {
-      console.error('Reset article error:', error);
-    }
-  };
-
   // Calculate stats
   const stats = {
     totalArticles: contentData.length,
@@ -232,13 +171,8 @@ const Admin = () => {
     totalCoupons: coupons.length,
   };
 
-  // Filter articles
-  const filteredArticles = contentData.filter(article =>
-    article.title.toLowerCase().includes(articleFilter.toLowerCase()) ||
-    article.id.toLowerCase().includes(articleFilter.toLowerCase())
-  );
-
-  if (!isLoaded || isCheckingAdmin) {
+  // Show loading while auth is loading OR while checking admin status
+  if (!isLoaded || (isSignedIn && isCheckingAdmin)) {
     return (
       <div className="admin-container">
         <div className="admin-loading">Loading...</div>
@@ -264,7 +198,7 @@ const Admin = () => {
         <div className="admin-error glass-panel">
           <Lock size={48} />
           <h2>Access Denied</h2>
-          <p>You don't have admin privileges to access this page.</p>
+          <p>You don&apos;t have admin privileges to access this page.</p>
         </div>
       </div>
     );
@@ -288,13 +222,6 @@ const Admin = () => {
         >
           <Tag size={18} />
           Coupons
-        </button>
-        <button
-          className={`tab ${activeTab === 'articles' ? 'active' : ''}`}
-          onClick={() => setActiveTab('articles')}
-        >
-          <FileText size={18} />
-          Articles
         </button>
         <button
           className={`tab ${activeTab === 'settings' ? 'active' : ''}`}
@@ -390,64 +317,6 @@ const Admin = () => {
                     </div>
                   </div>
                 ))
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Articles Tab */}
-        {activeTab === 'articles' && (
-          <div className="articles-tab">
-            <h2>Article Premium Status</h2>
-            <p className="tab-description">Override auto-detected premium status for individual articles.</p>
-
-            <input
-              type="text"
-              placeholder="Search articles..."
-              value={articleFilter}
-              onChange={(e) => setArticleFilter(e.target.value)}
-              className="article-search"
-            />
-
-            <div className="articles-list">
-              {filteredArticles.slice(0, 50).map(article => {
-                const hasOverride = articleOverrides[article.id] !== undefined;
-                const effectivePremium = hasOverride ? articleOverrides[article.id] : article.premium;
-
-                return (
-                  <div key={article.id} className={`article-item ${effectivePremium ? 'premium' : 'free'}`}>
-                    <div className="article-info">
-                      <span className="article-title">{article.title}</span>
-                      <span className="article-category">{article.category}/{article.subcategory}</span>
-                      {hasOverride && <span className="override-badge">Override</span>}
-                    </div>
-                    <div className="article-actions">
-                      <span className={`status-badge ${effectivePremium ? 'premium' : 'free'}`}>
-                        {effectivePremium ? <Crown size={14} /> : <Unlock size={14} />}
-                        {effectivePremium ? 'Premium' : 'Free'}
-                      </span>
-                      <button
-                        className="toggle-premium-btn"
-                        onClick={() => handleToggleArticlePremium(article.id, article.premium)}
-                        disabled={articlesLoading}
-                      >
-                        {effectivePremium ? 'Make Free' : 'Make Premium'}
-                      </button>
-                      {hasOverride && (
-                        <button
-                          className="reset-btn"
-                          onClick={() => handleResetArticleOverride(article.id)}
-                          title="Reset to auto-detect"
-                        >
-                          <RefreshCw size={16} />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-              {filteredArticles.length > 50 && (
-                <p className="more-articles">Showing 50 of {filteredArticles.length} articles. Use search to find more.</p>
               )}
             </div>
           </div>
@@ -752,129 +621,6 @@ const Admin = () => {
           padding: 2rem;
         }
 
-        /* Articles Tab */
-        .article-search {
-          width: 100%;
-          padding: 0.75rem;
-          border: 1px solid var(--border-color);
-          border-radius: 8px;
-          background: var(--surface-hover);
-          color: var(--text-main);
-          font-size: 0.9rem;
-          margin-bottom: 1rem;
-        }
-
-        .articles-list {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-          max-height: 500px;
-          overflow-y: auto;
-        }
-
-        .article-item {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 0.75rem 1rem;
-          background: var(--surface-hover);
-          border-radius: 8px;
-          border-left: 3px solid var(--border-color);
-        }
-
-        .article-item.premium {
-          border-left-color: var(--primary);
-        }
-
-        .article-item.free {
-          border-left-color: #22c55e;
-        }
-
-        .article-info {
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-          flex: 1;
-          min-width: 0;
-        }
-
-        .article-title {
-          font-weight: 500;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .article-category {
-          font-size: 0.8rem;
-          color: var(--text-muted);
-        }
-
-        .override-badge {
-          display: inline-block;
-          font-size: 0.7rem;
-          background: var(--primary);
-          color: white;
-          padding: 0.15rem 0.5rem;
-          border-radius: 4px;
-          margin-top: 0.25rem;
-          width: fit-content;
-        }
-
-        .article-actions {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-        }
-
-        .status-badge {
-          display: flex;
-          align-items: center;
-          gap: 0.25rem;
-          font-size: 0.75rem;
-          padding: 0.25rem 0.5rem;
-          border-radius: 4px;
-        }
-
-        .status-badge.premium {
-          background: rgba(139, 92, 246, 0.1);
-          color: var(--primary);
-        }
-
-        .status-badge.free {
-          background: rgba(34, 197, 94, 0.1);
-          color: #22c55e;
-        }
-
-        .toggle-premium-btn {
-          font-size: 0.75rem;
-          padding: 0.35rem 0.75rem;
-          background: var(--surface-hover);
-          border: 1px solid var(--border-color);
-          border-radius: 4px;
-          cursor: pointer;
-          color: var(--text-main);
-        }
-
-        .toggle-premium-btn:disabled {
-          opacity: 0.5;
-        }
-
-        .reset-btn {
-          background: transparent;
-          border: none;
-          cursor: pointer;
-          color: var(--text-muted);
-          padding: 0.25rem;
-        }
-
-        .more-articles {
-          text-align: center;
-          color: var(--text-muted);
-          font-size: 0.85rem;
-          padding: 1rem;
-        }
-
         /* Settings Tab */
         .setting-item {
           margin-bottom: 1.5rem;
@@ -1009,17 +755,6 @@ const Admin = () => {
 
           .form-row {
             flex-direction: column;
-          }
-
-          .article-item {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.75rem;
-          }
-
-          .article-actions {
-            width: 100%;
-            justify-content: space-between;
           }
         }
       `}</style>

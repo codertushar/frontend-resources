@@ -1,6 +1,7 @@
 ---
 date: 2025-03-27T08:09:10+05:30
 description: Automatically retries a failed async operation a specified number of times with optional delays. Essential for handling transient failures.
+premium: false
 ---
 # 🔄 Promise Retry Implementation
 

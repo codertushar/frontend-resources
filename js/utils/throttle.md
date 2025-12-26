@@ -1,6 +1,7 @@
 ---
 date: 2025-03-27T07:19:24+05:30
 description: Limits function execution to once per time period. Critical for scroll tracking, resize handling, and API rate limiting.
+premium: true
 ---
 # ⏱️ Throttle Function in JavaScript
 

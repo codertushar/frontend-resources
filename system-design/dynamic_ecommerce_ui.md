@@ -1,6 +1,7 @@
 ---
 date: 2025-12-11T23:54:49+05:30
 description: Design a flexible server-driven UI system for e-commerce that renders dynamic layouts from JSON configuration with component mapping.
+premium: true
 ---
 
 # 🛒 System Design: Dynamic eCommerce UIs with BFF Pattern (Senior Frontend Interview Guide)

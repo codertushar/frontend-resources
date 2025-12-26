@@ -1,6 +1,7 @@
 ---
 date: 2025-03-15T16:01:07+05:30
 description: A fully functional custom Promise implementation that matches the native JavaScript Promise API, including then, catch, finally, and static methods like all, race, and allSettled.
+premium: true
 ---
 # 🔧 Custom Promise Class Implementation
 

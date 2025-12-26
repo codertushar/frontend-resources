@@ -1,6 +1,7 @@
 ---
 description: The spread operator expands arrays and objects into individual elements. Essential for copying, merging, and passing array elements as function arguments.
 date: 2025-03-20T09:40:40+05:30
+premium: false
 ---
 
 # 📤 JavaScript Spread Operator (...) Explained

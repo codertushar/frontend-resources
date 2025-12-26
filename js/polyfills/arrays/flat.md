@@ -1,6 +1,7 @@
 ---
 date: 2025-03-21T07:33:05+05:30
 description: The flat() method creates a new array with all sub-array elements concatenated recursively up to the specified depth. Includes simple recursive and spec-compliant implementations.
+premium: false
 ---
 # 📋 Array.prototype.flat() Polyfill
 

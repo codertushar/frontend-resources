@@ -1,6 +1,7 @@
 ---
 date: 2025-03-27T08:09:10+05:30
 description: Promise.all waits for all promises to resolve and returns their results as an array. Rejects immediately if any promise fails.
+premium: true
 ---
 # 🎯 Promise.all() Implementation
 

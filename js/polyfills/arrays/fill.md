@@ -1,6 +1,7 @@
 ---
 date: 2025-03-15T00:35:56+05:30
 description: The fill() method changes array elements to a static value within a range. Useful for initializing arrays with default values.
+premium: false
 ---
 # 🔲 Array.prototype.fill() Polyfill
 

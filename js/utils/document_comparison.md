@@ -1,6 +1,7 @@
 ---
 date: 2025-05-06T07:45:22+05:30
 description: Line-by-line and word-by-word document comparison utility. Essential for version control, collaborative editing, and content management systems.
+premium: false
 ---
 # 📄 Document Comparison (Diff)
 

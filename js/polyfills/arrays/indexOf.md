@@ -1,6 +1,7 @@
 ---
 date: 2025-03-15T00:35:56+05:30
 description: The indexOf() method returns the first index of a value in an array, or -1 if not found. Commonly used for existence checks.
+premium: false
 ---
 # 🔢 Array.prototype.indexOf() Polyfill
 

@@ -1,6 +1,7 @@
 ---
 date: 2025-12-19T01:18:53+00:00
 description: Complete 30-day strategy guide to clear DSA rounds for senior frontend roles - designed for developers with DSA fear and 1 hour daily commitment.
+premium: false
 ---
 
 # 🎯 30-Day DSA Mastery Guide for Senior Frontend Engineers

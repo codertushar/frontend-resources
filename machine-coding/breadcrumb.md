@@ -1,6 +1,7 @@
 ---
 date: 2025-03-28T10:00:16+05:30
 description: Build a responsive breadcrumb navigation component with dynamic path generation, overflow handling, and accessibility support.
+premium: true
 ---
 
 # 🧭 React Breadcrumb Component

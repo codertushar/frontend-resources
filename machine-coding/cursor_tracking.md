@@ -1,6 +1,7 @@
 ---
 date: 2025-12-16T07:13:20+05:30
 description: Build cursor tracking systems with position monitoring, visual effects, analytics integration, and performance optimization for interactive web applications.
+premium: true
 ---
 
 # 🖱️ Cursor Tracking: Position Monitoring & Interactive Effects

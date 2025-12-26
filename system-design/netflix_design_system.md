@@ -1,6 +1,7 @@
 ---
 date: 2025-12-11T20:08:30+05:30
 description: Build a scalable design system like Netflix with reusable components, theming, documentation, and cross-platform consistency.
+premium: true
 ---
 
 # 🎬 System Design: Netflix Design System (Frontend Interview Guide)

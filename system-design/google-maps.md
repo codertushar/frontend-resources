@@ -1,6 +1,7 @@
 ---
 date: 2025-12-09T10:51:33+05:30
 description: Build a scalable maps application with tile rendering, WebGL performance, caching strategies, and gesture handling for millions of users.
+premium: true
 ---
 
 # 🗺️ System Design: Google Maps (Frontend Interview Guide)

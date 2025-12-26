@@ -1,6 +1,7 @@
 ---
 date: 2025-03-27T08:09:10+05:30
 description: A wrapper that prevents promise handlers from executing after cancellation. Useful for avoiding state updates in unmounted components.
+premium: false
 ---
 # 🛑 Cancelable Promise Implementation
 

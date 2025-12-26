@@ -1,6 +1,7 @@
 ---
 date: 2025-05-06T07:45:22+05:30
 description: Converts camelCase to snake_case without regex. Loop-based approach provides clarity, customizability, and better performance than pattern matching.
+premium: false
 ---
 # 🐫➡️🐍 Converting camelCase to snake_case in JavaScript (Without Regex)
 

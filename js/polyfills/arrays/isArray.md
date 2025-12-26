@@ -1,6 +1,7 @@
 ---
 date: 2025-03-15T00:35:56+05:30
 description: The isArray() method reliably determines if a value is an array. More accurate than typeof for cross-frame array detection.
+premium: false
 ---
 # ✅ Array.isArray() Polyfill
 

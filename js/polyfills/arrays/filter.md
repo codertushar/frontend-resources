@@ -1,6 +1,7 @@
 ---
 date: 2025-03-15T00:35:56+05:30
 description: The filter() method creates a new array with elements passing a test function. Critical for data filtering and commonly used in interviews.
+premium: false
 ---
 # 🔍 Array.prototype.filter() Polyfill
 

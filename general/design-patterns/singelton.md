@@ -1,6 +1,7 @@
 ---
 date: 2025-05-09T13:06:09+05:30
 description: Ensures only one instance of a class exists with global access. Use for config managers, logging services, caches, and shared state stores.
+premium: false
 ---
 
 # 🔒 Singleton — One Instance to Rule Them All

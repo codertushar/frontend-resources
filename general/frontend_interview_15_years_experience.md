@@ -1,6 +1,7 @@
 ---
 date: 2025-12-16T01:35:00+00:00
 description: Comprehensive interview preparation guide for senior frontend engineers with 15 years of experience - covering system design, leadership, architecture, and technical depth expectations for Staff/Principal roles.
+premium: true
 ---
 
 # 🎯 Frontend Interview Preparation Guide: 15 Years of Experience (Staff/Principal Engineer Level)

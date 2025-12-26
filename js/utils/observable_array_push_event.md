@@ -1,6 +1,7 @@
 ---
 date: 2025-05-06T07:45:22+05:30
 description: Intercepts array mutations to dispatch custom events when push is called. Enables reactive arrays without frameworks or proxies.
+premium: true
 ---
 # ⚡️ Fire on Push: Dispatching Custom Events When an Array Changes in JavaScript
 

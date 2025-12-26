@@ -1,6 +1,7 @@
 ---
 date: 2025-12-16T01:29:00+00:00
 description: Master JavaScript's Event Loop - the heart of asynchronous execution. Understand how the call stack, task queue, and microtask queue work together to handle async operations.
+premium: true
 ---
 
 # ⚡ JavaScript Event Loop: Complete Guide to Asynchronous Execution

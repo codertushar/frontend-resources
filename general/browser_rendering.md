@@ -1,6 +1,7 @@
 ---
 date: 2025-05-06T06:50:41+05:30
 description: Learn how browsers parse HTML, CSS, and JavaScript to render web pages, including DOM construction, CSSOM, render tree, and layout processes.
+premium: true
 ---
 
 # 🌐 Browser Rendering: How Browsers Display Web Pages

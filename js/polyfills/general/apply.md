@@ -1,6 +1,7 @@
 ---
 date: 2025-03-20T09:40:40+05:30
 description: The apply() method invokes a function with a specified this context and arguments as an array. Similar to call but with array arguments.
+premium: false
 ---
 # 📞 Function.prototype.apply() Polyfill
 

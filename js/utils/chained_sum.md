@@ -1,6 +1,7 @@
 ---
 date: 2025-03-15T00:35:56+05:30
 description: Curried sum function enabling chained calls like sum(1)(2)(3). Demonstrates closures, internal state, and valueOf/toString methods.
+premium: false
 ---
 
 # ➕ Chained Sum (Curried Function)

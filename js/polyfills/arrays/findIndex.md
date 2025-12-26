@@ -1,6 +1,7 @@
 ---
 date: 2025-03-15T00:35:56+05:30
 description: The findIndex() method returns the index of the first element satisfying a test function, or -1 if none found. Essential for locating items.
+premium: false
 ---
 # 🔢 Array.prototype.findIndex() Polyfill
 

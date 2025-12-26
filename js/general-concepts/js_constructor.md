@@ -1,6 +1,7 @@
 ---
 description: Constructor functions create and initialize objects with shared properties and methods. Foundation for object-oriented patterns before ES6 classes.
 date: 2025-03-20T09:40:40+05:30
+premium: false
 ---
 
 # 🏗️ Constructor Functions in JavaScript

@@ -1,6 +1,7 @@
 ---
 date: 2025-12-13T04:16:53+05:30
 description: Master the sliding window technique for efficient substring and subarray problems - a critical pattern for frontend interview coding challenges involving strings and arrays.
+premium: true
 ---
 
 # 🎯 Sliding Window Technique: Efficient String & Array Pattern for Frontend Interviews

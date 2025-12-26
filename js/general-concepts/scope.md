@@ -1,6 +1,7 @@
 ---
 description: Scope determines the accessibility of variables and functions at runtime. Essential for understanding closures, hoisting, and JavaScript's execution context.
 date: 2025-12-17T09:32:00+05:30
+premium: true
 ---
 
 # 🎯 Scope in JavaScript — The Complete Guide

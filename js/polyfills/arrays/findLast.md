@@ -1,6 +1,7 @@
 ---
 date: 2025-03-15T01:28:24+05:30
 description: The findLast() method returns the last element satisfying a test function, iterating from end to start. Reverses find() behavior.
+premium: false
 ---
 # 🔙 Array.prototype.findLast() Polyfill
 

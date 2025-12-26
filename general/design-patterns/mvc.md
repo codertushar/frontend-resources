@@ -1,6 +1,7 @@
 ---
 date: 2025-05-09T13:06:09+05:30
 description: Separates applications into Model, View, and Controller for maintainable code. Use when building complex UIs with multiple synchronized views.
+premium: false
 ---
 
 # 🧭 MVC (Model‑View‑Controller) — A Front‑End Deep Dive

@@ -1,6 +1,7 @@
 ---
 date: 2025-12-12T17:12:53+05:30
 description: Master the two-pointer technique for efficient array and string operations - a fundamental pattern for frontend interview coding challenges.
+premium: true
 ---
 
 # 🎯 Two-Pointer Technique: Essential Pattern for Frontend Interviews

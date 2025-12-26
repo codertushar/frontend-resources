@@ -1,6 +1,7 @@
 ---
 date: 2025-06-16T09:14:37+05:30
 description: Overview of essential JavaScript design patterns including Module, Observer, Factory, and Singleton. Use to write reusable and maintainable code.
+premium: false
 ---
 
 # 📘 Most Important Design Patterns in JavaScript

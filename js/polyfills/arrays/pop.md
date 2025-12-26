@@ -1,6 +1,7 @@
 ---
 date: 2025-03-15T16:01:07+05:30
 description: The pop() method removes and returns the last array element. Modifies the original array in place, reducing its length by one.
+premium: false
 ---
 # ➖ Array.prototype.pop() Polyfill
 
