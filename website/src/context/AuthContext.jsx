@@ -91,7 +91,18 @@ export const AuthProvider = ({ children }) => {
 
   const signOut = useCallback(async () => {
     if (!supabase) return;
+
+    // Sign out from Supabase
     await supabase.auth.signOut();
+
+    // Clear all Supabase tokens from localStorage to ensure clean state
+    Object.keys(localStorage)
+      .filter(key => key.startsWith('sb-'))
+      .forEach(key => localStorage.removeItem(key));
+
+    // Clear React state
+    setUser(null);
+    setSession(null);
   }, []);
 
   const getAccessToken = useCallback(async () => {
