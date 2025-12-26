@@ -48,19 +48,38 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    // 1. Get initial session first
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setIsLoading(false);
+    // Handle OAuth callback hash - must be done before getSession
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get('access_token');
+    const refreshToken = hashParams.get('refresh_token');
 
-      // Clean URL after OAuth callback
-      if (window.location.hash?.includes('access_token')) {
-        window.history.replaceState(null, '', window.location.pathname);
-      }
-    });
+    if (accessToken && refreshToken) {
+      // Process OAuth tokens from URL hash
+      supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      }).then(({ data: { session }, error }) => {
+        if (error) {
+          console.error('Error setting session from hash:', error);
+        }
+        if (session) {
+          setSession(session);
+          setUser(session.user);
+        }
+        setIsLoading(false);
+        // Clean URL
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      });
+    } else {
+      // No hash tokens - get existing session
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        setIsLoading(false);
+      });
+    }
 
-    // 2. Listen for auth state changes (cross-tab sync, sign in, sign out, token refresh)
+    // Listen for auth state changes (cross-tab sync, sign in, sign out, token refresh)
     // IMPORTANT: Don't use async callback - defer Supabase calls with setTimeout
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
