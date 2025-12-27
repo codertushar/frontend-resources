@@ -22,6 +22,25 @@ Object.keys(sessionStorage).forEach(key => {
   }
 });
 
+// Debug: If there's an access_token in URL, decode and log it
+if (window.location.hash.includes('access_token=')) {
+  try {
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get('access_token');
+    if (accessToken) {
+      // Decode JWT payload (middle part)
+      const payload = JSON.parse(atob(accessToken.split('.')[1]));
+      console.log('[Supabase] JWT payload from URL:', {
+        sub: payload.sub,
+        email: payload.email,
+        exp: new Date(payload.exp * 1000).toISOString(),
+      });
+    }
+  } catch (e) {
+    console.error('[Supabase] Failed to decode JWT:', e);
+  }
+}
+
 export const supabase = supabaseUrl && supabaseAnonKey
   ? createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
