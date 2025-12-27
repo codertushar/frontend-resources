@@ -33,9 +33,6 @@ export const AuthProvider = ({ children }) => {
   const [session, setSession] = useState(null);
   const [isLoading, setIsLoading] = useState(isSupabaseConfigured());
 
-  // Storage cleanup delay to ensure all storage operations complete
-  const STORAGE_CLEANUP_DELAY_MS = 100;
-
   const createProfileIfNeeded = useCallback(async (authUser) => {
     if (!supabase) return;
 
@@ -66,6 +63,22 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
+    // Debug: Log current URL and storage state
+    const urlHash = window.location.hash;
+    const urlSearch = window.location.search;
+    const sbKeys = Object.keys(localStorage).filter(k => k.startsWith('sb-'));
+    console.log('[Auth] Page load state:', {
+      hasHashToken: urlHash.includes('access_token'),
+      hasCodeParam: urlSearch.includes('code='),
+      storedKeys: sbKeys,
+    });
+
+    // If this is an OAuth callback, clear old tokens BEFORE Supabase processes them
+    if (urlHash.includes('access_token') || urlSearch.includes('code=')) {
+      console.log('[Auth] OAuth callback detected - clearing old storage first');
+      clearSupabaseStorage();
+    }
+
     let isInitialized = false;
 
     // Safety timeout: ensure loading state resolves within 10 seconds
@@ -73,14 +86,18 @@ export const AuthProvider = ({ children }) => {
       if (!isInitialized) {
         console.warn('[Auth] Loading timeout - forcing isLoading to false');
         setIsLoading(false);
-        isInitialized = true; // Prevent duplicate state updates
+        isInitialized = true;
       }
     }, 10000);
 
     // Set up auth state listener - handles OAuth redirects and auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
-        console.log('[Auth] onAuthStateChange:', { event, email: currentSession?.user?.email });
+        console.log('[Auth] onAuthStateChange:', {
+          event,
+          userId: currentSession?.user?.id,
+          email: currentSession?.user?.email,
+        });
 
         // IGNORE INITIAL_SESSION - it comes from stale localStorage
         // We use getUser() below for accurate initial state
@@ -117,15 +134,12 @@ export const AuthProvider = ({ children }) => {
         });
 
         // Only set state if onAuthStateChange hasn't already handled it
-        // (e.g., from a SIGNED_IN event during OAuth callback)
         if (!isInitialized) {
           if (error || !verifiedUser) {
-            // No valid session - clear everything
             clearSupabaseStorage();
             setSession(null);
             setUser(null);
           } else {
-            // Valid user from server - get the session
             supabase.auth.getSession().then(({ data: { session: validSession } }) => {
               setSession(validSession);
               setUser(verifiedUser);
@@ -136,7 +150,6 @@ export const AuthProvider = ({ children }) => {
         }
       })
       .catch((err) => {
-        // Ensure loading state resolves even on unexpected errors
         console.error('[Auth] Unexpected error during getUser:', err);
         if (!isInitialized) {
           clearSupabaseStorage();
@@ -202,10 +215,7 @@ export const AuthProvider = ({ children }) => {
     // Step 3: Clear all Supabase storage to ensure clean slate
     clearSupabaseStorage();
 
-    // Step 4: Small delay to ensure storage is fully cleared before next sign-in
-    await new Promise(resolve => setTimeout(resolve, STORAGE_CLEANUP_DELAY_MS));
-
-    console.log('[Auth] Complete sign out finished');
+    console.log('[Auth] Sign out complete');
   }, []);
 
   const getAccessToken = useCallback(async () => {
