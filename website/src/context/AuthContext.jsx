@@ -23,18 +23,45 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
+    // Helper to extract user from JWT (more reliable than user object)
+    const getUserFromJwt = (accessToken) => {
+      try {
+        const payload = JSON.parse(atob(accessToken.split('.')[1]));
+        return {
+          id: payload.sub,
+          email: payload.email,
+          user_metadata: payload.user_metadata || {},
+          app_metadata: payload.app_metadata || {},
+        };
+      } catch {
+        return null;
+      }
+    };
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      if (currentSession?.access_token) {
+        // Trust JWT over user object (Supabase bug workaround)
+        const jwtUser = getUserFromJwt(currentSession.access_token);
+        setUser(jwtUser || currentSession.user);
+      } else {
+        setUser(null);
+      }
       setSession(currentSession);
-      setUser(currentSession?.user ?? null);
       setIsLoading(false);
     });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, currentSession) => {
+      (_event, currentSession) => {
+        if (currentSession?.access_token) {
+          // Trust JWT over user object (Supabase bug workaround)
+          const jwtUser = getUserFromJwt(currentSession.access_token);
+          setUser(jwtUser || currentSession.user);
+        } else {
+          setUser(null);
+        }
         setSession(currentSession);
-        setUser(currentSession?.user ?? null);
         setIsLoading(false);
       }
     );
