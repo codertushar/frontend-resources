@@ -646,6 +646,10 @@ function processDirectory(dirPath, relativePath, resources, premiumFullContent =
                 ? metadata.premium === 'true' || metadata.premium === true
                 : isPremiumContent(category, difficulty, subcategory, itemRelativePath);
 
+            // Calculate read time from full content (words / 200 wpm)
+            const wordCount = rawContent.split(/\s+/).filter(w => w.length > 0).length;
+            const readTime = Math.max(3, Math.min(30, Math.ceil(wordCount / 200)));
+
             // Build resource object with frontmatter metadata
             const resource = {
                 id: itemRelativePath.replace('.md', ''),
@@ -655,6 +659,7 @@ function processDirectory(dirPath, relativePath, resources, premiumFullContent =
                 difficulty,
                 difficultyScore, // Numeric score for granular sorting (lower = easier)
                 premium, // Whether this is premium content
+                readTime, // Estimated read time in minutes
                 createdAt: fileStats.birthtime.toISOString(), // File creation timestamp for sorting
                 filePath: `/content/${itemRelativePath}`,
                 content: stripMarkdown(processedContent).slice(0, 300), // Preview for search/display

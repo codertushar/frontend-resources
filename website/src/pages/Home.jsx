@@ -2,8 +2,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Code, Database, Brain, Layout, Sparkles, BookOpen, Crown, Trophy } from 'lucide-react';
+import { ArrowRight, Code, Database, Brain, Layout, Sparkles, BookOpen, Crown, Trophy, Terminal, Lightbulb } from 'lucide-react';
 import contentData from '../data/content.json';
+import { useProgress } from '../context/ProgressContext';
 
 const container = {
   hidden: { opacity: 0 },
@@ -21,8 +22,16 @@ const item = {
 };
 
 const Home = () => {
+  const { getStats } = useProgress();
   const resourceCount = contentData.length;
   const premiumCount = contentData.filter(item => item.premium).length;
+  const stats = getStats(resourceCount);
+
+  // Calculate category counts
+  const categoryCounts = contentData.reduce((acc, item) => {
+    acc[item.category] = (acc[item.category] || 0) + 1;
+    return acc;
+  }, {});
 
   return (
     <div className="container">
@@ -46,7 +55,7 @@ const Home = () => {
 
         <motion.div variants={item} className="hero-actions">
           <Link to="/library" className="btn-primary">
-            <span>Explore {resourceCount}+ Resources</span>
+            <span>Explore Library</span>
             <ArrowRight size={18} />
           </Link>
           <Link to="/learning-path" className="btn-secondary">
@@ -58,7 +67,7 @@ const Home = () => {
           <div className="stat-item">
             <BookOpen size={20} />
             <div className="stat-content">
-              <span className="stat-value">{resourceCount}+</span>
+              <span className="stat-value">{resourceCount}</span>
               <span className="stat-label">Resources</span>
             </div>
           </div>
@@ -74,11 +83,27 @@ const Home = () => {
           <div className="stat-item">
             <Crown size={20} />
             <div className="stat-content">
-              <span className="stat-value">{premiumCount}+</span>
-              <span className="stat-label">Premium Guides</span>
+              <span className="stat-value">{premiumCount}</span>
+              <span className="stat-label">Premium</span>
             </div>
           </div>
         </motion.div>
+
+        {stats.completed > 0 && (
+          <motion.div variants={item} className="progress-banner glass-panel">
+            <div className="progress-content">
+              <div className="progress-info">
+                <span className="progress-label">Your Progress</span>
+                <span className="progress-value">{stats.completed} of {resourceCount} completed</span>
+              </div>
+              <div className="progress-bar-container">
+                <div className="progress-bar" style={{ width: `${stats.percentage}%` }}></div>
+              </div>
+              <span className="progress-percentage">{stats.percentage}%</span>
+            </div>
+            <Link to="/library" className="progress-cta">Continue Learning <ArrowRight size={16} /></Link>
+          </motion.div>
+        )}
 
         <motion.div variants={item} className="section-header">
           <h2>Explore by Category</h2>
@@ -88,23 +113,51 @@ const Home = () => {
         <motion.div variants={item} className="features-grid">
           <Link to="/library?category=js" className="feature-card glass-panel">
             <div className="feature-icon"><Code size={24} /></div>
-            <h3>JavaScript Deep Dives</h3>
-            <p>Master the core language, from closures to event loops.</p>
+            <div className="feature-content">
+              <h3>JavaScript Deep Dives</h3>
+              <p>Master the core language, from closures to event loops.</p>
+            </div>
+            <span className="feature-count">{categoryCounts['js'] || 0} articles</span>
           </Link>
           <Link to="/library?category=dsa" className="feature-card glass-panel">
             <div className="feature-icon"><Database size={24} /></div>
-            <h3>DSA for Frontend</h3>
-            <p>Algorithms and data structures optimized for interviews.</p>
+            <div className="feature-content">
+              <h3>DSA for Frontend</h3>
+              <p>Algorithms and data structures optimized for interviews.</p>
+            </div>
+            <span className="feature-count">{categoryCounts['dsa'] || 0} articles</span>
+          </Link>
+          <Link to="/library?category=machine-coding" className="feature-card glass-panel">
+            <div className="feature-icon"><Terminal size={24} /></div>
+            <div className="feature-content">
+              <h3>Machine Coding</h3>
+              <p>Real-world implementation challenges asked in interviews.</p>
+            </div>
+            <span className="feature-count">{categoryCounts['machine-coding'] || 0} articles</span>
           </Link>
           <Link to="/library?category=system-design" className="feature-card glass-panel">
             <div className="feature-icon"><Layout size={24} /></div>
-            <h3>System Design</h3>
-            <p>Large-scale frontend architecture for senior interviews.</p>
+            <div className="feature-content">
+              <h3>System Design</h3>
+              <p>Large-scale frontend architecture for senior interviews.</p>
+            </div>
+            <span className="feature-count">{categoryCounts['system-design'] || 0} articles</span>
+          </Link>
+          <Link to="/library?category=general" className="feature-card glass-panel">
+            <div className="feature-icon"><Lightbulb size={24} /></div>
+            <div className="feature-content">
+              <h3>Browser & Patterns</h3>
+              <p>Browser internals, rendering, and design patterns.</p>
+            </div>
+            <span className="feature-count">{categoryCounts['general'] || 0} articles</span>
           </Link>
           <Link to="/library?category=ai" className="feature-card glass-panel">
             <div className="feature-icon"><Brain size={24} /></div>
-            <h3>AI Engineering</h3>
-            <p>Integrate modern AI tools into your workflows.</p>
+            <div className="feature-content">
+              <h3>AI Engineering</h3>
+              <p>Integrate modern AI tools into your workflows.</p>
+            </div>
+            <span className="feature-count">{categoryCounts['ai'] || 0} articles</span>
           </Link>
         </motion.div>
       </motion.div>
@@ -189,7 +242,84 @@ const Home = () => {
           backdrop-filter: blur(16px);
           border: 1px solid var(--glass-border);
           border-radius: 16px;
+          margin-bottom: 2rem;
+        }
+
+        .progress-banner {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 1.25rem 2rem;
           margin-bottom: 4rem;
+          background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.05));
+          border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .progress-content {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+          flex: 1;
+        }
+
+        .progress-info {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+
+        .progress-label {
+          font-size: 0.8rem;
+          color: var(--text-muted);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        .progress-value {
+          font-size: 1rem;
+          font-weight: 600;
+          color: var(--text-main);
+        }
+
+        .progress-bar-container {
+          flex: 1;
+          max-width: 300px;
+          height: 8px;
+          background: var(--surface-hover);
+          border-radius: 4px;
+          overflow: hidden;
+        }
+
+        .progress-bar {
+          height: 100%;
+          background: linear-gradient(90deg, var(--primary), #ec4899);
+          border-radius: 4px;
+          transition: width 0.5s ease;
+        }
+
+        .progress-percentage {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: var(--primary);
+          min-width: 50px;
+        }
+
+        .progress-cta {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.6rem 1.25rem;
+          background: var(--primary);
+          color: white;
+          border-radius: 8px;
+          font-weight: 500;
+          font-size: 0.9rem;
+          transition: all 0.2s;
+        }
+
+        .progress-cta:hover {
+          background: var(--primary-hover);
+          transform: translateY(-2px);
         }
 
         .stat-item {
@@ -253,11 +383,14 @@ const Home = () => {
         }
 
         .feature-card {
-          padding: 2rem;
+          padding: 1.5rem;
           text-align: left;
           transition: all 0.3s ease;
           position: relative;
           overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
         }
 
         .feature-card::before {
@@ -304,19 +437,34 @@ const Home = () => {
           transform: scale(1.05);
         }
 
-        .feature-card h3 {
-          font-size: 1.25rem;
-          margin-bottom: 0.5rem;
-          color: var(--text-main);
+        .feature-content {
+          flex: 1;
           position: relative;
           z-index: 1;
         }
 
+        .feature-card h3 {
+          font-size: 1.1rem;
+          margin-bottom: 0.375rem;
+          color: var(--text-main);
+        }
+
         .feature-card p {
           color: var(--text-muted);
-          font-size: 0.95rem;
+          font-size: 0.875rem;
+          line-height: 1.4;
+        }
+
+        .feature-count {
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: var(--primary);
+          background: rgba(139, 92, 246, 0.1);
+          padding: 0.25rem 0.6rem;
+          border-radius: 4px;
           position: relative;
           z-index: 1;
+          align-self: flex-start;
         }
 
         @media (max-width: 768px) {
@@ -355,7 +503,7 @@ const Home = () => {
           .stats-row {
             gap: 1rem;
             padding: 1.25rem 1rem;
-            margin-bottom: 3rem;
+            margin-bottom: 1.5rem;
           }
 
           .stat-item {
@@ -368,13 +516,41 @@ const Home = () => {
             text-align: center;
           }
 
+          .progress-banner {
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1rem;
+            margin-bottom: 2.5rem;
+          }
+
+          .progress-content {
+            flex-direction: column;
+            gap: 0.75rem;
+            width: 100%;
+          }
+
+          .progress-info {
+            align-items: center;
+            text-align: center;
+          }
+
+          .progress-bar-container {
+            max-width: 100%;
+            width: 100%;
+          }
+
+          .progress-cta {
+            width: 100%;
+            justify-content: center;
+          }
+
           .features-grid {
             grid-template-columns: 1fr;
-            gap: 1.5rem;
+            gap: 1rem;
           }
 
           .feature-card {
-            padding: 1.5rem;
+            padding: 1.25rem;
           }
         }
 

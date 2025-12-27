@@ -1,7 +1,7 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Search, ChevronRight, LayoutGrid, List, X, CheckCircle, Crown } from 'lucide-react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, ChevronRight, ChevronDown, LayoutGrid, List, X, CheckCircle, Crown, Sparkles, BookOpen, Trophy, Shuffle, Target, Clock, SlidersHorizontal } from 'lucide-react';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import contentData from '../data/content.json';
 import { useProgress } from '../context/ProgressContext';
@@ -14,8 +14,28 @@ const CATEGORIES = [
   { id: 'ai', label: 'AI Engineering' },
   { id: 'machine-coding', label: 'Machine Coding' },
   { id: 'system-design', label: 'System Design' },
-  { id: 'general', label: 'General' },
+  { id: 'general', label: 'Browser & Patterns' },
 ];
+
+// Display name mappings for clearer UI labels
+const CATEGORY_DISPLAY_NAMES = {
+  'general': 'Browser & Patterns',
+  'js': 'JavaScript',
+  'dsa': 'DSA',
+  'ai': 'AI',
+  'machine-coding': 'Machine Coding',
+  'system-design': 'System Design',
+};
+
+const SUBCATEGORY_DISPLAY_NAMES = {
+  'general-concepts': 'Core Concepts',
+  'polyfills': 'Polyfills',
+  'promises': 'Promises',
+  'utils': 'Utilities',
+  'design-patterns': 'Design Patterns',
+  'arrays': 'Arrays',
+  'general': 'General',
+};
 
 const DIFFICULTIES = [
   { id: 'all', label: 'Difficulty' },
@@ -30,36 +50,95 @@ const ACCESS_OPTIONS = [
   { id: 'premium', label: 'Premium' },
 ];
 
+
+// Map articles to interview frequency based on topic patterns
+const getInterviewFrequency = (item) => {
+  // Critical: Core JS concepts, closures, promises, event loop, this binding
+  const criticalTopics = ['closures', 'event_loop', 'this', 'promises', 'prototype', 'hoisting', 'debounce', 'throttle'];
+  const criticalTags = ['closures', 'promises', 'async', 'this-binding'];
+
+  // Check if title or id contains critical topics
+  const idLower = item.id.toLowerCase();
+  const titleLower = item.title.toLowerCase();
+
+  if (criticalTopics.some(topic => idLower.includes(topic) || titleLower.includes(topic))) {
+    return 'critical';
+  }
+  if (item.tags?.some(tag => criticalTags.includes(tag))) {
+    return 'critical';
+  }
+
+  // System design and machine coding are always critical for interviews
+  if (item.category === 'system-design' || item.category === 'machine-coding') {
+    return 'critical';
+  }
+
+  // Hard difficulty items are typically common interview topics
+  if (item.difficulty === 'hard') {
+    return 'common';
+  }
+
+  // Polyfills are common interview questions
+  if (item.subcategory === 'polyfills' || item.tags?.includes('polyfill')) {
+    return 'common';
+  }
+
+  // DSA medium+ is common
+  if (item.category === 'dsa' && item.difficulty !== 'easy') {
+    return 'common';
+  }
+
+  // Everything else is occasional
+  return 'occasional';
+};
+
 const SORT_OPTIONS = [
   { id: 'default', label: 'Newest First' },
-  { id: 'difficulty-asc', label: 'Difficulty (Easy → Hard)' },
-  { id: 'difficulty-desc', label: 'Difficulty (Hard → Easy)' },
-  { id: 'title-asc', label: 'Title (A → Z)' },
-  { id: 'title-desc', label: 'Title (Z → A)' },
+  { id: 'difficulty-asc', label: 'Easy → Hard' },
+  { id: 'difficulty-desc', label: 'Hard → Easy' },
+  { id: 'title-asc', label: 'A → Z' },
+  { id: 'title-desc', label: 'Z → A' },
 ];
+
 
 const DIFFICULTY_ORDER = { easy: 1, medium: 2, hard: 3 };
 
-// Popular tags to show in the filter UI
+// Popular tags - consolidated for clarity
 const POPULAR_TAGS = [
   'polyfill',
-  'array-methods',
-  'promises',
-  'async',
+  'async',        // combines promises + async
+  'closures',
   'functional',
   'react',
-  'closures',
   'design-patterns',
-  'system-design',
-  'dsa',
-  'recursion',
   'caching',
+  'recursion',
+  'dom',
+  'api',
 ];
 
 const fuseOptions = {
   keys: ['title', 'category', 'subcategory', 'content', 'difficulty', 'tags'],
   threshold: 0.3,
 };
+
+// Featured articles - FREE handpicked essentials for interview prep
+const FEATURED_FREE_IDS = [
+  'js/general-concepts/this_keyword',     // FREE - critical interview topic
+  'js/polyfills/arrays/reduce',           // FREE - very common question
+  'js/polyfills/general/call',            // FREE - interview staple
+  'js/promises/retry',                    // FREE - practical async pattern
+  'js/general-concepts/spread',           // FREE - foundational ES6
+];
+
+// Start here - beginner friendly FREE articles
+const START_HERE_IDS = [
+  'js/general-concepts/function_vs_arrow_function',  // Easy, foundational
+  'js/polyfills/arrays/filter',                       // Easy, common
+  'dsa/30_day_dsa_guide_senior_frontend',            // Guide/roadmap
+  'general/design-patterns/general',                  // Overview
+];
+
 
 const Library = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -79,7 +158,22 @@ const Library = () => {
   const [sortBy, setSortBy] = useState(initialSort);
   const [activeTag, setActiveTag] = useState(initialTag);
   const [activeAccess, setActiveAccess] = useState(initialAccess);
-  const [viewMode, setViewMode] = useState('detailed'); // 'detailed' or 'compact'
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [showMoreFilters, setShowMoreFilters] = useState(false);
+  const [isFilterSticky, setIsFilterSticky] = useState(false);
+  const filterRef = useRef(null);
+
+  // Handle sticky filter bar
+  useEffect(() => {
+    const handleScroll = () => {
+      if (filterRef.current) {
+        const rect = filterRef.current.getBoundingClientRect();
+        setIsFilterSticky(rect.top <= 60);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Get progress stats
   const stats = getStats(contentData.length);
@@ -162,14 +256,227 @@ const Library = () => {
     return result;
   }, [query, activeCategory, activeDifficulty, activeTag, activeAccess, sortBy, fuse]);
 
+  // Get featured articles (FREE ones)
+  const featuredArticles = useMemo(() => {
+    return FEATURED_FREE_IDS
+      .map(id => contentData.find(item => item.id === id))
+      .filter(Boolean);
+  }, []);
+
+  // Get "Start Here" beginner articles
+  const startHereArticles = useMemo(() => {
+    return START_HERE_IDS
+      .map(id => contentData.find(item => item.id === id))
+      .filter(Boolean);
+  }, []);
+
+  // Calculate category-wise progress
+  const categoryProgress = useMemo(() => {
+    const progress = {};
+    CATEGORIES.forEach(cat => {
+      if (cat.id === 'all') return;
+      const categoryArticles = contentData.filter(item => item.category === cat.id);
+      const readCount = categoryArticles.filter(item => isRead(item.id)).length;
+      progress[cat.id] = {
+        total: categoryArticles.length,
+        read: readCount,
+        percentage: categoryArticles.length > 0 ? Math.round((readCount / categoryArticles.length) * 100) : 0,
+      };
+    });
+    return progress;
+  }, [isRead]);
+
+  // Count active filters
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (activeCategory !== 'all') count++;
+    if (activeDifficulty !== 'all') count++;
+    if (activeTag !== 'all') count++;
+    if (activeAccess !== 'all') count++;
+    if (sortBy !== 'default') count++;
+    if (query) count++;
+    return count;
+  }, [activeCategory, activeDifficulty, activeTag, activeAccess, sortBy, query]);
+
+  // Clear all filters
+  const clearAllFilters = useCallback(() => {
+    setQuery('');
+    setActiveCategory('all');
+    setActiveDifficulty('all');
+    setActiveTag('all');
+    setActiveAccess('all');
+    setSortBy('default');
+  }, []);
+
+  // Random article picker
+  const getRandomUnreadArticle = useCallback(() => {
+    const unreadArticles = contentData.filter(item => !isRead(item.id) && !item.premium);
+    if (unreadArticles.length === 0) return null;
+    return unreadArticles[Math.floor(Math.random() * unreadArticles.length)];
+  }, [isRead]);
+
+  const navigate = useNavigate();
+
+  const handleSurpriseMe = () => {
+    const randomArticle = getRandomUnreadArticle();
+    if (randomArticle) {
+      navigate(`/resource/${randomArticle.id}`);
+    }
+  };
+
+  // Check if any filters are active
+  const hasActiveFilters = query || activeCategory !== 'all' || activeDifficulty !== 'all' || activeTag !== 'all' || activeAccess !== 'all';
+
   return (
     <div className="container page-container">
       <div className="header-section">
         <h1 className="heading-gradient">Resource Library</h1>
         <p className="subtitle">Explore {contentData.length} curated resources to boost your skills.</p>
+
+        {stats.completed > 0 && (
+          <div className="library-progress">
+            <div className="library-progress-info">
+              <Trophy size={18} />
+              <span>{stats.completed} of {contentData.length} completed</span>
+              <span className="library-progress-percentage">{stats.percentage}%</span>
+            </div>
+            <div className="library-progress-bar-container">
+              <div className="library-progress-bar" style={{ width: `${stats.percentage}%` }}></div>
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className="controls-section glass-panel">
+      {/* Discovery Section - only show when no filters active */}
+      {!hasActiveFilters && (
+        <>
+          {/* Quick Actions Bar */}
+          <div className="quick-actions glass-panel">
+            <button className="quick-action-btn surprise-btn" onClick={handleSurpriseMe}>
+              <Shuffle size={18} />
+              <span>Surprise Me</span>
+            </button>
+            <div className="quick-stats">
+              <span className="stat-chip">
+                <BookOpen size={14} />
+                {contentData.filter(i => !i.premium).length} Free
+              </span>
+              <span className="stat-chip premium-chip">
+                <Crown size={14} />
+                {contentData.filter(i => i.premium).length} Premium
+              </span>
+            </div>
+          </div>
+
+          {/* Start Here Section - for newcomers */}
+          {stats.completed < 5 && startHereArticles.length > 0 && (
+            <div className="start-here-section">
+              <div className="section-header">
+                <Target size={20} />
+                <h2>Start Here</h2>
+                <span className="section-badge free-badge">All Free</span>
+              </div>
+              <p className="section-subtitle">New to frontend interviews? Begin with these foundational topics.</p>
+              <div className="start-here-grid">
+                {startHereArticles.map((item, index) => (
+                  <Link
+                    key={item.id}
+                    to={`/resource/${item.id}`}
+                    className={`start-here-card glass-panel ${isRead(item.id) ? 'is-read' : ''}`}
+                  >
+                    <span className="start-here-number">{index + 1}</span>
+                    {isRead(item.id) && (
+                      <span className="card-read-badge">
+                        <CheckCircle size={14} />
+                      </span>
+                    )}
+                    <h3>{item.title.replace(/^[^\s]+\s/, '')}</h3>
+                    <span className={`start-here-difficulty ${item.difficulty}`}>{item.difficulty}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Featured Interview Prep - FREE articles */}
+          {featuredArticles.length > 0 && (
+            <div className="featured-section">
+              <div className="section-header">
+                <Sparkles size={20} />
+                <h2>Essential Interview Prep</h2>
+                <span className="section-badge free-badge">All Free</span>
+              </div>
+              <div className="featured-grid">
+                {featuredArticles.map((item) => (
+                  <Link
+                    key={item.id}
+                    to={`/resource/${item.id}`}
+                    className={`featured-card glass-panel ${isRead(item.id) ? 'is-read' : ''}`}
+                  >
+                    {isRead(item.id) && (
+                      <span className="featured-read-badge">
+                        <CheckCircle size={14} />
+                      </span>
+                    )}
+                    <span className={`featured-difficulty ${item.difficulty}`}>{item.difficulty}</span>
+                    <h3>{item.title.replace(/^[^\s]+\s/, '')}</h3>
+                    <span className="featured-category">{CATEGORY_DISPLAY_NAMES[item.category] || item.category}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Category Progress */}
+          {stats.completed > 0 && (
+            <div className="category-progress-section">
+              <div className="section-header">
+                <Trophy size={20} />
+                <h2>Your Progress</h2>
+              </div>
+              <div className="category-progress-grid">
+                {CATEGORIES.filter(cat => cat.id !== 'all').map(cat => {
+                  const progress = categoryProgress[cat.id];
+                  if (!progress || progress.total === 0) return null;
+                  return (
+                    <button
+                      key={cat.id}
+                      className={`category-progress-card ${progress.percentage === 100 ? 'completed' : ''}`}
+                      onClick={() => setActiveCategory(cat.id)}
+                    >
+                      <div className="cat-progress-header">
+                        <span className="cat-progress-label">{cat.label}</span>
+                        <span className="cat-progress-count">{progress.read}/{progress.total}</span>
+                      </div>
+                      <div className="cat-progress-bar">
+                        <div
+                          className="cat-progress-fill"
+                          style={{ width: `${progress.percentage}%` }}
+                        ></div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      <div ref={filterRef} className={`controls-section glass-panel ${isFilterSticky ? 'is-sticky' : ''}`}>
+        {/* Categories - moved to top for better UX */}
+        <div className="categories">
+          {CATEGORIES.map(cat => (
+            <button
+              key={cat.id}
+              className={`category-pill ${activeCategory === cat.id ? 'active' : ''}`}
+              onClick={() => setActiveCategory(cat.id)}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
         <div className="search-row">
           <div className="search-bar">
             <Search size={20} className="search-icon" />
@@ -189,23 +496,6 @@ const Library = () => {
                 <X size={18} />
               </button>
             )}
-          </div>
-
-          <div className="view-toggle">
-            <button
-              className={`view-btn ${viewMode === 'detailed' ? 'active' : ''}`}
-              onClick={() => setViewMode('detailed')}
-              title="Detailed view"
-            >
-              <LayoutGrid size={18} />
-            </button>
-            <button
-              className={`view-btn ${viewMode === 'compact' ? 'active' : ''}`}
-              onClick={() => setViewMode('compact')}
-              title="Compact view"
-            >
-              <List size={18} />
-            </button>
           </div>
 
           <div className="filter-dropdowns">
@@ -233,96 +523,156 @@ const Library = () => {
               ))}
             </select>
 
-            <select
-              value={activeTag}
-              onChange={(e) => setActiveTag(e.target.value)}
-              className={`filter-select ${activeTag !== 'all' ? 'active' : ''}`}
+            <button
+              className={`filter-btn more-filters ${showMoreFilters ? 'active' : ''}`}
+              onClick={() => setShowMoreFilters(!showMoreFilters)}
             >
-              <option value="all">Tags</option>
-              {POPULAR_TAGS.map(tag => (
-                <option key={tag} value={tag}>
-                  #{tag}
-                </option>
-              ))}
-            </select>
+              <SlidersHorizontal size={16} />
+              <span>More</span>
+              <ChevronDown size={14} className={`chevron ${showMoreFilters ? 'rotated' : ''}`} />
+            </button>
+          </div>
 
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className={`filter-select ${sortBy !== 'default' ? 'active' : ''}`}
+          <div className="view-toggle">
+            <button
+              className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
+              onClick={() => setViewMode('grid')}
+              title="Grid view"
             >
-              {SORT_OPTIONS.map(option => (
-                <option key={option.id} value={option.id}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              <LayoutGrid size={18} />
+            </button>
+            <button
+              className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
+              onClick={() => setViewMode('list')}
+              title="List view"
+            >
+              <List size={18} />
+            </button>
           </div>
         </div>
 
-        <div className="categories">
-          {CATEGORIES.map(cat => (
-            <button
-              key={cat.id}
-              className={`category-pill ${activeCategory === cat.id ? 'active' : ''}`}
-              onClick={() => {
-                setActiveCategory(cat.id);
-                setActiveDifficulty('all');
-                setActiveAccess('all');
-                setActiveTag('all');
-                setSortBy('default');
-                setQuery('');
-              }}
+        {/* Expandable filters */}
+        <AnimatePresence>
+          {showMoreFilters && (
+            <motion.div
+              className="expanded-filters"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
             >
-              {cat.label}
+              <select
+                value={activeTag}
+                onChange={(e) => setActiveTag(e.target.value)}
+                className={`filter-select ${activeTag !== 'all' ? 'active' : ''}`}
+              >
+                <option value="all">All Tags</option>
+                {POPULAR_TAGS.map(tag => (
+                  <option key={tag} value={tag}>
+                    #{tag}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className={`filter-select ${sortBy !== 'default' ? 'active' : ''}`}
+              >
+                {SORT_OPTIONS.map(option => (
+                  <option key={option.id} value={option.id}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Results count and Clear All */}
+        <div className="results-bar">
+          <span className="results-count">
+            Showing <strong>{filteredContent.length}</strong> of {contentData.length} resources
+          </span>
+          {activeFilterCount > 0 && (
+            <button className="clear-all-btn" onClick={clearAllFilters}>
+              <X size={14} />
+              Clear {activeFilterCount} filter{activeFilterCount > 1 ? 's' : ''}
             </button>
-          ))}
+          )}
         </div>
       </div>
 
-      <div className={`resources-grid ${viewMode === 'compact' ? 'compact-view' : ''}`}>
+      <div className={`resources-grid ${viewMode === 'list' ? 'list-view' : ''}`}>
         {filteredContent.length > 0 ? (
-          filteredContent.map((item) => (
-            <motion.div
-              key={item.id}
-              layout
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Link to={`/resource/${item.id}`} className={`resource-card glass-panel ${item.premium && !isPremium() ? 'is-premium-locked' : ''}`}>
-                <div className="card-header">
-                  {isRead(item.id) && (
-                    <span className="read-indicator" title="Read">
-                      <CheckCircle size={16} />
+          filteredContent.map((item) => {
+            const interviewFreq = getInterviewFrequency(item);
+            return (
+              <motion.div
+                key={item.id}
+                layout
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Link
+                  to={`/resource/${item.id}`}
+                  className={`resource-card glass-panel ${item.premium && !isPremium() ? 'is-premium-locked' : ''} ${isRead(item.id) ? 'is-read' : ''}`}
+                >
+                  <div className="card-header">
+                    {isRead(item.id) && (
+                      <span className="read-indicator" title="Completed">
+                        <CheckCircle size={16} />
+                      </span>
+                    )}
+                    {item.premium && (
+                      <span className={`badge premium ${isPremium() ? 'unlocked' : ''}`} title={isPremium() ? 'Premium (Unlocked)' : 'Premium'}>
+                        <Crown size={12} />
+                      </span>
+                    )}
+                    {interviewFreq === 'critical' && (
+                      <span className="badge most-asked" title="Frequently asked in interviews">
+                        Most Asked
+                      </span>
+                    )}
+                    {item.difficulty && (
+                      <span className={`badge difficulty ${item.difficulty}`}>
+                        {item.difficulty}
+                      </span>
+                    )}
+                  </div>
+                  <h3>{item.title}</h3>
+                  <div className="card-meta">
+                    <span className="meta-category">{CATEGORY_DISPLAY_NAMES[item.category] || item.category}</span>
+                    {item.subcategory && (
+                      <>
+                        <span className="meta-separator">•</span>
+                        <span className="meta-subcategory">{SUBCATEGORY_DISPLAY_NAMES[item.subcategory] || item.subcategory}</span>
+                      </>
+                    )}
+                    <span className="meta-separator">•</span>
+                    <span className="meta-time">
+                      <Clock size={12} />
+                      {item.readTime || 5} min
                     </span>
-                  )}
-                  {item.premium && (
-                    <span className={`badge premium ${isPremium() ? 'unlocked' : ''}`} title={isPremium() ? 'Premium (Unlocked)' : 'Premium'}>
-                      <Crown size={12} />
-                    </span>
-                  )}
-                  <span className="badge">{item.category}</span>
-                  {item.subcategory && <span className="badge sub">{item.subcategory}</span>}
-                  {item.difficulty && (
-                    <span className={`badge difficulty ${item.difficulty}`}>
-                      {item.difficulty}
-                    </span>
-                  )}
-                </div>
-                <h3>{item.title}</h3>
-                <p className="card-description">{item.description || item.content.substring(0, 120)}</p>
-                <div className="card-footer">
-                  <span>Read More</span>
-                  <ChevronRight size={16} />
-                </div>
-              </Link>
-            </motion.div>
-          ))
+                  </div>
+                  <p className="card-description">{item.description || item.content.substring(0, 120)}</p>
+                  <div className="card-footer">
+                    <span>{isRead(item.id) ? 'Review' : 'Read Article'}</span>
+                    <ChevronRight size={16} />
+                  </div>
+                </Link>
+              </motion.div>
+            );
+          })
         ) : (
           <div className="empty-state">
-            <p>No resources found matching your criteria.</p>
+            <Search size={48} />
+            <h3>No resources found</h3>
+            <p>Try adjusting your filters or search terms</p>
+            <button className="btn-reset" onClick={clearAllFilters}>
+              Clear all filters
+            </button>
           </div>
         )}
       </div>
@@ -344,6 +694,490 @@ const Library = () => {
 
         .subtitle {
           color: var(--text-muted);
+        }
+
+        .library-progress {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          margin-top: 1rem;
+          padding: 0.75rem 1.25rem;
+          background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.05));
+          border: 1px solid rgba(139, 92, 246, 0.2);
+          border-radius: 12px;
+          max-width: 400px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .library-progress-info {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.875rem;
+          color: var(--text-muted);
+        }
+
+        .library-progress-info svg {
+          color: #fbbf24;
+        }
+
+        .library-progress-percentage {
+          font-weight: 700;
+          color: var(--primary);
+          margin-left: auto;
+        }
+
+        .library-progress-bar-container {
+          height: 6px;
+          background: var(--surface-hover);
+          border-radius: 3px;
+          overflow: hidden;
+        }
+
+        .library-progress-bar {
+          height: 100%;
+          background: linear-gradient(90deg, var(--primary), #ec4899);
+          border-radius: 3px;
+          transition: width 0.5s ease;
+        }
+
+        /* Quick Actions Bar */
+        .quick-actions {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0.75rem 1.25rem;
+          margin-bottom: 1.5rem;
+          gap: 1rem;
+        }
+
+        .quick-action-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.5rem 1rem;
+          background: linear-gradient(135deg, var(--primary), #ec4899);
+          border: none;
+          border-radius: 8px;
+          color: white;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .quick-action-btn:hover {
+          transform: scale(1.05);
+          box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .quick-stats {
+          display: flex;
+          gap: 0.75rem;
+        }
+
+        .stat-chip {
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
+          padding: 0.35rem 0.75rem;
+          background: rgba(34, 197, 94, 0.1);
+          border: 1px solid rgba(34, 197, 94, 0.2);
+          border-radius: 20px;
+          font-size: 0.8rem;
+          color: #22c55e;
+        }
+
+        .stat-chip.premium-chip {
+          background: rgba(139, 92, 246, 0.1);
+          border-color: rgba(139, 92, 246, 0.2);
+          color: #a78bfa;
+        }
+
+        /* Section Headers */
+        .section-header {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+          color: var(--primary);
+        }
+
+        .section-header h2 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: var(--text-main);
+          margin: 0;
+        }
+
+        .section-badge {
+          font-size: 0.7rem;
+          padding: 0.2rem 0.5rem;
+          border-radius: 4px;
+          font-weight: 600;
+          margin-left: 0.5rem;
+        }
+
+        .section-badge.free-badge {
+          background: rgba(34, 197, 94, 0.15);
+          color: #22c55e;
+        }
+
+        .section-subtitle {
+          color: var(--text-muted);
+          font-size: 0.9rem;
+          margin-bottom: 1rem;
+          margin-top: -0.5rem;
+        }
+
+        /* Start Here Section */
+        .start-here-section {
+          margin-bottom: 2rem;
+        }
+
+        .start-here-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1rem;
+        }
+
+        .start-here-card {
+          padding: 1rem;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          transition: all 0.2s;
+          border-left: 3px solid var(--primary);
+        }
+
+        .start-here-card:hover {
+          transform: translateY(-4px);
+          border-color: var(--primary);
+          background: var(--card-hover-bg);
+        }
+
+        .start-here-card.is-read {
+          border-left-color: #22c55e;
+          opacity: 0.8;
+        }
+
+        .start-here-number {
+          position: absolute;
+          top: -8px;
+          left: -8px;
+          width: 24px;
+          height: 24px;
+          background: var(--primary);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: white;
+        }
+
+        .start-here-card.is-read .start-here-number {
+          background: #22c55e;
+        }
+
+        .card-read-badge {
+          position: absolute;
+          top: 0.5rem;
+          right: 0.5rem;
+          color: #22c55e;
+        }
+
+        .start-here-card h3 {
+          font-size: 0.9rem;
+          color: var(--text-main);
+          margin: 0;
+          line-height: 1.3;
+        }
+
+        .start-here-difficulty {
+          font-size: 0.7rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          padding: 0.1rem 0.4rem;
+          border-radius: 4px;
+          align-self: flex-start;
+        }
+
+        .start-here-difficulty.easy {
+          background: rgba(34, 197, 94, 0.15);
+          color: #22c55e;
+        }
+
+        .start-here-difficulty.medium {
+          background: rgba(245, 158, 11, 0.15);
+          color: #f59e0b;
+        }
+
+        /* Learning Paths Section */
+        .learning-paths-section {
+          margin-bottom: 2rem;
+        }
+
+        .paths-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1rem;
+        }
+
+        .path-card {
+          padding: 1.25rem;
+          transition: all 0.2s;
+        }
+
+        .path-card:hover {
+          transform: translateY(-2px);
+          border-color: var(--primary);
+        }
+
+        .path-card.completed {
+          border-color: rgba(34, 197, 94, 0.3);
+          background: rgba(34, 197, 94, 0.05);
+        }
+
+        .path-header {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 0.75rem;
+        }
+
+        .path-icon {
+          color: var(--primary);
+        }
+
+        .path-card.completed .path-icon {
+          color: #22c55e;
+        }
+
+        .path-header h3 {
+          font-size: 0.95rem;
+          margin: 0;
+          flex: 1;
+        }
+
+        .path-complete-icon {
+          color: #fbbf24;
+        }
+
+        .path-progress {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-bottom: 1rem;
+        }
+
+        .path-progress-bar {
+          flex: 1;
+          height: 6px;
+          background: var(--surface-hover);
+          border-radius: 3px;
+          overflow: hidden;
+        }
+
+        .path-progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, var(--primary), #ec4899);
+          border-radius: 3px;
+          transition: width 0.3s;
+        }
+
+        .path-card.completed .path-progress-fill {
+          background: #22c55e;
+        }
+
+        .path-progress-text {
+          font-size: 0.8rem;
+          color: var(--text-muted);
+          min-width: 30px;
+        }
+
+        .path-articles {
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+        }
+
+        .path-article {
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
+          font-size: 0.8rem;
+          color: var(--text-muted);
+          padding: 0.25rem 0;
+          transition: color 0.2s;
+        }
+
+        .path-article:hover {
+          color: var(--primary);
+        }
+
+        .path-article.read {
+          color: #22c55e;
+        }
+
+        .path-article.read:hover {
+          color: #16a34a;
+        }
+
+        /* Category Progress Section */
+        .category-progress-section {
+          margin-bottom: 2rem;
+        }
+
+        .category-progress-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+          gap: 0.75rem;
+        }
+
+        .category-progress-card {
+          background: var(--surface-hover);
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          padding: 0.75rem 1rem;
+          cursor: pointer;
+          transition: all 0.2s;
+          text-align: left;
+        }
+
+        .category-progress-card:hover {
+          border-color: var(--primary);
+          transform: translateY(-2px);
+        }
+
+        .category-progress-card.completed {
+          border-color: rgba(34, 197, 94, 0.3);
+          background: rgba(34, 197, 94, 0.05);
+        }
+
+        .cat-progress-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.5rem;
+        }
+
+        .cat-progress-label {
+          font-size: 0.85rem;
+          font-weight: 500;
+        }
+
+        .cat-progress-count {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+        }
+
+        .cat-progress-bar {
+          height: 4px;
+          background: var(--border-color);
+          border-radius: 2px;
+          overflow: hidden;
+        }
+
+        .cat-progress-fill {
+          height: 100%;
+          background: var(--primary);
+          border-radius: 2px;
+          transition: width 0.3s;
+        }
+
+        .category-progress-card.completed .cat-progress-fill {
+          background: #22c55e;
+        }
+
+        .featured-section {
+          margin-bottom: 2rem;
+        }
+
+        .featured-header {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+          color: var(--primary);
+        }
+
+        .featured-header h2 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: var(--text-main);
+          margin: 0;
+        }
+
+        .featured-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          gap: 1rem;
+        }
+
+        .featured-card {
+          padding: 1rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          transition: all 0.2s ease;
+          position: relative;
+        }
+
+        .featured-card:hover {
+          transform: translateY(-4px);
+          border-color: var(--primary);
+          background: var(--card-hover-bg);
+        }
+
+        .featured-card.is-read {
+          border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .featured-read-badge {
+          position: absolute;
+          top: 0.75rem;
+          right: 0.75rem;
+          color: #22c55e;
+        }
+
+        .featured-difficulty {
+          font-size: 0.7rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          padding: 0.15rem 0.5rem;
+          border-radius: 4px;
+          align-self: flex-start;
+        }
+
+        .featured-difficulty.easy {
+          background: rgba(34, 197, 94, 0.15);
+          color: #22c55e;
+        }
+
+        .featured-difficulty.medium {
+          background: rgba(245, 158, 11, 0.15);
+          color: #f59e0b;
+        }
+
+        .featured-difficulty.hard {
+          background: rgba(239, 68, 68, 0.15);
+          color: #ef4444;
+        }
+
+        .featured-card h3 {
+          font-size: 0.95rem;
+          color: var(--text-main);
+          line-height: 1.3;
+          margin: 0;
+        }
+
+        .featured-category {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          text-transform: uppercase;
         }
 
         .progress-stats {
@@ -382,16 +1216,107 @@ const Library = () => {
 
         .controls-section {
           padding: 1.25rem;
-          margin-bottom: 2rem;
+          margin-bottom: 1.5rem;
           display: flex;
           flex-direction: column;
-          gap: 1rem;
+          gap: 0.75rem;
+          transition: all 0.3s ease;
+          z-index: 100;
+        }
+
+        .controls-section.is-sticky {
+          position: sticky;
+          top: 60px;
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+          border-color: var(--primary);
         }
 
         .search-row {
           display: flex;
           gap: 0.75rem;
           align-items: center;
+        }
+
+        /* More Filters Button */
+        .filter-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
+          padding: 0.6rem 0.85rem;
+          background: var(--input-bg, rgba(0,0,0,0.2));
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          color: var(--text-muted);
+          font-size: 0.85rem;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+          border-color: var(--text-muted);
+          color: var(--text-main);
+        }
+
+        .filter-btn.active {
+          border-color: var(--primary);
+          color: var(--primary);
+        }
+
+        .filter-btn .chevron {
+          transition: transform 0.2s;
+        }
+
+        .filter-btn .chevron.rotated {
+          transform: rotate(180deg);
+        }
+
+        /* Expanded Filters */
+        .expanded-filters {
+          display: flex;
+          gap: 0.5rem;
+          padding-top: 0.5rem;
+          overflow: hidden;
+        }
+
+        /* Results Bar */
+        .results-bar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding-top: 0.5rem;
+          border-top: 1px solid var(--border-color);
+        }
+
+        .results-count {
+          font-size: 0.85rem;
+          color: var(--text-muted);
+        }
+
+        .results-count strong {
+          color: var(--text-main);
+          font-weight: 600;
+        }
+
+        .clear-all-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
+          padding: 0.35rem 0.75rem;
+          background: rgba(239, 68, 68, 0.1);
+          border: 1px solid rgba(239, 68, 68, 0.2);
+          border-radius: 6px;
+          color: #ef4444;
+          font-size: 0.8rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .clear-all-btn:hover {
+          background: rgba(239, 68, 68, 0.2);
+          border-color: rgba(239, 68, 68, 0.4);
         }
 
         .search-bar {
@@ -653,6 +1578,14 @@ const Library = () => {
           border-color: rgba(34, 197, 94, 0.3);
         }
 
+        .badge.most-asked {
+          background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(249, 115, 22, 0.15));
+          color: #f87171;
+          border: 1px solid rgba(239, 68, 68, 0.2);
+          font-size: 0.7rem;
+          padding: 0.15rem 0.5rem;
+        }
+
         .resource-card.is-premium-locked {
           border-color: rgba(139, 92, 246, 0.2);
         }
@@ -661,43 +1594,91 @@ const Library = () => {
           border-color: rgba(139, 92, 246, 0.5);
         }
 
+        .resource-card.is-read {
+          border-color: rgba(34, 197, 94, 0.2);
+        }
+
         .resource-card h3 {
-          font-size: 1.2rem;
-          margin-bottom: 0.75rem;
+          font-size: 1.1rem;
+          margin-bottom: 0.5rem;
           color: var(--text-main);
           line-height: 1.4;
           position: relative;
           z-index: 1;
         }
 
+        /* Card Meta Info */
+        .card-meta {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.8rem;
+          color: var(--text-muted);
+          margin-bottom: 0.75rem;
+          position: relative;
+          z-index: 1;
+        }
+
+        .meta-separator {
+          opacity: 0.5;
+        }
+
+        .meta-time {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+
         .card-description {
           color: var(--text-muted);
-          font-size: 0.9rem;
+          font-size: 0.85rem;
           display: -webkit-box;
-          -webkit-line-clamp: 3;
+          -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1rem;
           position: relative;
           z-index: 1;
           line-height: 1.5;
         }
 
-        /* Compact view - hide descriptions */
-        .compact-view .card-description {
+        /* List view */
+        .list-view {
+          grid-template-columns: 1fr;
+          gap: 0.75rem;
+        }
+
+        .list-view .resource-card {
+          padding: 1rem 1.25rem;
+          display: grid;
+          grid-template-columns: 1fr auto;
+          grid-template-rows: auto auto;
+          gap: 0.25rem 1rem;
+        }
+
+        .list-view .card-header {
+          grid-column: 1 / -1;
+          margin-bottom: 0.25rem;
+        }
+
+        .list-view .resource-card h3 {
+          margin-bottom: 0;
+          grid-column: 1;
+          grid-row: 2;
+        }
+
+        .list-view .card-meta {
           display: none;
         }
 
-        .compact-view .resource-card {
-          padding: 1rem 1.25rem;
+        .list-view .card-description {
+          display: none;
         }
 
-        .compact-view .resource-card h3 {
-          margin-bottom: 0.5rem;
-        }
-
-        .compact-view .card-header {
-          margin-bottom: 0.5rem;
+        .list-view .card-footer {
+          grid-column: 2;
+          grid-row: 2;
+          margin-top: 0;
         }
 
         .card-footer {
@@ -705,7 +1686,7 @@ const Library = () => {
           align-items: center;
           gap: 0.25rem;
           color: var(--primary);
-          font-size: 0.9rem;
+          font-size: 0.85rem;
           font-weight: 500;
           margin-top: auto;
           position: relative;
@@ -717,11 +1698,48 @@ const Library = () => {
           gap: 0.5rem;
         }
 
+        /* Empty State */
         .empty-state {
           grid-column: 1 / -1;
           text-align: center;
-          padding: 4rem;
+          padding: 4rem 2rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+        }
+
+        .empty-state svg {
           color: var(--text-muted);
+          opacity: 0.5;
+        }
+
+        .empty-state h3 {
+          font-size: 1.25rem;
+          color: var(--text-main);
+          margin: 0;
+        }
+
+        .empty-state p {
+          color: var(--text-muted);
+          margin: 0;
+        }
+
+        .btn-reset {
+          padding: 0.6rem 1.25rem;
+          background: var(--primary);
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+          margin-top: 0.5rem;
+        }
+
+        .btn-reset:hover {
+          background: var(--primary-hover);
+          transform: translateY(-2px);
         }
 
         /* Mobile Responsive Styles */
@@ -736,6 +1754,114 @@ const Library = () => {
 
           .subtitle {
             font-size: 0.9rem;
+          }
+
+          .library-progress {
+            padding: 0.6rem 1rem;
+          }
+
+          .library-progress-info {
+            font-size: 0.8rem;
+          }
+
+          /* Quick Actions Mobile */
+          .quick-actions {
+            flex-direction: column;
+            gap: 0.75rem;
+            padding: 0.75rem;
+          }
+
+          .quick-action-btn {
+            width: 100%;
+            justify-content: center;
+          }
+
+          .quick-stats {
+            width: 100%;
+            justify-content: center;
+          }
+
+          /* Start Here Mobile */
+          .start-here-section {
+            margin-bottom: 1.5rem;
+          }
+
+          .start-here-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+          }
+
+          .start-here-card h3 {
+            font-size: 0.8rem;
+          }
+
+          .section-subtitle {
+            font-size: 0.8rem;
+          }
+
+          /* Learning Paths Mobile */
+          .learning-paths-section {
+            margin-bottom: 1.5rem;
+          }
+
+          .paths-grid {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+          }
+
+          .path-card {
+            padding: 1rem;
+          }
+
+          .path-header h3 {
+            font-size: 0.9rem;
+          }
+
+          .path-article span {
+            font-size: 0.75rem;
+          }
+
+          /* Category Progress Mobile */
+          .category-progress-section {
+            margin-bottom: 1.5rem;
+          }
+
+          .category-progress-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+          }
+
+          .category-progress-card {
+            padding: 0.6rem 0.75rem;
+          }
+
+          .cat-progress-label {
+            font-size: 0.75rem;
+          }
+
+          .cat-progress-count {
+            font-size: 0.7rem;
+          }
+
+          .featured-section {
+            margin-bottom: 1.5rem;
+          }
+
+          .featured-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+          }
+
+          .featured-card {
+            padding: 0.75rem;
+          }
+
+          .featured-card h3 {
+            font-size: 0.85rem;
+          }
+
+          .featured-difficulty {
+            font-size: 0.65rem;
           }
 
           .controls-section {
@@ -767,13 +1893,63 @@ const Library = () => {
           }
 
           .search-row {
-            flex-direction: column;
-            gap: 0.75rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
           }
 
-          /* Hide view toggle on mobile - always use compact */
+          .search-bar {
+            width: 100%;
+            order: 1;
+          }
+
+          .filter-dropdowns {
+            display: flex;
+            gap: 0.5rem;
+            order: 2;
+            flex: 1;
+          }
+
+          .filter-select {
+            min-width: unset;
+            font-size: 0.8rem;
+            padding: 0.5rem 0.6rem;
+            flex: 1;
+          }
+
+          .filter-btn {
+            padding: 0.5rem 0.6rem;
+            font-size: 0.8rem;
+          }
+
+          .filter-btn span {
+            display: none;
+          }
+
+          /* Hide view toggle on mobile */
           .view-toggle {
             display: none;
+          }
+
+          .expanded-filters {
+            flex-wrap: wrap;
+          }
+
+          .expanded-filters .filter-select {
+            flex: 1;
+            min-width: 120px;
+          }
+
+          .results-bar {
+            flex-wrap: wrap;
+            gap: 0.5rem;
+          }
+
+          .results-count {
+            font-size: 0.8rem;
+          }
+
+          .clear-all-btn {
+            font-size: 0.75rem;
           }
 
           /* Always hide description on mobile */
@@ -781,22 +1957,13 @@ const Library = () => {
             display: none;
           }
 
-          .filter-dropdowns {
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.5rem;
-          }
-
-          .filter-select {
-            min-width: unset;
-            font-size: 0.8rem;
-            padding: 0.5rem;
+          .card-meta {
+            display: none;
           }
 
           .resources-grid {
             grid-template-columns: 1fr;
-            gap: 1rem;
+            gap: 0.75rem;
           }
 
           .resource-card {
@@ -804,12 +1971,29 @@ const Library = () => {
           }
 
           .resource-card h3 {
-            font-size: 1.05rem;
-            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 0.35rem;
           }
 
           .card-header {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.35rem;
+          }
+
+          .card-footer {
+            font-size: 0.8rem;
+          }
+
+          .empty-state {
+            padding: 2rem 1rem;
+          }
+
+          .empty-state svg {
+            width: 36px;
+            height: 36px;
+          }
+
+          .empty-state h3 {
+            font-size: 1.1rem;
           }
 
           .empty-state {
@@ -821,6 +2005,14 @@ const Library = () => {
         @media (min-width: 641px) and (max-width: 900px) {
           .header-section h1 {
             font-size: 2rem;
+          }
+
+          .start-here-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+
+          .paths-grid {
+            grid-template-columns: repeat(2, 1fr);
           }
 
           .resources-grid {
