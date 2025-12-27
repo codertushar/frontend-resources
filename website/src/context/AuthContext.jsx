@@ -28,6 +28,13 @@ const clearSupabaseStorage = () => {
   });
 };
 
+// Log initial URL before Supabase processes it (runs immediately on module load)
+console.log('[Auth] Initial URL:', {
+  hash: window.location.hash.substring(0, 100),
+  search: window.location.search.substring(0, 100),
+  href: window.location.href.substring(0, 150),
+});
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [session, setSession] = useState(null);
