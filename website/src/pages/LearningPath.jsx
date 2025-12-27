@@ -1,10 +1,11 @@
 
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle, Circle, ArrowDown, BookOpen, Trophy } from 'lucide-react';
+import { CheckCircle, BookOpen, Trophy } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import contentData from '../data/content.json';
 import { useProgress } from '../context/ProgressContext';
+import { useAuth } from '../context/AuthContext';
 
 const STEPS = [
   {
@@ -59,6 +60,7 @@ const STEPS = [
 
 const LearningPath = () => {
   const { isRead, getStats } = useProgress();
+  const { isSignedIn } = useAuth();
 
   // Calculate stats for each step
   const stepsWithStats = useMemo(() => {
@@ -86,7 +88,7 @@ const LearningPath = () => {
         <p style={{ color: 'var(--text-muted)' }}>A structured guide to master frontend development.</p>
       </div>
 
-      {overallStats.completed > 0 && (
+      {isSignedIn && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -135,7 +137,7 @@ const LearningPath = () => {
                 </span>
               </div>
               <p>{step.description}</p>
-              {step.total > 0 && step.completed > 0 && (
+              {isSignedIn && step.total > 0 && (
                 <div className="step-progress">
                   <div className="step-progress-bar-container">
                     <div

@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -9,6 +9,7 @@ import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, Check, Circle, Crown }
 import contentData from '../data/content.json';
 import { useProgress } from '../context/ProgressContext';
 import { useSubscription } from '../context/SubscriptionContext';
+import { useAuth } from '../context/AuthContext';
 import Paywall from '../components/Paywall';
 
 const ResourceDetail = () => {
@@ -19,6 +20,7 @@ const ResourceDetail = () => {
   const [premiumContentError, setPremiumContentError] = useState(null);
   const { isRead, toggleRead, isInitialized } = useProgress();
   const { isPremium, fetchPremiumContent, isInitialized: subInitialized } = useSubscription();
+  const { isSignedIn } = useAuth();
 
   // Extract and decode the resource ID from the pathname
   // Remove /resource/ prefix and trailing slash
@@ -249,7 +251,7 @@ const ResourceDetail = () => {
               {resource.difficulty}
             </span>
           )}
-          {isInitialized && (
+          {isInitialized && isSignedIn && (
             <button
               onClick={() => toggleRead(resourceId)}
               className={`btn-mark-read ${isRead(resourceId) ? 'read' : ''}`}
