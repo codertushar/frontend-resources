@@ -29,8 +29,12 @@ export const ProgressProvider = ({ children }) => {
             .select('article_id')
             .eq('user_id', user.id);
 
-          if (error && error.code !== 'PGRST116') {
+          if (error) {
             console.error('Error loading progress:', error);
+            // Check if it's a table not found error
+            if (error.code === '42P01' || error.message?.includes('does not exist')) {
+              console.error('user_progress table does not exist. Please create it in Supabase.');
+            }
           }
 
           const supabaseProgress = progressData?.map(p => p.article_id) || [];
@@ -52,6 +56,7 @@ export const ProgressProvider = ({ children }) => {
   const markAsRead = useCallback(async (articleId) => {
     // Only allow marking as read if user is signed in
     if (!isSignedIn || !supabase || !user) {
+      console.warn('Cannot mark as read: user not signed in or supabase not available');
       return;
     }
 
@@ -59,9 +64,23 @@ export const ProgressProvider = ({ children }) => {
     updatedArticles.add(articleId);
     setReadArticles(updatedArticles);
 
-    await supabase
-      .from('user_progress')
-      .upsert({ user_id: user.id, article_id: articleId }, { onConflict: 'user_id,article_id' });
+    try {
+      const { error } = await supabase
+        .from('user_progress')
+        .upsert({ user_id: user.id, article_id: articleId }, { onConflict: 'user_id,article_id' });
+
+      if (error) {
+        console.error('Error saving progress to database:', error);
+        // Revert on error
+        updatedArticles.delete(articleId);
+        setReadArticles(new Set(updatedArticles));
+      }
+    } catch (err) {
+      console.error('Error saving progress:', err);
+      // Revert on error
+      updatedArticles.delete(articleId);
+      setReadArticles(new Set(updatedArticles));
+    }
   }, [readArticles, isSignedIn, supabase, user]);
 
   const markAsUnread = useCallback(async (articleId) => {
@@ -74,11 +93,25 @@ export const ProgressProvider = ({ children }) => {
     updatedArticles.delete(articleId);
     setReadArticles(updatedArticles);
 
-    await supabase
-      .from('user_progress')
-      .delete()
-      .eq('user_id', user.id)
-      .eq('article_id', articleId);
+    try {
+      const { error } = await supabase
+        .from('user_progress')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('article_id', articleId);
+
+      if (error) {
+        console.error('Error removing progress from database:', error);
+        // Revert on error
+        updatedArticles.add(articleId);
+        setReadArticles(new Set(updatedArticles));
+      }
+    } catch (err) {
+      console.error('Error removing progress:', err);
+      // Revert on error
+      updatedArticles.add(articleId);
+      setReadArticles(new Set(updatedArticles));
+    }
   }, [readArticles, isSignedIn, supabase, user]);
 
   const toggleRead = useCallback((articleId) => {
