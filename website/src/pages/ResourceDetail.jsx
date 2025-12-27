@@ -251,7 +251,7 @@ const ResourceDetail = () => {
               {resource.difficulty}
             </span>
           )}
-          {isInitialized && isSignedIn && (
+          {isInitialized && isSignedIn && !showPaywall && (
             <button
               onClick={() => toggleRead(resourceId)}
               className={`btn-mark-read ${isRead(resourceId) ? 'read' : ''}`}
