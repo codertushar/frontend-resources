@@ -1221,16 +1221,24 @@ const Library = () => {
           flex-direction: column;
           gap: 0.75rem;
           transition: all 0.3s ease;
-          z-index: 100;
+          position: relative;
+          z-index: 10;
         }
 
         .controls-section.is-sticky {
           position: sticky;
-          top: 60px;
-          background: var(--glass-bg);
-          backdrop-filter: blur(20px);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+          top: 70px;
+          background: var(--sticky-bg, rgba(17, 24, 39, 0.95));
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
           border-color: var(--primary);
+          z-index: 50;
+        }
+
+        :root.light .controls-section.is-sticky {
+          background: rgba(255, 255, 255, 0.95);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .search-row {
@@ -1746,6 +1754,24 @@ const Library = () => {
         @media (max-width: 640px) {
           .page-container {
             padding-top: 1rem;
+          }
+
+          /* Make glass panels more opaque on mobile */
+          .controls-section.glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+          }
+
+          .controls-section.is-sticky {
+            top: 65px;
+            background: rgba(17, 24, 39, 0.98);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+          }
+
+          :root.light .controls-section.is-sticky {
+            background: rgba(255, 255, 255, 0.98);
           }
 
           .header-section h1 {

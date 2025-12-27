@@ -18,9 +18,9 @@
   --text-main: #f9fafb;
   --text-muted: #9ca3af;
 
-  --glass-bg: rgba(17, 24, 39, 0.7);
+  --glass-bg: rgba(17, 24, 39, 0.85);
   --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-blur: 16px;
+  --glass-blur: 20px;
 
   --btn-secondary-bg: rgba(255, 255, 255, 0.05);
   --btn-secondary-hover: rgba(255, 255, 255, 0.1);
