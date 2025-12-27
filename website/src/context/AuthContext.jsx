@@ -110,7 +110,9 @@ export const AuthProvider = ({ children }) => {
       .then(({ data: { user: verifiedUser }, error }) => {
         console.log('[Auth] getUser result:', {
           hasUser: !!verifiedUser,
+          userId: verifiedUser?.id,
           email: verifiedUser?.email,
+          identities: verifiedUser?.identities?.map(i => ({ provider: i.provider, email: i.identity_data?.email })),
           error: error?.message
         });
 
