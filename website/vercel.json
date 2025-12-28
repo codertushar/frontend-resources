@@ -1,4 +1,6 @@
 {
+  "buildCommand": "node scripts/generate-content.js && npm run build",
+  "devCommand": "node scripts/generate-content.js --watch & vite",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
