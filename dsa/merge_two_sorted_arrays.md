@@ -1,7 +1,7 @@
 ---
 date: 2025-03-27T07:19:24+05:30
 description: Efficiently merge two sorted arrays into one sorted array using a two-pointer approach with O(n+m) time complexity.
-premium: true
+premium: false
 ---
 
 # 🔀 Merge Two Sorted Arrays
@@ -38,7 +38,7 @@ function mergeSortedArrays(arr1, arr2) {
 ### 🧪 Example
 
 ```js
-mergeSortedArrays([1, 3, 5], [2, 4, 6]); 
+mergeSortedArrays([1, 3, 5], [2, 4, 6]);
 // → [1, 2, 3, 4, 5, 6]
 ```
 

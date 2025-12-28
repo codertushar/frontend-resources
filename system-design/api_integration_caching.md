@@ -1,13 +1,13 @@
 ---
 date: 2025-12-11T21:34:56+05:30
 description: Master API integration patterns including caching strategies, retry logic, circuit breakers, and data orchestration for scalable systems.
-premium: true
+premium: false
 ---
 
 # 🌐 System Design: API Integration, Data Orchestration & Caching (Staff Engineer Interview Guide)
 
-**Target Level:** Staff Engineer / Principal Engineer  
-**Duration:** 45-60 minutes  
+**Target Level:** Staff Engineer / Principal Engineer
+**Duration:** 45-60 minutes
 **Interview Focus:** Distributed Systems, Cache Strategies, API Design, Performance, Observability
 
 ---
@@ -163,12 +163,12 @@ const isStale = (entry) => !isFresh(entry) && !isExpired(entry);
 // Stale-while-revalidate pattern
 const fetchWithSWR = async (key, fetcher, cache) => {
   const cached = cache.get(key);
-  
+
   // Return immediately if fresh
   if (cached && isFresh(cached)) {
     return cached.data;
   }
-  
+
   // Return stale data but revalidate in background
   if (cached && isStale(cached)) {
     // Trigger background revalidation (fire-and-forget)
@@ -177,10 +177,10 @@ const fetchWithSWR = async (key, fetcher, cache) => {
     }).catch(err => {
       console.error('Background revalidation failed:', err);
     });
-    
+
     return cached.data; // Return stale data immediately
   }
-  
+
   // Fetch fresh data if expired or missing
   const data = await fetcher();
   cache.set(key, createCacheEntry(data));
@@ -236,10 +236,10 @@ class TaggedCache {
     this.cache = new Map(); // key -> { data, tags }
     this.tagIndex = new Map(); // tag -> Set(keys)
   }
-  
+
   set(key, data, tags = []) {
     this.cache.set(key, { data, tags });
-    
+
     // Update tag index
     tags.forEach(tag => {
       if (!this.tagIndex.has(tag)) {
@@ -248,21 +248,21 @@ class TaggedCache {
       this.tagIndex.get(tag).add(key);
     });
   }
-  
+
   get(key) {
     const entry = this.cache.get(key);
     return entry?.data;
   }
-  
+
   // Invalidate all entries with a specific tag
   invalidateTag(tag) {
     const keys = this.tagIndex.get(tag) || new Set();
     keys.forEach(key => this.cache.delete(key));
     this.tagIndex.delete(tag);
-    
+
     console.log(`Invalidated ${keys.size} entries with tag: ${tag}`);
   }
-  
+
   // Invalidate multiple tags atomically
   invalidateTags(tags) {
     tags.forEach(tag => this.invalidateTag(tag));
@@ -290,11 +290,11 @@ class EventDrivenCache {
   constructor() {
     this.cache = new Map();
     this.eventBus = new EventTarget();
-    
+
     // Subscribe to domain events
     this.setupEventListeners();
   }
-  
+
   setupEventListeners() {
     // Product updated event
     this.eventBus.addEventListener('product:updated', (event) => {
@@ -302,38 +302,38 @@ class EventDrivenCache {
       this.invalidatePattern(`product:${productId}`);
       this.invalidatePattern(`catalog:*`); // Invalidate catalog pages
     });
-    
+
     // Cart modified event
     this.eventBus.addEventListener('cart:modified', (event) => {
       const { userId } = event.detail;
       this.invalidatePattern(`cart:${userId}`);
       this.invalidatePattern(`checkout:${userId}`);
     });
-    
+
     // User updated event
     this.eventBus.addEventListener('user:updated', (event) => {
       const { userId } = event.detail;
       this.invalidatePattern(`user:${userId}`);
     });
   }
-  
+
   invalidatePattern(pattern) {
     // Convert glob pattern to regex
     const regex = new RegExp(
       '^' + pattern.replace(/\*/g, '.*') + '$'
     );
-    
+
     const keysToDelete = [];
     for (const key of this.cache.keys()) {
       if (regex.test(key)) {
         keysToDelete.push(key);
       }
     }
-    
+
     keysToDelete.forEach(key => this.cache.delete(key));
     console.log(`Invalidated ${keysToDelete.length} entries matching: ${pattern}`);
   }
-  
+
   // Emit event from application
   emit(event, detail) {
     this.eventBus.dispatchEvent(new CustomEvent(event, { detail }));
@@ -346,7 +346,7 @@ const cache = new EventDrivenCache();
 // When user updates their cart
 const addToCart = async (userId, productId) => {
   await api.post('/cart', { userId, productId });
-  
+
   // Trigger cache invalidation
   cache.emit('cart:modified', { userId });
   cache.emit('product:updated', { productId }); // Update inventory
@@ -359,18 +359,18 @@ const addToCart = async (userId, productId) => {
 // Optimistic update with automatic rollback on failure
 const optimisticUpdate = async (key, updateFn, apiCall, cache) => {
   const previous = cache.get(key);
-  
+
   try {
     // Apply optimistic update immediately
     const optimistic = updateFn(previous);
     cache.set(key, optimistic);
-    
+
     // Call API
     const result = await apiCall();
-    
+
     // Update with server response
     cache.set(key, result);
-    
+
     return result;
   } catch (error) {
     // Rollback to previous state on failure
@@ -379,7 +379,7 @@ const optimisticUpdate = async (key, updateFn, apiCall, cache) => {
     } else {
       cache.delete(key);
     }
-    
+
     throw error;
   }
 };
@@ -429,7 +429,7 @@ const fetchDashboardData = async (userId) => {
       fetchProducts(),
       fetchRecommendations(userId),
     ]);
-    
+
     return { user, cart, products, recommendations };
   } catch (error) {
     // Problem: If ANY request fails, ALL data is lost
@@ -449,10 +449,10 @@ const fetchDashboardData = async (userId) => {
     fetchProducts(),
     fetchRecommendations(userId),
   ]);
-  
+
   // Extract successful responses and log failures
   const [userResult, cartResult, productsResult, recsResult] = results;
-  
+
   return {
     user: userResult.status === 'fulfilled' ? userResult.value : null,
     cart: cartResult.status === 'fulfilled' ? cartResult.value : null,
@@ -472,14 +472,14 @@ const fetchDashboardData = async (userId) => {
 const fetchUserWithOrders = async (userId) => {
   // Step 1: Fetch user
   const user = await fetchUser(userId);
-  
+
   // Step 2: Fetch dependent data in parallel
   const [orders, preferences, activity] = await Promise.all([
     fetchOrders(user.id),
     fetchPreferences(user.id),
     fetchActivity(user.id),
   ]);
-  
+
   return { user, orders, preferences, activity };
 };
 ```
@@ -492,21 +492,21 @@ class RequestDeduplicator {
   constructor() {
     this.inFlight = new Map(); // key -> Promise
   }
-  
+
   async fetch(key, fetcher) {
     // Return existing promise if request is already in-flight
     if (this.inFlight.has(key)) {
       console.log(`Deduplicating request: ${key}`);
       return this.inFlight.get(key);
     }
-    
+
     // Start new request
     const promise = fetcher()
       .finally(() => {
         // Clean up when done
         this.inFlight.delete(key);
       });
-    
+
     this.inFlight.set(key, promise);
     return promise;
   }
@@ -553,7 +553,7 @@ class ObservableAPIClient {
     this.logger = options.logger || console;
     this.tracer = options.tracer || null; // OpenTelemetry
   }
-  
+
   async request(method, path, options = {}) {
     const startTime = Date.now();
     const traceId = this.generateTraceId();
@@ -565,16 +565,16 @@ class ObservableAPIClient {
       userAgent: navigator.userAgent,
       ...options.context,
     };
-    
+
     try {
       // Log request start
       this.logger.info('API request started', requestContext);
-      
+
       // Start trace span
       const span = this.tracer?.startSpan('http.request', {
         attributes: { method, path, traceId },
       });
-      
+
       // Make request
       const response = await fetch(`${this.baseURL}${path}`, {
         method,
@@ -584,33 +584,33 @@ class ObservableAPIClient {
           ...options.headers,
         },
       });
-      
+
       const duration = Date.now() - startTime;
-      
+
       // Log response
       this.logger.info('API request completed', {
         ...requestContext,
         status: response.status,
         duration,
       });
-      
+
       // Record metrics
       this.metrics.histogram('api.request.duration', duration, {
         method,
         path,
         status: response.status,
       });
-      
+
       this.metrics.increment('api.request.count', {
         method,
         path,
         status: response.status,
       });
-      
+
       // End trace span
       span?.setStatus({ code: response.ok ? 0 : 1 });
       span?.end();
-      
+
       // Handle errors
       if (!response.ok) {
         const error = new APIError(
@@ -618,18 +618,18 @@ class ObservableAPIClient {
           response.status,
           requestContext
         );
-        
+
         // Send error to monitoring
         this.reportError(error, requestContext, duration);
-        
+
         throw error;
       }
-      
+
       return response.json();
-      
+
     } catch (error) {
       const duration = Date.now() - startTime;
-      
+
       // Log error with full context
       this.logger.error('API request failed', {
         ...requestContext,
@@ -637,21 +637,21 @@ class ObservableAPIClient {
         stack: error.stack,
         duration,
       });
-      
+
       // Record error metrics
       this.metrics.increment('api.request.error', {
         method,
         path,
         errorType: error.name,
       });
-      
+
       // Report to error tracking (Sentry)
       this.reportError(error, requestContext, duration);
-      
+
       throw error;
     }
   }
-  
+
   reportError(error, context, duration) {
     // Send to Sentry/Bugsnag/etc.
     if (window.Sentry) {
@@ -668,7 +668,7 @@ class ObservableAPIClient {
       });
     }
   }
-  
+
   generateTraceId() {
     return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
@@ -714,7 +714,7 @@ class RetryPolicy {
     this.jitter = options.jitter !== false; // Add jitter by default
     this.retryableErrors = options.retryableErrors || [408, 429, 500, 502, 503, 504];
   }
-  
+
   // Calculate delay with exponential backoff and jitter
   calculateDelay(attempt) {
     // Exponential: 1s, 2s, 4s, 8s, 16s
@@ -722,77 +722,77 @@ class RetryPolicy {
       this.baseDelay * Math.pow(2, attempt),
       this.maxDelay
     );
-    
+
     if (!this.jitter) {
       return exponentialDelay;
     }
-    
+
     // Add jitter to prevent thundering herd
     // Random value between 50% and 100% of exponential delay
     const jitterFactor = 0.5 + Math.random() * 0.5;
     return Math.floor(exponentialDelay * jitterFactor);
   }
-  
+
   isRetryable(error) {
     // Network errors are retryable
     if (error.name === 'TypeError' || error.message.includes('fetch')) {
       return true;
     }
-    
+
     // Specific status codes are retryable
     if (error.status && this.retryableErrors.includes(error.status)) {
       return true;
     }
-    
+
     return false;
   }
-  
+
   async executeWithRetry(fn, context = {}) {
     let lastError;
-    
+
     for (let attempt = 0; attempt <= this.maxRetries; attempt++) {
       try {
         // Attempt the request
         const result = await fn();
-        
+
         // Log success if it was a retry
         if (attempt > 0) {
           console.log(`Request succeeded after ${attempt} retries`, context);
         }
-        
+
         return result;
-        
+
       } catch (error) {
         lastError = error;
-        
+
         // Check if we should retry
         if (attempt < this.maxRetries && this.isRetryable(error)) {
           const delay = this.calculateDelay(attempt);
-          
+
           console.warn(
             `Request failed (attempt ${attempt + 1}/${this.maxRetries + 1}), ` +
             `retrying in ${delay}ms`,
             { error: error.message, ...context }
           );
-          
+
           // Wait before retrying
           await this.sleep(delay);
-          
+
         } else {
           // No more retries or error is not retryable
           console.error(
             `Request failed permanently after ${attempt + 1} attempts`,
             { error: error.message, ...context }
           );
-          
+
           throw error;
         }
       }
     }
-    
+
     throw lastError;
   }
-  
+
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -861,7 +861,7 @@ class CircuitBreaker {
     this.failures = 0;
     this.nextRetry = null;
   }
-  
+
   async execute(fn, context = {}) {
     // Check circuit state
     if (this.state === 'OPEN') {
@@ -869,39 +869,39 @@ class CircuitBreaker {
       if (Date.now() < this.nextRetry) {
         throw new Error('Circuit breaker is OPEN');
       }
-      
+
       // Move to HALF_OPEN state to test
       this.state = 'HALF_OPEN';
       console.log('Circuit breaker entering HALF_OPEN state');
     }
-    
+
     try {
       const result = await fn();
-      
+
       // Success! Reset circuit
       if (this.state === 'HALF_OPEN') {
         this.state = 'CLOSED';
         this.failures = 0;
         console.log('Circuit breaker CLOSED');
       }
-      
+
       return result;
-      
+
     } catch (error) {
       this.failures++;
-      
+
       // Trip circuit breaker if threshold exceeded
       if (this.failures >= this.failureThreshold) {
         this.state = 'OPEN';
         this.nextRetry = Date.now() + this.resetTimeout;
-        
+
         console.error(
           `Circuit breaker OPEN after ${this.failures} failures. ` +
           `Will retry at ${new Date(this.nextRetry).toISOString()}`,
           context
         );
       }
-      
+
       throw error;
     }
   }
@@ -963,37 +963,37 @@ const ProductPage = ({ productId }) => {
     queryFn: () => apiClient.request('GET', `/products/${productId}`),
     staleTime: 60 * 60 * 1000, // 1 hour
   });
-  
+
   const reviewsQuery = useQuery({
     queryKey: ['reviews', productId],
     queryFn: () => apiClient.request('GET', `/products/${productId}/reviews`),
     staleTime: 24 * 60 * 60 * 1000, // 24 hours
   });
-  
+
   const recommendationsQuery = useQuery({
     queryKey: ['recommendations', productId],
     queryFn: () => apiClient.request('GET', `/recommendations/${productId}`),
     staleTime: 60 * 60 * 1000, // 1 hour
   });
-  
+
   // Handle loading and error states
   if (productQuery.isLoading) {
     return <LoadingSkeleton />;
   }
-  
+
   if (productQuery.isError) {
     return <ErrorView error={productQuery.error} />;
   }
-  
+
   return (
     <div>
       <ProductDetails product={productQuery.data} />
-      
+
       {/* Show partial data even if some queries fail */}
       {reviewsQuery.isSuccess && (
         <Reviews data={reviewsQuery.data} />
       )}
-      
+
       {recommendationsQuery.isSuccess && (
         <Recommendations data={recommendationsQuery.data} />
       )}
@@ -1004,40 +1004,40 @@ const ProductPage = ({ productId }) => {
 // Optimistic updates with rollback
 const AddToCartButton = ({ productId }) => {
   const queryClient = useQueryClient();
-  
+
   const addToCart = useMutation({
-    mutationFn: (productId) => 
+    mutationFn: (productId) =>
       apiClient.request('POST', '/cart', { body: { productId } }),
-    
+
     // Optimistic update
     onMutate: async (productId) => {
       // Cancel any outgoing refetches
       await queryClient.cancelQueries({ queryKey: ['cart'] });
-      
+
       // Snapshot the previous value
       const previousCart = queryClient.getQueryData(['cart']);
-      
+
       // Optimistically update
       queryClient.setQueryData(['cart'], (old) => ({
         ...old,
         items: [...(old?.items || []), { productId, quantity: 1 }],
       }));
-      
+
       // Return context with previous value
       return { previousCart };
     },
-    
+
     // Rollback on error
     onError: (err, productId, context) => {
       queryClient.setQueryData(['cart'], context.previousCart);
     },
-    
+
     // Always refetch after error or success
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
   });
-  
+
   return (
     <button onClick={() => addToCart.mutate(productId)}>
       Add to Cart
@@ -1048,13 +1048,13 @@ const AddToCartButton = ({ productId }) => {
 // Tag-based cache invalidation
 const useInvalidateProductCache = () => {
   const queryClient = useQueryClient();
-  
+
   return (productId) => {
     // Invalidate all queries related to this product
     queryClient.invalidateQueries({ queryKey: ['product', productId] });
     queryClient.invalidateQueries({ queryKey: ['reviews', productId] });
     queryClient.invalidateQueries({ queryKey: ['recommendations', productId] });
-    
+
     // Invalidate catalog pages that might contain this product
     queryClient.invalidateQueries({ queryKey: ['products'] });
   };
@@ -1079,12 +1079,12 @@ const App = () => (
 // Detect slow connections and adjust caching strategy
 const useAdaptiveCaching = () => {
   const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-  
+
   // Adjust cache time based on connection speed
   const getCacheTime = () => {
-    
+
     const effectiveType = connection.effectiveType;
-    
+
     switch (effectiveType) {
       case 'slow-2g':
       case '2g':
@@ -1096,7 +1096,7 @@ const useAdaptiveCaching = () => {
         return 5 * 60 * 1000; // 5 minutes
     }
   };
-  
+
   return { cacheTime: getCacheTime() };
 };
 ```
@@ -1114,7 +1114,7 @@ self.addEventListener('fetch', (event) => {
       })
     );
   }
-  
+
   // Network-first with fallback for API calls
   if (event.request.url.includes('/api/')) {
     event.respondWith(
@@ -1156,7 +1156,7 @@ const socket = new WebSocket('wss://api.example.com/updates');
 
 socket.addEventListener('message', (event) => {
   const update = JSON.parse(event.data);
-  
+
   switch (update.type) {
     case 'product:updated':
       queryClient.invalidateQueries(['product', update.productId]);
@@ -1189,7 +1189,7 @@ const productLoader = async ({ params }) => {
     fetchReviews(params.id),
     fetchRecommendations(params.id),
   ]);
-  
+
   return { product, reviews, recommendations };
 };
 ```
@@ -1207,11 +1207,11 @@ class CrossTabCache {
   constructor() {
     this.cache = new Map();
     this.channel = new BroadcastChannel('cache-sync');
-    
+
     // Listen for updates from other tabs
     this.channel.addEventListener('message', (event) => {
       const { action, key, data } = event.data;
-      
+
       if (action === 'set') {
         this.cache.set(key, data);
       } else if (action === 'delete') {
@@ -1219,17 +1219,17 @@ class CrossTabCache {
       }
     });
   }
-  
+
   set(key, data) {
     this.cache.set(key, data);
-    
+
     // Notify other tabs
     this.channel.postMessage({ action: 'set', key, data });
   }
-  
+
   delete(key) {
     this.cache.delete(key);
-    
+
     // Notify other tabs
     this.channel.postMessage({ action: 'delete', key });
   }
@@ -1250,7 +1250,7 @@ const fetchDashboard = async () => {
     fetchCart(),
     fetchRecommendations(),
   ]);
-  
+
   return {
     user: results[0].status === 'fulfilled' ? results[0].value : null,
     cart: results[1].status === 'fulfilled' ? results[1].value : null,
@@ -1277,7 +1277,7 @@ const warmCache = async (userId) => {
     queryClient.prefetchQuery(['user', userId], () => fetchUser(userId)),
     queryClient.prefetchQuery(['cart', userId], () => fetchCart(userId)),
   ]);
-  
+
   // Nice-to-have data (non-blocking)
   Promise.all([
     queryClient.prefetchQuery(['recommendations', userId], () => fetchRecs(userId)),
@@ -1304,29 +1304,29 @@ class InstrumentedCache {
     this.cache = new Map();
     this.stats = { hits: 0, misses: 0 };
   }
-  
+
   get(key) {
     if (this.cache.has(key)) {
       this.stats.hits++;
       return this.cache.get(key);
     }
-    
+
     this.stats.misses++;
     return null;
   }
-  
+
   getHitRate() {
     const total = this.stats.hits + this.stats.misses;
     return total === 0 ? 0 : this.stats.hits / total;
   }
-  
+
   reportMetrics() {
     const hitRate = this.getHitRate();
-    
+
     // Send to monitoring
     metrics.gauge('cache.hit_rate', hitRate);
     metrics.gauge('cache.size', this.cache.size);
-    
+
     console.log(`Cache hit rate: ${(hitRate * 100).toFixed(2)}%`);
   }
 }
@@ -1364,14 +1364,14 @@ const storeTokenSecurely = async (token) => {
     false,
     ['encrypt', 'decrypt']
   );
-  
+
   // Encrypt and store in IndexedDB
   const encrypted = await crypto.subtle.encrypt(
     { name: 'AES-GCM', iv: crypto.getRandomValues(new Uint8Array(12)) },
     key,
     new TextEncoder().encode(token)
   );
-  
+
   await indexedDB.put('secure-store', 'token', encrypted);
 };
 ```
@@ -1396,7 +1396,7 @@ const updateProfile = async (userId, data) => {
 // ✅ Use optimistic locking with version numbers
 const updateProfile = async (userId, data) => {
   const current = await fetchProfile(userId);
-  
+
   try {
     await saveProfile(userId, {
       ...current,
@@ -1461,30 +1461,30 @@ class LRUCache {
     this.maxSize = maxSize;
     this.cache = new Map();
   }
-  
+
   get(key) {
     if (!this.cache.has(key)) return null;
-    
+
     // Move to end (most recently used)
     const value = this.cache.get(key);
     this.cache.delete(key);
     this.cache.set(key, value);
-    
+
     return value;
   }
-  
+
   set(key, value) {
     // Remove if exists
     if (this.cache.has(key)) {
       this.cache.delete(key);
     }
-    
+
     // Evict oldest if at capacity
     if (this.cache.size >= this.maxSize) {
       const firstKey = this.cache.keys().next().value;
       this.cache.delete(firstKey);
     }
-    
+
     this.cache.set(key, value);
   }
 }

@@ -1,7 +1,7 @@
 ---
 description: Closures allow functions to retain access to outer scope variables. Essential for data privacy, callbacks, and functional programming patterns.
 date: 2025-12-11T10:15:15+05:30
-premium: true
+premium: false
 ---
 
 # 🔒 Closures in JavaScript — The Complete Guide

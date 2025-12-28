@@ -1,7 +1,7 @@
 ---
 date: 2025-12-09T10:51:33+05:30
 description: Implement real-time streaming of large language model responses using Server-Sent Events and ReadableStream APIs for improved user experience.
-premium: true
+premium: false
 ---
 
 # 🤖 Handling Streaming LLM Responses in React
@@ -54,12 +54,12 @@ export function useLLMStream() {
 
       while (true) {
         const { done, value } = await reader.read();
-        
+
         if (done) break;
 
         // Decode the chunk (Uint8Array -> String)
         const chunk = decoder.decode(value, { stream: true });
-        
+
         // Update state functionally to avoid dependency issues
         setData((prev) => prev + chunk);
       }
@@ -96,7 +96,7 @@ function ChatMessage({ content, isStreaming }) {
 ## Performance Considerations
 
 ### `flushSync` vs `requestAnimationFrame`
-Updating React state on every single chunk can be expensive if chunks arrive very fast (e.g., local LLMs). 
+Updating React state on every single chunk can be expensive if chunks arrive very fast (e.g., local LLMs).
 -   **Throttling**: You might want to buffer chunks and update the state every 50ms or 100ms.
 -   **React 18 Batching**: Automatic batching helps, but heavy render trees can still lag.
 
@@ -114,9 +114,9 @@ const stop = () => {
 };
 
 // Pass signal to fetch
-const response = await fetch(url, { 
-  signal: abortControllerRef.current.signal 
-  // ... 
+const response = await fetch(url, {
+  signal: abortControllerRef.current.signal
+  // ...
 });
 ```
 
