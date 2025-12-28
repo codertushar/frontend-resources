@@ -59,6 +59,7 @@ export const ProgressProvider = ({ children }) => {
   }, [isLoaded, isSignedIn, user, supabase]);
 
   const markAsRead = useCallback(async (articleId) => {
+    console.log('[ProgressContext] markAsRead called:', articleId);
     // Only allow marking as read if user is signed in
     if (!isSignedIn || !supabase || !user) {
       console.warn('Cannot mark as read: user not signed in or supabase not available');
@@ -73,9 +74,13 @@ export const ProgressProvider = ({ children }) => {
     });
 
     try {
-      const { error } = await supabase
+      console.log('[ProgressContext] Upserting to DB:', { user_id: user.id, article_id: articleId });
+      const { data, error } = await supabase
         .from('user_progress')
-        .upsert({ user_id: user.id, article_id: articleId }, { onConflict: 'user_id,article_id' });
+        .upsert({ user_id: user.id, article_id: articleId }, { onConflict: 'user_id,article_id' })
+        .select();
+
+      console.log('[ProgressContext] Upsert result:', { data, error });
 
       if (error) {
         console.error('Error saving progress to database:', error);
