@@ -225,8 +225,19 @@ self.addEventListener('fetch', (event) => {
     // Ignore non-GET requests
     if (request.method !== 'GET') return;
 
-    // NEVER cache Supabase API requests - always fetch from network
-    if (request.url.includes('supabase.co')) {
+    // NEVER cache API requests - always fetch from network
+    // This prevents stale data issues with auth, user progress, etc.
+    const noCachePatterns = [
+        'supabase.co',           // Supabase API (auth, database)
+        '/api/',                 // Any API routes
+        '/rest/',                // REST API endpoints
+        '/auth/',                // Auth endpoints
+        'googleapis.com',        // Google APIs (auth, etc.)
+        'accounts.google.com',   // Google OAuth
+        '/graphql',              // GraphQL endpoints
+    ];
+
+    if (noCachePatterns.some(pattern => request.url.includes(pattern))) {
         return; // Let the browser handle it normally without SW intervention
     }
 

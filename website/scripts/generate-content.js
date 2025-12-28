@@ -686,6 +686,12 @@ function processDirectory(dirPath, relativePath, resources, premiumFullContent =
             // Use frontmatter description or auto-generate one
             resource.description = metadata.description || generateDescription(processedContent, title);
 
+            // Interview frequency: manual override via frontmatter or null (let frontend decide)
+            // Values: 'critical' (most asked), 'common', 'rare', or undefined
+            if (metadata.interviewFrequency) {
+                resource.interviewFrequency = metadata.interviewFrequency.toLowerCase();
+            }
+
             // If premium, store full content separately for API access
             if (premium) {
                 premiumFullContent[resource.id] = processedContent;

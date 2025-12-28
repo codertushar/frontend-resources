@@ -52,43 +52,52 @@ const ACCESS_OPTIONS = [
 
 
 // Map articles to interview frequency based on topic patterns
+// Now more selective - only truly common interview topics get 'critical'
 const getInterviewFrequency = (item) => {
-  // Critical: Core JS concepts, closures, promises, event loop, this binding
-  const criticalTopics = ['closures', 'event_loop', 'this', 'promises', 'prototype', 'hoisting', 'debounce', 'throttle'];
-  const criticalTags = ['closures', 'promises', 'async', 'this-binding'];
+  // 1. Frontmatter override takes priority
+  if (item.interviewFrequency) {
+    return item.interviewFrequency;
+  }
 
-  // Check if title or id contains critical topics
+  // 2. More selective auto-detection
+  // Only the absolute core JS interview topics (the "big 5" that appear in almost every interview)
+  const criticalTopics = ['closures', 'event_loop', 'hoisting'];
+  // Must be an exact match or the primary topic, not just mentioned
+  const criticalExactIds = [
+    'js/general-concepts/closures',
+    'js/general-concepts/event_loop',
+    'js/general-concepts/hoisting',
+    'js/general-concepts/this',
+    'js/promises/promises',
+    'js/general-concepts/prototype',
+  ];
+
   const idLower = item.id.toLowerCase();
-  const titleLower = item.title.toLowerCase();
 
-  if (criticalTopics.some(topic => idLower.includes(topic) || titleLower.includes(topic))) {
-    return 'critical';
-  }
-  if (item.tags?.some(tag => criticalTags.includes(tag))) {
+  // Exact ID match for truly critical topics
+  if (criticalExactIds.some(id => idLower === id.toLowerCase())) {
     return 'critical';
   }
 
-  // System design and machine coding are always critical for interviews
-  if (item.category === 'system-design' || item.category === 'machine-coding') {
+  // Check if the article is primarily about a critical topic (not just mentions it)
+  // The topic must be in the filename/id, not just in content
+  const fileName = idLower.split('/').pop();
+  if (criticalTopics.some(topic => fileName === topic || fileName.startsWith(topic + '_'))) {
     return 'critical';
   }
 
-  // Hard difficulty items are typically common interview topics
-  if (item.difficulty === 'hard') {
+  // Everything else uses 'common' or 'occasional' - no more auto-critical
+  // Hard difficulty polyfills are common
+  if ((item.subcategory === 'polyfills' || item.tags?.includes('polyfill')) && item.difficulty === 'hard') {
     return 'common';
   }
 
-  // Polyfills are common interview questions
-  if (item.subcategory === 'polyfills' || item.tags?.includes('polyfill')) {
+  // DSA hard is common
+  if (item.category === 'dsa' && item.difficulty === 'hard') {
     return 'common';
   }
 
-  // DSA medium+ is common
-  if (item.category === 'dsa' && item.difficulty !== 'easy') {
-    return 'common';
-  }
-
-  // Everything else is occasional
+  // Everything else is occasional (no badge shown)
   return 'occasional';
 };
 
@@ -142,14 +151,8 @@ const START_HERE_IDS = [
 
 const Library = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { isRead, getStats, readArticles } = useProgress();
+  const { isRead, getStats } = useProgress();
   const { isPremium } = useSubscription();
-
-  // Debug: Log when readArticles changes
-  useEffect(() => {
-    console.log('[Library] readArticles updated:', readArticles);
-    console.log('[Library] isRead test for machine-coding/pagination_with_ellipsis:', isRead('machine-coding/pagination_with_ellipsis'));
-  }, [readArticles, isRead]);
 
   const initialQuery = searchParams.get('q') || '';
   const initialCategory = searchParams.get('category') || 'all';
@@ -632,13 +635,13 @@ const Library = () => {
                       </span>
                     )}
                     {item.premium && (
-                      <span className={`badge premium ${isPremium() ? 'unlocked' : ''}`} title={isPremium() ? 'Premium (Unlocked)' : 'Premium'}>
-                        <Crown size={12} />
+                      <span className={`badge premium ${isPremium() ? 'unlocked' : ''}`}>
+                        Premium
                       </span>
                     )}
                     {interviewFreq === 'critical' && (
-                      <span className="badge most-asked" title="Frequently asked in interviews">
-                        Most Asked
+                      <span className="badge interview-favorite" title="Frequently asked in interviews">
+                        Interview Favorite
                       </span>
                     )}
                     {item.difficulty && (
@@ -1592,11 +1595,11 @@ const Library = () => {
           border-color: rgba(34, 197, 94, 0.3);
         }
 
-        .badge.most-asked {
-          background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(249, 115, 22, 0.15));
-          color: #f87171;
-          border: 1px solid rgba(239, 68, 68, 0.2);
-          font-size: 0.7rem;
+        .badge.interview-favorite {
+          background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(249, 115, 22, 0.15));
+          color: #fbbf24;
+          border: 1px solid rgba(251, 191, 36, 0.25);
+          font-size: 0.65rem;
           padding: 0.15rem 0.5rem;
         }
 

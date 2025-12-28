@@ -21,39 +21,18 @@ export const ProgressProvider = ({ children }) => {
     if (!isLoaded) return;
 
     const loadProgress = async () => {
-      console.log('[ProgressContext] loadProgress called', { isSignedIn, userId: user?.id, hasSupabase: !!supabase, hasSession: !!session });
       if (isSignedIn && user && supabase && session) {
         try {
-          // Verify session is valid before fetching
-          const { data: { session: currentSession } } = await supabase.auth.getSession();
-          console.log('[ProgressContext] Current session check:', { hasSession: !!currentSession, userId: currentSession?.user?.id });
-
-          if (!currentSession) {
-            console.warn('[ProgressContext] No valid session, skipping load');
-            setReadArticles(new Set());
-            setIsInitialized(true);
-            return;
-          }
-
-          // Load from Supabase user_progress table
-          console.log('[ProgressContext] Fetching progress for user:', user.id);
           const { data: progressData, error } = await supabase
             .from('user_progress')
             .select('article_id')
             .eq('user_id', user.id);
 
-          console.log('[ProgressContext] Supabase response:', { progressData, error });
-
           if (error) {
             console.error('Error loading progress:', error);
-            // Check if it's a table not found error
-            if (error.code === '42P01' || error.message?.includes('does not exist')) {
-              console.error('user_progress table does not exist. Please create it in Supabase.');
-            }
           }
 
           const supabaseProgress = progressData?.map(p => p.article_id) || [];
-          console.log('[ProgressContext] Setting readArticles:', supabaseProgress);
           setReadArticles(new Set(supabaseProgress));
         } catch (error) {
           console.error('Error loading progress:', error);
@@ -70,14 +49,11 @@ export const ProgressProvider = ({ children }) => {
   }, [isLoaded, isSignedIn, user, supabase, session]);
 
   const markAsRead = useCallback(async (articleId) => {
-    console.log('[ProgressContext] markAsRead called:', articleId);
-    // Only allow marking as read if user is signed in
     if (!isSignedIn || !supabase || !user) {
-      console.warn('Cannot mark as read: user not signed in or supabase not available');
       return;
     }
 
-    // Optimistic update using functional state update to avoid stale closure
+    // Optimistic update
     setReadArticles(prev => {
       const updated = new Set(prev);
       updated.add(articleId);
@@ -85,29 +61,13 @@ export const ProgressProvider = ({ children }) => {
     });
 
     try {
-      // Get the actual session user ID to compare
-      const { data: { session: currentSession } } = await supabase.auth.getSession();
-      const sessionUserId = currentSession?.user?.id;
-      console.log('[ProgressContext] User ID comparison:', {
-        fromContext: user.id,
-        fromSession: sessionUserId,
-        match: user.id === sessionUserId
-      });
-
-      // Use session user ID to ensure it matches auth.uid()
-      const userIdToUse = sessionUserId || user.id;
-      console.log('[ProgressContext] Inserting to DB:', { user_id: userIdToUse, article_id: articleId });
-
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('user_progress')
-        .insert({ user_id: userIdToUse, article_id: articleId })
-        .select();
-
-      console.log('[ProgressContext] Insert result:', { data, error });
+        .upsert({ user_id: user.id, article_id: articleId }, { onConflict: 'user_id,article_id' });
 
       if (error) {
         console.error('Error saving progress to database:', error);
-        // Revert on error using functional update
+        // Revert on error
         setReadArticles(prev => {
           const reverted = new Set(prev);
           reverted.delete(articleId);
@@ -116,7 +76,7 @@ export const ProgressProvider = ({ children }) => {
       }
     } catch (err) {
       console.error('Error saving progress:', err);
-      // Revert on error using functional update
+      // Revert on error
       setReadArticles(prev => {
         const reverted = new Set(prev);
         reverted.delete(articleId);
@@ -126,14 +86,11 @@ export const ProgressProvider = ({ children }) => {
   }, [isSignedIn, supabase, user]);
 
   const markAsUnread = useCallback(async (articleId) => {
-    console.log('[ProgressContext] markAsUnread called:', articleId);
-    // Only allow marking as unread if user is signed in
     if (!isSignedIn || !supabase || !user) {
-      console.warn('Cannot mark as unread: user not signed in or supabase not available');
       return;
     }
 
-    // Optimistic update using functional state update
+    // Optimistic update
     setReadArticles(prev => {
       const updated = new Set(prev);
       updated.delete(articleId);
@@ -141,19 +98,15 @@ export const ProgressProvider = ({ children }) => {
     });
 
     try {
-      console.log('[ProgressContext] Deleting from DB:', { user_id: user.id, article_id: articleId });
-      const { data, error, count } = await supabase
+      const { error } = await supabase
         .from('user_progress')
         .delete()
         .eq('user_id', user.id)
-        .eq('article_id', articleId)
-        .select();
-
-      console.log('[ProgressContext] Delete result:', { data, error, count });
+        .eq('article_id', articleId);
 
       if (error) {
         console.error('Error removing progress from database:', error);
-        // Revert on error using functional update
+        // Revert on error
         setReadArticles(prev => {
           const reverted = new Set(prev);
           reverted.add(articleId);
@@ -162,7 +115,7 @@ export const ProgressProvider = ({ children }) => {
       }
     } catch (err) {
       console.error('Error removing progress:', err);
-      // Revert on error using functional update
+      // Revert on error
       setReadArticles(prev => {
         const reverted = new Set(prev);
         reverted.add(articleId);
@@ -172,7 +125,6 @@ export const ProgressProvider = ({ children }) => {
   }, [isSignedIn, supabase, user]);
 
   const toggleRead = useCallback(async (articleId) => {
-    // Check current state synchronously from the Set
     const isCurrentlyRead = readArticles.has(articleId);
     if (isCurrentlyRead) {
       await markAsUnread(articleId);
@@ -198,7 +150,6 @@ export const ProgressProvider = ({ children }) => {
   }, [readArticles]);
 
   const clearProgress = useCallback(async () => {
-    // Only allow clearing progress if user is signed in
     if (!isSignedIn || !supabase || !user) {
       return;
     }
