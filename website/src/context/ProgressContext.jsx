@@ -28,8 +28,9 @@ export const ProgressProvider = ({ children }) => {
           console.log('[ProgressContext] Fetching progress for user:', user.id);
           const { data: progressData, error } = await supabase
             .from('user_progress')
-            .select('article_id')
-            .eq('user_id', user.id);
+            .select('article_id', { head: false, count: null })
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false });
 
           console.log('[ProgressContext] Supabase response:', { progressData, error });
 
