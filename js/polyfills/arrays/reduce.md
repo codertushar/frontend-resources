@@ -127,4 +127,3 @@ Length: 3
 - [ ] Throws an error when encountering holes
 - [ ] Fills holes with null before processing
 <!-- quiz-end -->
-

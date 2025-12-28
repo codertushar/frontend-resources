@@ -122,4 +122,3 @@ promiseAllSettled([
 - [x] It resolves immediately with an empty array []
 - [ ] It rejects with an AggregateError
 <!-- quiz-end -->
-

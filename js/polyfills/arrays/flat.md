@@ -140,4 +140,3 @@ if (!Array.prototype.flat) {
 - [ ] When all elements are numbers
 - [ ] When a null value is encountered
 <!-- quiz-end -->
-
