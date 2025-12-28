@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { BookOpen, Layers, Map, Mail, Github, Linkedin, LogOut, User, Crown, Sparkles, Music, Play, Pause, Volume2, VolumeX, RotateCcw, Flame } from 'lucide-react';
+import { BookOpen, Layers, Map, Mail, Github, Linkedin, LogOut, User, Crown, Sparkles, Music, Play, Pause, Volume2, VolumeX, RotateCcw, Flame, Code2 } from 'lucide-react';
 import { XIcon } from './SocialIcons';
 
 import ThemeToggle from './ThemeToggle';
@@ -505,6 +505,10 @@ const Layout = ({ children }) => {
             <NavLink to="/learning-path" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
               <Map size={18} />
               <span>Path</span>
+            </NavLink>
+            <NavLink to="/practice" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+              <Code2 size={18} />
+              <span>Practice</span>
             </NavLink>
             <div className="nav-separator"></div>
             {isSignedIn && user?.id && <StreakCounter userId={user.id} />}

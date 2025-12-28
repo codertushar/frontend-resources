@@ -9,6 +9,7 @@ import LearningPath from './pages/LearningPath';
 import ResourceDetail from './pages/ResourceDetail';
 import Pricing from './pages/Pricing';
 import Admin from './pages/Admin';
+import MachineCodingPractice from './pages/MachineCodingPractice';
 import { useCanonical } from './hooks/useCanonical';
 
 import { ThemeProvider } from './context/ThemeContext';
@@ -28,6 +29,7 @@ function AppContent() {
           <Route path="/learning-path" element={<LearningPath />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/practice" element={<MachineCodingPractice />} />
           <Route path="/resource/*" element={<ResourceDetail />} />
         </Routes>
       </Layout>
