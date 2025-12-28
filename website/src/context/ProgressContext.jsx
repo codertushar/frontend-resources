@@ -85,13 +85,25 @@ export const ProgressProvider = ({ children }) => {
     });
 
     try {
-      console.log('[ProgressContext] Upserting to DB:', { user_id: user.id, article_id: articleId });
+      // Get the actual session user ID to compare
+      const { data: { session: currentSession } } = await supabase.auth.getSession();
+      const sessionUserId = currentSession?.user?.id;
+      console.log('[ProgressContext] User ID comparison:', {
+        fromContext: user.id,
+        fromSession: sessionUserId,
+        match: user.id === sessionUserId
+      });
+
+      // Use session user ID to ensure it matches auth.uid()
+      const userIdToUse = sessionUserId || user.id;
+      console.log('[ProgressContext] Inserting to DB:', { user_id: userIdToUse, article_id: articleId });
+
       const { data, error } = await supabase
         .from('user_progress')
-        .upsert({ user_id: user.id, article_id: articleId }, { onConflict: 'user_id,article_id' })
+        .insert({ user_id: userIdToUse, article_id: articleId })
         .select();
 
-      console.log('[ProgressContext] Upsert result:', { data, error });
+      console.log('[ProgressContext] Insert result:', { data, error });
 
       if (error) {
         console.error('Error saving progress to database:', error);
