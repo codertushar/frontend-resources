@@ -196,47 +196,51 @@ const cache = new Map(); // Create a new Map
 
 ## 💎 Premium Content Strategy
 
-The website uses a freemium model with **~50% free, ~50% premium** content. The premium status is automatically determined by `generate-content.js` based on these rules:
+The website uses a freemium model with **~40% free, ~60% premium** content. The premium status is automatically determined by `generate-content.js` based on these rules:
 
-### Balanced Premium Strategy
+### Monetization Strategy - 60% Premium
 
-**Core Principle**: Each category/condition has at least 1 free article for discoverability and SEO.
+**Core Principle**: Maximize monetization (60% premium) while maintaining minimum free content for SEO and discoverability.
 
 | Category | Rule | Distribution |
 |----------|------|--------------|
-| **Easy difficulty** | Always FREE | 100% free |
-| **Medium difficulty** | 50% free, 50% premium | Alternating (SEO + popular utilities) |
-| **Hard difficulty** | First 1-2 articles FREE, rest premium | ~20% free, ~80% premium |
-| **System Design** | First 1-2 articles FREE, rest premium | ~20% free, ~80% premium |
-| **Machine Coding** | First 1-2 articles FREE, rest premium | ~20% free, ~80% premium |
-| **AI** | First 1-2 articles FREE, rest premium | ~20% free, ~80% premium |
-| **Browser/Rendering** | Premium (advanced topics) | ~90% premium |
+| **Easy difficulty** | All FREE (fundamental learning) | 100% free |
+| **Medium difficulty** | 30% free, 70% premium | First article FREE, next 2 PREMIUM, repeat |
+| **Hard difficulty** | 1 FREE per category, rest premium | ~5-10% free, ~90% premium |
+| **System Design** | Only intro articles FREE, rest premium | ~17% free (1-2), ~83% premium |
+| **Machine Coding** | Only intro articles FREE, rest premium | ~17% free (1-2), ~83% premium |
+| **AI** | Only intro articles FREE, rest premium | ~17% free (1-2), ~83% premium |
+| **Browser/Rendering** | 95% Premium (advanced topics) | Only basics free, rest premium |
 
 ### What's Premium (Paywalled)
 
-- Advanced utilities: `debounce`, `throttle`, `deep_clone`, `map_limit`, `sequential`
-- Hard difficulty articles (except first 2 per category)
-- System Design (except intro articles)
-- Machine Coding (except intro articles)
-- AI (except intro articles)
+- All advanced utilities: `debounce`, `throttle`, `deep_clone`, `map_limit`, `sequential`
+- Most medium difficulty articles (70% of medium articles)
+- All hard difficulty articles (except 1 per category)
+- System Design (except 1-2 intro articles)
+- Machine Coding (except 1-2 intro articles)
+- AI (except 1-2 intro articles)
 - Advanced browser/rendering topics
+- Interview prep content (hard/advanced only)
+- Advanced design patterns beyond basics
 
 ### What's Always Free
 
-- Easy difficulty articles (100% free)
-- Intro/guide articles (`30-day`, `guide`, `introduction`, `getting-started`)
-- Popular design patterns: `factory`, `singleton`, `observer`, `module`
-- Fundamental concepts: `prototype`, `event_emitter`
-- Observable array pattern (popular utility)
-- Browser/rendering basics (non-advanced)
+- **Easy difficulty articles** (100% free - foundational learning)
+- **Intro/guide articles** (`30-day`, `guide`, `introduction`, `getting-started`)
+- **Fundamental concepts**: `prototype`, `event_emitter`
+- **Basic design patterns**: `factory`, `singleton`, `observer`, `module`
+- **Observable array pattern** (foundational)
+- **Browser/rendering basics** (non-advanced only)
 
-### Medium Difficulty Articles (50/50 Split)
+### Medium Difficulty Articles (70% Premium Split)
 
-For better SEO and user acquisition, 50% of medium difficulty articles are kept free. This is achieved by:
+To maximize monetization while maintaining SEO discoverability, 70% of medium articles are premium:
 - First article in each category/medium: FREE
-- Second article in each category/medium: PREMIUM
-- Third article in each category/medium: FREE
-- And so on (alternating pattern)
+- Next 2 articles in each category/medium: PREMIUM
+- Fourth article in each category/medium: FREE
+- Fifth+ articles in each category/medium: PREMIUM
+- Pattern: Free → Premium → Premium → Free → Premium → Premium...
 
 ### Overriding Premium Status
 
@@ -252,8 +256,8 @@ premium: true  # Force this article to be premium
 
 ### Current Distribution Target
 
-- **Free**: ~50% (for SEO, user acquisition, demonstrating value)
-- **Premium**: ~50% (monetization, high-value interview prep content)
+- **Free**: ~40% (for SEO, user acquisition, demonstrating value)
+- **Premium**: ~60% (monetization, high-value interview prep content)
 
 ### Running Content Generation
 

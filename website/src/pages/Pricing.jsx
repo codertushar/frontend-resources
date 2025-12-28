@@ -243,13 +243,15 @@ const Pricing = () => {
               </div>
             ) : appliedCoupon ? (
               <>
-                <div className="price original-price">
-                  <span className="currency">₹</span>
-                  <span className="amount strikethrough">{formatPrice(basePrice)}</span>
-                </div>
-                <div className="price discounted-price">
-                  <span className="currency">₹</span>
-                  <span className="amount">{formatPrice(finalPrice)}</span>
+                <div className="prices-with-discount">
+                  <div className="price original-price">
+                    <span className="currency">₹</span>
+                    <span className="amount strikethrough">{formatPrice(basePrice)}</span>
+                  </div>
+                  <div className="price discounted-price">
+                    <span className="currency">₹</span>
+                    <span className="amount">{formatPrice(finalPrice)}</span>
+                  </div>
                 </div>
                 <div className="discount-badge">
                   <Tag size={14} />
@@ -460,67 +462,57 @@ const Pricing = () => {
           margin-bottom: 2rem;
         }
 
-        .price-loading {
+        .prices-with-discount {
           display: flex;
-          justify-content: center;
           align-items: center;
-          min-height: 80px;
+          justify-content: center;
+          gap: 1.5rem;
+          margin-bottom: 0.5rem;
         }
 
-        .price-skeleton {
-          width: 120px;
-          height: 48px;
-          background: linear-gradient(90deg, var(--surface-hover) 25%, var(--surface-color) 50%, var(--surface-hover) 75%);
-          background-size: 200% 100%;
-          animation: shimmer 1.5s infinite;
-          border-radius: 8px;
-        }
-
-        @keyframes shimmer {
-          0% { background-position: 200% 0; }
-          100% { background-position: -200% 0; }
-        }
-
-        .price {
+        .original-price {
           display: flex;
           align-items: flex-start;
           justify-content: center;
           gap: 0.25rem;
         }
 
-        .currency {
+        .original-price .currency {
+          font-size: 1rem;
+          color: var(--text-muted);
+        }
+
+        .original-price .amount {
+          font-size: 1.75rem;
+          color: var(--text-muted);
+          opacity: 0.6;
+          text-decoration: line-through;
+          text-decoration-color: rgba(239, 68, 68, 0.7);
+          text-decoration-thickness: 2px;
+          text-underline-offset: 4px;
+        }
+
+        .discounted-price {
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 0.25rem;
+        }
+
+        .discounted-price .currency {
           font-size: 1.5rem;
           font-weight: 600;
           color: var(--text-main);
           margin-top: 0.5rem;
         }
 
-        .amount {
+        .discounted-price .amount {
           font-size: 4rem;
           font-weight: 800;
-          background: var(--heading-gradient);
+          background: linear-gradient(135deg, #22c55e, #16a34a);
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
-        }
-
-        .price-note {
-          color: var(--text-muted);
-          font-size: 0.9rem;
-        }
-
-        .original-price .amount {
-          font-size: 2rem;
-          text-decoration: line-through;
-          opacity: 0.5;
-        }
-
-        .original-price .currency {
-          font-size: 1rem;
-        }
-
-        .discounted-price {
-          margin-top: -0.5rem;
         }
 
         .discount-badge {

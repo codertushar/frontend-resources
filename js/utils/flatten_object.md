@@ -1,7 +1,7 @@
 ---
 date: 2025-03-21T07:33:05+05:30
 description: Converts nested objects into single-level structure with delimited keys. Useful for form serialization, API payloads, and configuration management.
-premium: false
+premium: true
 ---
 # 📦 Flatten Object Implementation
 

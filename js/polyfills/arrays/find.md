@@ -1,7 +1,7 @@
 ---
 date: 2025-03-15T00:35:56+05:30
 description: The find() method returns the first element satisfying a test function, or undefined if none found. Simpler than filter for single matches.
-premium: false
+premium: true
 ---
 # 🔎 Array.prototype.find() Polyfill
 

@@ -1,7 +1,7 @@
 ---
 date: 2025-05-06T06:50:41+05:30
 description: Filters consecutive duplicate values from arrays. Similar to RxJS operator, preserving non-consecutive duplicates while removing sequential repeats.
-premium: false
+premium: true
 ---
 # 🔄 distinctUntilChanged() Polyfill
 

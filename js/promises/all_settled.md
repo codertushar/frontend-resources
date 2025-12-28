@@ -1,7 +1,7 @@
 ---
 date: 2025-03-27T08:09:10+05:30
 description: Promise.allSettled waits for all promises to settle and returns their outcomes. Never rejects, always returns success and error results.
-premium: false
+premium: true
 ---
 # ✅ Promise.allSettled() Implementation
 

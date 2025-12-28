@@ -147,13 +147,14 @@ The website uses a freemium model with **~50% free, ~50% premium** content. Prem
 - Observable array pattern (popular utility)
 - Browser/rendering basics (non-advanced)
 
-### Medium Difficulty Articles (50/50 Split)
+### Medium Difficulty Articles (70% Premium Split)
 
-For better SEO and user acquisition, 50% of medium difficulty articles are kept free. This is achieved by:
+To maximize monetization while maintaining SEO discoverability, 70% of medium articles are premium:
 - First article in each category/medium: FREE
-- Second article in each category/medium: PREMIUM
-- Third article in each category/medium: FREE
-- And so on (alternating pattern)
+- Next 2 articles in each category/medium: PREMIUM  
+- Fourth article in each category/medium: FREE
+- Fifth+ articles in each category/medium: PREMIUM
+- Pattern: Free → Premium → Premium → Free → Premium → Premium...
 
 ### Override with Frontmatter
 
@@ -174,7 +175,7 @@ Run content generation to update JSON files:
 cd website && node scripts/generate-content.js
 ```
 
-This will automatically recalculate the premium distribution based on the new rules.
+This will automatically recalculate the premium distribution based on the new rules (60% premium, 40% free).
 
 ---
 

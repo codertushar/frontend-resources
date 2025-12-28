@@ -1,7 +1,7 @@
 ---
 date: 2025-03-21T07:33:05+05:30
 description: The reduce() method executes a reducer function on array elements to produce a single value. Powerful for aggregations and transformations.
-premium: false
+premium: true
 ---
 # 🔄 Array.prototype.reduce() Polyfill
 

@@ -1,7 +1,7 @@
 ---
 date: 2025-03-27T07:19:24+05:30
 description: Efficiently merge two sorted arrays into one sorted array using a two-pointer approach with O(n+m) time complexity.
-premium: false
+premium: true
 ---
 
 # 🔀 Merge Two Sorted Arrays
