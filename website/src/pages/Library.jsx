@@ -142,8 +142,14 @@ const START_HERE_IDS = [
 
 const Library = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { isRead, getStats } = useProgress();
+  const { isRead, getStats, readArticles } = useProgress();
   const { isPremium } = useSubscription();
+
+  // Debug: Log when readArticles changes
+  useEffect(() => {
+    console.log('[Library] readArticles updated:', readArticles);
+    console.log('[Library] isRead test for machine-coding/pagination_with_ellipsis:', isRead('machine-coding/pagination_with_ellipsis'));
+  }, [readArticles, isRead]);
 
   const initialQuery = searchParams.get('q') || '';
   const initialCategory = searchParams.get('category') || 'all';
