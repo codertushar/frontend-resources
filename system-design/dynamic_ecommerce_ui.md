@@ -1,13 +1,13 @@
 ---
 date: 2025-12-11T23:54:49+05:30
 description: Design a flexible server-driven UI system for e-commerce that renders dynamic layouts from JSON configuration with component mapping.
-premium: true
+premium: false
 ---
 
 # 🛒 System Design: Dynamic eCommerce UIs with BFF Pattern (Senior Frontend Interview Guide)
 
-**Target Level:** Senior Frontend Engineer / Staff Engineer  
-**Duration:** 45-60 minutes  
+**Target Level:** Senior Frontend Engineer / Staff Engineer
+**Duration:** 45-60 minutes
 **Interview Focus:** Backend for Frontend (BFF), Config-Driven UI, Feature Flags, Dynamic Forms, A/B Testing
 
 > **Interview Importance:** 🔴 Critical — eCommerce companies heavily test on this topic because dynamic UIs drive conversion rates, enable rapid experimentation, and power festival/event-based campaigns that generate massive revenue spikes.
@@ -176,8 +176,8 @@ const pageConfig = await fetch('/api/bff/page-config?page=home');
     { type: "Banner", data: { image, headline, cta } },
     { type: "ProductGrid", data: { products: [...] } }
   ],
-  forms: { 
-    checkout: { fields: [...], validation: {...} } 
+  forms: {
+    checkout: { fields: [...], validation: {...} }
   }
 }
 
@@ -205,13 +205,13 @@ const COMPONENT_REGISTRY = {
       <button>{data.ctaText}</button>
     </div>
   ),
-  
+
   ProductGrid: ({ data }) => (
     <div className="grid">
       {data.products.map(p => <ProductCard key={p.id} {...p} />)}
     </div>
   ),
-  
+
   CountdownTimer: ({ data }) => {
     const [time, setTime] = useState(data.endTime);
     // ... countdown logic
@@ -288,7 +288,7 @@ const app = express();
 
 app.get('/api/bff/page-config', async (req, res) => {
   const { page, userId } = req.query;
-  
+
   try {
     // 1. Fetch data from multiple services IN PARALLEL
     const [themeData, userData, productData, bannerData] = await Promise.all([
@@ -297,11 +297,11 @@ app.get('/api/bff/page-config', async (req, res) => {
       axios.get(`${PRODUCT_SERVICE}/featured?category=${page}`),
       axios.get(`${CMS_SERVICE}/banners?page=${page}`)
     ]);
-    
+
     // 2. Apply personalization logic
     const theme = getThemeForUser(themeData.data, userData.data);
     const products = personalizeProducts(productData.data, userData.data);
-    
+
     // 3. Construct config-driven response
     const config = {
       theme: {
@@ -321,11 +321,11 @@ app.get('/api/bff/page-config', async (req, res) => {
       ],
       forms: getFormsForPage(page, userData.data)
     };
-    
+
     // 4. Cache response at CDN (5 minutes)
     res.set('Cache-Control', 'public, max-age=300');
     res.json(config);
-    
+
   } catch (error) {
     console.error('BFF Error:', error);
     // Fallback to default config
@@ -337,7 +337,7 @@ app.get('/api/bff/page-config', async (req, res) => {
 const getThemeForUser = (themeData, userData) => {
   const currentEvent = themeData.currentEvent; // "diwali", "christmas", etc.
   const userLocale = userData.country;
-  
+
   // Regional variations
   if (currentEvent === 'diwali' && userLocale === 'IN') {
     return themeData.themes.diwaliIndia;
@@ -345,7 +345,7 @@ const getThemeForUser = (themeData, userData) => {
   if (currentEvent === 'blackfriday' && userLocale === 'US') {
     return themeData.themes.blackFridayUS;
   }
-  
+
   return themeData.themes.default;
 };
 
@@ -386,13 +386,13 @@ const featureFlags = {
 // BFF checks feature flag
 const getActiveTheme = async (userId) => {
   const user = await getUserContext(userId);
-  
+
   const themeVariation = await ldClient.variation(
     'diwali-theme-2024',
     user,
     'standard' // default
   );
-  
+
   if (themeVariation === 'diwali') {
     return {
       name: 'Diwali Dhamaka',
@@ -404,7 +404,7 @@ const getActiveTheme = async (userId) => {
       }
     };
   }
-  
+
   return standardTheme;
 };
 ```
@@ -516,89 +516,89 @@ import { useState, useEffect } from 'react';
 const DynamicForm = ({ schema }) => {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
-  
+
   // Determine which fields to show based on conditionals
   const getVisibleFields = () => {
     return schema.fields.filter(field => {
       if (!field.conditional) return true;
-      
+
       const dependentValue = formData[field.conditional.dependsOn];
       return field.conditional.showWhen.includes(dependentValue);
     });
   };
-  
+
   // Custom validators
   const validators = {
     luhnCheck: (value) => {
       // Luhn algorithm for credit card validation
       let sum = 0;
       let isEven = false;
-      
+
       for (let i = value.length - 1; i >= 0; i--) {
         let digit = parseInt(value[i]);
-        
+
         if (isEven) {
           digit *= 2;
           if (digit > 9) digit -= 9;
         }
-        
+
         sum += digit;
         isEven = !isEven;
       }
-      
+
       return sum % 10 === 0;
     }
   };
-  
+
   // Validate single field
   const validateField = (field, value) => {
     if (field.required && !value) {
       return 'This field is required';
     }
-    
+
     if (field.validation?.pattern) {
       const regex = new RegExp(field.validation.pattern);
       if (!regex.test(value)) {
         return field.validation.message;
       }
     }
-    
+
     if (field.validation?.custom) {
       const validatorFn = validators[field.validation.custom];
       if (validatorFn && !validatorFn(value)) {
         return field.validation.message;
       }
     }
-    
+
     return null;
   };
-  
+
   // Handle input change
   const handleChange = (fieldName, value) => {
     setFormData(prev => ({ ...prev, [fieldName]: value }));
-    
+
     // Clear error on change
     setErrors(prev => ({ ...prev, [fieldName]: null }));
   };
-  
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validate all visible fields
     const newErrors = {};
     const visibleFields = getVisibleFields();
-    
+
     visibleFields.forEach(field => {
       const error = validateField(field, formData[field.name]);
       if (error) newErrors[field.name] = error;
     });
-    
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    
+
     // Submit form
     try {
       const response = await fetch(schema.submit.url, {
@@ -606,7 +606,7 @@ const DynamicForm = ({ schema }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
-      
+
       if (response.ok) {
         window.location.href = schema.submit.successRedirect;
       }
@@ -614,10 +614,10 @@ const DynamicForm = ({ schema }) => {
       console.error('Form submission error:', error);
     }
   };
-  
+
   // Render form
   const visibleFields = getVisibleFields();
-  
+
   return (
     <form onSubmit={handleSubmit} className="dynamic-form">
       {visibleFields.map(field => (
@@ -626,7 +626,7 @@ const DynamicForm = ({ schema }) => {
             {field.label}
             {field.required && <span className="required">*</span>}
           </label>
-          
+
           {field.type === 'select' ? (
             <select
               value={formData[field.name] || ''}
@@ -646,13 +646,13 @@ const DynamicForm = ({ schema }) => {
               onChange={(e) => handleChange(field.name, e.target.value)}
             />
           )}
-          
+
           {errors[field.name] && (
             <span className="error">{errors[field.name]}</span>
           )}
         </div>
       ))}
-      
+
       <button type="submit">Submit</button>
     </form>
   );
@@ -670,7 +670,7 @@ Initial State:
 ---------------------------------------------------------
   formData = {}
   visibleFields = [email, country, shippingMethod, paymentMethod]
-  
+
 Step 1: User enters country = "IN"
 ---------------------------------------------------------
   formData = { country: "IN" }
@@ -725,7 +725,7 @@ const getAmazonPageConfig = async (userId) => {
   const now = new Date();
   const festivalStart = new Date('2024-10-08');
   const festivalEnd = new Date('2024-10-15');
-  
+
   if (now >= festivalStart && now <= festivalEnd) {
     return {
       theme: 'great-indian-festival',
@@ -754,7 +754,7 @@ const getAmazonPageConfig = async (userId) => {
       }
     };
   }
-  
+
   return getStandardConfig();
 };
 ```
@@ -775,30 +775,30 @@ const getAmazonPageConfig = async (userId) => {
 const FlashSaleProduct = ({ productId }) => {
   const [product, setProduct] = useState(null);
   const [timeLeft, setTimeLeft] = useState(null);
-  
+
   useEffect(() => {
     // Connect to WebSocket for real-time updates
     const ws = new WebSocket(`wss://api.flipkart.com/flash-sale/${productId}`);
-    
+
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      
+
       if (data.type === 'PRICE_UPDATE') {
         setProduct(prev => ({ ...prev, price: data.newPrice }));
       }
-      
+
       if (data.type === 'STOCK_UPDATE') {
         setProduct(prev => ({ ...prev, stock: data.remaining }));
       }
-      
+
       if (data.type === 'SALE_END') {
         setTimeLeft(null);
       }
     };
-    
+
     return () => ws.close();
   }, [productId]);
-  
+
   return (
     <div className="flash-sale-card">
       {timeLeft && <CountdownTimer endTime={timeLeft} />}
@@ -876,7 +876,7 @@ interface PageConfig {
   page: string;
   version: string;
   timestamp: string;
-  
+
   theme: {
     name: string;
     colors: {
@@ -904,15 +904,15 @@ interface PageConfig {
       xl: number;
     };
   };
-  
+
   components: Array<{
     type: string;
     data: Record<string, any>;
     props?: Record<string, any>;
   }>;
-  
+
   forms: Record<string, FormSchema>;
-  
+
   metadata: {
     experiment?: {
       id: string;
@@ -967,7 +967,7 @@ Calling microservices directly has several problems:
 
 1. **Network Waterfalls:** Client makes 5 sequential requests (1 second total)
    Client -> Service A (200ms) -> Service B (200ms) -> Service C (200ms)
-   
+
    With BFF: Client -> BFF -> [A, B, C in parallel] (200ms total)
    BFF reduces round trips by 5x!
 
@@ -980,7 +980,7 @@ Calling microservices directly has several problems:
    - Authentication tokens for each service
    - Error handling for each API
    - Data transformation logic
-   
+
    With BFF: Client makes 1 simple request, BFF handles complexity
 
 4. **Security:** Exposing internal microservice URLs to client is risky
@@ -1005,13 +1005,13 @@ Calling microservices directly has several problems:
 const updateThemeConfig = async (newTheme) => {
   // 1. Update config in database
   await db.themes.update(newTheme);
-  
+
   // 2. Purge CDN cache by tag
   await cloudflare.purgeByTag('theme-config');
-  
+
   // 3. Invalidate Redis cache
   await redis.del('theme:current');
-  
+
   // 4. Broadcast to all BFF instances
   await pubsub.publish('config-update', { type: 'theme' });
 };
@@ -1021,13 +1021,13 @@ const getThemeConfig = async () => {
   // Try Redis first (hot cache)
   const cached = await redis.get('theme:current');
   if (cached) return JSON.parse(cached);
-  
+
   // Cache miss -> fetch from database
   const theme = await db.themes.findActive();
-  
+
   // Store in Redis for 5 minutes
   await redis.setex('theme:current', 300, JSON.stringify(theme));
-  
+
   return theme;
 };
 
@@ -1065,8 +1065,8 @@ const diwaliConfig = {
 };
 
 // 2. Enable for internal users first (testing)
-featureFlags.enable('diwali-2024', { 
-  users: ['internal@company.com'] 
+featureFlags.enable('diwali-2024', {
+  users: ['internal@company.com']
 });
 
 // 3. Gradual rollout to real users
@@ -1081,7 +1081,7 @@ const rolloutSchedule = [
 // 4. Monitor error rates
 const monitorRollout = async () => {
   const errorRate = await metrics.getErrorRate('diwali-2024');
-  
+
   if (errorRate > 0.5) {
     // Errors > 0.5%? Rollback immediately!
     await featureFlags.disable('diwali-2024');
@@ -1110,21 +1110,21 @@ const monitorRollout = async () => {
 
 const getCheckoutForm = (userContext) => {
   const { country, product, shippingMethod } = userContext;
-  
+
   // Base fields (same for everyone)
   const baseFields = [
     { name: 'email', type: 'email', required: true },
     { name: 'name', type: 'text', required: true }
   ];
-  
+
   // Country-specific fields
   const countryFields = {
     'IN': [
-      { 
-        name: 'gstNumber', 
-        type: 'text', 
+      {
+        name: 'gstNumber',
+        type: 'text',
         label: 'GST Number (Optional)',
-        validation: { 
+        validation: {
           pattern: '^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}.*',
           message: 'Invalid GST format'
         }
@@ -1141,9 +1141,9 @@ const getCheckoutForm = (userContext) => {
       }
     ],
     'US': [
-      { 
-        name: 'zipCode', 
-        type: 'text', 
+      {
+        name: 'zipCode',
+        type: 'text',
         label: 'ZIP Code',
         required: true,
         validation: {
@@ -1170,7 +1170,7 @@ const getCheckoutForm = (userContext) => {
       }
     ]
   };
-  
+
   // Product-specific fields
   const productFields = product.category === 'electronics' ? [
     {
@@ -1179,7 +1179,7 @@ const getCheckoutForm = (userContext) => {
       label: 'Add 2-year extended warranty (+$99)'
     }
   ] : [];
-  
+
   // Shipping-specific fields
   const shippingFields = shippingMethod === 'express' ? [
     {
@@ -1189,7 +1189,7 @@ const getCheckoutForm = (userContext) => {
       required: true
     }
   ] : [];
-  
+
   // Combine all fields
   return {
     formId: 'checkout',
@@ -1225,7 +1225,7 @@ describe('Dynamic Form Schema', () => {
     const gstField = form.fields.find(f => f.name === 'gstNumber');
     expect(gstField).toBeDefined();
   });
-  
+
   test('hides phone field for standard shipping', () => {
     const form = getCheckoutForm({ shippingMethod: 'standard' });
     const phoneField = form.fields.find(f => f.name === 'phone');
@@ -1242,7 +1242,7 @@ describe('BFF Page Config API', () => {
         'X-Test-Date': '2024-10-20' // Simulate date
       }
     });
-    
+
     expect(config.theme.name).toBe('diwali');
   });
 });
@@ -1252,7 +1252,7 @@ describe('BFF Page Config API', () => {
 test('Festival banner displays correctly', async () => {
   await page.goto('/home?theme=diwali');
   await page.screenshot({ path: 'diwali-banner.png' });
-  
+
   // Compare with baseline
   expect(await page.screenshot()).toMatchSnapshot();
 });
@@ -1261,11 +1261,11 @@ test('Festival banner displays correctly', async () => {
 // Add ?preview=diwali-2024 to URL
 const getConfig = async (req) => {
   const previewFlag = req.query.preview;
-  
+
   if (previewFlag && isInternalUser(req)) {
     return getPreviewConfig(previewFlag);
   }
-  
+
   return getProductionConfig();
 };
 
@@ -1300,14 +1300,14 @@ const abTest = {
 
 app.get('/api/bff/page-config', async (req, res) => {
   const { page, userId } = req.query;
-  
+
   // Get user segment (not personal data)
   const userSegment = await getUserSegment(userId); // "premium", "regular", "new"
-  
+
   // Cache-Key: page + segment (not userId)
   // This allows sharing cache across similar users
   const cacheKey = `${page}:${userSegment}`;
-  
+
   // Set cache headers
   if (userSegment === 'new') {
     // New users: more personalization, shorter cache
@@ -1316,7 +1316,7 @@ app.get('/api/bff/page-config', async (req, res) => {
     // Regular users: less personalization, longer cache
     res.set('Cache-Control', 'public, max-age=300, s-maxage=300');
   }
-  
+
   res.set('Vary', 'X-User-Segment'); // Vary cache by segment
   res.json(config);
 });
@@ -1325,18 +1325,18 @@ app.get('/api/bff/page-config', async (req, res) => {
 const getPageConfig = async (page, userId) => {
   const userSegment = await getUserSegment(userId);
   const cacheKey = `config:${page}:${userSegment}`;
-  
+
   // Try Redis
   const cached = await redis.get(cacheKey);
   if (cached) return JSON.parse(cached);
-  
+
   // Cache miss -> generate config
   const config = await generatePageConfig(page, userSegment);
-  
+
   // Store in Redis (TTL based on segment)
   const ttl = userSegment === 'new' ? 60 : 300;
   await redis.setex(cacheKey, ttl, JSON.stringify(config));
-  
+
   return config;
 };
 
@@ -1346,11 +1346,11 @@ const memCache = new NodeCache({ stdTTL: 60 });
 
 const getCachedConfig = async (page, segment) => {
   const key = `${page}:${segment}`;
-  
+
   // Check memory cache first (fastest)
   let config = memCache.get(key);
   if (config) return config;
-  
+
   // Check Redis (medium speed)
   config = await redis.get(key);
   if (config) {
@@ -1358,7 +1358,7 @@ const getCachedConfig = async (page, segment) => {
     memCache.set(key, parsedConfig);
     return parsedConfig;
   }
-  
+
   // Generate fresh (slowest)
   config = await generateConfig(page, segment);
   memCache.set(key, config);
@@ -1388,20 +1388,20 @@ const getCachedConfig = async (page, segment) => {
 // DON'T do this
 const CheckoutForm = () => {
   const [country, setCountry] = useState('');
-  
+
   return (
     <form>
       <input name="email" required />
-      
+
       {/* ❌ Business logic hardcoded in component */}
       {country === 'IN' && (
         <input name="gstNumber" pattern="^[0-9]{2}[A-Z]{5}..." />
       )}
-      
+
       {country === 'US' && (
         <input name="zipCode" pattern="^[0-9]{5}..." />
       )}
-      
+
       {/* ❌ If requirements change, must update component code */}
     </form>
   );
@@ -1435,7 +1435,7 @@ const getFormSchema = (country) => {
 ```javascript
 const HomePage = () => {
   const [config, setConfig] = useState(null);
-  
+
   useEffect(() => {
     fetch('/api/bff/page-config')
       .then(res => res.json())
@@ -1444,9 +1444,9 @@ const HomePage = () => {
     // ❌ No fallback
     // ❌ User sees blank page if BFF fails
   }, []);
-  
+
   if (!config) return <div>Loading...</div>;
-  
+
   return <DynamicPage config={config} />;
 };
 ```
@@ -1461,7 +1461,7 @@ const DEFAULT_CONFIG = {
 const HomePage = () => {
   const [config, setConfig] = useState(DEFAULT_CONFIG);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     fetch('/api/bff/page-config')
       .then(res => {
@@ -1476,7 +1476,7 @@ const HomePage = () => {
       })
       .finally(() => setIsLoading(false));
   }, []);
-  
+
   return <DynamicPage config={config} loading={isLoading} />;
 };
 ```
@@ -1491,7 +1491,7 @@ const HomePage = () => {
 ```javascript
 const App = () => {
   const [config, setConfig] = useState(null);
-  
+
   // ❌ Fetches config on every page navigation
   // ❌ User waits 200ms+ per page
   useEffect(() => {
@@ -1499,7 +1499,7 @@ const App = () => {
       .then(res => res.json())
       .then(setConfig);
   }, [currentPage]);
-  
+
   return <DynamicPage config={config} />;
 };
 ```
@@ -1508,7 +1508,7 @@ const App = () => {
 ```javascript
 const usePageConfig = (page) => {
   const queryClient = useQueryClient();
-  
+
   // ✅ Cache config for 5 minutes
   const { data: config } = useQuery(
     ['page-config', page],
@@ -1518,19 +1518,19 @@ const usePageConfig = (page) => {
       cacheTime: 10 * 60 * 1000 // 10 minutes
     }
   );
-  
+
   // ✅ Prefetch next likely page
   useEffect(() => {
     const nextPages = { 'home': 'products', 'products': 'cart' };
     const nextPage = nextPages[page];
-    
+
     if (nextPage) {
       queryClient.prefetchQuery(['page-config', nextPage], () =>
         fetch(`/api/bff/page-config?page=${nextPage}`).then(r => r.json())
       );
     }
   }, [page]);
-  
+
   return config;
 };
 ```
@@ -1559,7 +1559,7 @@ const getCacheKey = (page, userId) => {
 // ✅ Group users into segments = 90%+ cache hit rate
 const getUserSegment = (userId) => {
   const user = await getUser(userId);
-  
+
   // Segment users by key attributes
   if (user.isPremium) return 'premium';
   if (user.isNew) return 'new';

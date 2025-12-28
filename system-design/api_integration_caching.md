@@ -1,7 +1,7 @@
 ---
 date: 2025-12-11T21:34:56+05:30
 description: Master API integration patterns including caching strategies, retry logic, circuit breakers, and data orchestration for scalable systems.
-premium: false
+premium: true
 ---
 
 # 🌐 System Design: API Integration, Data Orchestration & Caching (Staff Engineer Interview Guide)

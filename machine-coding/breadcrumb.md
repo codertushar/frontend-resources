@@ -1,7 +1,7 @@
 ---
 date: 2025-03-28T10:00:16+05:30
 description: Build a responsive breadcrumb navigation component with dynamic path generation, overflow handling, and accessibility support.
-premium: true
+premium: false
 ---
 
 # 🧭 React Breadcrumb Component
@@ -128,13 +128,13 @@ import React, { useState } from 'react';
 const Breadcrumbs = ({ data }) => {
   // "path" holds the keys to navigate the nested object
   const [path, setPath] = useState([]);
-  
+
   // Get current nested value using the path
   const currentData = path.reduce((acc, key) => acc && acc[key], data);
-  
+
   // Navigate back to a specific breadcrumb level
   const handleClick = (index) => setPath(path.slice(0, index + 1));
-  
+
   // Drill down by adding a key to the current path
   const handleDrillDown = (key) => {
     if (currentData && typeof currentData === 'object') {
@@ -146,8 +146,8 @@ const Breadcrumbs = ({ data }) => {
     <div className="bg-gray-100 p-5 rounded-lg max-w-md mx-auto">
       {/* Breadcrumb Navigation */}
       <div className="mb-4 text-lg">
-        <span 
-          onClick={() => setPath([])} 
+        <span
+          onClick={() => setPath([])}
           className="cursor-pointer hover:text-blue-600 transition"
         >
           🏠 Home
@@ -156,8 +156,8 @@ const Breadcrumbs = ({ data }) => {
           <span key={index}>
             {" "}
             👉{" "}
-            <span 
-              onClick={() => handleClick(index)} 
+            <span
+              onClick={() => handleClick(index)}
               className="cursor-pointer hover:text-blue-600 transition"
             >
               {key}
@@ -165,15 +165,15 @@ const Breadcrumbs = ({ data }) => {
           </span>
         ))}
       </div>
-  
+
       {/* Content Display */}
       <div>
         {currentData && typeof currentData === "object" ? (
           <ul className="list-none pl-0">
             {Object.keys(currentData).map((key) => (
-              <li 
-                key={key} 
-                onClick={() => handleDrillDown(key)} 
+              <li
+                key={key}
+                onClick={() => handleDrillDown(key)}
                 className="cursor-pointer my-2 p-2 bg-white rounded hover:bg-blue-50 transition"
               >
                 📂 {key}

@@ -1,7 +1,7 @@
 ---
 date: 2025-05-06T06:50:41+05:30
 description: Design and implement a lightweight analytics SDK with event tracking, batching, retry logic, and offline support for web applications.
-premium: false
+premium: true
 ---
 
 # 📊 Analytics SDK with Retry Logic
