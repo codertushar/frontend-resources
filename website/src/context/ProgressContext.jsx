@@ -21,13 +21,17 @@ export const ProgressProvider = ({ children }) => {
     if (!isLoaded) return;
 
     const loadProgress = async () => {
+      console.log('[ProgressContext] loadProgress called', { isSignedIn, userId: user?.id, hasSupabase: !!supabase });
       if (isSignedIn && user && supabase) {
         try {
           // Load from Supabase user_progress table
+          console.log('[ProgressContext] Fetching progress for user:', user.id);
           const { data: progressData, error } = await supabase
             .from('user_progress')
             .select('article_id')
             .eq('user_id', user.id);
+
+          console.log('[ProgressContext] Supabase response:', { progressData, error });
 
           if (error) {
             console.error('Error loading progress:', error);
@@ -38,6 +42,7 @@ export const ProgressProvider = ({ children }) => {
           }
 
           const supabaseProgress = progressData?.map(p => p.article_id) || [];
+          console.log('[ProgressContext] Setting readArticles:', supabaseProgress);
           setReadArticles(new Set(supabaseProgress));
         } catch (error) {
           console.error('Error loading progress:', error);
