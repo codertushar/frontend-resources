@@ -798,13 +798,20 @@ const Layout = ({ children }) => {
           align-items: center;
           gap: 6px;
           padding: 4px 10px;
-          background: linear-gradient(135deg, var(--primary) 0%, #6d28d9 100%);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+          background-size: 300% 300%;
+          animation: btn-gradient-shift 4s ease infinite;
           color: white;
           font-size: 0.75rem;
           font-weight: 500;
           border-radius: 99px;
           width: fit-content;
           transition: all 0.2s;
+        }
+        
+        :root.light .upgrade-link {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+          background-size: 300% 300%;
         }
 
         .upgrade-link:hover {
@@ -849,13 +856,24 @@ const Layout = ({ children }) => {
         }
 
         .btn-signup {
-          background: var(--primary);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+          background-size: 300% 300%;
+          animation: btn-gradient-shift 4s ease infinite;
           color: white;
+        }
+        
+        :root.light .btn-signup {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+          background-size: 300% 300%;
         }
 
         .btn-signup:hover {
-          background: var(--primary-hover);
           transform: translateY(-1px);
+          box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(236, 72, 153, 0.3);
+        }
+        
+        :root.light .btn-signup:hover {
+          box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3), 0 2px 8px rgba(219, 39, 119, 0.2);
         }
 
         .main-content {
@@ -1083,7 +1101,9 @@ const Layout = ({ children }) => {
           height: 40px;
           border-radius: 50%;
           border: none;
-          background: linear-gradient(135deg, var(--primary), #a78bfa);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+          background-size: 300% 300%;
+          animation: btn-gradient-shift 4s ease infinite;
           color: white;
           display: flex;
           align-items: center;
@@ -1091,6 +1111,11 @@ const Layout = ({ children }) => {
           cursor: pointer;
           transition: box-shadow 0.3s ease;
           flex-shrink: 0;
+        }
+        
+        :root.light .music-toggle-btn {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+          background-size: 300% 300%;
         }
 
         .music-toggle-btn:hover {
@@ -1162,14 +1187,25 @@ const Layout = ({ children }) => {
         }
 
         .control-btn.play-btn {
-          background: linear-gradient(135deg, var(--primary), #a78bfa);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+          background-size: 300% 300%;
+          animation: btn-gradient-shift 4s ease infinite;
           border-color: transparent;
           color: white;
+        }
+        
+        :root.light .control-btn.play-btn {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+          background-size: 300% 300%;
         }
 
         .control-btn.play-btn:hover {
           transform: scale(1.15);
           box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+        }
+        
+        :root.light .control-btn.play-btn:hover {
+          box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
         }
 
         .volume-slider {
@@ -1194,9 +1230,13 @@ const Layout = ({ children }) => {
           width: 12px;
           height: 12px;
           border-radius: 50%;
-          background: var(--primary);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4);
           cursor: pointer;
           transition: transform 0.2s;
+        }
+        
+        :root.light .volume-slider::-webkit-slider-thumb {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2);
         }
 
         .volume-slider::-webkit-slider-thumb:hover {
@@ -1207,9 +1247,13 @@ const Layout = ({ children }) => {
           width: 12px;
           height: 12px;
           border-radius: 50%;
-          background: var(--primary);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4);
           cursor: pointer;
           border: none;
+        }
+        
+        :root.light .volume-slider::-moz-range-thumb {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2);
         }
 
         @media (max-width: 640px) {

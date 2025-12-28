@@ -185,7 +185,8 @@ a {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent-pink) 100%);
+  background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+  background-size: 300% 300%;
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -193,9 +194,25 @@ a {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px var(--primary-glow);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(236, 72, 153, 0.3);
   position: relative;
   overflow: hidden;
+  animation: btn-gradient-shift 4s ease infinite;
+}
+
+:root.light .btn-primary {
+  background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+  background-size: 300% 300%;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3), 0 2px 8px rgba(219, 39, 119, 0.2);
+}
+
+@keyframes btn-gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .btn-primary::before {
@@ -210,9 +227,12 @@ a {
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, var(--primary-hover) 0%, var(--accent-pink-hover) 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px var(--primary-glow), 0 4px 15px var(--accent-pink-glow);
+  box-shadow: 0 8px 30px rgba(139, 92, 246, 0.5), 0 4px 20px rgba(236, 72, 153, 0.4), 0 2px 10px rgba(6, 182, 212, 0.3);
+}
+
+:root.light .btn-primary:hover {
+  box-shadow: 0 8px 30px rgba(124, 58, 237, 0.4), 0 4px 20px rgba(219, 39, 119, 0.3), 0 2px 10px rgba(8, 145, 178, 0.2);
 }
 
 .btn-primary:hover::before {
@@ -365,6 +385,96 @@ a {
   background: radial-gradient(circle at 50% 0%, rgba(124, 58, 237, 0.1), rgba(219, 39, 119, 0.05) 40%, transparent 70%);
 }
 
+/* ========================================
+   ANIMATED GRADIENT UTILITIES
+   ======================================== */
+
+/* Animated gradient background (for any element) */
+.bg-animated-gradient {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+  background-size: 300% 300%;
+  animation: bg-gradient-shift 4s ease infinite;
+}
+
+:root.light .bg-animated-gradient {
+  background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+  background-size: 300% 300%;
+}
+
+@keyframes bg-gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Animated gradient text */
+.text-animated-gradient {
+  background: linear-gradient(90deg, #8b5cf6 0%, #ec4899 25%, #06b6d4 50%, #ec4899 75%, #8b5cf6 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-gradient-shift 4s linear infinite;
+}
+
+:root.light .text-animated-gradient {
+  background: linear-gradient(90deg, #7c3aed 0%, #db2777 25%, #0891b2 50%, #db2777 75%, #7c3aed 100%);
+  background-size: 200% auto;
+}
+
+@keyframes text-gradient-shift {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Animated gradient border (wrapper needed) */
+.border-animated-gradient {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.border-animated-gradient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+  background-size: 300% 300%;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-gradient-shift 4s linear infinite;
+  z-index: -1;
+}
+
+:root.light .border-animated-gradient::before {
+  background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+  background-size: 300% 300%;
+}
+
+@keyframes border-gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -486,18 +596,30 @@ a {
 
 .notification-actions .btn-enable {
   padding: 0.5rem 1rem;
-  background: var(--primary);
+  background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+  background-size: 300% 300%;
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.3s ease;
+  animation: btn-gradient-shift 4s ease infinite;
+}
+
+:root.light .notification-actions .btn-enable {
+  background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+  background-size: 300% 300%;
 }
 
 .notification-actions .btn-enable:hover {
-  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(236, 72, 153, 0.3);
+}
+
+:root.light .notification-actions .btn-enable:hover {
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3), 0 2px 8px rgba(219, 39, 119, 0.2);
 }
 
 .notification-actions .btn-dismiss {
