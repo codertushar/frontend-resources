@@ -462,6 +462,29 @@ const Pricing = () => {
           margin-bottom: 2rem;
         }
 
+        .price {
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 0.25rem;
+        }
+
+        .price .currency {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: var(--text-main);
+          margin-top: 0.5rem;
+        }
+
+        .price .amount {
+          font-size: 4rem;
+          font-weight: 800;
+          background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
         .prices-with-discount {
           display: flex;
           align-items: center;
