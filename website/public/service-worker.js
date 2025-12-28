@@ -225,6 +225,11 @@ self.addEventListener('fetch', (event) => {
     // Ignore non-GET requests
     if (request.method !== 'GET') return;
 
+    // NEVER cache Supabase API requests - always fetch from network
+    if (request.url.includes('supabase.co')) {
+        return; // Let the browser handle it normally without SW intervention
+    }
+
     // For navigation requests (HTML pages) - network first with cache fallback
     if (request.mode === 'navigate' || request.destination === 'document') {
         event.respondWith(
