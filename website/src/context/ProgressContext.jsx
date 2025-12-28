@@ -60,9 +60,12 @@ export const ProgressProvider = ({ children }) => {
       return;
     }
 
-    const updatedArticles = new Set(readArticles);
-    updatedArticles.add(articleId);
-    setReadArticles(updatedArticles);
+    // Optimistic update using functional state update to avoid stale closure
+    setReadArticles(prev => {
+      const updated = new Set(prev);
+      updated.add(articleId);
+      return updated;
+    });
 
     try {
       const { error } = await supabase
@@ -71,17 +74,23 @@ export const ProgressProvider = ({ children }) => {
 
       if (error) {
         console.error('Error saving progress to database:', error);
-        // Revert on error
-        updatedArticles.delete(articleId);
-        setReadArticles(new Set(updatedArticles));
+        // Revert on error using functional update
+        setReadArticles(prev => {
+          const reverted = new Set(prev);
+          reverted.delete(articleId);
+          return reverted;
+        });
       }
     } catch (err) {
       console.error('Error saving progress:', err);
-      // Revert on error
-      updatedArticles.delete(articleId);
-      setReadArticles(new Set(updatedArticles));
+      // Revert on error using functional update
+      setReadArticles(prev => {
+        const reverted = new Set(prev);
+        reverted.delete(articleId);
+        return reverted;
+      });
     }
-  }, [readArticles, isSignedIn, supabase, user]);
+  }, [isSignedIn, supabase, user]);
 
   const markAsUnread = useCallback(async (articleId) => {
     // Only allow marking as unread if user is signed in
@@ -89,9 +98,12 @@ export const ProgressProvider = ({ children }) => {
       return;
     }
 
-    const updatedArticles = new Set(readArticles);
-    updatedArticles.delete(articleId);
-    setReadArticles(updatedArticles);
+    // Optimistic update using functional state update
+    setReadArticles(prev => {
+      const updated = new Set(prev);
+      updated.delete(articleId);
+      return updated;
+    });
 
     try {
       const { error } = await supabase
@@ -102,23 +114,31 @@ export const ProgressProvider = ({ children }) => {
 
       if (error) {
         console.error('Error removing progress from database:', error);
-        // Revert on error
-        updatedArticles.add(articleId);
-        setReadArticles(new Set(updatedArticles));
+        // Revert on error using functional update
+        setReadArticles(prev => {
+          const reverted = new Set(prev);
+          reverted.add(articleId);
+          return reverted;
+        });
       }
     } catch (err) {
       console.error('Error removing progress:', err);
-      // Revert on error
-      updatedArticles.add(articleId);
-      setReadArticles(new Set(updatedArticles));
+      // Revert on error using functional update
+      setReadArticles(prev => {
+        const reverted = new Set(prev);
+        reverted.add(articleId);
+        return reverted;
+      });
     }
-  }, [readArticles, isSignedIn, supabase, user]);
+  }, [isSignedIn, supabase, user]);
 
-  const toggleRead = useCallback((articleId) => {
-    if (readArticles.has(articleId)) {
-      return markAsUnread(articleId);
+  const toggleRead = useCallback(async (articleId) => {
+    // Check current state synchronously from the Set
+    const isCurrentlyRead = readArticles.has(articleId);
+    if (isCurrentlyRead) {
+      await markAsUnread(articleId);
     } else {
-      return markAsRead(articleId);
+      await markAsRead(articleId);
     }
   }, [readArticles, markAsRead, markAsUnread]);
 

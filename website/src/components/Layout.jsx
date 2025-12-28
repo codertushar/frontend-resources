@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { BookOpen, Layers, Map, Mail, Github, Linkedin, LogOut, User } from 'lucide-react';
+import { BookOpen, Layers, Map, Mail, Github, Linkedin, LogOut, User, Crown, Sparkles } from 'lucide-react';
 import { XIcon } from './SocialIcons';
 
 import ThemeToggle from './ThemeToggle';
 import NotificationPrompt from './NotificationPrompt';
 import { useAuth } from '../context/AuthContext';
+import { useSubscription } from '../context/SubscriptionContext';
 
 const Logo = ({ className }) => (
   <svg
@@ -27,8 +28,10 @@ const Logo = ({ className }) => (
 
 const Layout = ({ children }) => {
   const { user, isSignedIn, isLoaded, signInWithGoogle, signOut } = useAuth();
+  const { isPremium, subscription } = useSubscription();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const userIsPremium = isPremium();
 
   const handleSignIn = async () => {
     const { error } = await signInWithGoogle();
@@ -104,6 +107,21 @@ const Layout = ({ children }) => {
                       <div className="user-dropdown">
                         <div className="dropdown-header">
                           <span className="dropdown-email">{user?.email}</span>
+                          {userIsPremium ? (
+                            <div className="premium-badge">
+                              <Crown size={12} />
+                              <span>Premium {subscription?.plan === 'lifetime' ? '(Lifetime)' : ''}</span>
+                            </div>
+                          ) : (
+                            <Link
+                              to="/pricing"
+                              className="upgrade-link"
+                              onClick={() => setIsDropdownOpen(false)}
+                            >
+                              <Sparkles size={12} />
+                              <span>Upgrade to Premium</span>
+                            </Link>
+                          )}
                         </div>
                         <div className="dropdown-divider"></div>
                         <button className="dropdown-item" onClick={handleSignOut}>
@@ -291,12 +309,47 @@ const Layout = ({ children }) => {
 
         .dropdown-header {
           padding: 12px 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
         }
 
         .dropdown-email {
           font-size: 0.85rem;
           color: var(--text-muted);
           word-break: break-all;
+        }
+
+        .premium-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 4px 10px;
+          background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+          color: white;
+          font-size: 0.75rem;
+          font-weight: 600;
+          border-radius: 99px;
+          width: fit-content;
+        }
+
+        .upgrade-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 4px 10px;
+          background: linear-gradient(135deg, var(--primary) 0%, #6d28d9 100%);
+          color: white;
+          font-size: 0.75rem;
+          font-weight: 500;
+          border-radius: 99px;
+          width: fit-content;
+          transition: all 0.2s;
+        }
+
+        .upgrade-link:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
         }
 
         .dropdown-divider {
