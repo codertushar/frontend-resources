@@ -424,13 +424,30 @@ const Logo = ({ className }) => (
     xmlns="http://www.w3.org/2000/svg"
   >
     <defs>
-      <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#a78bfa" />
-        <stop offset="100%" stopColor="#7c3aed" />
+      <linearGradient id="logoGradAnimated" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#8b5cf6">
+          <animate attributeName="stop-color" values="#8b5cf6;#ec4899;#06b6d4;#ec4899;#8b5cf6" dur="4s" repeatCount="indefinite" />
+        </stop>
+        <stop offset="50%" stopColor="#ec4899">
+          <animate attributeName="stop-color" values="#ec4899;#06b6d4;#8b5cf6;#06b6d4;#ec4899" dur="4s" repeatCount="indefinite" />
+        </stop>
+        <stop offset="100%" stopColor="#06b6d4">
+          <animate attributeName="stop-color" values="#06b6d4;#8b5cf6;#ec4899;#8b5cf6;#06b6d4" dur="4s" repeatCount="indefinite" />
+        </stop>
       </linearGradient>
+      {/* Glow filter */}
+      <filter id="logoGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+        <feMerge>
+          <feMergeNode in="coloredBlur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
     </defs>
-    <path d="M50 2 L58 28 L78 35 L58 42 L50 68 L42 42 L22 35 L42 28 Z" fill="url(#logoGrad)" />
-    <circle cx="50" cy="82" r="14" fill="url(#logoGrad)" />
+    <g filter="url(#logoGlow)">
+      <path d="M50 2 L58 28 L78 35 L58 42 L50 68 L42 42 L22 35 L42 28 Z" fill="url(#logoGradAnimated)" />
+      <circle cx="50" cy="82" r="14" fill="url(#logoGradAnimated)" />
+    </g>
   </svg>
 );
 
@@ -622,7 +639,32 @@ const Layout = ({ children }) => {
         .logo-text {
           display: flex;
           align-items: center;
-          color: #8b5cf6;
+        }
+
+        .logo-text-full,
+        .logo-text-short {
+          background: linear-gradient(
+            90deg,
+            #8b5cf6 0%,
+            #ec4899 25%,
+            #06b6d4 50%,
+            #ec4899 75%,
+            #8b5cf6 100%
+          );
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: logo-gradient-shift 4s linear infinite;
+        }
+
+        @keyframes logo-gradient-shift {
+          0% {
+            background-position: 0% center;
+          }
+          100% {
+            background-position: 200% center;
+          }
         }
 
         .logo-text-short {

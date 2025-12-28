@@ -586,7 +586,7 @@ const Library = () => {
               >
                 <Link
                   to={`/resource/${item.id}`}
-                  className={`resource-card glass-panel ${item.premium && !isPremium() ? 'is-premium-locked' : ''} ${isRead(item.id) ? 'is-read' : ''}`}
+                  className={`resource-card glass-panel animated-card subtle ${item.premium && !isPremium() ? 'is-premium-locked' : ''} ${isRead(item.id) ? 'is-read' : ''}`}
                 >
                   <div className="card-header">
                     {isRead(item.id) && (
@@ -1527,32 +1527,11 @@ const Library = () => {
           display: block;
           padding: 1.5rem;
           height: 100%;
-          transition: all 0.3s ease;
-          position: relative;
-          overflow: hidden;
         }
 
-        .resource-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: radial-gradient(circle at 50% 0%, var(--primary-glow), transparent 70%);
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-
+        /* Hover background handled by animated-card, just add card-hover-bg */
         .resource-card:hover {
-          transform: translateY(-4px);
           background: var(--card-hover-bg);
-          border-color: var(--primary);
-          box-shadow: 0 16px 32px -8px rgba(139, 92, 246, 0.2);
-        }
-
-        .resource-card:hover::before {
-          opacity: 1;
         }
 
         .card-header {

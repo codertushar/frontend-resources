@@ -1,8 +1,8 @@
 
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Code, Database, Brain, Layout, Sparkles, BookOpen, Crown, Trophy, Terminal, Lightbulb } from 'lucide-react';
+import { Zap, Code, Database, Brain, Layout, Sparkles, BookOpen, Crown, Trophy, Terminal, Lightbulb, Rocket } from 'lucide-react';
 import contentData from '../data/content.json';
 import { useProgress } from '../context/ProgressContext';
 
@@ -21,11 +21,104 @@ const item = {
   show: { opacity: 1, y: 0 }
 };
 
+// Typewriter hook
+const useTypewriter = (text, speed = 50, delay = 500) => {
+  const [displayText, setDisplayText] = useState('');
+  const [isComplete, setIsComplete] = useState(false);
+
+  useEffect(() => {
+    let timeout;
+    let charIndex = 0;
+
+    const startTyping = () => {
+      timeout = setTimeout(() => {
+        if (charIndex < text.length) {
+          setDisplayText(text.slice(0, charIndex + 1));
+          charIndex++;
+          startTyping();
+        } else {
+          setIsComplete(true);
+        }
+      }, speed);
+    };
+
+    const initialDelay = setTimeout(() => {
+      startTyping();
+    }, delay);
+
+    return () => {
+      clearTimeout(timeout);
+      clearTimeout(initialDelay);
+    };
+  }, [text, speed, delay]);
+
+  return { displayText, isComplete };
+};
+
+// Pre-generated particle positions (pure/deterministic)
+const PARTICLES = [
+  { id: 0, x: 12, y: 8, size: 3, duration: 18, delay: 1, xOffset: 5 },
+  { id: 1, x: 85, y: 15, size: 2, duration: 22, delay: 0, xOffset: -8 },
+  { id: 2, x: 45, y: 25, size: 4, duration: 15, delay: 2, xOffset: 10 },
+  { id: 3, x: 72, y: 42, size: 2, duration: 25, delay: 3, xOffset: -5 },
+  { id: 4, x: 28, y: 55, size: 3, duration: 20, delay: 1, xOffset: 7 },
+  { id: 5, x: 92, y: 68, size: 2, duration: 17, delay: 4, xOffset: -10 },
+  { id: 6, x: 8, y: 75, size: 4, duration: 23, delay: 0, xOffset: 8 },
+  { id: 7, x: 55, y: 82, size: 2, duration: 19, delay: 2, xOffset: -6 },
+  { id: 8, x: 38, y: 12, size: 3, duration: 21, delay: 3, xOffset: 9 },
+  { id: 9, x: 65, y: 35, size: 2, duration: 16, delay: 1, xOffset: -7 },
+  { id: 10, x: 18, y: 48, size: 4, duration: 24, delay: 4, xOffset: 6 },
+  { id: 11, x: 78, y: 58, size: 2, duration: 18, delay: 0, xOffset: -9 },
+  { id: 12, x: 52, y: 72, size: 3, duration: 22, delay: 2, xOffset: 8 },
+  { id: 13, x: 25, y: 88, size: 2, duration: 15, delay: 3, xOffset: -5 },
+  { id: 14, x: 88, y: 22, size: 4, duration: 20, delay: 1, xOffset: 10 },
+  { id: 15, x: 5, y: 38, size: 2, duration: 26, delay: 4, xOffset: -8 },
+  { id: 16, x: 42, y: 5, size: 3, duration: 17, delay: 0, xOffset: 7 },
+  { id: 17, x: 68, y: 92, size: 2, duration: 23, delay: 2, xOffset: -6 },
+  { id: 18, x: 95, y: 45, size: 4, duration: 19, delay: 3, xOffset: 9 },
+  { id: 19, x: 32, y: 65, size: 2, duration: 21, delay: 1, xOffset: -10 },
+];
+
+// Floating Particles Component
+const FloatingParticles = () => {
+  return (
+    <div className="particles-container">
+      {PARTICLES.map((particle) => (
+        <motion.div
+          key={particle.id}
+          className="particle"
+          style={{
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+            width: particle.size,
+            height: particle.size,
+          }}
+          animate={{
+            y: [0, -30, 0],
+            x: [0, particle.xOffset, 0],
+            opacity: [0.2, 0.8, 0.2],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: particle.duration,
+            delay: particle.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 const Home = () => {
   const { getStats } = useProgress();
   const resourceCount = contentData.length;
   const premiumCount = contentData.filter(item => item.premium).length;
   const stats = getStats(resourceCount);
+
+  const subtitleText = "A curated collection of in-depth resources, real-world patterns, and interview-focused guides to land your dream frontend role.";
+  const { displayText, isComplete } = useTypewriter(subtitleText, 30, 800);
 
   // Calculate category counts
   const categoryCounts = contentData.reduce((acc, item) => {
@@ -41,25 +134,36 @@ const Home = () => {
         animate="show"
         className="hero"
       >
+        {/* Floating Particles Background */}
+        <FloatingParticles />
+
         <motion.div variants={item} className="hero-badge">
           <Sparkles size={14} />
           <span>Curated Resources for Frontend Interviews</span>
         </motion.div>
 
-        <motion.h1 variants={item} className="hero-title heading-gradient">
-          Master Frontend<br />Engineering
-        </motion.h1>
+        {/* Animated Gradient Title with Glow */}
+        <motion.div variants={item} className="hero-title-wrapper">
+          <div className="hero-glow" />
+          <h1 className="hero-title animated-gradient-text">
+            Ace Your Frontend<br />Interviews
+          </h1>
+        </motion.div>
+
+        {/* Typewriter Subtitle */}
         <motion.p variants={item} className="hero-subtitle">
-          A curated collection of in-depth resources, real-world patterns, and interview-focused guides to accelerate your frontend career.
+          {displayText}
+          <span className={`typing-cursor ${isComplete ? 'blink' : ''}`}>|</span>
         </motion.p>
 
         <motion.div variants={item} className="hero-actions">
           <Link to="/library" className="btn-primary">
-            <span>Explore Library</span>
-            <ArrowRight size={18} />
+            <Zap size={18} />
+            <span>Dive In</span>
           </Link>
-          <Link to="/learning-path" className="btn-secondary">
-            Start Learning Path
+          <Link to="/learning-path" className="btn-gradient-border">
+            <Rocket size={18} />
+            <span>Start Learning Path</span>
           </Link>
         </motion.div>
 
@@ -111,7 +215,7 @@ const Home = () => {
         </motion.div>
 
         <motion.div variants={item} className="features-grid">
-          <Link to="/library?category=js" className="feature-card glass-panel">
+          <Link to="/library?category=js" className="feature-card glass-panel animated-card">
             <div className="feature-icon"><Code size={24} /></div>
             <div className="feature-content">
               <h3>JavaScript Deep Dives</h3>
@@ -119,7 +223,7 @@ const Home = () => {
             </div>
             <span className="feature-count">{categoryCounts['js'] || 0} articles</span>
           </Link>
-          <Link to="/library?category=dsa" className="feature-card glass-panel">
+          <Link to="/library?category=dsa" className="feature-card glass-panel animated-card">
             <div className="feature-icon"><Database size={24} /></div>
             <div className="feature-content">
               <h3>DSA for Frontend</h3>
@@ -127,7 +231,7 @@ const Home = () => {
             </div>
             <span className="feature-count">{categoryCounts['dsa'] || 0} articles</span>
           </Link>
-          <Link to="/library?category=machine-coding" className="feature-card glass-panel">
+          <Link to="/library?category=machine-coding" className="feature-card glass-panel animated-card">
             <div className="feature-icon"><Terminal size={24} /></div>
             <div className="feature-content">
               <h3>Machine Coding</h3>
@@ -135,7 +239,7 @@ const Home = () => {
             </div>
             <span className="feature-count">{categoryCounts['machine-coding'] || 0} articles</span>
           </Link>
-          <Link to="/library?category=system-design" className="feature-card glass-panel">
+          <Link to="/library?category=system-design" className="feature-card glass-panel animated-card">
             <div className="feature-icon"><Layout size={24} /></div>
             <div className="feature-content">
               <h3>System Design</h3>
@@ -143,7 +247,7 @@ const Home = () => {
             </div>
             <span className="feature-count">{categoryCounts['system-design'] || 0} articles</span>
           </Link>
-          <Link to="/library?category=general" className="feature-card glass-panel">
+          <Link to="/library?category=general" className="feature-card glass-panel animated-card">
             <div className="feature-icon"><Lightbulb size={24} /></div>
             <div className="feature-content">
               <h3>Browser & Patterns</h3>
@@ -151,7 +255,7 @@ const Home = () => {
             </div>
             <span className="feature-count">{categoryCounts['general'] || 0} articles</span>
           </Link>
-          <Link to="/library?category=ai" className="feature-card glass-panel">
+          <Link to="/library?category=ai" className="feature-card glass-panel animated-card">
             <div className="feature-icon"><Brain size={24} /></div>
             <div className="feature-content">
               <h3>AI Engineering</h3>
@@ -163,6 +267,26 @@ const Home = () => {
       </motion.div>
 
       <style>{`
+        /* Floating Particles */
+        .particles-container {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          overflow: hidden;
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        .particle {
+          position: absolute;
+          border-radius: 50%;
+          background: linear-gradient(135deg, var(--primary), #ec4899);
+          box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+
+        /* Hero Section */
         .hero {
           display: flex;
           flex-direction: column;
@@ -170,6 +294,7 @@ const Home = () => {
           text-align: center;
           padding: 4rem 1rem;
           position: relative;
+          overflow: hidden;
         }
 
         .hero-badge {
@@ -184,10 +309,68 @@ const Home = () => {
           color: var(--primary);
           font-weight: 500;
           margin-bottom: 2rem;
+          position: relative;
+          z-index: 1;
         }
 
         .hero-badge svg {
           color: var(--primary);
+        }
+
+        /* Title Wrapper with Glow */
+        .hero-title-wrapper {
+          position: relative;
+          z-index: 1;
+        }
+
+        .hero-glow {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 120%;
+          height: 150%;
+          background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.3) 0%, rgba(236, 72, 153, 0.15) 40%, transparent 70%);
+          filter: blur(40px);
+          animation: pulse-glow 4s ease-in-out infinite;
+          pointer-events: none;
+        }
+
+        @keyframes pulse-glow {
+          0%, 100% {
+            opacity: 0.6;
+            transform: translate(-50%, -50%) scale(1);
+          }
+          50% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.1);
+          }
+        }
+
+        /* Animated Gradient Text */
+        .animated-gradient-text {
+          background: linear-gradient(
+            90deg,
+            #8b5cf6 0%,
+            #ec4899 25%,
+            #06b6d4 50%,
+            #ec4899 75%,
+            #8b5cf6 100%
+          );
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: gradient-shift 4s linear infinite;
+        }
+
+        @keyframes gradient-shift {
+          0% {
+            background-position: 0% center;
+          }
+          100% {
+            background-position: 200% center;
+          }
         }
 
         .hero-title {
@@ -196,20 +379,47 @@ const Home = () => {
           font-weight: 800;
           margin-bottom: 1.5rem;
           letter-spacing: -0.03em;
+          position: relative;
         }
 
+        /* Typewriter Effect */
         .hero-subtitle {
           font-size: 1.25rem;
           color: var(--text-muted);
           max-width: 640px;
           margin-bottom: 2.5rem;
           line-height: 1.6;
+          min-height: 3.2em;
+          position: relative;
+          z-index: 1;
+        }
+
+        .typing-cursor {
+          display: inline-block;
+          margin-left: 2px;
+          color: var(--primary);
+          font-weight: 400;
+        }
+
+        .typing-cursor.blink {
+          animation: cursor-blink 1s step-end infinite;
+        }
+
+        @keyframes cursor-blink {
+          0%, 100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0;
+          }
         }
 
         .hero-actions {
           display: flex;
           gap: 1rem;
           margin-bottom: 3rem;
+          position: relative;
+          z-index: 1;
         }
 
         .hero-actions .btn-primary {
@@ -218,19 +428,107 @@ const Home = () => {
           gap: 0.5rem;
         }
 
-        .btn-secondary {
-          background: var(--btn-secondary-bg);
-          color: var(--text-main);
+        .stats-row {
+          position: relative;
+          z-index: 1;
+        }
+
+        .section-header,
+        .features-grid {
+          position: relative;
+          z-index: 1;
+        }
+
+        /* Gradient Border Button */
+        .btn-gradient-border {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
           padding: 0.75rem 1.5rem;
           border-radius: 8px;
           font-weight: 500;
+          color: var(--text-main);
+          background: var(--surface-color);
           transition: all 0.3s ease;
-          border: 1px solid var(--border-color);
+          overflow: hidden;
+          z-index: 1;
         }
-        .btn-secondary:hover {
-          background: var(--btn-secondary-hover);
-          border-color: var(--text-muted);
+
+        .btn-gradient-border::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 8px;
+          padding: 2px;
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+          background-size: 300% 300%;
+          -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+          mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          animation: gradient-rotate 4s linear infinite;
+          z-index: -1;
+        }
+
+        .btn-gradient-border::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 8px;
+          background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.05), rgba(6, 182, 212, 0.1));
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          z-index: -1;
+        }
+
+        .btn-gradient-border:hover::after {
+          opacity: 1;
+        }
+
+        .btn-gradient-border:hover {
           transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2), 0 4px 15px rgba(236, 72, 153, 0.15);
+        }
+
+        .btn-gradient-border:hover svg {
+          animation: rocket-bounce 0.6s ease-in-out;
+        }
+
+        @keyframes gradient-rotate {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+
+        @keyframes rocket-bounce {
+          0%, 100% {
+            transform: translateY(0) rotate(0deg);
+          }
+          25% {
+            transform: translateY(-3px) rotate(-5deg);
+          }
+          50% {
+            transform: translateY(-5px) rotate(0deg);
+          }
+          75% {
+            transform: translateY(-3px) rotate(5deg);
+          }
+        }
+
+        .btn-gradient-border svg {
+          color: var(--accent-pink);
+          transition: all 0.3s ease;
         }
 
         .stats-row {
@@ -385,35 +683,10 @@ const Home = () => {
         .feature-card {
           padding: 1.5rem;
           text-align: left;
-          transition: all 0.3s ease;
-          position: relative;
-          overflow: hidden;
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
-        }
-
-        .feature-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: radial-gradient(circle at 50% 0%, var(--primary-glow), transparent 70%);
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-
-        .feature-card:hover {
-          transform: translateY(-6px);
-          background: var(--card-hover-bg);
-          border-color: var(--primary);
-          box-shadow: 0 20px 40px -12px rgba(139, 92, 246, 0.25);
-        }
-
-        .feature-card:hover::before {
-          opacity: 1;
+          background: var(--surface-color);
         }
 
         .feature-icon {
