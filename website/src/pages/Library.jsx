@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ChevronRight, ChevronDown, LayoutGrid, List, X, CheckCircle, Crown, Sparkles, BookOpen, Trophy, Shuffle, Target, Clock, SlidersHorizontal } from 'lucide-react';
+import { Search, ChevronRight, ChevronDown, LayoutGrid, List, X, CheckCircle, Crown, BookOpen, Trophy, Shuffle, Target, Clock, SlidersHorizontal, Layers, Code2, Binary, Brain, Terminal, Server, Globe } from 'lucide-react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import contentData from '../data/content.json';
@@ -8,13 +8,13 @@ import { useProgress } from '../context/ProgressContext';
 import { useSubscription } from '../context/SubscriptionContext';
 
 const CATEGORIES = [
-  { id: 'all', label: 'All Resources' },
-  { id: 'js', label: 'JavaScript' },
-  { id: 'dsa', label: 'DSA' },
-  { id: 'ai', label: 'AI Engineering' },
-  { id: 'machine-coding', label: 'Machine Coding' },
-  { id: 'system-design', label: 'System Design' },
-  { id: 'general', label: 'Browser & Patterns' },
+  { id: 'all', label: 'All Resources', icon: Layers, color: '#8b5cf6' },
+  { id: 'js', label: 'JavaScript', icon: Code2, color: '#f59e0b' },
+  { id: 'dsa', label: 'DSA', icon: Binary, color: '#22c55e' },
+  { id: 'ai', label: 'AI Engineering', icon: Brain, color: '#ec4899' },
+  { id: 'machine-coding', label: 'Machine Coding', icon: Terminal, color: '#06b6d4' },
+  { id: 'system-design', label: 'System Design', icon: Server, color: '#f97316' },
+  { id: 'general', label: 'Browser & Patterns', icon: Globe, color: '#6366f1' },
 ];
 
 // Display name mappings for clearer UI labels
@@ -130,15 +130,6 @@ const fuseOptions = {
   keys: ['title', 'category', 'subcategory', 'content', 'difficulty', 'tags'],
   threshold: 0.3,
 };
-
-// Featured articles - FREE handpicked essentials for interview prep
-const FEATURED_FREE_IDS = [
-  'js/general-concepts/this_keyword',     // FREE - critical interview topic
-  'js/polyfills/arrays/reduce',           // FREE - very common question
-  'js/polyfills/general/call',            // FREE - interview staple
-  'js/promises/retry',                    // FREE - practical async pattern
-  'js/general-concepts/spread',           // FREE - foundational ES6
-];
 
 // Start here - beginner friendly FREE articles
 const START_HERE_IDS = [
@@ -264,13 +255,6 @@ const Library = () => {
 
     return result;
   }, [query, activeCategory, activeDifficulty, activeTag, activeAccess, sortBy, fuse]);
-
-  // Get featured articles (FREE ones)
-  const featuredArticles = useMemo(() => {
-    return FEATURED_FREE_IDS
-      .map(id => contentData.find(item => item.id === id))
-      .filter(Boolean);
-  }, []);
 
   // Get "Start Here" beginner articles
   const startHereArticles = useMemo(() => {
@@ -407,35 +391,6 @@ const Library = () => {
             </div>
           )}
 
-          {/* Featured Interview Prep - FREE articles */}
-          {featuredArticles.length > 0 && (
-            <div className="featured-section">
-              <div className="section-header">
-                <Sparkles size={20} />
-                <h2>Essential Interview Prep</h2>
-                <span className="section-badge free-badge">All Free</span>
-              </div>
-              <div className="featured-grid">
-                {featuredArticles.map((item) => (
-                  <Link
-                    key={item.id}
-                    to={`/resource/${item.id}`}
-                    className={`featured-card glass-panel ${isRead(item.id) ? 'is-read' : ''}`}
-                  >
-                    {isRead(item.id) && (
-                      <span className="featured-read-badge">
-                        <CheckCircle size={14} />
-                      </span>
-                    )}
-                    <span className={`featured-difficulty ${item.difficulty}`}>{item.difficulty}</span>
-                    <h3>{item.title.replace(/^[^\s]+\s/, '')}</h3>
-                    <span className="featured-category">{CATEGORY_DISPLAY_NAMES[item.category] || item.category}</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Category Progress */}
           {stats.completed > 0 && (
             <div className="category-progress-section">
@@ -475,15 +430,20 @@ const Library = () => {
       <div ref={filterRef} className={`controls-section glass-panel ${isFilterSticky ? 'is-sticky' : ''}`}>
         {/* Categories - moved to top for better UX */}
         <div className="categories">
-          {CATEGORIES.map(cat => (
-            <button
-              key={cat.id}
-              className={`category-pill ${activeCategory === cat.id ? 'active' : ''}`}
-              onClick={() => setActiveCategory(cat.id)}
-            >
-              {cat.label}
-            </button>
-          ))}
+          {CATEGORIES.map(cat => {
+            const IconComponent = cat.icon;
+            return (
+              <button
+                key={cat.id}
+                className={`category-pill ${activeCategory === cat.id ? 'active' : ''}`}
+                onClick={() => setActiveCategory(cat.id)}
+                style={{ '--cat-color': cat.color }}
+              >
+                <IconComponent size={16} className="category-icon" />
+                <span>{cat.label}</span>
+              </button>
+            );
+          })}
         </div>
 
         <div className="search-row">
@@ -1260,25 +1220,30 @@ const Library = () => {
         .filter-btn {
           display: flex;
           align-items: center;
-          gap: 0.35rem;
-          padding: 0.6rem 0.85rem;
-          background: var(--input-bg, rgba(0,0,0,0.2));
-          border: 1px solid var(--border-color);
-          border-radius: 8px;
-          color: var(--text-muted);
-          font-size: 0.85rem;
+          gap: 0.4rem;
+          padding: 0.6rem 1rem;
+          background: var(--surface-hover, rgba(255,255,255,0.08));
+          border: 1.5px solid var(--border-color);
+          border-radius: 10px;
+          color: var(--text-main);
+          font-size: 0.875rem;
+          font-weight: 500;
           cursor: pointer;
           transition: all 0.2s;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .filter-btn:hover {
-          border-color: var(--text-muted);
-          color: var(--text-main);
+          border-color: var(--primary);
+          background-color: var(--surface-color, rgba(255,255,255,0.12));
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
         }
 
         .filter-btn.active {
           border-color: var(--primary);
+          background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.1));
           color: var(--primary);
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
         }
 
         .filter-btn .chevron {
@@ -1431,63 +1396,121 @@ const Library = () => {
         }
 
         .filter-select {
-          background: var(--input-bg, rgba(0,0,0,0.2));
-          border: 1px solid var(--border-color);
-          color: var(--text-muted);
-          padding: 0.6rem 0.75rem;
-          border-radius: 8px;
-          font-size: 0.85rem;
+          background: var(--surface-hover, rgba(255,255,255,0.08));
+          border: 1.5px solid var(--border-color);
+          color: var(--text-main);
+          padding: 0.6rem 1rem;
+          padding-right: 2rem;
+          border-radius: 10px;
+          font-size: 0.875rem;
+          font-weight: 500;
           cursor: pointer;
           outline: none;
           transition: all 0.2s;
-          min-width: 100px;
+          min-width: 110px;
+          appearance: none;
+          -webkit-appearance: none;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 0.6rem center;
+          background-size: 14px;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .filter-select:hover {
-          border-color: var(--text-muted);
+          border-color: var(--primary);
+          background-color: var(--surface-color, rgba(255,255,255,0.12));
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
         }
 
         .filter-select:focus {
           border-color: var(--primary);
+          box-shadow: 0 0 0 3px var(--primary-glow, rgba(139, 92, 246, 0.2));
         }
 
         .filter-select.active {
           border-color: var(--primary);
+          background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.1));
           color: var(--text-main);
+          font-weight: 600;
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
         }
 
         .filter-select option {
           background: var(--bg-primary, #1a1a2e);
           color: var(--text-main);
+          padding: 0.5rem;
         }
 
         .categories {
           display: flex;
-          gap: 0.5rem;
+          gap: 0.6rem;
           flex-wrap: wrap;
         }
 
         .category-pill {
-          background: transparent;
-          border: 1px solid var(--border-color);
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: var(--surface-hover, rgba(255,255,255,0.05));
+          border: 1.5px solid var(--border-color);
           color: var(--text-muted);
-          padding: 0.35rem 0.9rem;
+          padding: 0.55rem 1.1rem;
           border-radius: 99px;
           cursor: pointer;
           font-size: 0.85rem;
-          transition: all 0.2s;
+          font-weight: 500;
+          transition: all 0.25s ease;
           white-space: nowrap;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .category-pill .category-icon {
+          color: var(--cat-color, var(--text-muted));
+          transition: all 0.25s ease;
+          flex-shrink: 0;
+        }
+
+        .category-pill::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, color-mix(in srgb, var(--cat-color) 15%, transparent), color-mix(in srgb, var(--cat-color) 5%, transparent));
+          opacity: 0;
+          transition: opacity 0.25s ease;
         }
 
         .category-pill:hover {
           color: var(--text-main);
-          border-color: var(--text-muted);
+          border-color: color-mix(in srgb, var(--cat-color) 50%, transparent);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 16px color-mix(in srgb, var(--cat-color) 25%, transparent);
+        }
+
+        .category-pill:hover::before {
+          opacity: 1;
+        }
+
+        .category-pill:hover .category-icon {
+          transform: scale(1.1);
         }
 
         .category-pill.active {
-          background: var(--primary);
-          border-color: var(--primary);
+          background: linear-gradient(135deg, var(--cat-color), color-mix(in srgb, var(--cat-color) 70%, #fff));
+          border-color: transparent;
           color: white;
+          font-weight: 600;
+          box-shadow: 0 4px 20px color-mix(in srgb, var(--cat-color) 50%, transparent);
+          transform: translateY(-2px);
+        }
+
+        .category-pill.active .category-icon {
+          color: white;
+        }
+
+        .category-pill.active::before {
+          opacity: 0;
         }
 
         .resources-grid {
@@ -1923,8 +1946,14 @@ const Library = () => {
 
           .category-pill {
             flex-shrink: 0;
-            padding: 0.3rem 0.7rem;
+            padding: 0.4rem 0.85rem;
             font-size: 0.8rem;
+            gap: 0.4rem;
+          }
+
+          .category-pill .category-icon {
+            width: 14px;
+            height: 14px;
           }
 
           .search-row {
@@ -1947,12 +1976,15 @@ const Library = () => {
           .filter-select {
             min-width: unset;
             font-size: 0.8rem;
-            padding: 0.5rem 0.6rem;
+            padding: 0.5rem 0.75rem;
+            padding-right: 1.75rem;
             flex: 1;
+            background-position: right 0.5rem center;
+            background-size: 12px;
           }
 
           .filter-btn {
-            padding: 0.5rem 0.6rem;
+            padding: 0.5rem 0.75rem;
             font-size: 0.8rem;
           }
 

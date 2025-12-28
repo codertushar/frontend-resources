@@ -1,12 +1,132 @@
 import { useState, useRef, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { BookOpen, Layers, Map, Mail, Github, Linkedin, LogOut, User, Crown, Sparkles } from 'lucide-react';
+import { BookOpen, Layers, Map, Mail, Github, Linkedin, LogOut, User, Crown, Sparkles, Music, Play, Pause, Volume2, VolumeX, Radio } from 'lucide-react';
 import { XIcon } from './SocialIcons';
 
 import ThemeToggle from './ThemeToggle';
 import NotificationPrompt from './NotificationPrompt';
 import { useAuth } from '../context/AuthContext';
 import { useSubscription } from '../context/SubscriptionContext';
+
+// Lofi Hip Hop Radio - 24/7 chill beats for studying (via Zeno.FM)
+const LOFI_RADIO_URL = 'https://stream.zeno.fm/0r0xa792kwzuv';
+
+// Focus Music Player Component
+const FocusMusicPlayer = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isMobileExpanded, setIsMobileExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const audioRef = useRef(null);
+  const hoverTimeoutRef = useRef(null);
+
+  // Detect mobile
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = isMuted ? 0 : volume;
+    }
+  }, [volume, isMuted]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    };
+  }, []);
+
+  const handleMouseEnter = () => {
+    if (!isMobile) {
+      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+      setIsHovered(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (!isMobile) {
+      hoverTimeoutRef.current = setTimeout(() => setIsHovered(false), 300);
+    }
+  };
+
+  const handleMobileToggle = () => {
+    if (isMobile) {
+      setIsMobileExpanded(!isMobileExpanded);
+    }
+  };
+
+  const isExpanded = isMobile ? isMobileExpanded : isHovered;
+
+  const togglePlay = async () => {
+    if (audioRef.current) {
+      try {
+        if (isPlaying) {
+          audioRef.current.pause();
+          setIsPlaying(false);
+        } else {
+          await audioRef.current.play();
+          setIsPlaying(true);
+        }
+      } catch (error) {
+        console.error('Audio playback error:', error);
+        setIsPlaying(false);
+      }
+    }
+  };
+
+  return (
+    <div
+      className={`focus-music-player ${isExpanded ? 'expanded' : ''} ${isPlaying ? 'playing' : ''}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <audio ref={audioRef} src={LOFI_RADIO_URL} />
+
+      <button
+        className="music-toggle-btn"
+        onClick={handleMobileToggle}
+        title="Lofi Radio"
+      >
+        {isPlaying ? <Radio size={18} className="pulse-icon" /> : <Music size={18} />}
+      </button>
+
+      <div className={`music-controls ${isExpanded ? 'visible' : ''}`}>
+        <span className="track-name">Lofi Radio</span>
+
+        <div className="music-buttons">
+          <button onClick={togglePlay} className="control-btn play-btn" title={isPlaying ? 'Pause' : 'Play'}>
+            {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+          </button>
+          <button
+            onClick={() => setIsMuted(!isMuted)}
+            className="control-btn"
+            title={isMuted ? 'Unmute' : 'Mute'}
+          >
+            {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+          </button>
+        </div>
+
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.1"
+          value={volume}
+          onChange={(e) => setVolume(parseFloat(e.target.value))}
+          className="volume-slider"
+          title="Volume"
+        />
+      </div>
+    </div>
+  );
+};
 
 const Logo = ({ className }) => (
   <svg
@@ -167,6 +287,7 @@ const Layout = ({ children }) => {
       </footer>
 
       <NotificationPrompt />
+      <FocusMusicPlayer />
 
       <style>{`
         .navbar {
@@ -540,6 +661,208 @@ const Layout = ({ children }) => {
 
           .social-links {
             gap: 1rem;
+          }
+        }
+
+        /* Focus Music Player */
+        .focus-music-player {
+          position: fixed;
+          bottom: 24px;
+          right: 24px;
+          z-index: 999;
+          display: flex;
+          align-items: center;
+          background: var(--surface-color);
+          border: 1px solid var(--border-color);
+          border-radius: 28px;
+          padding: 8px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+          transition: border-radius 0.3s ease,
+                      padding 0.3s ease,
+                      gap 0.3s ease,
+                      box-shadow 0.3s ease,
+                      border-color 0.3s ease;
+        }
+
+        .focus-music-player.playing {
+          border-color: rgba(139, 92, 246, 0.4);
+          box-shadow: 0 4px 24px rgba(139, 92, 246, 0.2);
+        }
+
+        .focus-music-player.expanded {
+          border-radius: 16px;
+          padding: 10px 14px;
+          gap: 12px;
+        }
+
+        .music-toggle-btn {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          border: none;
+          background: linear-gradient(135deg, var(--primary), #a78bfa);
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: box-shadow 0.3s ease;
+          flex-shrink: 0;
+        }
+
+        .music-toggle-btn:hover {
+          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+
+        .pulse-icon {
+          animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.6; }
+        }
+
+        .music-controls {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          max-width: 0;
+          opacity: 0;
+          overflow: hidden;
+          transition: max-width 0.25s ease-out,
+                      opacity 0.2s ease-out;
+          pointer-events: none;
+        }
+
+        .music-controls.visible {
+          max-width: 320px;
+          opacity: 1;
+          pointer-events: auto;
+          transition: max-width 0.3s ease-out,
+                      opacity 0.25s ease-in 0.05s;
+        }
+
+        .track-name {
+          font-size: 0.85rem;
+          font-weight: 500;
+          color: var(--text-main);
+          white-space: nowrap;
+          min-width: 85px;
+        }
+
+        .music-buttons {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+
+        .control-btn {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          border: 1px solid var(--border-color);
+          background: var(--surface-hover);
+          color: var(--text-main);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .control-btn:hover {
+          background: var(--primary);
+          border-color: var(--primary);
+          color: white;
+          transform: scale(1.1);
+        }
+
+        .control-btn.play-btn {
+          background: linear-gradient(135deg, var(--primary), #a78bfa);
+          border-color: transparent;
+          color: white;
+        }
+
+        .control-btn.play-btn:hover {
+          transform: scale(1.15);
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+        }
+
+        .volume-slider {
+          width: 50px;
+          height: 4px;
+          -webkit-appearance: none;
+          appearance: none;
+          background: var(--border-color);
+          border-radius: 2px;
+          outline: none;
+          cursor: pointer;
+          transition: width 0.3s ease;
+        }
+
+        .focus-music-player.expanded .volume-slider:hover {
+          width: 70px;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: var(--primary);
+          cursor: pointer;
+          transition: transform 0.2s;
+        }
+
+        .volume-slider::-webkit-slider-thumb:hover {
+          transform: scale(1.3);
+        }
+
+        .volume-slider::-moz-range-thumb {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: var(--primary);
+          cursor: pointer;
+          border: none;
+        }
+
+        @media (max-width: 640px) {
+          .focus-music-player {
+            bottom: 16px;
+            right: 16px;
+          }
+
+          .focus-music-player.expanded {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 12px;
+            border-radius: 16px;
+            gap: 10px;
+          }
+
+          .music-controls.visible {
+            max-width: 100%;
+            flex-direction: column;
+            gap: 10px;
+          }
+
+          .track-name {
+            text-align: center;
+          }
+
+          .music-buttons {
+            justify-content: center;
+          }
+
+          .volume-slider {
+            width: 100%;
+          }
+
+          .focus-music-player.expanded .volume-slider:hover {
+            width: 100%;
           }
         }
       `}</style>

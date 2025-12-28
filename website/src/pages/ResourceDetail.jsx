@@ -397,7 +397,7 @@ const ResourceDetail = () => {
       </div>
 
       <div className={`article-content glass-panel ${showPaywall ? 'has-paywall' : ''}`}>
-        {loading || premiumContentLoading ? (
+                {loading || premiumContentLoading ? (
           <div className="loading">Loading content...</div>
         ) : (
           <>
@@ -883,8 +883,10 @@ const ResourceDetail = () => {
           overflow: visible;
           max-width: 100%;
           position: relative;
+          isolation: isolate;
         }
 
+        
         .article-content.has-paywall {
           padding-bottom: 1rem;
         }

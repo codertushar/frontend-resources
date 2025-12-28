@@ -13,13 +13,15 @@ const Pricing = () => {
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponError, setCouponError] = useState(null);
   const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
-  const [basePrice, setBasePrice] = useState(200000); // Default ₹2000
+  const [basePrice, setBasePrice] = useState(null);
+  const [isPriceLoading, setIsPriceLoading] = useState(true);
 
   const { isSignedIn, isLoaded, signInWithGoogle } = useAuth();
   const { isPremium, validateCoupon, initiatePayment, refreshSubscription } = useSubscription();
 
-  // Fetch base price from settings
+  // Fetch base price from settings - price should always come from backend
   useEffect(() => {
+    setIsPriceLoading(true);
     fetch('/api/settings')
       .then(res => res.json())
       .then(data => {
@@ -27,7 +29,8 @@ const Pricing = () => {
           setBasePrice(data.basePrice);
         }
       })
-      .catch(err => console.error('Error fetching settings:', err));
+      .catch(err => console.error('Error fetching settings:', err))
+      .finally(() => setIsPriceLoading(false));
   }, []);
 
   // Calculate stats
@@ -234,7 +237,11 @@ const Pricing = () => {
           <div className="card-badge">Best Value</div>
 
           <div className="price-section">
-            {appliedCoupon ? (
+            {isPriceLoading ? (
+              <div className="price-loading">
+                <div className="price-skeleton" />
+              </div>
+            ) : appliedCoupon ? (
               <>
                 <div className="price original-price">
                   <span className="currency">₹</span>
@@ -313,7 +320,7 @@ const Pricing = () => {
             <button
               className="purchase-btn"
               onClick={handlePurchase}
-              disabled={isProcessing}
+              disabled={isProcessing || isPriceLoading || !basePrice}
             >
               {isProcessing ? (
                 <>
@@ -451,6 +458,27 @@ const Pricing = () => {
 
         .price-section {
           margin-bottom: 2rem;
+        }
+
+        .price-loading {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 80px;
+        }
+
+        .price-skeleton {
+          width: 120px;
+          height: 48px;
+          background: linear-gradient(90deg, var(--surface-hover) 25%, var(--surface-color) 50%, var(--surface-hover) 75%);
+          background-size: 200% 100%;
+          animation: shimmer 1.5s infinite;
+          border-radius: 8px;
+        }
+
+        @keyframes shimmer {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
         }
 
         .price {
