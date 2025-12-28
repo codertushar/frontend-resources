@@ -5,23 +5,22 @@ export const config = {
   runtime: 'nodejs',
 };
 
-const DEFAULT_BASE_PRICE = 200000; // ₹2000 in paise (fallback)
-
 async function getBasePrice(supabase) {
-  try {
-    const { data: setting } = await supabase
-      .from('settings')
-      .select('value')
-      .eq('key', 'base_price')
-      .single();
+  const { data: setting, error } = await supabase
+    .from('settings')
+    .select('value')
+    .eq('key', 'base_price')
+    .single();
 
-    if (setting?.value) {
-      return parseInt(setting.value, 10);
-    }
-  } catch (error) {
-    console.error('Error fetching base price:', error);
+  if (error) {
+    throw new Error('Failed to fetch base_price from database');
   }
-  return DEFAULT_BASE_PRICE;
+
+  if (!setting?.value) {
+    throw new Error('base_price not found in database');
+  }
+
+  return parseInt(setting.value, 10);
 }
 
 export default async function handler(req, res) {

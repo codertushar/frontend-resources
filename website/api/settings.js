@@ -4,9 +4,8 @@ export const config = {
   runtime: 'nodejs',
 };
 
-// Default settings values
+// Default settings values (base_price must come from database)
 const DEFAULTS = {
-  base_price: '200000', // ₹2000 in paise
   currency: 'INR',
 };
 
@@ -19,11 +18,8 @@ export default async function handler(req, res) {
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !supabaseServiceKey) {
-    // Return defaults if Supabase not configured
-    return res.status(200).json({
-      basePrice: parseInt(DEFAULTS.base_price, 10),
-      currency: DEFAULTS.currency,
-    });
+    // Supabase not configured - cannot fetch base_price
+    return res.status(400).json({ error: 'Supabase not configured' });
   }
 
   try {
@@ -36,11 +32,7 @@ export default async function handler(req, res) {
 
     if (error) {
       console.error('Error fetching settings:', error);
-      // Return defaults on error
-      return res.status(200).json({
-        basePrice: parseInt(DEFAULTS.base_price, 10),
-        currency: DEFAULTS.currency,
-      });
+      return res.status(500).json({ error: 'Failed to fetch settings from database' });
     }
 
     // Convert to object with defaults
@@ -55,9 +47,6 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error('Settings error:', error);
-    return res.status(200).json({
-      basePrice: parseInt(DEFAULTS.base_price, 10),
-      currency: DEFAULTS.currency,
-    });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 }

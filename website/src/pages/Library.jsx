@@ -1444,23 +1444,23 @@ const Library = () => {
 
         .categories {
           display: flex;
-          gap: 0.6rem;
+          gap: 0.8rem;
           flex-wrap: wrap;
         }
 
         .category-pill {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          background: var(--surface-hover, rgba(255,255,255,0.05));
+          gap: 0.6rem;
+          background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(236, 72, 153, 0.05));
           border: 1.5px solid var(--border-color);
           color: var(--text-muted);
-          padding: 0.55rem 1.1rem;
-          border-radius: 99px;
+          padding: 0.7rem 1.4rem;
+          border-radius: 16px;
           cursor: pointer;
-          font-size: 0.85rem;
+          font-size: 0.9rem;
           font-weight: 500;
-          transition: all 0.25s ease;
+          transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
           white-space: nowrap;
           position: relative;
           overflow: hidden;
@@ -1468,8 +1468,10 @@ const Library = () => {
 
         .category-pill .category-icon {
           color: var(--cat-color, var(--text-muted));
-          transition: all 0.25s ease;
+          transition: all 0.3s ease;
           flex-shrink: 0;
+          width: 20px;
+          height: 20px;
         }
 
         .category-pill::before {
@@ -1478,14 +1480,14 @@ const Library = () => {
           inset: 0;
           background: linear-gradient(135deg, color-mix(in srgb, var(--cat-color) 15%, transparent), color-mix(in srgb, var(--cat-color) 5%, transparent));
           opacity: 0;
-          transition: opacity 0.25s ease;
+          transition: opacity 0.3s ease;
         }
 
         .category-pill:hover {
           color: var(--text-main);
-          border-color: color-mix(in srgb, var(--cat-color) 50%, transparent);
-          transform: translateY(-2px);
-          box-shadow: 0 4px 16px color-mix(in srgb, var(--cat-color) 25%, transparent);
+          border-color: var(--cat-color, var(--primary));
+          transform: translateY(-3px) scale(1.05);
+          box-shadow: 0 8px 24px color-mix(in srgb, var(--cat-color) 30%, transparent);
         }
 
         .category-pill:hover::before {
@@ -1493,7 +1495,8 @@ const Library = () => {
         }
 
         .category-pill:hover .category-icon {
-          transform: scale(1.1);
+          transform: scale(1.2) rotate(5deg);
+          color: var(--cat-color);
         }
 
         .category-pill.active {
@@ -1501,12 +1504,13 @@ const Library = () => {
           border-color: transparent;
           color: white;
           font-weight: 600;
-          box-shadow: 0 4px 20px color-mix(in srgb, var(--cat-color) 50%, transparent);
-          transform: translateY(-2px);
+          box-shadow: 0 8px 28px color-mix(in srgb, var(--cat-color) 50%, transparent);
+          transform: translateY(-4px) scale(1.08);
         }
 
         .category-pill.active .category-icon {
           color: white;
+          transform: scale(1.25);
         }
 
         .category-pill.active::before {

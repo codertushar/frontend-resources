@@ -196,23 +196,47 @@ const cache = new Map(); // Create a new Map
 
 ## 💎 Premium Content Strategy
 
-The website uses a freemium model with ~40-50% premium content. The premium status is automatically determined by `generate-content.js` based on these rules:
+The website uses a freemium model with **~50% free, ~50% premium** content. The premium status is automatically determined by `generate-content.js` based on these rules:
 
-### Premium Content Rules
+### Balanced Premium Strategy
 
-| Rule | Description | Premium? |
-|------|-------------|----------|
-| **Hard difficulty** | All articles with `difficulty: hard` | ✅ Yes |
-| **System Design** | All system-design category content | ✅ Yes (100%) |
-| **Machine Coding** | All machine-coding category content | ✅ Yes (100%) |
-| **AI** | All AI category content | ✅ Yes (100%) |
-| **DSA** | Medium and hard difficulty | ✅ Yes (except easy) |
-| **Advanced utilities** | debounce, throttle, deep_clone, map_limit, sequential promises, prototype | ✅ Yes |
-| **Browser/rendering** | Articles about browser internals, rendering | ✅ Yes |
-| **Easy difficulty** | All easy articles | ❌ No (always free) |
-| **Basic polyfills** | Simple array methods, basic concepts | ❌ No |
-| **Design patterns** | General design patterns | ❌ No |
-| **Intro guides** | Articles with "guide", "30-day", "introduction" in name | ❌ No |
+**Core Principle**: Each category/condition has at least 1 free article for discoverability and SEO.
+
+| Category | Rule | Distribution |
+|----------|------|--------------|
+| **Easy difficulty** | Always FREE | 100% free |
+| **Medium difficulty** | 50% free, 50% premium | Alternating (SEO + popular utilities) |
+| **Hard difficulty** | First 1-2 articles FREE, rest premium | ~20% free, ~80% premium |
+| **System Design** | First 1-2 articles FREE, rest premium | ~20% free, ~80% premium |
+| **Machine Coding** | First 1-2 articles FREE, rest premium | ~20% free, ~80% premium |
+| **AI** | First 1-2 articles FREE, rest premium | ~20% free, ~80% premium |
+| **Browser/Rendering** | Premium (advanced topics) | ~90% premium |
+
+### What's Premium (Paywalled)
+
+- Advanced utilities: `debounce`, `throttle`, `deep_clone`, `map_limit`, `sequential`
+- Hard difficulty articles (except first 2 per category)
+- System Design (except intro articles)
+- Machine Coding (except intro articles)
+- AI (except intro articles)
+- Advanced browser/rendering topics
+
+### What's Always Free
+
+- Easy difficulty articles (100% free)
+- Intro/guide articles (`30-day`, `guide`, `introduction`, `getting-started`)
+- Popular design patterns: `factory`, `singleton`, `observer`, `module`
+- Fundamental concepts: `prototype`, `event_emitter`
+- Observable array pattern (popular utility)
+- Browser/rendering basics (non-advanced)
+
+### Medium Difficulty Articles (50/50 Split)
+
+For better SEO and user acquisition, 50% of medium difficulty articles are kept free. This is achieved by:
+- First article in each category/medium: FREE
+- Second article in each category/medium: PREMIUM
+- Third article in each category/medium: FREE
+- And so on (alternating pattern)
 
 ### Overriding Premium Status
 
@@ -228,8 +252,8 @@ premium: true  # Force this article to be premium
 
 ### Current Distribution Target
 
-- **Free**: ~50-60% (for SEO, user acquisition, demonstrating value)
-- **Premium**: ~40-50% (monetization, high-value interview prep content)
+- **Free**: ~50% (for SEO, user acquisition, demonstrating value)
+- **Premium**: ~50% (monetization, high-value interview prep content)
 
 ### Running Content Generation
 

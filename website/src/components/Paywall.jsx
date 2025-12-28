@@ -7,7 +7,7 @@ import { useSubscription } from '../context/SubscriptionContext';
 const Paywall = ({ articleTitle }) => {
   const { signInWithGoogle } = useAuth();
   const { isSignedIn } = useSubscription();
-  const [basePrice, setBasePrice] = useState(200000);
+  const [basePrice, setBasePrice] = useState(null);
 
   useEffect(() => {
     fetch('/api/settings')

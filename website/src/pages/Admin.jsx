@@ -20,7 +20,7 @@ const Admin = () => {
   const [couponMessage, setCouponMessage] = useState(null);
 
   // Settings state
-  const [settings, setSettings] = useState({ base_price: '200000' });
+  const [settings, setSettings] = useState({ base_price: '' });
   const [settingsLoading, setSettingsLoading] = useState(false);
   const [settingsMessage, setSettingsMessage] = useState(null);
 

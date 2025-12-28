@@ -17,17 +17,23 @@ const PREMIUM_CONTENT_JSON = path.join(WEBSITE_ROOT, 'src', 'data', 'premium-con
 const CONTENT_DIRS = ['js', 'dsa', 'ai', 'general', 'machine-coding', 'system-design'];
 
 // Premium content configuration
-// Strategy: ~40-50% premium, high-value content behind paywall
-// - All hard difficulty = premium
-// - System Design, Machine Coding, AI = 100% premium
-// - DSA = mostly premium (except intro guides)
-// - JS/General = hard difficulty + specific advanced utilities
+// Strategy: ~50% premium, ~50% free with balanced conditions
+// - Each category has at least some free content
+// - Hard difficulty: mostly premium, but first 1-2 articles free
+// - Medium difficulty: 50% premium, 50% free (popular/useful ones stay free)
+// - Easy difficulty: always free
+// - System Design: 80% premium (1-2 free intro articles)
+// - Machine Coding: 80% premium (1-2 free intro articles)
+// - AI: 80% premium (1-2 free intro articles)
+// - DSA: 60% premium (easy all free, some medium free)
+// - JS/General: 40% premium (utilities/advanced concepts premium)
 const PREMIUM_CONFIG = {
-    // Categories that are fully premium (100%)
-    fullyPremiumCategories: ['system-design', 'machine-coding', 'ai'],
-    // Categories that are mostly premium (except easy intro content)
-    mostlyPremiumCategories: ['dsa'],
-    // Specific files/topics that should be premium regardless of difficulty
+    // Categories that are mostly premium but not 100%
+    mostlyPremiumCategories: ['system-design', 'machine-coding', 'ai'],
+    // Categories that are balanced (some premium, some free)
+    balancedCategories: ['dsa', 'js', 'general'],
+    // Specific files/topics that should be premium (advanced utilities)
+    // These are moved to premium to maintain value for paying users
     premiumTopics: [
         'debounce',
         'throttle',
@@ -36,60 +42,93 @@ const PREMIUM_CONFIG = {
         'map_limit',
         'maplimit',
         'fire_on_push',
-        'observable_array',
         'sequential',
-        'prototype',  // prototype inheritance article
     ],
-    // Files that should always be FREE (intro/guide content)
+    // Specific files/topics that should ALWAYS be free (intro/guide content, popular utilities)
+    // Popular utilities and fundamental concepts should remain free for SEO and user acquisition
     freeTopics: [
         '30-day',
         'guide',
         'introduction',
         'getting-started',
+        'prototype',  // Prototype is fundamental, keep free
+        'observable_array',  // Popular pattern, keep free
+        'event_emitter',  // Common pattern, keep free
+        'observer',  // Design pattern, keep free
+        'factory',  // Design pattern, keep free
+        'singleton',  // Design pattern, keep free
+        'module',  // Design pattern, keep free
     ],
 };
 
-function isPremiumContent(category, difficulty, subcategory, filePath = '') {
+function isPremiumContent(category, difficulty, subcategory, filePath = '', contentIndex = 0) {
     const filePathLower = filePath.toLowerCase();
     const fileName = filePathLower.split('/').pop().replace('.md', '');
 
-    // Rule 0: Check if explicitly marked as free (intro guides)
+    // Rule 0: Check if explicitly marked as free (intro guides and popular free topics)
     for (const topic of PREMIUM_CONFIG.freeTopics) {
         if (filePathLower.includes(topic)) {
             return false;
         }
     }
 
-    // Rule 1: All hard difficulty = premium
-    if (difficulty === 'hard') {
-        return true;
+    // Rule 1: Easy difficulty = always free
+    if (difficulty === 'easy') {
+        return false;
     }
 
-    // Rule 2: Fully premium categories (system-design, machine-coding, ai)
-    if (PREMIUM_CONFIG.fullyPremiumCategories.includes(category)) {
-        return true;
-    }
-
-    // Rule 3: DSA - mostly premium except easy difficulty
-    if (PREMIUM_CONFIG.mostlyPremiumCategories.includes(category)) {
-        return difficulty !== 'easy';
-    }
-
-    // Rule 4: Check specific premium topics (advanced utilities)
+    // Rule 2: Check specific premium topics (advanced utilities)
     for (const topic of PREMIUM_CONFIG.premiumTopics) {
         if (fileName.includes(topic) || filePathLower.includes(topic)) {
             return true;
         }
     }
 
-    // Rule 5: General - browser/rendering topics = premium
-    if (category === 'general') {
-        if (filePathLower.includes('browser') || filePathLower.includes('rendering') || filePathLower.includes('interview')) {
-            return true;
+    // Rule 3: Hard difficulty = mostly premium, but keep first 2-3 accessible for each category
+    if (difficulty === 'hard') {
+        // Keep first 1-2 hard articles free per category for accessibility
+        // This is determined by contentIndex (position in list)
+        return contentIndex > 1; // First 2 (indices 0,1) are free, rest are premium
+    }
+
+    // Rule 4: System Design, Machine Coding, AI - mostly premium (~80%)
+    // Keep first 1-2 articles free per category
+    if (PREMIUM_CONFIG.mostlyPremiumCategories.includes(category)) {
+        return contentIndex > 1; // First 2 articles free, rest premium
+    }
+
+    // Rule 5: DSA - balanced (easy free, ~60% of medium premium, hard mostly premium)
+    if (category === 'dsa') {
+        if (difficulty === 'medium') {
+            // 50% of medium articles should be free for SEO
+            // Use contentIndex to alternate: even indices free, odd premium
+            return contentIndex % 2 === 1;
+        }
+        if (difficulty === 'hard') {
+            return contentIndex > 0; // First hard article per difficulty free
         }
     }
 
-    // Default: free
+    // Rule 6: JS and General categories - balanced
+    if (['js', 'general'].includes(category)) {
+        if (difficulty === 'medium') {
+            // 50% of medium articles free for SEO and popular utility retention
+            return contentIndex % 2 === 1;
+        }
+        if (difficulty === 'hard') {
+            return contentIndex > 0; // First hard article free
+        }
+    }
+
+    // Rule 7: Browser/rendering advanced topics = premium
+    if (filePathLower.includes('browser') && difficulty !== 'easy') {
+        return true;
+    }
+    if (filePathLower.includes('rendering') && difficulty !== 'easy') {
+        return true;
+    }
+
+    // Default: free (bias towards free for unknown cases)
     return false;
 }
 
@@ -604,7 +643,7 @@ function extractTitleAndContent(content, filename) {
     return { title, processedContent, metadata };
 }
 
-function processDirectory(dirPath, relativePath, resources, premiumFullContent = {}) {
+function processDirectory(dirPath, relativePath, resources, premiumFullContent = {}, categoryDifficultyIndex = {}) {
     const items = fs.readdirSync(dirPath, { withFileTypes: true });
 
     for (const item of items) {
@@ -613,7 +652,7 @@ function processDirectory(dirPath, relativePath, resources, premiumFullContent =
 
         if (item.isDirectory()) {
             if (item.name === 'node_modules' || item.name === '.git') continue;
-            processDirectory(itemPath, itemRelativePath, resources, premiumFullContent);
+            processDirectory(itemPath, itemRelativePath, resources, premiumFullContent, categoryDifficultyIndex);
         } else if (item.isFile() && item.name.endsWith('.md')) {
             // Ignore README/AGENTS at root if strictly looking for resources,
             // but maybe we want them? Let's stick to CONTENT_DIRS for now.
@@ -641,10 +680,15 @@ function processDirectory(dirPath, relativePath, resources, premiumFullContent =
                 ? parseInt(metadata.order, 10)
                 : normalizedScore;
 
+            // Track index of articles within each category/difficulty combination
+            const indexKey = `${category}:${difficulty}`;
+            categoryDifficultyIndex[indexKey] = (categoryDifficultyIndex[indexKey] || 0) + 1;
+            const contentIndex = categoryDifficultyIndex[indexKey] - 1; // 0-based index
+
             // Determine if content is premium
             const premium = metadata.premium !== undefined
                 ? metadata.premium === 'true' || metadata.premium === true
-                : isPremiumContent(category, difficulty, subcategory, itemRelativePath);
+                : isPremiumContent(category, difficulty, subcategory, itemRelativePath, contentIndex);
 
             // Calculate read time from full content (words / 200 wpm)
             const wordCount = rawContent.split(/\s+/).filter(w => w.length > 0).length;
@@ -705,11 +749,12 @@ function processDirectory(dirPath, relativePath, resources, premiumFullContent =
 function generateContent() {
     const resources = [];
     const premiumFullContent = {}; // Map of id -> full content for premium articles
+    const categoryDifficultyIndex = {}; // Track index within each category/difficulty combo
 
     for (const dir of CONTENT_DIRS) {
         const fullPath = path.join(PROJECT_ROOT, dir);
         if (fs.existsSync(fullPath)) {
-            processDirectory(fullPath, dir, resources, premiumFullContent);
+            processDirectory(fullPath, dir, resources, premiumFullContent, categoryDifficultyIndex);
         }
     }
 

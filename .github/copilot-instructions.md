@@ -113,28 +113,47 @@ const cache = new Map(); // Prevent redundant calculations
 
 ## 💎 Premium Content Strategy
 
-The website uses a freemium model. Premium status is automatically determined by `website/scripts/generate-content.js`:
+The website uses a freemium model with **~50% free, ~50% premium** content. Premium status is automatically determined by `website/scripts/generate-content.js`:
+
+### Balanced Premium Strategy
+
+**Core Principle**: Each category/condition has at least 1 free article for discoverability and SEO.
+
+| Category | Rule | Distribution |
+|----------|------|--------------|
+| **Easy difficulty** | Always FREE | 100% free |
+| **Medium difficulty** | 50% free, 50% premium | Alternating (SEO + popular utilities) |
+| **Hard difficulty** | First 1-2 articles FREE, rest premium | ~20% free, ~80% premium |
+| **System Design** | First 1-2 articles FREE, rest premium | ~20% free, ~80% premium |
+| **Machine Coding** | First 1-2 articles FREE, rest premium | ~20% free, ~80% premium |
+| **AI** | First 1-2 articles FREE, rest premium | ~20% free, ~80% premium |
+| **Browser/Rendering** | Premium (advanced topics) | ~90% premium |
 
 ### What's Premium (Paywalled)
 
-| Category | Rule |
-|----------|------|
-| **Hard difficulty** | All hard articles are premium |
-| **System Design** | 100% premium |
-| **Machine Coding** | 100% premium |
-| **AI** | 100% premium |
-| **DSA** | Premium except easy difficulty |
-| **Advanced utilities** | debounce, throttle, deep_clone, map_limit, sequential, prototype |
-| **Browser/rendering** | Browser internals, rendering pipeline |
+- Advanced utilities: `debounce`, `throttle`, `deep_clone`, `map_limit`, `sequential`
+- Hard difficulty articles (except first 2 per category)
+- System Design (except intro articles)
+- Machine Coding (except intro articles)
+- AI (except intro articles)
+- Advanced browser/rendering topics
 
-### What's Free
+### What's Always Free
 
-| Category | Rule |
-|----------|------|
-| **Easy difficulty** | Always free |
-| **Basic polyfills** | Simple array methods (filter, map, push, etc.) |
-| **Design patterns** | General patterns (singleton, factory, etc.) |
-| **Intro guides** | Articles with "guide", "30-day", "introduction" |
+- Easy difficulty articles (100% free)
+- Intro/guide articles (`30-day`, `guide`, `introduction`, `getting-started`)
+- Popular design patterns: `factory`, `singleton`, `observer`, `module`
+- Fundamental concepts: `prototype`, `event_emitter`
+- Observable array pattern (popular utility)
+- Browser/rendering basics (non-advanced)
+
+### Medium Difficulty Articles (50/50 Split)
+
+For better SEO and user acquisition, 50% of medium difficulty articles are kept free. This is achieved by:
+- First article in each category/medium: FREE
+- Second article in each category/medium: PREMIUM
+- Third article in each category/medium: FREE
+- And so on (alternating pattern)
 
 ### Override with Frontmatter
 
@@ -154,6 +173,8 @@ Run content generation to update JSON files:
 ```bash
 cd website && node scripts/generate-content.js
 ```
+
+This will automatically recalculate the premium distribution based on the new rules.
 
 ---
 
