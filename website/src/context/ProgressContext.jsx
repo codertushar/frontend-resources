@@ -12,25 +12,35 @@ export const useProgress = () => {
 };
 
 export const ProgressProvider = ({ children }) => {
-  const { user, isSignedIn, isLoaded, supabase } = useAuth();
+  const { user, isSignedIn, isLoaded, supabase, session } = useAuth();
   const [readArticles, setReadArticles] = useState(new Set());
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Load progress from Supabase (only when signed in)
+  // Load progress from Supabase (only when signed in AND session is ready)
   useEffect(() => {
     if (!isLoaded) return;
 
     const loadProgress = async () => {
-      console.log('[ProgressContext] loadProgress called', { isSignedIn, userId: user?.id, hasSupabase: !!supabase });
-      if (isSignedIn && user && supabase) {
+      console.log('[ProgressContext] loadProgress called', { isSignedIn, userId: user?.id, hasSupabase: !!supabase, hasSession: !!session });
+      if (isSignedIn && user && supabase && session) {
         try {
+          // Verify session is valid before fetching
+          const { data: { session: currentSession } } = await supabase.auth.getSession();
+          console.log('[ProgressContext] Current session check:', { hasSession: !!currentSession, userId: currentSession?.user?.id });
+
+          if (!currentSession) {
+            console.warn('[ProgressContext] No valid session, skipping load');
+            setReadArticles(new Set());
+            setIsInitialized(true);
+            return;
+          }
+
           // Load from Supabase user_progress table
           console.log('[ProgressContext] Fetching progress for user:', user.id);
           const { data: progressData, error } = await supabase
             .from('user_progress')
-            .select('article_id', { head: false, count: null })
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false });
+            .select('article_id')
+            .eq('user_id', user.id);
 
           console.log('[ProgressContext] Supabase response:', { progressData, error });
 
@@ -57,7 +67,7 @@ export const ProgressProvider = ({ children }) => {
     };
 
     loadProgress();
-  }, [isLoaded, isSignedIn, user, supabase]);
+  }, [isLoaded, isSignedIn, user, supabase, session]);
 
   const markAsRead = useCallback(async (articleId) => {
     console.log('[ProgressContext] markAsRead called:', articleId);
