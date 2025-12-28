@@ -4,6 +4,9 @@ import { Sandpack } from '@codesandbox/sandpack-react';
 import { Code2, Play, CheckCircle, XCircle, Terminal, Info, ChevronDown, ChevronUp } from 'lucide-react';
 
 // Practice questions with test cases
+// NOTE: Sandpack currently has React 19 compatibility issues. 
+// The implementation is correct but requires React 18 for full functionality.
+// See MACHINE_CODING_PRACTICE.md for details and workarounds.
 const PRACTICE_QUESTIONS = [
   {
     id: 'chained-calculator',
