@@ -179,4 +179,24 @@ delete context[fnKey];
 
 ✅ **Works just like the native `apply` method!**
 
-Would you like a `bind` polyfill next? 🚀
+---
+
+<!-- quiz-start -->
+### Q1: What is the main difference between `call()` and `apply()`?
+- [ ] call() is faster
+- [ ] apply() can change `this`, call() cannot
+- [x] call() takes arguments individually, apply() takes them as an array
+- [ ] apply() returns a new function, call() invokes immediately
+
+### Q2: Why is a `Symbol` used as the function key in the polyfill?
+- [ ] For better performance
+- [x] To avoid property name collisions on the context object
+- [ ] To make the function enumerable
+- [ ] It's required by the JavaScript spec
+
+### Q3: What does `apply()` return?
+- [ ] The context object
+- [ ] A new function
+- [x] The return value of the invoked function
+- [ ] undefined always
+<!-- quiz-end -->

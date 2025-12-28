@@ -183,4 +183,24 @@ p1.greet();
 
 ✅ **Use prototype for shared methods to improve performance.**
 
-Would you like an example of constructor chaining or advanced class patterns? 🚀
+---
+
+<!-- quiz-start -->
+### Q1: What happens if you call a constructor function without the `new` keyword?
+- [ ] It throws a syntax error
+- [x] `this` refers to the global object (or undefined in strict mode)
+- [ ] It automatically creates a new object
+- [ ] The function returns null
+
+### Q2: Why is it better to define methods on the prototype instead of inside the constructor?
+- [ ] Methods on the prototype are faster to execute
+- [ ] It's required by JavaScript specification
+- [x] Methods on the prototype are shared among all instances, saving memory
+- [ ] Methods inside the constructor don't work properly
+
+### Q3: What does the `constructor` property of an object instance reference?
+- [ ] The prototype object
+- [x] The function that created the instance
+- [ ] The parent class
+- [ ] The global object
+<!-- quiz-end -->

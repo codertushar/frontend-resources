@@ -45,3 +45,25 @@ console.log('reversed:', reversed); // Output: ["three", "two", "one"]
 * **Space Complexity** : `O(1)`—no additional memory is used, other than the variables for the pointers.
 
 This method efficiently reverses the array while mimicking the behavior of the native `.reverse()` method in JavaScript.
+
+---
+
+<!-- quiz-start -->
+### Q1: Does `reverse()` modify the original array or return a new one?
+- [x] Modifies the original array in place
+- [ ] Returns a new reversed array
+- [ ] Depends on the array length
+- [ ] Creates a shallow copy first
+
+### Q2: What is the time complexity of the two-pointer reverse algorithm?
+- [ ] O(n^2)
+- [x] O(n)
+- [ ] O(log n)
+- [ ] O(1)
+
+### Q3: What is the space complexity of the in-place reverse polyfill?
+- [x] O(1)
+- [ ] O(n)
+- [ ] O(log n)
+- [ ] O(n^2)
+<!-- quiz-end -->

@@ -1585,3 +1585,25 @@ observer.observe(document.querySelector('.content-section'));
 ---
 
 ## 📋 Summary
+
+---
+
+<!-- quiz-start -->
+### Q1: What is the primary reason CSS is considered render-blocking?
+- [ ] CSS files are always larger than JavaScript files
+- [x] The browser needs all styles before creating the render tree to avoid FOUC
+- [ ] CSS must be downloaded before HTML can be parsed
+- [ ] CSS blocks all network requests
+
+### Q2: Which approach is recommended for optimizing JavaScript render-blocking?
+- [ ] Use `async` for all scripts including the main application bundle
+- [ ] Place all scripts in the `<head>` without any attributes
+- [x] Use `defer` for application code and `async` for non-critical scripts like analytics
+- [ ] Inline all JavaScript to avoid network requests
+
+### Q3: What happens when microtasks (like Promise.then callbacks) are processing in the event loop?
+- [ ] Rendering can occur between each microtask
+- [ ] Microtasks are processed after rendering
+- [x] All microtasks must complete before rendering can occur
+- [ ] Microtasks and rendering happen simultaneously
+<!-- quiz-end -->

@@ -1630,3 +1630,25 @@ Let's go! 🚀💪
 
 **Ready?** See you on Day 1! 🎯
 
+---
+
+<!-- quiz-start -->
+### Q1: According to this guide, how many problems should you realistically solve to be interview-ready for senior frontend roles?
+- [ ] 500+ problems across all difficulties
+- [x] 60-80 curated problems focusing on Easy and Medium
+- [ ] Only 10-15 Hard problems
+- [ ] 200 problems minimum
+
+### Q2: What is the recommended difficulty distribution for the 30-day plan?
+- [x] 70% Easy, 30% Medium, 0% Hard
+- [ ] 50% Easy, 40% Medium, 10% Hard
+- [ ] 100% Medium problems only
+- [ ] 30% Easy, 50% Medium, 20% Hard
+
+### Q3: When you encounter a problem during practice and get stuck for 10 minutes, what does the guide recommend?
+- [ ] Keep trying for at least 30 more minutes
+- [ ] Skip the problem entirely
+- [x] Check the solution - this is learning, not testing
+- [ ] Ask someone else to solve it for you
+<!-- quiz-end -->
+

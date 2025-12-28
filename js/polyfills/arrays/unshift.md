@@ -59,4 +59,26 @@ console.log(array); // Output: [0, 4, 5, 1, 2, 3]
 
 ✔ Preserves element order correctly
 
-🚀 **This implementation is efficient and follows the exact behavior of `Array.prototype.unshift`!** Let me know if you need refinements.**s**
+This implementation is efficient and follows the exact behavior of `Array.prototype.unshift`.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `unshift()` return?
+- [ ] The added elements
+- [ ] The original array
+- [x] The new length of the array
+- [ ] undefined
+
+### Q2: What is the time complexity of `unshift()`?
+- [ ] O(1)
+- [x] O(n)
+- [ ] O(log n)
+- [ ] O(n^2)
+
+### Q3: Where does `unshift()` add the new elements?
+- [x] At the beginning of the array
+- [ ] At the end of the array
+- [ ] At a random position
+- [ ] Sorted into the correct position
+<!-- quiz-end -->

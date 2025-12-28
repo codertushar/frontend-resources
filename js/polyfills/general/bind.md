@@ -564,3 +564,25 @@ Function.prototype.goodBind = function(context) {
 
 - [MDN: Function.prototype.bind()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind)
 - [JavaScript.info: Function binding](https://javascript.info/bind)
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `bind()` return?
+- [ ] The result of calling the function
+- [x] A new function with bound context
+- [ ] undefined
+- [ ] The original function modified
+
+### Q2: What happens when you use `new` with a bound function?
+- [ ] An error is thrown
+- [ ] The bound context is used
+- [x] The bound context is ignored and a new object is created
+- [ ] The function returns undefined
+
+### Q3: What is the effect of calling `bind()` on an arrow function?
+- [ ] Works exactly like regular functions
+- [ ] Throws a TypeError
+- [x] Has no effect since arrow functions don't have their own `this`
+- [ ] Creates a new arrow function
+<!-- quiz-end -->

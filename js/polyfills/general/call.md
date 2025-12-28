@@ -234,4 +234,24 @@ delete context[fnKey];
 
 ✅ **Works just like the native `call` method!**
 
-Would you like a similar breakdown for `apply` or `bind`? 🚀
+---
+
+<!-- quiz-start -->
+### Q1: What does `call()` do?
+- [ ] Creates a new function with bound context
+- [x] Immediately invokes a function with specified `this` and arguments
+- [ ] Returns the arguments as an array
+- [ ] Delays function execution
+
+### Q2: Why is `delete context[fnKey]` necessary in the polyfill?
+- [ ] To improve performance
+- [ ] To prevent memory leaks
+- [x] To clean up the temporary function property from the context object
+- [ ] It's not necessary, just a convention
+
+### Q3: What happens if `context` is `null` or `undefined` in `call()`?
+- [ ] An error is thrown
+- [ ] The function doesn't execute
+- [x] `this` defaults to the global object (globalThis)
+- [ ] `this` becomes null inside the function
+<!-- quiz-end -->

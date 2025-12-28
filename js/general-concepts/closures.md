@@ -1134,3 +1134,30 @@ function CounterFixed() {
 - [MDN: Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures) — Official documentation with examples
 - [JavaScript.info: Closures](https://javascript.info/closure) — In-depth tutorial with visualizations
 - [You Don't Know JS: Scope & Closures](https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/README.md) — Deep dive into JavaScript scoping
+
+---
+
+<!-- quiz-start -->
+### Q1: What will the following code output?
+```javascript
+for (var i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 100);
+}
+```
+- [ ] 0, 1, 2
+- [ ] 0, 0, 0
+- [x] 3, 3, 3
+- [ ] undefined, undefined, undefined
+
+### Q2: What is a closure in JavaScript?
+- [ ] A function that only runs once
+- [ ] A method to close browser windows
+- [x] A function that has access to variables from its outer scope even after the outer function has returned
+- [ ] A way to make variables private using the `private` keyword
+
+### Q3: Which statement best describes why closures are useful for data privacy?
+- [ ] Closures encrypt data automatically
+- [x] Variables in the outer function cannot be accessed directly from outside, only through the returned inner function
+- [ ] Closures prevent variables from being modified
+- [ ] JavaScript automatically hides all closure variables
+<!-- quiz-end -->

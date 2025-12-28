@@ -60,3 +60,25 @@ console.log([NaN].customIncludes(NaN)); // Output: true
 * Supports negative `fromIndex` by adjusting it to count from the end of the array.
 * Iterates through the array and checks for strict equality (`===`) with `searchElement` or if both are `NaN`.
 * Returns a boolean indicating whether `searchElement` is found in the array.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `[NaN].customIncludes(NaN)` return?
+- [x] true
+- [ ] false
+- [ ] undefined
+- [ ] Throws an error
+
+### Q2: How does `includes()` differ from `indexOf()` when dealing with NaN?
+- [ ] They behave the same way
+- [x] includes() correctly finds NaN, indexOf() returns -1
+- [ ] indexOf() finds NaN, includes() returns false
+- [ ] Neither can find NaN
+
+### Q3: What does `[1, 2, 3].customIncludes(2, 2)` return?
+- [ ] true
+- [x] false
+- [ ] 2
+- [ ] 1
+<!-- quiz-end -->

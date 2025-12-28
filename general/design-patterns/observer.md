@@ -248,3 +248,25 @@ events.publish("new-user", "Foo Once Async");
 * JavaScript embraces this pattern heavily through  **DOM events** ,  **custom listeners** , and  **async flows** .
 
 Master this pattern to design  **flexible** ,  **scalable** , and **responsive** systems. 🧠🔄
+
+---
+
+<!-- quiz-start -->
+### Q1: What is the key difference between the Observer Pattern and the Pub/Sub Pattern?
+- [ ] They are exactly the same
+- [x] In Observer, the subject knows observers directly; in Pub/Sub, they are decoupled via an event bus
+- [ ] Pub/Sub only works with async code
+- [ ] Observer cannot have multiple subscribers
+
+### Q2: How can you prevent memory leaks when using the Observer Pattern?
+- [ ] Use more observers
+- [ ] Never unsubscribe
+- [x] Always unsubscribe observers when they are no longer needed
+- [ ] Use global variables for all observers
+
+### Q3: Which JavaScript feature is a natural example of the Observer Pattern in action?
+- [ ] Promises
+- [ ] Closures
+- [x] DOM event listeners (addEventListener)
+- [ ] Template literals
+<!-- quiz-end -->

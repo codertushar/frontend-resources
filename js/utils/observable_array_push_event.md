@@ -149,4 +149,26 @@ This pattern is a foundation for reactive state systems, event-driven logic, or 
 
 ---
 
-Want a React-compatible or Svelte-integrated version? Ask and I’ll tailor one.
+Want a React-compatible or Svelte-integrated version? Ask and I'll tailor one.
+
+---
+
+<!-- quiz-start -->
+### Q1: How does the observable array intercept the `push` method?
+- [ ] By using Object.defineProperty
+- [x] By overriding the push method on the specific array instance
+- [ ] By modifying Array.prototype directly
+- [ ] By using a Proxy on all arrays
+
+### Q2: Why is `Array.prototype.push.apply(this, items)` used in the custom push method?
+- [ ] To make the code shorter
+- [ ] To avoid using the spread operator
+- [x] To call the original push functionality while preserving context
+- [ ] To improve performance
+
+### Q3: What does the `CustomEvent` dispatch include in its detail?
+- [ ] Only the array length
+- [ ] The entire array
+- [x] The added items and the new array length
+- [ ] The timestamp of the push
+<!-- quiz-end -->

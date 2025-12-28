@@ -84,6 +84,38 @@ Brief one-liner explaining what this is.
 - Related concepts worth exploring
 - Links to other resources
 
+### 8. **Quick Quiz (Required)**
+Every article MUST include a quick quiz at the end to test reader understanding. Add 2-3 multiple choice questions using this format:
+
+```markdown
+<!-- quiz-start -->
+### Q1: Your question here?
+- [ ] Wrong answer option
+- [x] Correct answer (mark with x)
+- [ ] Another wrong option
+- [ ] Yet another option
+
+### Q2: Second question?
+- [ ] Option A
+- [x] Option B (correct)
+- [ ] Option C
+
+### Q3: Third question?
+- [x] Correct answer
+- [ ] Wrong answer
+- [ ] Another wrong answer
+<!-- quiz-end -->
+```
+
+**Quiz Guidelines:**
+- Include 2-3 questions per article
+- Questions should test key concepts from the article
+- Each question needs 3-4 options with exactly ONE correct answer marked with `[x]`
+- Mark wrong answers with `[ ]`
+- Questions should be practical, not trivial
+- Cover the most important takeaways
+- Place quiz at the very end of the article
+
 ---
 
 ## 💻 Code Style & Conventions
@@ -514,52 +546,14 @@ Explanation.
 
 ---
 
-## 🎓 Summary
-
-AI agents working with **frontend-resources** should:
-
-1. **Understand the purpose**: Educational resource for JavaScript, DSA, and frontend development
-2. **Follow the structure**: Consistent markdown format with 7-step content outline
-3. **Maintain code quality**: Modern ES6+, error handling, clear comments
-4. **Respect conventions**: snake_case naming, emoji prefixes, proper organization
-5. **Ensure completeness**: Every resource should be production-ready with examples, limitations, and summaries
-6. **Build connections**: Cross-reference related topics
-7. **Stay consistent**: Match the style and depth of existing resources
-
-By adhering to these guidelines, AI agents can effectively contribute to building a high-quality, maintainable knowledge base that benefits all developers learning frontend concepts.
-
----
-
-## 🚀 Next Steps for Agents
-
-When starting work on this repository:
-
-1. Read the main [README.md](./README.md) for project overview
-2. Review this `AGENTS.md` document for comprehensive guidelines and LLM integration patterns
-3. Examine 2-3 existing resources in the target category to understand style and depth
-4. Follow the structure and style of existing resources
-5. Use the content review checklist before considering work complete
-6. Reference the emoji guidelines and code style conventions throughout your contributions
-
----
-
 ## 📝 Interview-Focused Article Generation Prompt
 
-When generating educational articles for interview preparation, use the following comprehensive prompt to ensure high-quality, interview-worthy content:
+When generating educational articles for interview preparation, use the following comprehensive structure and guidelines:
 
----
-
-### System Prompt for Article Generation
-
-You are an expert technical writer creating interview preparation content for frontend developers. Enhance the following article to make it worthy of praise for people preparing for interviews and learning concepts in depth.
-
-#### Requirements
-
-##### Structure
-Transform the article to follow this exact structure:
+### Article Structure (14 Sections)
 
 1. **Title with Emoji** - Descriptive title
-2. **Interview Importance Badge** - Add this line after title:
+2. **Interview Importance Badge** - Add after title:
    > **Interview Importance:** 🔴 Critical / 🟡 Important / 🟢 Good-to-know — [One line explaining why this matters in interviews]
 
 3. **Section 1️⃣ What is X?**
@@ -622,13 +616,13 @@ Transform the article to follow this exact structure:
 14. **📚 Further Reading**
     - 2-3 authoritative links (MDN, official docs)
 
-##### Style Guidelines
+### Style Guidelines
 
 - Use GitHub-flavored markdown
 - Use emoji headers (1️⃣, 2️⃣, etc.) for main sections
 - Use tables for comparisons and structured data
 - Use code blocks with `javascript` syntax highlighting
-- Use ASCII diagrams for visual concepts like:
+- Use ASCII diagrams for visual concepts:
 ```
 ┌─────────────┐
 │    Box      │
@@ -643,7 +637,7 @@ Transform the article to follow this exact structure:
 - Keep explanations concise but thorough
 - Focus on the "WHAT, WHY, HOW" framework
 
-##### Dry Run Format Example
+### Dry Run Format Example
 ```
 Step 1: functionCall(args)
 ─────────────────────────────────────────────────────────
@@ -658,7 +652,7 @@ Step 2: Next operation
   ...
 ```
 
-##### Content Quality Requirements
+### Content Quality Requirements
 
 1. **Depth over breadth** - Explain concepts thoroughly
 2. **Interview-focused** - Include what interviewers actually ask
@@ -666,12 +660,6 @@ Step 2: Next operation
 4. **Edge cases** - Cover what most tutorials skip
 5. **Memory aids** - Include mnemonics or memorable analogies
 6. **No fluff** - Every line should add value
-
----
-
-#### Usage
-
-When asked to generate or enhance an article, apply all the guidelines above. The goal is to create comprehensive content that someone reading it would feel confident explaining and implementing the concept in an interview.
 
 ---
 

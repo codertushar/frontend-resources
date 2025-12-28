@@ -62,3 +62,25 @@ In this example, `findLast` finds the last even number (4) in the array.
 - If the array is empty, it returns `undefined`.
   
 This implementation closely mimics the behavior of the modern `findLast` method that was introduced in newer versions of JavaScript.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `[1, 2, 3, 4, 5].findLast(num => num % 2 === 0)` return?
+- [ ] 2
+- [x] 4
+- [ ] [2, 4]
+- [ ] 3
+
+### Q2: How does `findLast()` differ from `find()`?
+- [ ] findLast() returns all matching elements
+- [ ] findLast() is slower
+- [x] findLast() iterates from the end of the array
+- [ ] findLast() returns the index instead of the element
+
+### Q3: What does `findLast()` return when no element matches?
+- [ ] -1
+- [ ] null
+- [ ] The last element of the array
+- [x] undefined
+<!-- quiz-end -->

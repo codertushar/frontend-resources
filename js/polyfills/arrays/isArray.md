@@ -37,3 +37,25 @@ function customIsArray(value) {
 
 * **Returns `true` for arrays** : Works for empty arrays, populated arrays, arrays created with the `Array` constructor, and even `Array.prototype`.
 * **Returns `false` for non-arrays** : Includes `undefined`, `null`, objects, numbers, strings, booleans, and array-like objects such as `TypedArrays`.
+
+---
+
+<!-- quiz-start -->
+### Q1: Why is `Object.prototype.toString.call()` used instead of `typeof`?
+- [ ] It's faster
+- [ ] typeof works fine for arrays
+- [x] typeof returns "object" for arrays, which is not specific enough
+- [ ] It handles null values better
+
+### Q2: What does `customIsArray({ length: 3 })` return?
+- [ ] true
+- [x] false
+- [ ] undefined
+- [ ] Throws an error
+
+### Q3: What string does `Object.prototype.toString.call([])` return?
+- [ ] "[object Object]"
+- [x] "[object Array]"
+- [ ] "Array"
+- [ ] "[]"
+<!-- quiz-end -->

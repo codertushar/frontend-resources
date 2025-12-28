@@ -370,5 +370,27 @@ const CircleFactory = (() => {
 
 ## 📚 Final Tip
 
-Design patterns are best learned through **real coding experience**. Keep solving problems, and you’ll begin to recognize patterns as **intuitive solutions**, not abstract theory.
+Design patterns are best learned through **real coding experience**. Keep solving problems, and you'll begin to recognize patterns as **intuitive solutions**, not abstract theory.
+
+---
+
+<!-- quiz-start -->
+### Q1: Which pattern category would you choose for creating objects?
+- [x] Creational (Factory, Singleton, Builder)
+- [ ] Structural (Module, Adapter, Decorator)
+- [ ] Behavioral (Observer, Strategy, Command)
+- [ ] Functional patterns
+
+### Q2: If you need to swap logic or algorithms dynamically at runtime, which pattern should you use?
+- [ ] Singleton
+- [ ] Factory
+- [x] Strategy
+- [ ] Builder
+
+### Q3: Which pattern is best for simplifying access to a complex system with multiple subsystems?
+- [ ] Adapter
+- [ ] Decorator
+- [x] Facade
+- [ ] Proxy
+<!-- quiz-end -->
 

@@ -51,3 +51,25 @@ console.log(array1.customFill(6));       // Output: [6, 6, 6, 6]
 * Supports negative indices by adjusting them to count from the end of the array.
 * Modifies the array in place and returns the updated array reference (like `.fill()`).
 * Defaults to `start = 0` and `end = array.length` if not provided.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `[1, 2, 3, 4].customFill(0, 1, 3)` return?
+- [ ] [0, 0, 0, 0]
+- [ ] [1, 0, 0, 0]
+- [x] [1, 0, 0, 4]
+- [ ] [0, 1, 2, 3]
+
+### Q2: Does `fill()` modify the original array or create a new one?
+- [x] Modifies the original array in place
+- [ ] Creates and returns a new array
+- [ ] Creates a shallow copy first, then modifies it
+- [ ] Depends on the parameters passed
+
+### Q3: What does `[1, 2, 3].customFill(5, -2)` do?
+- [ ] Throws an error because of negative index
+- [ ] Fills nothing and returns [1, 2, 3]
+- [x] Fills from index 1 to end, returning [1, 5, 5]
+- [ ] Fills the entire array with 5
+<!-- quiz-end -->

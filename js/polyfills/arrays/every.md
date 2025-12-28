@@ -61,4 +61,26 @@ console.log([].customEvery(isEven)); // Output: true (empty array always returns
 
 ✔ **Throws an error if `callback` is not a function**
 
-🚀 **This implementation is efficient, clean, and mirrors `Array.prototype.every` exactly.** Let me know if you need further refinements!
+This implementation is efficient, clean, and mirrors `Array.prototype.every` exactly.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `[].customEvery(x => x > 0)` return?
+- [x] true
+- [ ] false
+- [ ] undefined
+- [ ] An error is thrown
+
+### Q2: When does `every()` return `false`?
+- [ ] When all elements pass the test
+- [x] When any single element fails the test
+- [ ] Only when all elements fail the test
+- [ ] When the array is empty
+
+### Q3: What happens if the callback is not a function?
+- [ ] Returns false
+- [ ] Returns undefined
+- [x] Throws a TypeError
+- [ ] Silently fails and returns true
+<!-- quiz-end -->

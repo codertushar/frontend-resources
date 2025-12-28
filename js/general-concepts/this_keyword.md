@@ -1137,3 +1137,34 @@ greetWrapper();  // "Hello, Dave" ✓
 - [MDN: this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this)
 - [You Don't Know JS: this & Object Prototypes](https://github.com/getify/You-Dont-Know-JS/blob/1st-ed/this%20%26%20object%20prototypes/README.md)
 - [JavaScript.info: Object methods, "this"](https://javascript.info/object-methods)
+
+---
+
+<!-- quiz-start -->
+### Q1: What determines the value of `this` in a regular function?
+- [ ] Where the function is defined
+- [x] How and where the function is called
+- [ ] The function's name
+- [ ] The file where the function is located
+
+### Q2: What will `user.greet()` output?
+```javascript
+const user = {
+  name: 'Alice',
+  greet: () => {
+    console.log(`Hello, ${this.name}`);
+  }
+};
+user.greet();
+```
+- [ ] "Hello, Alice"
+- [x] "Hello, undefined"
+- [ ] "Hello, "
+- [ ] Error: this is not defined
+
+### Q3: Which binding rule has the highest priority for determining `this`?
+- [ ] Default binding
+- [ ] Implicit binding (method call)
+- [ ] Explicit binding (call/apply/bind)
+- [x] `new` binding
+<!-- quiz-end -->

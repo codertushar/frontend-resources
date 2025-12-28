@@ -590,3 +590,25 @@ console.log(getPageNumbers(10, 10)); // [1, '...', 9, 10]
 ---
 
 **Last Updated**: December 2024
+
+---
+
+<!-- quiz-start -->
+### Q1: In pagination with ellipsis, which pages are ALWAYS visible regardless of the current page?
+- [ ] Only the current page and its neighbors
+- [ ] The first three and last three pages
+- [x] The first page, last page, current page, and adjacent pages (current-1, current+1)
+- [ ] All pages within 5 positions of the current page
+
+### Q2: When should an ellipsis ("...") be displayed in the pagination?
+- [ ] When there are more than 5 pages total
+- [x] When there is a gap of 2 or more pages between displayed page numbers
+- [ ] When the current page is greater than 3
+- [ ] Always, to indicate more pages exist
+
+### Q3: What is the output of `getPageNumbers(5, 10)` (current page 5, total pages 10)?
+- [ ] [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+- [ ] [1, 4, 5, 6, 10]
+- [x] [1, '...', 4, 5, 6, '...', 10]
+- [ ] [1, '...', 5, '...', 10]
+<!-- quiz-end -->

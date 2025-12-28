@@ -80,3 +80,25 @@ promiseRace([p1, p2])
   .catch(console.error); // → "fail"
 ```
 
+---
+
+<!-- quiz-start -->
+### Q1: What determines whether Promise.race resolves or rejects?
+- [ ] Whether the majority of promises resolve
+- [ ] Whether all promises eventually resolve
+- [x] Whether the first promise to settle resolves or rejects
+- [ ] It always resolves with an array of the first results
+
+### Q2: What happens when Promise.race is passed an empty array?
+- [ ] It resolves with undefined
+- [ ] It rejects with an error
+- [x] The returned promise never settles (stays pending forever)
+- [ ] It throws a TypeError immediately
+
+### Q3: Which is a common use case for Promise.race?
+- [ ] Waiting for all API responses before proceeding
+- [x] Implementing request timeouts by racing with a timeout promise
+- [ ] Collecting all errors from multiple promises
+- [ ] Running promises sequentially
+<!-- quiz-end -->
+

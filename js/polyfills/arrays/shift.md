@@ -63,4 +63,26 @@ console.log([].customShift()); // Output: undefined (empty array case)
 
 ✔ Returns the first element as expected
 
-🚀 **This implementation is simple, efficient, and follows `Array.prototype.shift` exactly!** Let me know if you need any refinements.
+This implementation is simple, efficient, and follows `Array.prototype.shift` exactly.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `[].customShift()` return?
+- [ ] null
+- [ ] An empty array
+- [x] undefined
+- [ ] 0
+
+### Q2: What is the time complexity of the `shift()` operation?
+- [ ] O(1)
+- [x] O(n)
+- [ ] O(log n)
+- [ ] O(n^2)
+
+### Q3: How does the shift polyfill work internally?
+- [ ] Removes the first element using delete
+- [x] Shifts all elements left by one position and decreases length
+- [ ] Creates a new array without the first element
+- [ ] Uses splice() to remove the first element
+<!-- quiz-end -->

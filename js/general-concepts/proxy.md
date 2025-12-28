@@ -188,3 +188,25 @@ console.log(settings.language); // Outputs: N/A
 ## 🧪 Final Thoughts
 
 `Proxy` is one of the most **underrated meta-programming tools** in JavaScript. It's not for every use case — but when you need full behavioral control, reactive systems, or clean abstractions, it's the scalpel you want.
+
+---
+
+<!-- quiz-start -->
+### Q1: What are the two arguments required when creating a Proxy?
+- [ ] A function and an object
+- [x] A target object and a handler object with traps
+- [ ] A key and a value
+- [ ] An array and a callback function
+
+### Q2: Which trap would you use to intercept property reads on a proxy?
+- [ ] `set`
+- [x] `get`
+- [ ] `read`
+- [ ] `access`
+
+### Q3: What is a limitation of JavaScript Proxies?
+- [ ] They can only wrap arrays
+- [ ] They don't support property deletion
+- [x] They are not supported in IE11 and cannot be fully polyfilled
+- [ ] They can only be used with classes
+<!-- quiz-end -->

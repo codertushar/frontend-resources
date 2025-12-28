@@ -99,3 +99,25 @@ const deepClone = JSON.parse(JSON.stringify(original));
 * Use manual recursion only when you need custom behavior.
 
 Let me know your runtime constraints if you want a tailored version.
+
+---
+
+<!-- quiz-start -->
+### Q1: What is a major limitation of using `JSON.parse(JSON.stringify(obj))` for deep cloning?
+- [ ] It's too slow for small objects
+- [x] It strips functions, undefined, symbols, dates, and regex
+- [ ] It only works in Node.js
+- [ ] It cannot handle nested objects
+
+### Q2: What is `structuredClone` used for?
+- [ ] Creating shallow copies of objects
+- [x] Creating deep clones with native browser support
+- [ ] Cloning only primitive values
+- [ ] Converting objects to JSON strings
+
+### Q3: Why is a `WeakMap` used in manual deep clone implementations?
+- [ ] To improve performance
+- [ ] To store primitive values
+- [x] To handle circular references without memory leaks
+- [ ] To preserve prototype chains
+<!-- quiz-end -->

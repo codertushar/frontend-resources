@@ -32,3 +32,25 @@ const arr = [1, 1, 2, 2, 2, 3, 1, 1];
 const filtered = arr.distinctUntilChanged();
 console.log(filtered); // [1, 2, 3, 1]
 ```
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `distinctUntilChanged` do with the array `[1, 2, 2, 1, 1, 2]`?
+- [ ] Returns `[1, 2]`
+- [x] Returns `[1, 2, 1, 2]`
+- [ ] Returns `[1, 2, 2, 1, 1, 2]`
+- [ ] Returns `[1, 1, 2, 2]`
+
+### Q2: How does `distinctUntilChanged` differ from removing all duplicates?
+- [ ] It's faster than removing all duplicates
+- [ ] It only works with numbers
+- [x] It only removes consecutive duplicates, preserving non-consecutive ones
+- [ ] It modifies the original array
+
+### Q3: What is the result of `[1, 1, 1, 1].distinctUntilChanged()`?
+- [x] `[1]`
+- [ ] `[]`
+- [ ] `[1, 1, 1, 1]`
+- [ ] `undefined`
+<!-- quiz-end -->

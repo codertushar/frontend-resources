@@ -1490,3 +1490,25 @@ Netflix's design system is designed to scale across millions of users, hundreds 
 5. **Great DX = Great UX** - Happy developers build better products
 
 When interviewing, demonstrate that you understand the **trade-offs** between flexibility and constraints, performance and developer experience, consistency and innovation. Show that you can design systems that solve real business problems, not just technical puzzles.
+
+---
+
+<!-- quiz-start -->
+### Q1: What are "Design Tokens" in a design system?
+- [ ] Authentication tokens for accessing design tools
+- [ ] Code snippets that generate components automatically
+- [x] The single source of truth for all design decisions (colors, typography, spacing) stored as variables
+- [ ] Unique identifiers for each component in the library
+
+### Q2: Why should components return `this` pattern NOT be used when using React Context for theming?
+- [ ] Because `this` doesn't exist in React
+- [x] Because React Context eliminates prop drilling, making theme available to all components without passing it through props
+- [ ] Because returning `this` causes memory leaks
+- [ ] Because React doesn't support theming
+
+### Q3: What is the benefit of organizing components using Atomic Design principles (atoms, molecules, organisms)?
+- [ ] It makes the bundle size smaller
+- [ ] It improves server-side rendering performance
+- [x] It enables reusability and maintainability by building complex components from simpler primitives
+- [ ] It automatically generates documentation
+<!-- quiz-end -->

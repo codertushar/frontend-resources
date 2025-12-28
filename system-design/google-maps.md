@@ -1239,3 +1239,25 @@ class TrafficLayer {
 
 **Sample closing statement:**
 > "To summarize, I'd build a hybrid architecture with WebGL for rendering, Zustand for state management, Web Workers for heavy processing, and a multi-tier caching strategy for offline support. The key challenges are maintaining 60fps performance, managing memory efficiently, and ensuring accessibility despite using Canvas. I'd use existing libraries like Mapbox GL as a foundation rather than building from scratch, focusing on the unique business requirements."
+
+---
+
+<!-- quiz-start -->
+### Q1: Why is Canvas/WebGL preferred over DOM elements for rendering Google Maps?
+- [ ] Canvas provides better accessibility support
+- [ ] DOM elements are not supported in modern browsers
+- [x] Canvas renders thousands of shapes as pixels on a single element with GPU acceleration, avoiding DOM node overhead and layout thrashing
+- [ ] Canvas automatically handles click events on markers
+
+### Q2: What is the QuadTree tiling strategy used in map applications?
+- [ ] Loading the entire world map at once for faster access
+- [x] Dividing the map into tiles at each zoom level (4^N tiles at zoom N), loading only visible tiles
+- [ ] Storing all tiles in browser localStorage
+- [ ] Using a single large image that scales based on zoom
+
+### Q3: What is the advantage of Vector Tiles over Raster Tiles for street maps?
+- [ ] Vector tiles are larger but higher quality
+- [ ] Raster tiles support client-side styling
+- [x] Vector tiles are smaller, support client-side styling (like dark mode), and stay crisp at any zoom level
+- [ ] Vector tiles don't require any client-side rendering
+<!-- quiz-end -->

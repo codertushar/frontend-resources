@@ -61,4 +61,26 @@ console.log(array.customSome((num) => num > 10)); // Output: false
 
 ✔ **Throws an error if `callback` is not a function**
 
-This version is  **simple, efficient, and follows the behavior of `Array.prototype.some` exactly** . 🚀 Let me know if you need improvements!
+This version is simple, efficient, and follows the behavior of `Array.prototype.some` exactly.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `[].customSome(x => x > 0)` return?
+- [ ] true
+- [x] false
+- [ ] undefined
+- [ ] Throws an error
+
+### Q2: When does `some()` return `true`?
+- [ ] When all elements pass the test
+- [x] When at least one element passes the test
+- [ ] When no elements pass the test
+- [ ] When the array is empty
+
+### Q3: What is the key difference between `some()` and `every()`?
+- [ ] some() is faster
+- [x] some() returns true if ANY element passes; every() returns true if ALL pass
+- [ ] every() can handle sparse arrays, some() cannot
+- [ ] some() modifies the array, every() does not
+<!-- quiz-end -->

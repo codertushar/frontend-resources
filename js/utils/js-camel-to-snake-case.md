@@ -122,3 +122,25 @@ snakeToCamel("get_http_response_code"); // "getHttpResponseCode"
 ## 🔚 Closing Thoughts
 
 Regex has its place, but for small transforms, **explicit logic wins** — it's more maintainable, more tunable, and often faster. Next time you're wrangling format conversions, consider reaching for clarity over cleverness.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does the basic `camelToSnake` function produce for "getHTTPResponseCode"?
+- [ ] `get_http_response_code`
+- [x] `get_h_t_t_p_response_code`
+- [ ] `getHTTPResponseCode`
+- [ ] `get_httpresponse_code`
+
+### Q2: How does `camelToSnakeSmart` differ from the basic version?
+- [ ] It uses regular expressions
+- [ ] It handles numbers differently
+- [x] It only adds underscores between lowercase-uppercase transitions, preserving acronyms
+- [ ] It converts to uppercase instead of lowercase
+
+### Q3: What is a key advantage of the loop-based approach over regex?
+- [ ] It's always faster
+- [ ] It handles Unicode better
+- [x] It's more readable, debuggable, and customizable
+- [ ] It uses less memory
+<!-- quiz-end -->

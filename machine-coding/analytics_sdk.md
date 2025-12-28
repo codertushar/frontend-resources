@@ -134,3 +134,25 @@ The logic does not proceed to the next event until the current one (including it
 * **Robust simulation** : Failures are explicit and testable.
 * **Reusable utilities** : `sleep()` is abstracted for clarity.
 * **Separation of concerns** : Queue management, retry logic, and delay handling are well-isolated.
+
+---
+
+<!-- quiz-start -->
+### Q1: Why is `this.isSending` used in the Analytics SDK?
+- [ ] To track how many events have been sent
+- [x] To prevent multiple sending loops from running concurrently
+- [ ] To count the number of retries
+- [ ] To store the current event being processed
+
+### Q2: What happens when the 5th event fails to send in this SDK implementation?
+- [ ] The event is discarded and the next event is processed
+- [ ] The SDK stops processing all remaining events
+- [x] The event is retried after a 1-second delay
+- [ ] The event is moved to the end of the queue
+
+### Q3: What does `this.queue.shift()` do in the send() method?
+- [ ] Adds a new event to the beginning of the queue
+- [ ] Returns the last event without removing it
+- [x] Removes and returns the first event from the queue
+- [ ] Clears the entire queue
+<!-- quiz-end -->

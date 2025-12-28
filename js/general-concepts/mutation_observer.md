@@ -673,4 +673,26 @@ element.setAttribute('style', 'color: red'); // MutationObserver will detect thi
 
 ---
 
-**Happy DOM watching! 👀**
+**Happy DOM watching!**
+
+---
+
+<!-- quiz-start -->
+### Q1: Which configuration option allows MutationObserver to detect changes in all descendants of the target element?
+- [ ] `childList: true`
+- [x] `subtree: true`
+- [ ] `attributes: true`
+- [ ] `deep: true`
+
+### Q2: What method stops a MutationObserver from listening to mutations?
+- [ ] `observer.stop()`
+- [ ] `observer.pause()`
+- [x] `observer.disconnect()`
+- [ ] `observer.remove()`
+
+### Q3: Which type of change will MutationObserver NOT detect?
+- [ ] Adding a child element
+- [ ] Changing an attribute value
+- [ ] Modifying text content
+- [x] Changing inline styles via JavaScript (e.g., `element.style.color = 'red'`)
+<!-- quiz-end -->

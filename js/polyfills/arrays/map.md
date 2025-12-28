@@ -538,3 +538,25 @@ Where `n` = length of the input array.
 
 - [MDN: Array.prototype.map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)
 - [ECMAScript Specification: Array.prototype.map](https://tc39.es/ecma262/#sec-array.prototype.map)
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `map()` return when called on a sparse array like `[1, , 3]`?
+- [ ] [1, undefined, 3] after transformation
+- [x] A new array with holes preserved in the same positions
+- [ ] An error because of the hole
+- [ ] A dense array with holes removed
+
+### Q2: Why is `hasOwnProperty(i)` or `i in this` important in the map polyfill?
+- [ ] To check if the callback exists
+- [ ] To validate array bounds
+- [x] To skip holes in sparse arrays
+- [ ] To handle negative indices
+
+### Q3: What happens when you call `map()` with a `thisArg`?
+- [ ] The thisArg becomes the return value
+- [ ] An error is thrown
+- [x] The thisArg is used as `this` inside the callback
+- [ ] The original array is replaced with thisArg
+<!-- quiz-end -->

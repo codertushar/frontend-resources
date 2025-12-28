@@ -58,3 +58,25 @@ console.log(array.customIndexOf(2, -3));   // Output: 0
 * `customIndexOf(2, -3)`: Starts searching from `index 0`, finds `2` at index `0`, so it returns `0`.
 
 This implementation mimics `Array.prototype.indexOf`, with additional support for negative `fromIndex`, ensuring the search works as expected.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `[2, 9, 9].customIndexOf(9)` return?
+- [ ] 0
+- [x] 1
+- [ ] 2
+- [ ] [1, 2]
+
+### Q2: What comparison does `indexOf()` use to find elements?
+- [ ] Loose equality (==)
+- [x] Strict equality (===)
+- [ ] Object.is()
+- [ ] Deep equality
+
+### Q3: What does `[1, 2, 3].customIndexOf(1, 1)` return?
+- [ ] 0
+- [ ] 1
+- [x] -1
+- [ ] undefined
+<!-- quiz-end -->

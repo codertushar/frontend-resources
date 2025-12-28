@@ -137,4 +137,26 @@ while (!(result = iterator.next()).done) {
 
 ## ✅ Conclusion
 
-The `for...of` construct is the **canonical way to iterate over iterable values** in modern JavaScript. It’s readable, concise, and robust— **avoid `for...in` for arrays or iterable data structures** .
+The `for...of` construct is the **canonical way to iterate over iterable values** in modern JavaScript. It's readable, concise, and robust— **avoid `for...in` for arrays or iterable data structures** .
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `for...of` iterate over?
+- [ ] Object keys
+- [ ] Array indexes
+- [x] Iterable values
+- [ ] Object properties including inherited ones
+
+### Q2: Which of the following can you iterate with `for...of`?
+- [ ] Plain objects `{}`
+- [x] Arrays, Strings, Maps, and Sets
+- [ ] Only arrays
+- [ ] Only strings
+
+### Q3: What is the key difference between `for...of` and `for...in`?
+- [ ] `for...of` is faster than `for...in`
+- [ ] `for...in` only works on arrays
+- [x] `for...of` iterates over values, while `for...in` iterates over keys/property names
+- [ ] There is no difference, they are interchangeable
+<!-- quiz-end -->

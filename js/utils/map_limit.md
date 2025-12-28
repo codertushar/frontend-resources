@@ -129,3 +129,25 @@ async function uploadFiles(files) {
 * **Preserves order** unlike race conditions in uncontrolled parallel execution
 
 By mastering `mapLimit`, you gain a powerful tool for handling asynchronous operations efficiently while respecting system constraints.
+
+---
+
+<!-- quiz-start -->
+### Q1: What is the main purpose of `mapLimit`?
+- [ ] To limit the size of the result array
+- [ ] To skip processing some items
+- [x] To control how many async operations run in parallel
+- [ ] To sort results by completion time
+
+### Q2: How does `mapLimit` preserve the order of results?
+- [ ] By processing items sequentially
+- [x] By pre-allocating a results array and storing results at their original indices
+- [ ] By sorting results after all complete
+- [ ] It doesn't preserve order
+
+### Q3: What happens when an operation completes in `mapLimit`?
+- [ ] All remaining operations are cancelled
+- [ ] The function returns immediately
+- [x] A new operation is started if there are more items to process
+- [ ] The result is pushed to the end of the array
+<!-- quiz-end -->

@@ -62,3 +62,25 @@ setTimeout(() => cancelable.cancel(), 500); // cancel before it resolves
 
 * This doesn't stop network/fetch/etc. — only  **suppresses result handlers** .
 * Use `AbortController` for cancelable fetch requests or actual task termination.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does calling cancel() on a cancelable promise actually do?
+- [ ] It immediately aborts the underlying async operation
+- [ ] It throws an error that stops the promise execution
+- [x] It prevents the .then() and .catch() handlers from executing normally
+- [ ] It removes the promise from memory
+
+### Q2: What happens when a cancelable promise is canceled before resolution?
+- [ ] The promise resolves with null
+- [ ] The original promise is destroyed
+- [x] The promise rejects with `{ canceled: true }`
+- [ ] The promise remains pending forever
+
+### Q3: For truly canceling a fetch request (not just ignoring results), what should you use?
+- [ ] Promise.cancel()
+- [ ] clearTimeout()
+- [x] AbortController
+- [ ] Promise.reject()
+<!-- quiz-end -->

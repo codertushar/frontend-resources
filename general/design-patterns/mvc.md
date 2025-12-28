@@ -177,6 +177,28 @@ For small SPA prototypes, prefer component‑centric patterns (MVU, MVVM) to red
 
 ## 🔚 Recap
 
-**MVC** divides application logic into Model, View, and Controller, enabling testable, maintainable UIs—especially when multiple views share state. Master the *why* and *how* behind MVC, and you’ll shine in front‑end interviews when asked to architect anything beyond a toy component.
+**MVC** divides application logic into Model, View, and Controller, enabling testable, maintainable UIs—especially when multiple views share state. Master the *why* and *how* behind MVC, and you'll shine in front‑end interviews when asked to architect anything beyond a toy component.
 
 Happy structuring! 🏗️
+
+---
+
+<!-- quiz-start -->
+### Q1: In the MVC pattern, which component is responsible for data and business rules?
+- [ ] View
+- [ ] Controller
+- [x] Model
+- [ ] Router
+
+### Q2: In modern React with Redux, which MVC role does the Redux store fulfill?
+- [ ] View
+- [ ] Controller
+- [x] Model
+- [ ] All three roles
+
+### Q3: What is a common risk when implementing MVC incorrectly?
+- [ ] The View becomes too simple
+- [x] Controller bloat - mixing validation, formatting, and routing logic
+- [ ] The Model directly renders to the DOM
+- [ ] Too few files per feature
+<!-- quiz-end -->

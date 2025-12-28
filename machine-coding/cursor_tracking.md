@@ -1232,3 +1232,25 @@ document.body.appendChild(tracker);
 - [Web.dev: Optimize Input Delay](https://web.dev/optimize-input-delay/) - Performance optimization for input events
 - [JavaScript Event Loop Article](../js/general-concepts/event_loop.md) - Understanding event processing
 - [Debounce & Throttle Implementation](../js/utils/debounce_throttle.md) - Performance optimization patterns
+
+---
+
+<!-- quiz-start -->
+### Q1: What is the key difference between `clientX/clientY` and `pageX/pageY` in mouse events?
+- [ ] clientX/Y includes scroll offset, pageX/Y does not
+- [x] clientX/Y is relative to viewport, pageX/Y is relative to document (includes scroll)
+- [ ] They are identical and can be used interchangeably
+- [ ] clientX/Y works only on mobile, pageX/Y only on desktop
+
+### Q2: Why is `pointer-events: none` important for cursor tracking display elements?
+- [ ] It improves performance by reducing event calculations
+- [ ] It makes the element invisible to screen readers
+- [x] It allows mouse events to pass through to elements beneath
+- [ ] It enables touch events on the element
+
+### Q3: What is the recommended approach to avoid performance issues when tracking mouse movement?
+- [ ] Use setTimeout to delay processing
+- [ ] Increase the polling interval to 1 second
+- [x] Throttle the event handler to limit processing frequency (e.g., 16ms for 60fps)
+- [ ] Disable tracking when the user is scrolling
+<!-- quiz-end -->

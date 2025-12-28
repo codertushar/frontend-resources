@@ -1261,3 +1261,25 @@ function ChatWidget() {
 - [MDN: Memory Management](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_Management)
 - [V8 Garbage Collection Internals](https://v8.dev/blog/trash-talk)
 - [Chrome DevTools Memory Profiling](https://developer.chrome.com/docs/devtools/memory-problems/)
+
+---
+
+<!-- quiz-start -->
+### Q1: What algorithm do modern JavaScript engines primarily use for garbage collection?
+- [ ] Reference counting
+- [x] Mark-and-sweep
+- [ ] Manual memory management
+- [ ] Copy collection only
+
+### Q2: Which of the following is a common cause of memory leaks in JavaScript?
+- [ ] Using `const` instead of `let`
+- [ ] Creating too many functions
+- [x] Forgotten event listeners that are never removed
+- [ ] Using arrow functions
+
+### Q3: What is the purpose of WeakMap in relation to garbage collection?
+- [ ] It prevents all garbage collection
+- [ ] It makes garbage collection faster
+- [x] It holds weak references to keys, allowing them to be garbage collected when no other references exist
+- [ ] It stores data permanently in memory
+<!-- quiz-end -->

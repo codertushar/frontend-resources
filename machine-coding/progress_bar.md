@@ -296,3 +296,25 @@ This reusable component can be instantiated multiple times in different containe
 # Interactive Demo
 
 [Cluade](https://claude.site/artifacts/ea368905-ef9c-4e65-82f4-7e26fce3599f)
+
+---
+
+<!-- quiz-start -->
+### Q1: What is the purpose of using `useRef` for the interval ID instead of `useState`?
+- [ ] useRef provides better performance for rendering
+- [x] useRef persists the value across renders without causing re-renders when updated
+- [ ] useState cannot store numbers
+- [ ] useRef is required for setTimeout/setInterval by React rules
+
+### Q2: What happens when the Stop button is clicked on a running progress bar?
+- [ ] Progress resets to 0 and status becomes "idle"
+- [ ] Progress pauses and can be resumed with Start
+- [x] Progress stops permanently and cannot be resumed until Reset is clicked
+- [ ] Progress continues in the background
+
+### Q3: Why is `clearInterval(intervalRef.current)` called in the useEffect cleanup function?
+- [ ] To speed up the progress bar
+- [ ] To reset the progress value to 0
+- [x] To prevent memory leaks and stop the timer when the component unmounts
+- [ ] To pause the progress when the user clicks elsewhere
+<!-- quiz-end -->

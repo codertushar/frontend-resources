@@ -522,3 +522,25 @@ class SyncEngine {
 - Be prepared to implement a simple OT transform function on a whiteboard
 
 Good luck with your interview! 🚀
+
+---
+
+<!-- quiz-start -->
+### Q1: What is the main purpose of Operational Transformation (OT) in collaborative editing?
+- [ ] To compress document content for faster transmission
+- [ ] To encrypt messages between clients
+- [x] To transform operations so concurrent edits from multiple users converge to the same result
+- [ ] To store document history in the database
+
+### Q2: In OT, if User A inserts 'X' at position 5 and User B inserts 'Y' at position 5, how is the conflict resolved?
+- [ ] User B's operation is discarded
+- [ ] Both operations are rejected
+- [x] One operation is transformed to adjust its position based on a deterministic rule (like client ID comparison)
+- [ ] The server picks a random winner
+
+### Q3: What is the key difference between OT and CRDT for collaborative editing?
+- [ ] OT works offline, CRDT requires constant connection
+- [x] OT requires a central server for ordering, while CRDT can work peer-to-peer and is mathematically proven to converge
+- [ ] CRDT is more bandwidth-efficient than OT
+- [ ] OT only supports text, CRDT supports all data types
+<!-- quiz-end -->

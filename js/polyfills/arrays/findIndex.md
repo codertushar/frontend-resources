@@ -73,4 +73,24 @@ console.log(array.customFindIndex(element => element > 200)); // Output: -1
 - It uses a `for` loop to iterate over the array and `callbackFn.call()` to ensure the correct context for the `this` inside the callback function.
 - The method returns the **index of the first matching element** or `-1` if no element satisfies the condition.
 
-Let me know if you'd like any modifications or further explanations! 😊
+---
+
+<!-- quiz-start -->
+### Q1: What does `[5, 12, 8, 130].customFindIndex(x => x > 10)` return?
+- [ ] 12
+- [x] 1
+- [ ] 3
+- [ ] [1, 3]
+
+### Q2: What does `findIndex()` return when no element matches?
+- [x] -1
+- [ ] undefined
+- [ ] null
+- [ ] false
+
+### Q3: What is the key difference between `find()` and `findIndex()`?
+- [ ] find() is faster
+- [ ] findIndex() creates a new array
+- [x] find() returns the element, findIndex() returns the index
+- [ ] findIndex() can only work with numbers
+<!-- quiz-end -->

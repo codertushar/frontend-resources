@@ -179,3 +179,25 @@ Use it when:
 The **Factory Pattern** in JavaScript is a **clean, flexible, and powerful way** to create objects. It emphasizes **composition over inheritance**, embraces **functional programming principles**, and works especially well when combined with **closures** to achieve true encapsulation.
 
 Whether you're building utility modules, UI components, or domain models, the Factory Pattern is a great choice for **modular, testable, and maintainable code**.
+
+---
+
+<!-- quiz-start -->
+### Q1: What distinguishes the Factory Pattern from constructor functions or ES6 classes?
+- [ ] Factory functions are slower
+- [x] Factory functions do not use `new` keyword and don't rely on `this`
+- [ ] Factory functions cannot create multiple objects
+- [ ] Factory functions require inheritance
+
+### Q2: How does the Factory Pattern achieve true private data?
+- [ ] By using the `private` keyword
+- [ ] By using WeakMaps
+- [x] By using closures to encapsulate variables
+- [ ] By using ES6 class private fields (#)
+
+### Q3: What is a potential pitfall of defining methods inside a factory function?
+- [ ] Methods cannot access private data
+- [x] Each object gets its own copy of the methods (memory inefficiency)
+- [ ] Methods cannot be called
+- [ ] Methods are automatically shared via prototype
+<!-- quiz-end -->

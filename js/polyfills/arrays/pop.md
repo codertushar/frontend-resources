@@ -55,4 +55,26 @@ console.log([].customPop()); // Output: undefined (empty array case)
 
 ✔ Returns the last element as expected
 
-🚀 **This implementation is clean, efficient, and follows `Array.prototype.pop` exactly!** Let me know if you need any refinements.
+This implementation is clean, efficient, and follows `Array.prototype.pop` exactly.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `[].customPop()` return?
+- [ ] null
+- [ ] An empty array
+- [x] undefined
+- [ ] Throws an error
+
+### Q2: Does `pop()` modify the original array?
+- [x] Yes, it modifies the array in place
+- [ ] No, it returns a new array
+- [ ] Only if the array has more than one element
+- [ ] It depends on the element type
+
+### Q3: How does the pop polyfill remove the last element?
+- [ ] Uses splice() internally
+- [ ] Calls delete on the last element
+- [x] Decreases the array's length property by 1
+- [ ] Creates a new array without the last element
+<!-- quiz-end -->

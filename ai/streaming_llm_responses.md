@@ -123,3 +123,25 @@ const response = await fetch(url, {
 ## Conclusion
 
 Streaming is not just a visual flair; it's a necessity for AI interfaces. By mastering `ReadableStream` and efficient state updates, you can create chat interfaces that feel responsive and "alive".
+
+---
+
+<!-- quiz-start -->
+### Q1: What API is used to read streaming data from a fetch response in JavaScript?
+- [ ] XMLHttpRequest
+- [ ] WebSocket
+- [x] ReadableStream via response.body.getReader()
+- [ ] Server-Sent Events (EventSource)
+
+### Q2: Why is `{ stream: true }` passed to TextDecoder.decode()?
+- [ ] To enable compression on the decoded text
+- [ ] To convert binary to Base64 encoding
+- [x] To handle multi-byte characters that may be split across chunks
+- [ ] To improve decoding performance
+
+### Q3: What is the purpose of using AbortController when streaming LLM responses?
+- [ ] To speed up the streaming process
+- [ ] To cache the response for later use
+- [x] To allow users to cancel an in-progress request when they change their mind
+- [ ] To handle network errors automatically
+<!-- quiz-end -->

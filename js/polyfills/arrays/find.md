@@ -71,3 +71,25 @@ printThis.call(obj); // Logs: { name: 'Alice' }
 
 * **`.call(thisArg, ...)`** allows explicit control over the `this` context inside the callback.
 * Without `.call()`, the `this` context inside the callback may not behave as expected, especially when `thisArg` is provided.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `[5, 12, 8, 130].customFind(x => x > 10)` return?
+- [ ] 130
+- [x] 12
+- [ ] [12, 130]
+- [ ] 1
+
+### Q2: What does `find()` return when no element matches?
+- [ ] null
+- [ ] -1
+- [ ] false
+- [x] undefined
+
+### Q3: Why is `.call(thisArg, ...)` used in the find polyfill?
+- [ ] To improve performance
+- [ ] To handle async callbacks
+- [x] To explicitly set the `this` context inside the callback
+- [ ] To convert the callback to an arrow function
+<!-- quiz-end -->

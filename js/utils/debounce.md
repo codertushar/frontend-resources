@@ -586,3 +586,25 @@ The debounce function itself is O(1) — the complexity of `fn` is separate.
 
 - [Lodash debounce documentation](https://lodash.com/docs/4.17.15#debounce)
 - [CSS-Tricks: Debouncing and Throttling Explained](https://css-tricks.com/debouncing-throttling-explained-examples/)
+
+---
+
+<!-- quiz-start -->
+### Q1: What happens if you don't call `clearTimeout` in a debounce implementation?
+- [ ] The function will never execute
+- [ ] Memory leak will occur
+- [x] All calls will eventually fire, defeating the purpose of debounce
+- [ ] The delay will be doubled
+
+### Q2: Which scenario is BEST suited for debounce (not throttle)?
+- [ ] Tracking scroll position for infinite scroll
+- [x] Auto-saving a document after user stops typing
+- [ ] Rate-limiting API requests per second
+- [ ] Updating mouse position on mousemove
+
+### Q3: Why should you use a regular function (not arrow function) as the returned debounced function?
+- [ ] Arrow functions are slower
+- [ ] Arrow functions cannot access arguments
+- [x] Arrow functions don't have their own `this` context
+- [ ] Arrow functions cannot use setTimeout
+<!-- quiz-end -->

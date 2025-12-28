@@ -101,3 +101,25 @@ promiseAllSettled([
 */
 ```
 
+---
+
+<!-- quiz-start -->
+### Q1: What is the key difference between Promise.all and Promise.allSettled?
+- [ ] Promise.allSettled runs promises sequentially
+- [ ] Promise.allSettled is faster than Promise.all
+- [x] Promise.allSettled never rejects and returns all outcomes regardless of failures
+- [ ] Promise.allSettled only works with async/await syntax
+
+### Q2: What is the result format for a rejected promise in Promise.allSettled?
+- [ ] `{ success: false, error: reason }`
+- [ ] `{ fulfilled: false, value: reason }`
+- [x] `{ status: "rejected", reason: error }`
+- [ ] `{ state: "error", message: reason }`
+
+### Q3: What does Promise.allSettled return when passed an empty array?
+- [ ] It throws an error
+- [ ] It returns a promise that never settles
+- [x] It resolves immediately with an empty array []
+- [ ] It rejects with an AggregateError
+<!-- quiz-end -->
+

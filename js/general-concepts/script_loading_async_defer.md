@@ -243,3 +243,25 @@ Script loading attributes control **how and when** JavaScript files are download
 - [Critical Rendering Path](../general/critical_rendering_path.md) - Advanced optimization
 - [ES6 Modules](es6_modules.md) - Modern module loading
 - [Promises](../promises/) - Async JavaScript patterns
+
+---
+
+<!-- quiz-start -->
+### Q1: What happens when you use both `async` and `defer` on the same script tag?
+- [ ] `defer` takes precedence
+- [x] `async` takes precedence, `defer` is ignored
+- [ ] Both attributes work together
+- [ ] The browser throws an error
+
+### Q2: Which attribute should you use for scripts that depend on each other and need to maintain execution order?
+- [x] `defer`
+- [ ] `async`
+- [ ] Both `async` and `defer`
+- [ ] Neither, use no attributes
+
+### Q3: When do scripts with the `defer` attribute execute?
+- [ ] Immediately when downloaded
+- [ ] Before HTML parsing begins
+- [x] After the DOM is fully parsed, before DOMContentLoaded
+- [ ] Only when called by other scripts
+<!-- quiz-end -->

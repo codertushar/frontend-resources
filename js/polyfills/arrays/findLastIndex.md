@@ -60,4 +60,26 @@ console.log(index); // Output: 3 (because the last even number is 4 at index 3)
 - **Empty array**: If the array is empty, it returns `-1` right away.
 - **Callback that always returns false**: If the callback always returns false, the result will be `-1`.
 
-This polyfill ensures the behavior of `findLastIndex` is available even in environments where it’s not supported natively.
+This polyfill ensures the behavior of `findLastIndex` is available even in environments where it's not supported natively.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `[1, 2, 3, 4, 5].findLastIndex(num => num % 2 === 0)` return?
+- [ ] 1
+- [x] 3
+- [ ] 4
+- [ ] [1, 3]
+
+### Q2: What is the starting point for iteration in `findLastIndex()`?
+- [ ] Index 0
+- [ ] The middle of the array
+- [x] The last index (length - 1)
+- [ ] A random index
+
+### Q3: What does `findLastIndex()` return for an empty array?
+- [x] -1
+- [ ] undefined
+- [ ] 0
+- [ ] null
+<!-- quiz-end -->

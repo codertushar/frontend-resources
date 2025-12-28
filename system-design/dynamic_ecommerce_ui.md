@@ -1668,3 +1668,25 @@ const getCacheKey = (page, userId) => {
 - Discuss caching strategy in detail (multi-layer, invalidation, hit rates)
 - Show awareness of real-world concerns (monitoring, rollback, testing)
 - Code examples should be production-ready (error handling, validation)
+
+---
+
+<!-- quiz-start -->
+### Q1: What is the primary purpose of the Backend for Frontend (BFF) pattern?
+- [ ] To replace the main backend server
+- [x] To aggregate data from multiple services and return exactly what the frontend needs in a single request
+- [ ] To cache all API responses permanently
+- [ ] To handle user authentication only
+
+### Q2: In config-driven UIs, how are form fields conditionally shown based on user context?
+- [ ] By creating separate forms for each country
+- [ ] By hardcoding conditions in the React component
+- [x] By using a schema with conditional rules that specify when fields should appear based on other field values
+- [ ] By fetching different HTML templates from the server
+
+### Q3: What is the benefit of using feature flags for festival theme activations?
+- [ ] Faster page load times
+- [ ] Better SEO rankings
+- [x] Zero-downtime deployments with instant rollback capability and gradual rollout control
+- [ ] Reduced server costs
+<!-- quiz-end -->

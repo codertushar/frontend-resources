@@ -175,4 +175,26 @@ console.log(object1 === object2); // true
 * In modern JS, **ES modules** are the easiest Singleton mechanism.
 * Beware of **global state coupling** and  **testing headaches** ; mitigate with factories and mocks.
 
-Master these nuances and you’ll nail Singleton questions with confidence! 🚀
+Master these nuances and you'll nail Singleton questions with confidence! 🚀
+
+---
+
+<!-- quiz-start -->
+### Q1: Why are ES modules considered singletons by default?
+- [ ] They use the `new` keyword internally
+- [ ] They are compiled differently
+- [x] ES modules are executed once and cached - every import gets the same exports
+- [ ] They use closures to prevent multiple instances
+
+### Q2: What issue can arise if you store user session data in a singleton during server-side rendering?
+- [ ] The singleton will not work
+- [x] State leaks between user requests - one user might see another user's data
+- [ ] The singleton creates too many instances
+- [ ] Memory usage decreases
+
+### Q3: Which of the following is a typical front-end use case for the Singleton Pattern?
+- [ ] Creating multiple user objects
+- [ ] Rendering a list of items
+- [x] Managing a global configuration or theme manager
+- [ ] Sorting arrays
+<!-- quiz-end -->

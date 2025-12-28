@@ -132,3 +132,25 @@ setTimeout(cancel, 100);
 ---
 
 Let me know if you want a **generic wrapper** that adds cancelation to *any* async operation (not just `fetch`).
+
+---
+
+<!-- quiz-start -->
+### Q1: What error name is thrown when a fetch request is aborted?
+- [ ] CancelError
+- [x] AbortError
+- [ ] TimeoutError
+- [ ] RequestError
+
+### Q2: Which property of AbortController do you pass to fetch()?
+- [ ] controller.abort
+- [ ] controller.cancel
+- [x] controller.signal
+- [ ] controller.token
+
+### Q3: What does signal.aborted return after calling abort()?
+- [x] true
+- [ ] false
+- [ ] undefined
+- [ ] "aborted"
+<!-- quiz-end -->

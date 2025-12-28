@@ -1544,3 +1544,25 @@ class LRUCache {
 - [React Query Documentation](https://tanstack.com/query/latest) — Comprehensive guide to data fetching and caching in React
 - [HTTP Caching (MDN)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching) — HTTP cache headers and browser caching strategies
 - [Designing Data-Intensive Applications](https://dataintensive.net/) — Martin Kleppmann's book on distributed systems and data consistency
+
+---
+
+<!-- quiz-start -->
+### Q1: What is the "Stale-While-Revalidate" caching pattern?
+- [ ] Always fetch fresh data and ignore cached data
+- [ ] Only use cached data and never refetch
+- [x] Return stale data immediately while fetching fresh data in the background
+- [ ] Delete stale data and wait for fresh data
+
+### Q2: Why is `Promise.allSettled` preferred over `Promise.all` for fetching multiple APIs?
+- [ ] It's faster than Promise.all
+- [ ] It automatically retries failed requests
+- [x] It handles partial failures gracefully, returning results for successful requests even if some fail
+- [ ] It runs requests sequentially instead of in parallel
+
+### Q3: What is the purpose of "jitter" in exponential backoff retry strategies?
+- [ ] To make the delay longer for each retry
+- [ ] To cancel retries after a timeout
+- [x] To add randomness to prevent multiple clients from retrying at the exact same time (thundering herd)
+- [ ] To prioritize certain requests over others
+<!-- quiz-end -->

@@ -537,3 +537,25 @@ Promise.all([
 
 - [MDN: Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all)
 - [JavaScript.info: Promise API](https://javascript.info/promise-api)
+
+---
+
+<!-- quiz-start -->
+### Q1: What happens when one promise in Promise.all rejects?
+- [ ] It waits for all promises to complete and returns partial results
+- [x] It immediately rejects with the first rejection reason
+- [ ] It filters out the rejected promise and returns remaining results
+- [ ] It replaces the rejected value with undefined
+
+### Q2: Why do we store results by index (`results[index] = value`) instead of using push?
+- [ ] Push is slower than direct array assignment
+- [ ] It prevents memory leaks
+- [x] It preserves the order of results matching input order, regardless of resolution order
+- [ ] It's required for TypeScript compatibility
+
+### Q3: What does Promise.all return when passed an empty array?
+- [ ] It throws a TypeError
+- [ ] It returns a pending promise that never resolves
+- [x] It resolves immediately with an empty array []
+- [ ] It rejects with "No promises provided"
+<!-- quiz-end -->

@@ -575,3 +575,25 @@ window.addEventListener('load', loadResourcesBasedOnNetwork);
 | `<script>`       | ✅ Yes   | ❌ No    | ✅ Yes  | Immediately (blocks) |
 | `<script defer>` | ❌ No    | ✅ Yes   | ✅ Yes  | After DOM complete   |
 | `<script async>` | ❌ No    | ✅ Yes   | ❌ No   | When ready (early)   |
+
+---
+
+<!-- quiz-start -->
+### Q1: Why does CSS block rendering by default?
+- [ ] To save bandwidth
+- [x] To prevent Flash of Unstyled Content (FOUC) - users would see unstyled HTML first
+- [ ] CSS is always downloaded last
+- [ ] The browser cannot parse CSS asynchronously
+
+### Q2: What is the difference between `defer` and `async` attributes on script tags?
+- [ ] They are identical in behavior
+- [ ] `defer` blocks HTML parsing while `async` does not
+- [x] `defer` executes scripts in order after DOM is ready; `async` executes as soon as downloaded (out of order)
+- [ ] `async` is for external scripts only
+
+### Q3: Which rendering stage would be triggered if you only change an element's `background-color`?
+- [ ] Layout (Reflow) only
+- [x] Paint only (no layout recalculation needed)
+- [ ] Both Layout and Paint
+- [ ] Compositing only
+<!-- quiz-end -->

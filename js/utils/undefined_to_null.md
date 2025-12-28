@@ -76,3 +76,25 @@ console.log(undefinedToNull({ a: ['BFE.dev', undefined, 'bigfrontend.dev'] }));
 * **Preserves object structure** : The function maintains the same structure (arrays within objects, objects within arrays).
 
 This function is useful when you need to sanitize an object or array by replacing all `undefined` values with `null`, which can be particularly helpful for data processing or preparation.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `undefinedToNull({ a: undefined, b: 2 })` return?
+- [ ] `{ a: undefined, b: 2 }`
+- [x] `{ a: null, b: 2 }`
+- [ ] `{ b: 2 }`
+- [ ] `{ a: 'null', b: 2 }`
+
+### Q2: How does the function handle nested arrays containing undefined?
+- [ ] It removes the undefined values
+- [ ] It throws an error
+- [x] It recursively replaces undefined with null in the array
+- [ ] It converts the array to an object
+
+### Q3: Why is it useful to convert undefined to null?
+- [ ] null uses less memory
+- [ ] undefined is deprecated in JavaScript
+- [x] JSON.stringify ignores undefined but preserves null
+- [ ] null is faster to compare
+<!-- quiz-end -->

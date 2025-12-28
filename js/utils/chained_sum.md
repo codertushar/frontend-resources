@@ -112,3 +112,25 @@ console.log(sum(5)(-1)(2) == 6);  // true
 * The second implementation, using recursion, creates new function instances on each call, which might have slight overhead in deep recursion cases.
 
 Both implementations allow you to chain function calls to accumulate the sum, with the key distinction being whether you manage state via a variable (`total`) or via recursive function calls.
+
+---
+
+<!-- quiz-start -->
+### Q1: Why is the `valueOf` method added to the inner function in a chained sum implementation?
+- [ ] To allow the function to be called with multiple arguments
+- [x] To make the function evaluate to a number when used in comparisons
+- [ ] To prevent memory leaks in the closure
+- [ ] To enable recursion in the function
+
+### Q2: What is the key difference between the state-based and recursive implementations of chained sum?
+- [ ] Only the recursive version supports chaining
+- [ ] The state-based version is always faster
+- [x] State-based uses a property to track total, recursive creates new function instances
+- [ ] Only the state-based version can handle negative numbers
+
+### Q3: What would `sum(1)(2)(3) == 6` return if `valueOf` was not implemented?
+- [ ] true
+- [x] false
+- [ ] It would throw an error
+- [ ] undefined
+<!-- quiz-end -->

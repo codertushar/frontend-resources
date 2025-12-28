@@ -106,3 +106,25 @@ runSequential(tasks, 1).then(console.log);  // → 2
 * Passes value from one promise to the next.
 * Works with both sync and async returns.
 * Use case: chained API calls, data transformation pipelines.
+
+---
+
+<!-- quiz-start -->
+### Q1: Why must the tasks array contain functions that return promises, rather than promises directly?
+- [ ] Functions are more memory efficient
+- [x] Promises start executing immediately when created; functions allow delayed execution until the previous task completes
+- [ ] It's required for the reduce pattern to work
+- [ ] Functions provide better error handling
+
+### Q2: What is the purpose of `Promise.resolve()` as the initial value in the reduce pattern?
+- [ ] It handles empty arrays by rejecting
+- [x] It provides a resolved promise to start the chain, allowing the first task to execute
+- [ ] It converts the tasks array into promises
+- [ ] It catches errors from the first task
+
+### Q3: When should you use sequential promise execution instead of Promise.all?
+- [ ] When you want faster execution
+- [ ] When promises are independent of each other
+- [x] When each operation depends on the result of the previous one
+- [ ] When you need to handle multiple rejections
+<!-- quiz-end -->

@@ -1000,6 +1000,28 @@ Asking zero questions signals lack of interest or preparation. Strong questions 
 
 ---
 
-**Good luck with your interviews!** 🚀  
+**Good luck with your interviews!** 🚀
 
 Remember: At 15 years, you're not just demonstrating technical skills—you're showing you can shape the future of engineering organizations. Be confident, be curious, and most importantly, be yourself.
+
+---
+
+<!-- quiz-start -->
+### Q1: At the Staff/Principal engineer level, what is the primary focus of interviews?
+- [ ] Solving as many LeetCode Hard problems as possible
+- [ ] Demonstrating knowledge of multiple programming languages
+- [x] System design, architecture decisions, leadership, and team impact
+- [ ] Memorizing API documentation
+
+### Q2: According to the guide, what percentage of coding should a Staff Engineer expect in their role?
+- [ ] 80-100% coding
+- [x] 30-50% coding
+- [ ] 0% coding (purely management)
+- [ ] 10% coding only
+
+### Q3: When answering behavioral questions at this level, what is the most critical element to include?
+- [ ] Technical jargon to impress the interviewer
+- [ ] Only describing the situation and task
+- [x] Measurable impact with specific metrics and numbers
+- [ ] Criticizing previous employers' decisions
+<!-- quiz-end -->

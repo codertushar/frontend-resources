@@ -991,3 +991,25 @@ for (let right = 0; right < n; right++) {      // Executes n times
 
 - [Two-Pointer Technique](two_pointer_technique.md) - Complementary pattern for sorted arrays and palindromes
 - [Merge Two Sorted Arrays](merge_two_sorted_arrays.md) - Uses two-pointer technique similar to sliding window
+
+---
+
+<!-- quiz-start -->
+### Q1: What is the key insight that makes sliding window achieve O(n) time complexity instead of O(n²)?
+- [ ] It uses recursion to divide the problem
+- [x] Each element enters and exits the window exactly once, avoiding recalculation
+- [ ] It sorts the array first
+- [ ] It uses hash tables for O(1) lookups
+
+### Q2: What is the difference between fixed-size and variable-size sliding windows?
+- [ ] Fixed-size windows are always faster
+- [ ] Variable-size windows require sorting
+- [x] Fixed-size windows maintain constant length while variable-size windows expand/contract based on conditions
+- [ ] There is no difference, they are the same technique
+
+### Q3: In a variable-size sliding window for finding longest substring without repeating characters, when do you shrink the window from the left?
+- [ ] When the window reaches a maximum size
+- [ ] At every iteration
+- [x] When a duplicate character is encountered in the window
+- [ ] When the right pointer reaches the end
+<!-- quiz-end -->

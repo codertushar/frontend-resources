@@ -121,3 +121,25 @@ console.log(numbers); // Output: [1, 4, 21, 30, 100000]
 * **QuickSort** : More efficient, with average time complexity of `O(n log n)`. It uses a divide-and-conquer approach to partition the array into smaller sub-arrays and sorts them recursively.
 
 Both implementations allow you to pass a custom `compareFn` function for sorting, but if none is provided, they default to lexicographic sorting.
+
+---
+
+<!-- quiz-start -->
+### Q1: What is the default sorting behavior when no compare function is provided?
+- [ ] Numeric ascending order
+- [x] Lexicographic (string) comparison
+- [ ] Numeric descending order
+- [ ] No sorting occurs
+
+### Q2: Why does `[1, 30, 4, 21, 100000].sort()` produce `[1, 100000, 21, 30, 4]`?
+- [ ] The sort is broken
+- [ ] Numbers are sorted by their first digit
+- [x] Elements are converted to strings and sorted lexicographically
+- [ ] It's random behavior
+
+### Q3: What is the average time complexity of QuickSort?
+- [ ] O(n)
+- [ ] O(n^2)
+- [x] O(n log n)
+- [ ] O(log n)
+<!-- quiz-end -->

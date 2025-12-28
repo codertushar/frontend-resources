@@ -1107,3 +1107,31 @@ console.log('2: After call (continues synchronously)');
 - Learn about [promises](../promises/) for async patterns and microtask behavior
 - Review [async/await patterns](../promises/) for modern asynchronous code
 - Check [debounce.md](../utils/debounce.md) and [throttle.md](../utils/throttle.md) for practical event loop applications
+
+---
+
+<!-- quiz-start -->
+### Q1: What is the output of this code?
+```javascript
+console.log('A');
+setTimeout(() => console.log('B'), 0);
+Promise.resolve().then(() => console.log('C'));
+console.log('D');
+```
+- [ ] A, B, C, D
+- [ ] A, D, B, C
+- [x] A, D, C, B
+- [ ] A, C, D, B
+
+### Q2: Which queue has higher priority in the event loop?
+- [ ] Macrotask queue
+- [x] Microtask queue
+- [ ] Both have equal priority
+- [ ] It depends on the browser
+
+### Q3: What happens when setTimeout is called with a delay of 0ms?
+- [ ] The callback executes immediately
+- [ ] The callback executes before synchronous code
+- [x] The callback is added to the macrotask queue and executes after all synchronous code and microtasks
+- [ ] The delay is ignored and treated as 1ms
+<!-- quiz-end -->

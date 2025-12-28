@@ -1325,3 +1325,33 @@ const objFixed2 = {
 - [MDN: Scope](https://developer.mozilla.org/en-US/docs/Glossary/Scope) — Official documentation
 - [JavaScript.info: Closures and Scope](https://javascript.info/closure) — Comprehensive guide with examples
 - [You Don't Know JS: Scope & Closures](https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/README.md) — Deep dive into scoping mechanisms
+
+---
+
+<!-- quiz-start -->
+### Q1: What is the scope of a variable declared with `let` inside a `for` loop?
+- [ ] Function scope
+- [ ] Global scope
+- [x] Block scope (limited to the loop block)
+- [ ] Module scope
+
+### Q2: What is the Temporal Dead Zone (TDZ)?
+- [ ] A period when variables declared with `var` are undefined
+- [x] The period between entering a scope and the `let`/`const` declaration where the variable cannot be accessed
+- [ ] A JavaScript error state
+- [ ] The time when garbage collection runs
+
+### Q3: What will `console.log(x)` output?
+```javascript
+var x = 1;
+function test() {
+  console.log(x);
+  var x = 2;
+}
+test();
+```
+- [ ] 1
+- [x] undefined
+- [ ] 2
+- [ ] ReferenceError
+<!-- quiz-end -->

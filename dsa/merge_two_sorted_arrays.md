@@ -326,3 +326,23 @@ minHeap = [
 ```
 
 ---
+
+<!-- quiz-start -->
+### Q1: What is the time complexity of merging two sorted arrays using the two-pointer approach?
+- [ ] O(n * m) where n and m are array lengths
+- [x] O(n + m) where n and m are array lengths
+- [ ] O(n log n) due to sorting
+- [ ] O(1) constant time
+
+### Q2: When merging K sorted arrays, what data structure provides the optimal approach?
+- [ ] Stack
+- [ ] Queue
+- [x] Min-Heap (Priority Queue)
+- [ ] Linked List
+
+### Q3: In the two-pointer approach for merging two sorted arrays, what happens when one array is exhausted?
+- [ ] The algorithm stops immediately
+- [ ] The remaining elements are discarded
+- [x] The remaining elements from the other array are appended
+- [ ] A new comparison loop starts
+<!-- quiz-end -->

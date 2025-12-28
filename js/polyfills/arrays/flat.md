@@ -119,3 +119,25 @@ if (!Array.prototype.flat) {
 | `[1, [2, [3]]]`with `depth=2` | `[1, 2, 3]`     |
 | `[1, [2, [3]]]`with `depth=0` | `[1, [2, [3]]]` |
 
+---
+
+<!-- quiz-start -->
+### Q1: What is the default depth value for `flat()`?
+- [ ] 0
+- [x] 1
+- [ ] Infinity
+- [ ] undefined
+
+### Q2: What does `[1, [2, [3, [4]]]].flat(2)` return?
+- [ ] [1, 2, 3, 4]
+- [x] [1, 2, 3, [4]]
+- [ ] [1, [2, [3, [4]]]]
+- [ ] [1, 2, [3, [4]]]
+
+### Q3: How does the recursive `flat()` polyfill determine when to stop flattening?
+- [ ] When the array is empty
+- [x] When depth reaches 0 or the item is not an array
+- [ ] When all elements are numbers
+- [ ] When a null value is encountered
+<!-- quiz-end -->
+

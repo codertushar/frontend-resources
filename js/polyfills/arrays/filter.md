@@ -65,3 +65,25 @@ console.log(evenNumbers); // Output: [2, 4, 6]
 * If not, it throws a `TypeError`, mimicking the behavior of the native `Array.prototype.filter` method.
 
 This polyfill behaves similarly to the native `Array.prototype.filter`, allowing for array filtering based on a custom condition. It handles `thisArg`, ensures correct element processing in sparse arrays, and performs type checking on the callback.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `filter()` return?
+- [ ] The first matching element
+- [ ] The original array modified in place
+- [x] A new array with elements that pass the test
+- [ ] The count of matching elements
+
+### Q2: Why does the filter polyfill use `this.hasOwnProperty(i)`?
+- [ ] To check if the callback exists
+- [ ] To validate the index is a number
+- [x] To handle sparse arrays and skip holes
+- [ ] To ensure the element is not null
+
+### Q3: What does `[1, 2, 3].myFilter(x => x > 5)` return?
+- [ ] undefined
+- [ ] null
+- [ ] [1, 2, 3]
+- [x] []
+<!-- quiz-end -->

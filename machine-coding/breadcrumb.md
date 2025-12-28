@@ -276,3 +276,25 @@ drill using reduce     build from array
 That’s all a breadcrumb for nested objects really is.
 
 Want me to generate a flashcard version or a diagram to make it stick even harder?
+
+---
+
+<!-- quiz-start -->
+### Q1: What JavaScript method is used to traverse the nested object based on the path array?
+- [ ] map()
+- [ ] filter()
+- [x] reduce()
+- [ ] forEach()
+
+### Q2: When a user clicks on a breadcrumb item at index 2, what happens to the path array?
+- [ ] The entire path is cleared
+- [ ] Only the clicked item is removed
+- [x] The path is sliced to keep elements from index 0 to index 2 (inclusive)
+- [ ] A new item is added at index 2
+
+### Q3: What is the purpose of returning `acc && acc[key]` in the reduce function?
+- [ ] To add new keys to the object
+- [x] To safely handle undefined values and prevent errors when navigating
+- [ ] To count the total number of keys
+- [ ] To sort the keys alphabetically
+<!-- quiz-end -->

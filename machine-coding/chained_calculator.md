@@ -88,3 +88,25 @@ console.log(result); // Output: 24
 You can use this pattern to build more complex calculators by adding operations or features like exponentiation, modulus, or even memory storage.
 
 [Runkit link](https://runkit.com/codertushar/chain-calculator)
+
+---
+
+<!-- quiz-start -->
+### Q1: What enables method chaining in the ChainCalculator class?
+- [ ] Using arrow functions for all methods
+- [ ] Storing values in an array
+- [x] Returning `this` from each operation method
+- [ ] Using the constructor to initialize methods
+
+### Q2: What is the output of: `new ChainCalculator(10).add(5).multiply(2).getResult()`?
+- [ ] 25
+- [x] 30
+- [ ] 20
+- [ ] 35
+
+### Q3: What happens when you call `divide(0)` on the ChainCalculator?
+- [ ] Returns Infinity
+- [ ] Returns 0
+- [ ] Returns NaN
+- [x] Throws an Error with message "Division by zero is not allowed."
+<!-- quiz-end -->

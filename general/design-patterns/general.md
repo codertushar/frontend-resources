@@ -276,3 +276,25 @@ Design patterns aren't strict rules—they're proven solutions to recurring prob
 | Prototype | Share behavior through inheritance     |
 | Strategy  | Choose behavior at runtime             |
 | Command   | Wrap requests as executable objects    |
+
+---
+
+<!-- quiz-start -->
+### Q1: Which design pattern is best suited for creating multiple similar objects without using the `new` keyword?
+- [ ] Singleton Pattern
+- [x] Factory Pattern
+- [ ] Observer Pattern
+- [ ] Module Pattern
+
+### Q2: What is the main purpose of the Observer Pattern (Pub/Sub)?
+- [ ] To ensure only one instance exists
+- [ ] To encapsulate private variables
+- [x] To notify subscribers automatically when a publisher's state changes
+- [ ] To create objects step by step
+
+### Q3: Which pattern would you use to implement an undo/redo feature?
+- [ ] Factory Pattern
+- [ ] Singleton Pattern
+- [x] Command Pattern
+- [ ] Prototype Pattern
+<!-- quiz-end -->

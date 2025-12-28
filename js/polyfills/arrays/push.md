@@ -51,4 +51,26 @@ console.log(array); // Output: [1, 2, 3, 4, 5, 6, 7]
 
 ✔ Appends elements in order
 
-🚀 **This implementation is simple, efficient, and follows the behavior of `Array.prototype.push` exactly!** Let me know if you need refinements.
+This implementation is simple, efficient, and follows the behavior of `Array.prototype.push` exactly.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `push()` return?
+- [ ] The pushed element(s)
+- [ ] The original array
+- [x] The new length of the array
+- [ ] undefined
+
+### Q2: How does the push polyfill add elements to the array?
+- [ ] Using concat()
+- [x] Assigning elements at `this.length` index
+- [ ] Using unshift() internally
+- [ ] Creating a new array with spread operator
+
+### Q3: What does `[1, 2].customPush(3, 4, 5)` return?
+- [ ] [1, 2, 3, 4, 5]
+- [ ] 3
+- [x] 5
+- [ ] [3, 4, 5]
+<!-- quiz-end -->

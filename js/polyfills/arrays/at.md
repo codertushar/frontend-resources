@@ -51,3 +51,25 @@ console.log(array.customAt(100)); // Output: undefined
 * `customAt(100)` returns `undefined` since the index is out of bounds.
 
 This mimics `Array.prototype.at` while supporting both positive and negative indices.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `[5, 12, 8].customAt(-1)` return?
+- [ ] 5
+- [ ] undefined
+- [x] 8
+- [ ] -1
+
+### Q2: How does the `at()` polyfill handle negative indices?
+- [ ] It throws an error for negative indices
+- [ ] It returns undefined for any negative index
+- [x] It adds the array length to convert negative index to positive
+- [ ] It takes the absolute value of the index
+
+### Q3: What does `[1, 2, 3].customAt(10)` return?
+- [ ] 3
+- [ ] null
+- [ ] An error is thrown
+- [x] undefined
+<!-- quiz-end -->

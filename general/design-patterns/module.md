@@ -220,3 +220,25 @@ While **ES6 modules** are preferred for modern applications, the classic Module 
 
 The **Module Pattern** is a cornerstone of JavaScript architecture that laid the groundwork for modern module systems. It helps write clean, modular, and maintainable code by enforcing encapsulation and separation of concerns. Understanding this pattern also provides deep insight into how **closures**, **scoping**, and **privacy** work in JavaScript.
 
+---
+
+<!-- quiz-start -->
+### Q1: What JavaScript feature does the Module Pattern rely on to create private scope?
+- [ ] ES6 classes
+- [ ] The `private` keyword
+- [x] Closures and Immediately Invoked Function Expressions (IIFE)
+- [ ] Prototypes
+
+### Q2: What is a key limitation of the classic Module Pattern?
+- [ ] It cannot expose public methods
+- [ ] It pollutes the global namespace
+- [x] It creates a singleton - only one instance exists
+- [ ] It cannot use closures
+
+### Q3: What is the modern alternative to the Module Pattern in JavaScript?
+- [ ] Constructor functions
+- [ ] Prototype-based objects
+- [x] ES6 Modules with import/export syntax
+- [ ] Global variables
+<!-- quiz-end -->
+

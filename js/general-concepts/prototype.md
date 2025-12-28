@@ -487,3 +487,25 @@ obj.greet();  // Still "Hi" - obj still linked to OLD prototype
 
 - [MDN: Inheritance and the prototype chain](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain)
 - [JavaScript.info: Prototypes](https://javascript.info/prototypes)
+
+---
+
+<!-- quiz-start -->
+### Q1: What is the difference between `__proto__` and `prototype`?
+- [ ] They are the same thing
+- [ ] `__proto__` is only available in Node.js
+- [x] `prototype` is a property of functions; `__proto__` is a property of all objects pointing to their prototype
+- [ ] `prototype` is deprecated and `__proto__` should be used instead
+
+### Q2: What happens when you access a property that doesn't exist on an object?
+- [ ] JavaScript throws a ReferenceError
+- [ ] JavaScript returns null
+- [x] JavaScript looks up the prototype chain until it finds the property or reaches null
+- [ ] JavaScript creates the property automatically
+
+### Q3: Why should you use `Object.create(Parent.prototype)` instead of `new Parent()` when setting up inheritance?
+- [ ] `Object.create` is faster
+- [ ] `new Parent()` doesn't work with prototypes
+- [x] `Object.create` creates the prototype link without calling the parent constructor
+- [ ] There is no difference between the two approaches
+<!-- quiz-end -->

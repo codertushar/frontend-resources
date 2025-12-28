@@ -108,3 +108,25 @@ console.log(compareDocuments(doc1, doc2));
 * No external dependencies
 * Simple `diff` granularity: line + word
 * Expandable for char-level or structural diffing (e.g. JSON, HTML trees)
+
+---
+
+<!-- quiz-start -->
+### Q1: What does the `compareDocuments` function return when two lines are identical?
+- [ ] `{ status: 'same' }`
+- [x] `{ status: 'equal', content: '...' }`
+- [ ] `null`
+- [ ] An empty object
+
+### Q2: How are words compared within a differing line?
+- [ ] Using character-by-character comparison
+- [x] By splitting on whitespace and comparing each word by index
+- [ ] Using regular expressions
+- [ ] By calculating Levenshtein distance
+
+### Q3: What happens when one document has more lines than the other?
+- [ ] The function throws an error
+- [ ] Extra lines are ignored
+- [x] Missing lines are treated as empty strings in the comparison
+- [ ] The function returns null
+<!-- quiz-end -->

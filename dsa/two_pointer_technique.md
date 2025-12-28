@@ -807,3 +807,25 @@ const moveZeros = (arr) => {
 - [LeetCode Two Pointers Pattern](https://leetcode.com/tag/two-pointers/)
 - [MDN Array Methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
 - [Big-O Cheat Sheet](https://www.bigocheatsheet.com/)
+
+---
+
+<!-- quiz-start -->
+### Q1: What is the main advantage of the two-pointer technique over nested loops?
+- [ ] It uses less memory by avoiding arrays
+- [x] It reduces time complexity from O(n²) to O(n) for pair/comparison problems
+- [ ] It only works with sorted arrays
+- [ ] It eliminates the need for variables
+
+### Q2: When should you use converging (opposite direction) pointers vs fast/slow (same direction) pointers?
+- [x] Converging for palindromes and pair sums; fast/slow for removing duplicates and cycle detection
+- [ ] Converging for large arrays; fast/slow for small arrays
+- [ ] They are interchangeable and can be used for any problem
+- [ ] Converging for strings only; fast/slow for numbers only
+
+### Q3: In the two-pointer technique for finding pairs with a target sum in a sorted array, when the current sum is less than target, which pointer should move?
+- [x] Move the left pointer to the right (to increase the sum)
+- [ ] Move the right pointer to the left (to decrease the sum)
+- [ ] Move both pointers toward the center
+- [ ] Reset both pointers to the start
+<!-- quiz-end -->

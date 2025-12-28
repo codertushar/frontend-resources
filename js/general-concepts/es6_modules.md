@@ -242,4 +242,26 @@ console.log(subtract(10, 5));  // 5
 
 The **ES6 module system** is now the **standard way to organize JavaScript code**, replacing older patterns like IIFEs, CommonJS, and AMD. It improves code clarity, enforces modular structure, and provides powerful tooling benefits (like tree-shaking and scope isolation).
 
-If you’re building modern JavaScript applications—whether in the browser or Node.js—you should embrace ES6 modules as your go-to solution for scalable code architecture.
+If you're building modern JavaScript applications—whether in the browser or Node.js—you should embrace ES6 modules as your go-to solution for scalable code architecture.
+
+---
+
+<!-- quiz-start -->
+### Q1: How many default exports can a module have?
+- [ ] Unlimited
+- [ ] Two
+- [x] One
+- [ ] None, only named exports are allowed
+
+### Q2: What is the correct way to import a default export?
+- [ ] `import { default } from './module.js'`
+- [x] `import myModule from './module.js'`
+- [ ] `import * from './module.js'`
+- [ ] `require('./module.js')`
+
+### Q3: Which statement about ES6 modules is TRUE?
+- [ ] Modules run in non-strict mode by default
+- [ ] `import` statements can be placed anywhere in the file
+- [x] Module scripts have `defer` behavior implicitly enabled in browsers
+- [ ] ES6 modules support dynamic `require()` syntax
+<!-- quiz-end -->

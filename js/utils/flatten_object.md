@@ -106,3 +106,25 @@ console.log('✅ Final Flattened Object:', flat);
 * **No global state** : Uses `result` as an accumulator.
 * **Prefix logic** : Avoids leading underscores.
 
+---
+
+<!-- quiz-start -->
+### Q1: What does `flattenObject({ a: { b: 1 } })` return?
+- [ ] `{ a: 1 }`
+- [x] `{ a_b: 1 }`
+- [ ] `{ 'a.b': 1 }`
+- [ ] `{ ab: 1 }`
+
+### Q2: How does the flatten function handle arrays?
+- [ ] It flattens them with numeric indices
+- [ ] It converts them to comma-separated strings
+- [x] It leaves them as-is without recursing into them
+- [ ] It throws an error
+
+### Q3: Why is `value !== null` checked before recursing?
+- [ ] Because null causes infinite loops
+- [x] Because `typeof null` is 'object' but null should not be recursed into
+- [ ] Because null values should be converted to undefined
+- [ ] Because null cannot have properties
+<!-- quiz-end -->
+

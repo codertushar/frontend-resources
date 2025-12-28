@@ -603,3 +603,25 @@ const throttled = throttle(apiCall, 100);         // Reasonable rate limit
 - [Lodash throttle documentation](https://lodash.com/docs/4.17.15#throttle)
 - [CSS-Tricks: Debouncing and Throttling Explained](https://css-tricks.com/debouncing-throttling-explained-examples/)
 - [MDN: requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame)
+
+---
+
+<!-- quiz-start -->
+### Q1: If you throttle a function with a 100ms delay and call it 50 times in 1 second, approximately how many times will it execute?
+- [ ] 50 times
+- [x] 10 times
+- [ ] 1 time
+- [ ] 100 times
+
+### Q2: What is the difference between leading edge and trailing edge throttle?
+- [ ] Leading is faster than trailing
+- [x] Leading executes immediately on first call; trailing executes at end of delay
+- [ ] Leading only works with scroll events
+- [ ] There is no practical difference
+
+### Q3: Which scenario is BEST suited for throttle (not debounce)?
+- [ ] Search input autocomplete
+- [ ] Form field validation after typing
+- [x] Tracking scroll position during scrolling
+- [ ] Auto-saving after user stops editing
+<!-- quiz-end -->

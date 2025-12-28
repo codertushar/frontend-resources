@@ -27,6 +27,7 @@ Every educational resource MUST follow this 7-step structure:
 5. **Limitations & Considerations** - Edge cases, performance implications
 6. **Summary** - Bullet-point key takeaways
 7. **Related Resources (Optional)** - Cross-references to related topics
+8. **Quick Quiz (Required)** - 2-3 multiple choice questions to test understanding
 
 ### 2. Code Style Conventions
 
@@ -175,6 +176,39 @@ Before completing any task, verify:
 - [ ] Heading hierarchy is maintained
 - [ ] Cross-references to related resources where applicable
 - [ ] No significant overlap with existing files
+- [ ] Quick quiz with 2-3 questions at the end
+
+---
+
+## 🎯 Quick Quiz Format (Required)
+
+Every article MUST end with a quick quiz. Use this exact format:
+
+```markdown
+<!-- quiz-start -->
+### Q1: Your question here?
+- [ ] Wrong answer
+- [x] Correct answer (mark with x)
+- [ ] Another wrong option
+
+### Q2: Second question?
+- [ ] Option A
+- [x] Option B (correct)
+- [ ] Option C
+
+### Q3: Third question?
+- [x] Correct answer
+- [ ] Wrong answer
+- [ ] Another wrong answer
+<!-- quiz-end -->
+```
+
+**Guidelines:**
+- 2-3 questions per article
+- 3-4 options per question
+- Exactly ONE correct answer marked with `[x]`
+- Test key concepts, not trivial details
+- Place at the very end of the article
 
 ---
 
@@ -237,35 +271,6 @@ This repository is primarily educational content (markdown files) with no comple
 - ❌ DON'T omit the summary/key takeaways section
 - ❌ DON'T leave code examples untested
 - ❌ DON'T break existing cross-references
-
----
-
-## 📚 Additional Resources
-
-For comprehensive AI agent guidelines and detailed patterns, see **[AGENTS.md](../AGENTS.md)** which contains:
-- Detailed content structure requirements
-- Code style conventions with examples
-- Repository organization patterns
-- Agent interaction patterns
-- Cross-reference best practices
-- Complete template for new resources
-- Validation examples
-- Emoji guidelines
-
----
-
-## 💡 Best Practices Summary
-
-1. **Always use modern ES6+ JavaScript syntax** (const/let, arrow functions)
-2. **Follow the 7-step content structure** for all educational resources
-3. **Use snake_case for filenames** consistently
-4. **Include practical examples** (minimum 2-3 per resource)
-5. **Add error handling** in all code examples
-6. **Use emoji prefixes** in markdown headings
-7. **Cross-reference related topics** to build connections
-8. **Run `node update-readme.js`** after adding new content
-9. **Verify code examples** are syntactically correct
-10. **Check AGENTS.md** for comprehensive guidelines
 
 ---
 

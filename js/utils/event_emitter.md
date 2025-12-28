@@ -689,3 +689,25 @@ emit(event, ...args) {
 - [Node.js EventEmitter](https://nodejs.org/api/events.html)
 - [MDN: CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)
 - [Observer Pattern](https://refactoring.guru/design-patterns/observer)
+
+---
+
+<!-- quiz-start -->
+### Q1: Why is `Set` preferred over `Array` for storing listeners in an EventEmitter?
+- [ ] Sets are easier to iterate
+- [x] Sets provide O(1) lookup and deletion, and prevent duplicate listeners
+- [ ] Sets preserve insertion order better
+- [ ] Arrays cannot store functions
+
+### Q2: What is the purpose of the `once` method in an EventEmitter?
+- [ ] To emit an event only once
+- [ ] To check if an event exists
+- [x] To subscribe a listener that automatically unsubscribes after one execution
+- [ ] To delay event emission
+
+### Q3: What is a common pitfall when using anonymous functions as event listeners?
+- [ ] They run slower than named functions
+- [ ] They cannot access the event data
+- [x] They cannot be removed with `off()` because there's no reference to match
+- [ ] They cause memory leaks automatically
+<!-- quiz-end -->

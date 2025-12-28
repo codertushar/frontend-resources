@@ -101,3 +101,25 @@ promiseAny([
   });
 ```
 
+---
+
+<!-- quiz-start -->
+### Q1: When does Promise.any reject?
+- [ ] When the first promise rejects
+- [ ] When any promise rejects
+- [x] Only when ALL promises reject
+- [ ] It never rejects
+
+### Q2: What type of error does Promise.any throw when all promises reject?
+- [ ] TypeError
+- [ ] RejectionError
+- [x] AggregateError
+- [ ] PromiseError
+
+### Q3: What happens when Promise.any is passed an empty array?
+- [ ] It resolves with undefined
+- [ ] It returns a pending promise that never settles
+- [x] It rejects immediately with an AggregateError
+- [ ] It throws a TypeError
+<!-- quiz-end -->
+

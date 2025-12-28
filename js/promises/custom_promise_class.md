@@ -234,3 +234,25 @@ CustomPromise.allSettled([
 Additional Resources:
 
 [Build Your Own Promise](https://www.youtube.com/watch?v=IxOJgcvlHHc)
+
+---
+
+<!-- quiz-start -->
+### Q1: Why does the custom Promise implementation use `setTimeout(handleFulfilled, 0)` when the promise is already fulfilled?
+- [ ] To prevent memory leaks
+- [x] To ensure asynchronous behavior matching native Promise microtask semantics
+- [ ] To allow multiple handlers to be registered
+- [ ] To prevent stack overflow errors
+
+### Q2: What are the three possible states a Promise can be in?
+- [ ] waiting, done, error
+- [ ] open, closed, failed
+- [x] pending, fulfilled, rejected
+- [ ] started, completed, cancelled
+
+### Q3: How does the .catch() method work internally in a Promise implementation?
+- [ ] It creates a new error handling mechanism
+- [ ] It wraps the promise in a try-catch block
+- [x] It calls .then(null, onRejected)
+- [ ] It registers a global error handler
+<!-- quiz-end -->

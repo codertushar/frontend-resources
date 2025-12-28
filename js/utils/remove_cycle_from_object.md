@@ -138,3 +138,25 @@ console.log(JSON.stringify(item1, getCircularReplacer(), 2));
 * Use **`JSON.stringify` with a custom replacer** to safely serialize cyclic structures on-demand.
 
 These patterns are standard in tools like `fast-safe-stringify`, `circular-json`, or serializers for distributed systems and state management frameworks.
+
+---
+
+<!-- quiz-start -->
+### Q1: Why is `WeakSet` used instead of a regular `Set` for tracking visited objects?
+- [ ] WeakSet is faster
+- [ ] WeakSet can store primitives
+- [x] WeakSet allows garbage collection of objects when no other references exist
+- [ ] WeakSet supports iteration
+
+### Q2: What does `removeCycle` do when it detects a circular reference?
+- [ ] Throws an error
+- [ ] Returns undefined
+- [x] Deletes the property that creates the cycle
+- [ ] Replaces the reference with null
+
+### Q3: When should you use `getCircularReplacer()` with JSON.stringify instead of `removeCycle()`?
+- [x] When you want to serialize without mutating the original object
+- [ ] When you need better performance
+- [ ] When dealing with arrays only
+- [ ] When the object has no circular references
+<!-- quiz-end -->

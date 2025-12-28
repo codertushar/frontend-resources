@@ -174,8 +174,30 @@ Avoid using a facade if:
 
 The **Facade Pattern** is all about **clarity and usability**. It’s not always necessary, but when used appropriately, it brings elegance to your APIs and shields users from the chaos of complexity.
 
-It’s especially useful when:
+It's especially useful when:
 
 * Designing public libraries
 * Integrating multiple services
 * Creating SDK wrappers or simplifying APIs
+
+---
+
+<!-- quiz-start -->
+### Q1: What is the primary purpose of the Facade Pattern?
+- [ ] To add new functionality to existing code
+- [x] To provide a simplified interface to a complex system of subsystems
+- [ ] To create multiple instances of objects
+- [ ] To observe changes in state
+
+### Q2: Which of the following is a real-world analogy for the Facade Pattern?
+- [ ] A factory assembly line
+- [x] A travel booking website that internally calls multiple APIs (flights, hotels, cars)
+- [ ] A newspaper subscription service
+- [ ] A singleton database connection
+
+### Q3: When should you NOT use the Facade Pattern?
+- [ ] When you want to simplify API usage
+- [ ] When integrating multiple services
+- [x] When your system is already simple or clients need fine-grained control over subsystems
+- [ ] When creating SDK wrappers
+<!-- quiz-end -->

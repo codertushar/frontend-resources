@@ -106,3 +106,25 @@ Length: 3
 ✅ AOT 7: Returning final result: 6
 ```
 
+---
+
+<!-- quiz-start -->
+### Q1: What happens when calling `[].reduce((a, b) => a + b)` without an initial value?
+- [ ] Returns undefined
+- [ ] Returns 0
+- [x] Throws a TypeError
+- [ ] Returns an empty array
+
+### Q2: When no initial value is provided, what does `reduce()` use as the initial accumulator?
+- [ ] undefined
+- [ ] 0
+- [ ] The last element of the array
+- [x] The first defined element of the array
+
+### Q3: How does `reduce()` handle sparse arrays (arrays with holes)?
+- [ ] Treats holes as undefined
+- [x] Skips holes and only processes existing elements
+- [ ] Throws an error when encountering holes
+- [ ] Fills holes with null before processing
+<!-- quiz-end -->
+

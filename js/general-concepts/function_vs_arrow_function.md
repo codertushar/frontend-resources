@@ -136,3 +136,25 @@ const counter = {
 ## 🔚 Conclusion
 
 Use **function declarations or expressions** when you rely on dynamic `this`, such as in methods or callbacks that depend on object context. Use **arrow functions** for everything else — especially in callbacks, map/reduce logic, and stateless utilities.
+
+---
+
+<!-- quiz-start -->
+### Q1: What does `this` refer to inside an arrow function?
+- [ ] The object that called the function
+- [ ] The global object (window)
+- [x] The `this` value from the enclosing lexical scope
+- [ ] undefined always
+
+### Q2: Can you change the `this` value of an arrow function using `.call()` or `.apply()`?
+- [ ] Yes, just like regular functions
+- [x] No, arrow functions ignore explicit `this` binding
+- [ ] Only with `.call()`, not `.apply()`
+- [ ] Only in strict mode
+
+### Q3: Which scenario is best suited for arrow functions?
+- [ ] Object methods that need to access `this.property`
+- [ ] Event handlers that need to reference the clicked element via `this`
+- [x] Callbacks inside methods like `.map()`, `.filter()`, or `.forEach()`
+- [ ] Constructor functions
+<!-- quiz-end -->

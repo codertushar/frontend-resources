@@ -173,6 +173,26 @@ console.log(letters); // ✅ ["H", "e", "l", "l", "o"]
 
 💡 **Final Thought:**
 
-The **spread operator (`...`) is one of JavaScript’s most powerful tools** for working with arrays, objects, and function arguments in a clean, concise way. 🚀
+The **spread operator (`...`) is one of JavaScript's most powerful tools** for working with arrays, objects, and function arguments in a clean, concise way.
 
-Would you like real-world examples (e.g., React state updates)? 😊
+---
+
+<!-- quiz-start -->
+### Q1: What does the spread operator do when used with an array?
+- [ ] Combines arrays by reference
+- [x] Expands array elements into individual elements
+- [ ] Creates a deep copy of nested objects
+- [ ] Removes duplicate elements
+
+### Q2: What is the result of `{ ...{ a: 1, b: 2 }, ...{ b: 3, c: 4 } }`?
+- [ ] `{ a: 1, b: 2, c: 4 }`
+- [x] `{ a: 1, b: 3, c: 4 }`
+- [ ] `{ a: 1, b: [2, 3], c: 4 }`
+- [ ] Error: duplicate property
+
+### Q3: What is the key difference between the spread operator and the rest parameter?
+- [ ] They are the same thing
+- [ ] Spread can only be used with objects
+- [x] Spread expands elements, while rest collects elements into an array
+- [ ] Rest can only be used in function returns
+<!-- quiz-end -->

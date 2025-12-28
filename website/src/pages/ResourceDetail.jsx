@@ -11,6 +11,7 @@ import { useProgress } from '../context/ProgressContext';
 import { useSubscription } from '../context/SubscriptionContext';
 import { useAuth } from '../context/AuthContext';
 import Paywall from '../components/Paywall';
+import QuizSection, { parseQuizFromMarkdown, removeQuizFromContent } from '../components/QuizSection';
 
 const SUBCATEGORY_DISPLAY_NAMES = {
   'general-concepts': 'Core Concepts',
@@ -64,11 +65,13 @@ const ResourceDetail = () => {
   // Derive content directly - no loading state needed for initial content
   // Free articles: full content from JSON
   // Premium articles: preview from JSON, or fetched premium content if available
-  const content = useMemo(() => {
-    if (!resource) return '';
-    if (premiumContent) return premiumContent;
-    // If paywall should show and user doesn't have premium, only show preview
-    if (showPaywall) {
+  const { content, quizQuestions } = useMemo(() => {
+    if (!resource) return { content: '', quizQuestions: null };
+
+    let rawContent;
+    if (premiumContent) {
+      rawContent = premiumContent;
+    } else if (showPaywall) {
       // Generate preview - first ~300 words
       const fullContent = resource.fullContent || '';
       const lines = fullContent.split('\n');
@@ -79,9 +82,16 @@ const ResourceDetail = () => {
         wordCount += line.split(/\s+/).filter(w => w.length > 0).length;
         if (wordCount >= 300) break;
       }
-      return previewLines.join('\n');
+      rawContent = previewLines.join('\n');
+    } else {
+      rawContent = resource.fullContent;
     }
-    return resource.fullContent;
+
+    // Parse quiz from content and remove quiz block for markdown rendering
+    const quiz = parseQuizFromMarkdown(rawContent);
+    const cleanContent = removeQuizFromContent(rawContent);
+
+    return { content: cleanContent, quizQuestions: quiz };
   }, [resource, premiumContent, showPaywall]);
 
   // Derive loading state - only true when we have no content to show
@@ -437,6 +447,10 @@ const ResourceDetail = () => {
               <div className="premium-error">
                 Failed to load full content. Showing preview instead.
               </div>
+            )}
+            {/* Quiz Section - only show if quiz exists and not behind paywall */}
+            {!showPaywall && quizQuestions && (
+              <QuizSection questions={quizQuestions} />
             )}
           </>
         )}

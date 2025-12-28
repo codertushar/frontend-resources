@@ -47,12 +47,27 @@ async function checkForNewContent() {
 
     try {
         console.log('[SW] Checking for new content...');
-        const response = await fetch(`${BASE_PATH}/content.json`);
+
+        // Try BASE_PATH first (production), fall back to root (development)
+        let response = await fetch(`${BASE_PATH}/content.json`);
+
+        // If not ok or not JSON, try root path for development
+        if (!response.ok || !response.headers.get('content-type')?.includes('application/json')) {
+            response = await fetch('/content.json');
+        }
+
         if (!response.ok) {
             console.warn('[SW] Failed to fetch content.json:', response.status, response.statusText);
             return;
         }
-        
+
+        // Verify response is actually JSON before parsing
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            console.warn('[SW] content.json returned non-JSON response:', contentType);
+            return;
+        }
+
         const content = await response.json();
         const currentCount = content.length;
         console.log('[SW] Current article count:', currentCount);

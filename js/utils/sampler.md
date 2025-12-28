@@ -84,4 +84,26 @@ It uses closures to maintain internal state across invocations — an elegant an
 
 ## Final Thoughts
 
-Sampling is a subtle but powerful tool when you need deterministic execution control based on **call frequency**. It’s particularly valuable in analytics-heavy or high-frequency event environments, where precision and control outweigh sheer throughput.
+Sampling is a subtle but powerful tool when you need deterministic execution control based on **call frequency**. It's particularly valuable in analytics-heavy or high-frequency event environments, where precision and control outweigh sheer throughput.
+
+---
+
+<!-- quiz-start -->
+### Q1: When using `sampler(fn, 4)`, on which call numbers does the function execute?
+- [ ] 1st, 2nd, 3rd, 4th
+- [ ] 1st, 5th, 9th, 13th
+- [x] 4th, 8th, 12th, 16th
+- [ ] Every call after the 4th
+
+### Q2: How does sampling differ from throttling?
+- [ ] Sampling is faster
+- [x] Sampling is count-based while throttling is time-based
+- [ ] Throttling executes more often
+- [ ] There is no difference
+
+### Q3: What happens when you create two samplers with the same function but different counts?
+- [ ] They share the same counter
+- [ ] The second sampler overrides the first
+- [x] Each sampler has its own independent counter
+- [ ] An error is thrown
+<!-- quiz-end -->
