@@ -83,63 +83,61 @@ const Layout = ({ children }) => {
             </NavLink>
             <div className="nav-separator"></div>
             <ThemeToggle />
-            {isLoaded && (
-              <>
-                {isSignedIn ? (
-                  <div className="auth-section" ref={dropdownRef}>
-                    <button
-                      className="user-avatar-btn"
-                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                      aria-expanded={isDropdownOpen}
-                      aria-haspopup="true"
-                    >
-                      {(user?.user_metadata?.avatar_url || user?.user_metadata?.picture) ? (
-                        <img
-                          src={user.user_metadata.avatar_url || user.user_metadata.picture}
-                          alt="Profile"
-                          className="avatar-img"
-                        />
-                      ) : (
-                        <User size={18} />
-                      )}
-                    </button>
-                    {isDropdownOpen && (
-                      <div className="user-dropdown">
-                        <div className="dropdown-header">
-                          <span className="dropdown-email">{user?.email}</span>
-                          {userIsPremium ? (
-                            <div className="premium-badge">
-                              <Crown size={12} />
-                              <span>Premium {subscription?.plan === 'lifetime' ? '(Lifetime)' : ''}</span>
-                            </div>
-                          ) : (
-                            <Link
-                              to="/pricing"
-                              className="upgrade-link"
-                              onClick={() => setIsDropdownOpen(false)}
-                            >
-                              <Sparkles size={12} />
-                              <span>Upgrade to Premium</span>
-                            </Link>
-                          )}
-                        </div>
-                        <div className="dropdown-divider"></div>
-                        <button className="dropdown-item" onClick={handleSignOut}>
-                          <LogOut size={16} />
-                          <span>Sign Out</span>
-                        </button>
-                      </div>
+            <div className="auth-section" ref={dropdownRef}>
+              {!isLoaded ? (
+                <div className="auth-placeholder" aria-hidden="true" />
+              ) : isSignedIn ? (
+                <>
+                  <button
+                    className="user-avatar-btn"
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    aria-expanded={isDropdownOpen}
+                    aria-haspopup="true"
+                  >
+                    {(user?.user_metadata?.avatar_url || user?.user_metadata?.picture) ? (
+                      <img
+                        src={user.user_metadata.avatar_url || user.user_metadata.picture}
+                        alt="Profile"
+                        className="avatar-img"
+                      />
+                    ) : (
+                      <User size={18} />
                     )}
-                  </div>
-                ) : (
-                  <div className="auth-section">
-                    <button className="btn-auth btn-signup" onClick={handleSignIn}>
-                      Sign In
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
+                  </button>
+                  {isDropdownOpen && (
+                    <div className="user-dropdown">
+                      <div className="dropdown-header">
+                        <span className="dropdown-email">{user?.email}</span>
+                        {userIsPremium ? (
+                          <div className="premium-badge">
+                            <Crown size={12} />
+                            <span>Premium {subscription?.plan === 'lifetime' ? '(Lifetime)' : ''}</span>
+                          </div>
+                        ) : (
+                          <Link
+                            to="/pricing"
+                            className="upgrade-link"
+                            onClick={() => setIsDropdownOpen(false)}
+                          >
+                            <Sparkles size={12} />
+                            <span>Upgrade to Premium</span>
+                          </Link>
+                        )}
+                      </div>
+                      <div className="dropdown-divider"></div>
+                      <button className="dropdown-item" onClick={handleSignOut}>
+                        <LogOut size={16} />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <button className="btn-auth btn-signup" onClick={handleSignIn}>
+                  Sign In
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </nav>
@@ -262,6 +260,15 @@ const Layout = ({ children }) => {
           align-items: center;
           gap: 0.5rem;
           margin-left: 0.5rem;
+          min-width: 70px;
+        }
+
+        .auth-placeholder {
+          width: 70px;
+          height: 36px;
+          border-radius: 99px;
+          background: var(--surface-hover);
+          opacity: 0.5;
         }
 
         .user-avatar-btn {
@@ -485,6 +492,12 @@ const Layout = ({ children }) => {
           .auth-section {
             display: flex;
             gap: 0.25rem;
+            min-width: 55px;
+          }
+
+          .auth-placeholder {
+            width: 55px;
+            height: 30px;
           }
 
           .user-avatar-btn {

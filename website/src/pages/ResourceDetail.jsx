@@ -1,16 +1,35 @@
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, Check, Circle, Crown } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, Check, Circle, Crown, ChevronDown, ChevronUp } from 'lucide-react';
 import contentData from '../data/content.json';
 import { useProgress } from '../context/ProgressContext';
 import { useSubscription } from '../context/SubscriptionContext';
 import { useAuth } from '../context/AuthContext';
 import Paywall from '../components/Paywall';
+
+const SUBCATEGORY_DISPLAY_NAMES = {
+  'general-concepts': 'Core Concepts',
+  'polyfills': 'Polyfills',
+  'promises': 'Promises',
+  'utils': 'Utilities',
+  'design-patterns': 'Design Patterns',
+  'arrays': 'Arrays',
+  'general': 'General',
+};
+
+const CATEGORY_DISPLAY_NAMES = {
+  'js': 'JavaScript',
+  'dsa': 'DSA',
+  'ai': 'AI Engineering',
+  'machine-coding': 'Machine Coding',
+  'system-design': 'System Design',
+  'general': 'Browser & Patterns',
+};
 
 const ResourceDetail = () => {
   const location = useLocation();
@@ -18,6 +37,9 @@ const ResourceDetail = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [premiumContentLoading, setPremiumContentLoading] = useState(false);
   const [premiumContentError, setPremiumContentError] = useState(null);
+  const [showFullCategory, setShowFullCategory] = useState(false);
+  const sidebarRef = useRef(null);
+  const activeItemRef = useRef(null);
   const { isRead, toggleRead, isInitialized } = useProgress();
   const { isPremium, fetchPremiumContent, isInitialized: subInitialized } = useSubscription();
   const { isSignedIn } = useAuth();
@@ -75,6 +97,17 @@ const ResourceDetail = () => {
   const prevArticle = currentIndex > 0 ? categoryArticles[currentIndex - 1] : null;
   const nextArticle = currentIndex < categoryArticles.length - 1 ? categoryArticles[currentIndex + 1] : null;
 
+  // Get subcategory articles for sidebar
+  const subcategoryArticles = useMemo(() => {
+    if (!resource || !resource.subcategory) return categoryArticles;
+    return contentData.filter(r =>
+      r.category === resource.category && r.subcategory === resource.subcategory
+    );
+  }, [resource, categoryArticles]);
+
+  // Determine which articles to show in sidebar
+  const sidebarArticles = showFullCategory ? categoryArticles : subcategoryArticles;
+
   // Get related articles (same category or subcategory, excluding current)
   const relatedArticles = useMemo(() => {
     if (!resource) return [];
@@ -87,11 +120,27 @@ const ResourceDetail = () => {
       .slice(0, 3);
   }, [resource, resourceId]);
 
-  // Reset premium content when resource changes
+  // Reset premium content and sidebar state when resource changes
   useEffect(() => {
     setPremiumContent(null);
     setPremiumContentError(null);
+    setShowFullCategory(false);
   }, [resourceId]);
+
+  // Scroll to active article in sidebar
+  useEffect(() => {
+    if (activeItemRef.current && sidebarRef.current) {
+      const sidebar = sidebarRef.current;
+      const activeItem = activeItemRef.current;
+      const sidebarRect = sidebar.getBoundingClientRect();
+      const activeRect = activeItem.getBoundingClientRect();
+
+      // Check if active item is outside visible area
+      if (activeRect.top < sidebarRect.top || activeRect.bottom > sidebarRect.bottom) {
+        activeItem.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+    }
+  }, [resourceId, sidebarArticles]);
 
   // For premium users, fetch full content after auth is ready
   useEffect(() => {
@@ -204,15 +253,88 @@ const ResourceDetail = () => {
         />
       </div>
 
-      <div className="container detail-container">
-        {/* Breadcrumb Navigation */}
-        <nav className="breadcrumb">
-        <Link to="/library" className="breadcrumb-link">Library</Link>
-        <span className="breadcrumb-sep">/</span>
-        <Link to={`/library?category=${resource.category}`} className="breadcrumb-link">{resource.category}</Link>
-        <span className="breadcrumb-sep">/</span>
-        <span className="breadcrumb-current">{currentIndex + 1} of {categoryArticles.length}</span>
-      </nav>
+      <div className="container detail-container-wrapper">
+        {/* Sidebar Navigation */}
+        <aside className="article-sidebar glass-panel" ref={sidebarRef}>
+          <div className="sidebar-header">
+            <div className="sidebar-title">
+              <span className="sidebar-category">
+                {CATEGORY_DISPLAY_NAMES[resource.category] || resource.category}
+              </span>
+              {resource.subcategory && !showFullCategory && (
+                <span className="sidebar-subcategory">
+                  {SUBCATEGORY_DISPLAY_NAMES[resource.subcategory] || resource.subcategory}
+                </span>
+              )}
+            </div>
+            {resource.subcategory && (
+              <button
+                className="sidebar-toggle"
+                onClick={() => setShowFullCategory(!showFullCategory)}
+                aria-label={showFullCategory ? 'Show subcategory only' : 'Show all in category'}
+              >
+                {showFullCategory ? (
+                  <>
+                    <ChevronUp size={14} />
+                    <span>Less</span>
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown size={14} />
+                    <span>All {categoryArticles.length}</span>
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+          <div className="sidebar-list">
+            {sidebarArticles.map((article) => {
+              const isActive = article.id === resourceId;
+              const articleRead = isInitialized && isRead(article.id);
+              return (
+                <Link
+                  key={article.id}
+                  to={`/resource/${article.id}`}
+                  className={`sidebar-item ${isActive ? 'active' : ''} ${articleRead ? 'read' : ''}`}
+                  ref={isActive ? activeItemRef : null}
+                >
+                  <div className="sidebar-item-content">
+                    <span className="sidebar-item-title">{article.title}</span>
+                    <div className="sidebar-item-meta">
+                      {article.premium && (
+                        <Crown size={12} className="sidebar-premium-icon" />
+                      )}
+                      {article.difficulty && (
+                        <span className={`sidebar-difficulty ${article.difficulty}`}>
+                          {article.difficulty}
+                        </span>
+                      )}
+                      {articleRead && (
+                        <Check size={12} className="sidebar-read-icon" />
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+          <div className="sidebar-footer">
+            <span className="sidebar-count">
+              {sidebarArticles.findIndex(a => a.id === resourceId) + 1} of {sidebarArticles.length}
+            </span>
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <div className="detail-main">
+          {/* Breadcrumb Navigation */}
+          <nav className="breadcrumb">
+            <Link to="/library" className="breadcrumb-link">Library</Link>
+            <span className="breadcrumb-sep">/</span>
+            <Link to={`/library?category=${resource.category}`} className="breadcrumb-link">{resource.category}</Link>
+            <span className="breadcrumb-sep">/</span>
+            <span className="breadcrumb-current">{currentIndex + 1} of {categoryArticles.length}</span>
+          </nav>
 
       <div className="article-header">
         <h1 className="article-title">
@@ -370,6 +492,7 @@ const ResourceDetail = () => {
           </div>
         </div>
       )}
+        </div>{/* End detail-main */}
 
       <style>{`
         /* Reading Progress Bar */
@@ -390,6 +513,207 @@ const ResourceDetail = () => {
           background: linear-gradient(90deg, var(--primary), #a78bfa);
           transition: width 0.1s ease-out;
           box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        /* Grid Layout Wrapper */
+        .detail-container-wrapper {
+          display: flex;
+          gap: 2rem;
+          padding-top: 2rem;
+          max-width: 1200px;
+        }
+
+        .detail-main {
+          flex: 1;
+          max-width: 900px;
+          min-width: 0;
+          margin-left: 300px;
+        }
+
+        /* Sidebar Styles */
+        .article-sidebar {
+          position: fixed;
+          top: 100px;
+          left: max(calc((100vw - 1200px) / 2 + 1.5rem), 1.5rem);
+          width: 280px;
+          max-height: calc(100vh - 120px);
+          overflow-y: auto;
+          padding: 1.25rem;
+          display: flex;
+          flex-direction: column;
+          z-index: 50;
+        }
+
+        .sidebar-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 1rem;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid var(--border-color);
+          gap: 0.5rem;
+        }
+
+        .sidebar-title {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+
+        .sidebar-category {
+          font-weight: 600;
+          font-size: 0.95rem;
+          color: var(--text-main);
+        }
+
+        .sidebar-subcategory {
+          font-size: 0.8rem;
+          color: var(--primary);
+        }
+
+        .sidebar-toggle {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          background: var(--surface-color);
+          border: 1px solid var(--border-color);
+          padding: 0.35rem 0.6rem;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.2s;
+          flex-shrink: 0;
+        }
+
+        .sidebar-toggle:hover {
+          color: var(--primary);
+          border-color: var(--primary);
+          background: rgba(139, 92, 246, 0.1);
+        }
+
+        .sidebar-list {
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+          flex: 1;
+          overflow-y: auto;
+          margin: 0 -0.5rem;
+          padding: 0 0.5rem;
+          min-height: 0;
+        }
+
+        .sidebar-item {
+          display: block;
+          padding: 0.65rem 0.75rem;
+          border-radius: 8px;
+          transition: all 0.2s;
+          border-left: 3px solid transparent;
+          text-decoration: none;
+        }
+
+        .sidebar-item:hover {
+          background: var(--surface-hover);
+        }
+
+        .sidebar-item.active {
+          background: rgba(139, 92, 246, 0.15);
+          border-left-color: var(--primary);
+        }
+
+        .sidebar-item.read .sidebar-item-title {
+          color: var(--text-muted);
+        }
+
+        .sidebar-item-content {
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+        }
+
+        .sidebar-item-title {
+          font-size: 0.85rem;
+          font-weight: 500;
+          color: var(--text-main);
+          line-height: 1.4;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .sidebar-item.active .sidebar-item-title {
+          color: var(--primary);
+        }
+
+        .sidebar-item-meta {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .sidebar-premium-icon {
+          color: #a78bfa;
+        }
+
+        .sidebar-difficulty {
+          font-size: 0.65rem;
+          font-weight: 600;
+          padding: 0.15rem 0.4rem;
+          border-radius: 4px;
+          text-transform: capitalize;
+        }
+
+        .sidebar-difficulty.easy {
+          background: rgba(34, 197, 94, 0.15);
+          color: #22c55e;
+        }
+
+        .sidebar-difficulty.medium {
+          background: rgba(245, 158, 11, 0.15);
+          color: #f59e0b;
+        }
+
+        .sidebar-difficulty.hard {
+          background: rgba(239, 68, 68, 0.15);
+          color: #ef4444;
+        }
+
+        .sidebar-read-icon {
+          color: #22c55e;
+        }
+
+        .sidebar-footer {
+          margin-top: auto;
+          padding-top: 1rem;
+          border-top: 1px solid var(--border-color);
+        }
+
+        .sidebar-count {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+        }
+
+        /* Custom scrollbar for sidebar */
+        .article-sidebar::-webkit-scrollbar,
+        .sidebar-list::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        .article-sidebar::-webkit-scrollbar-track,
+        .sidebar-list::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        .article-sidebar::-webkit-scrollbar-thumb,
+        .sidebar-list::-webkit-scrollbar-thumb {
+          background: var(--border-color);
+          border-radius: 4px;
+        }
+
+        .article-sidebar::-webkit-scrollbar-thumb:hover,
+        .sidebar-list::-webkit-scrollbar-thumb:hover {
+          background: var(--text-muted);
         }
 
         .detail-container {
@@ -852,7 +1176,24 @@ const ResourceDetail = () => {
           font-weight: 500;
         }
 
+        /* Hide sidebar on smaller screens */
+        @media (max-width: 1024px) {
+          .article-sidebar {
+            display: none;
+          }
+
+          .detail-main {
+            margin-left: 0;
+            max-width: 900px;
+          }
+        }
+
         @media (max-width: 768px) {
+          .detail-container-wrapper {
+            padding-top: 1rem;
+            overflow-x: hidden;
+          }
+
           .detail-container {
             padding-top: 1rem;
             overflow-x: hidden;

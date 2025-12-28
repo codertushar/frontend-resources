@@ -22,6 +22,14 @@
 
   <title>CrackFrontend</title>
 
+  <!-- Prevent theme flash - must be blocking script in head -->
+  <script>
+    (function() {
+      const theme = localStorage.getItem('theme') || 'light';
+      document.documentElement.classList.add(theme);
+    })();
+  </script>
+
   <!-- Razorpay SDK for payments -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
