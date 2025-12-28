@@ -103,8 +103,10 @@ export const ProgressProvider = ({ children }) => {
   }, [isSignedIn, supabase, user]);
 
   const markAsUnread = useCallback(async (articleId) => {
+    console.log('[ProgressContext] markAsUnread called:', articleId);
     // Only allow marking as unread if user is signed in
     if (!isSignedIn || !supabase || !user) {
+      console.warn('Cannot mark as unread: user not signed in or supabase not available');
       return;
     }
 
@@ -116,11 +118,15 @@ export const ProgressProvider = ({ children }) => {
     });
 
     try {
-      const { error } = await supabase
+      console.log('[ProgressContext] Deleting from DB:', { user_id: user.id, article_id: articleId });
+      const { data, error, count } = await supabase
         .from('user_progress')
         .delete()
         .eq('user_id', user.id)
-        .eq('article_id', articleId);
+        .eq('article_id', articleId)
+        .select();
+
+      console.log('[ProgressContext] Delete result:', { data, error, count });
 
       if (error) {
         console.error('Error removing progress from database:', error);
