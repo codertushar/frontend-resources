@@ -172,17 +172,29 @@ const Pricing = () => {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: var(--primary);
+            background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+            background-size: 300% 300%;
+            animation: btn-gradient-shift 4s ease infinite;
             color: white;
             padding: 0.75rem 1.5rem;
             border-radius: 8px;
             font-weight: 600;
             transition: all 0.2s;
           }
+          
+          :root.light .btn-primary {
+            background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+            background-size: 300% 300%;
+          }
 
           .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+          }
+          
+          :root.light .btn-primary:hover {
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.25);
+          }
           }
         `}</style>
       </div>
@@ -608,7 +620,9 @@ const Pricing = () => {
         }
 
         .apply-coupon-btn {
-          background: var(--primary);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+          background-size: 300% 300%;
+          animation: btn-gradient-shift 4s ease infinite;
           color: white;
           border: none;
           padding: 0.5rem 1rem;
@@ -617,6 +631,11 @@ const Pricing = () => {
           font-weight: 600;
           cursor: pointer;
           transition: opacity 0.2s;
+        }
+        
+        :root.light .apply-coupon-btn {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+          background-size: 300% 300%;
         }
 
         .apply-coupon-btn:hover:not(:disabled) {

@@ -607,17 +607,29 @@ const Home = () => {
           align-items: center;
           gap: 0.5rem;
           padding: 0.6rem 1.25rem;
-          background: var(--primary);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+          background-size: 300% 300%;
+          animation: btn-gradient-shift 4s ease infinite;
           color: white;
           border-radius: 8px;
           font-weight: 500;
           font-size: 0.9rem;
           transition: all 0.2s;
         }
+        
+        :root.light .progress-cta {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+          background-size: 300% 300%;
+        }
 
         .progress-cta:hover {
-          background: var(--primary-hover);
           transform: translateY(-2px);
+          box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(236, 72, 153, 0.3);
+        }
+        
+        :root.light .progress-cta:hover {
+          box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3), 0 2px 8px rgba(219, 39, 119, 0.2);
+        }
         }
 
         .stat-item {
@@ -705,9 +717,13 @@ const Home = () => {
         }
 
         .feature-card:hover .feature-icon {
-          background: var(--primary);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4);
           color: white;
           transform: scale(1.05);
+        }
+        
+        :root.light .feature-card:hover .feature-icon {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2);
         }
 
         .feature-content {

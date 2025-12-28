@@ -633,8 +633,15 @@ const Admin = () => {
         }
 
         .tab.active {
-          background: var(--primary);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+          background-size: 300% 300%;
+          animation: btn-gradient-shift 4s ease infinite;
           color: white;
+        }
+        
+        :root.light .tab.active {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+          background-size: 300% 300%;
         }
 
         .tab-content {
@@ -678,13 +685,20 @@ const Admin = () => {
           align-items: center;
           gap: 0.5rem;
           padding: 0.75rem 1.25rem;
-          background: var(--primary);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+          background-size: 300% 300%;
+          animation: btn-gradient-shift 4s ease infinite;
           color: white;
           border: none;
           border-radius: 8px;
           cursor: pointer;
           font-weight: 600;
           transition: opacity 0.2s;
+        }
+        
+        :root.light .form-row button {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+          background-size: 300% 300%;
         }
 
         .form-row button:disabled {
@@ -824,12 +838,19 @@ const Admin = () => {
           align-items: center;
           gap: 0.5rem;
           padding: 0.75rem 1.5rem;
-          background: var(--primary);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+          background-size: 300% 300%;
+          animation: btn-gradient-shift 4s ease infinite;
           color: white;
           border: none;
           border-radius: 8px;
           cursor: pointer;
           font-weight: 600;
+        }
+        
+        :root.light .save-settings-btn {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+          background-size: 300% 300%;
         }
 
         .save-settings-btn:disabled {

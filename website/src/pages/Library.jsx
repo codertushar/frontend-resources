@@ -837,7 +837,7 @@ const Library = () => {
           left: -8px;
           width: 24px;
           height: 24px;
-          background: var(--primary);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4);
           border-radius: 50%;
           display: flex;
           align-items: center;
@@ -845,6 +845,10 @@ const Library = () => {
           font-size: 0.75rem;
           font-weight: 700;
           color: white;
+        }
+        
+        :root.light .start-here-number {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2);
         }
 
         .start-here-card.is-read .start-here-number {
@@ -1052,9 +1056,13 @@ const Library = () => {
 
         .cat-progress-fill {
           height: 100%;
-          background: var(--primary);
+          background: linear-gradient(90deg, #8b5cf6, #ec4899, #06b6d4);
           border-radius: 2px;
           transition: width 0.3s;
+        }
+        
+        :root.light .cat-progress-fill {
+          background: linear-gradient(90deg, #7c3aed, #db2777, #0891b2);
         }
 
         .category-progress-card.completed .cat-progress-fill {
@@ -1750,7 +1758,9 @@ const Library = () => {
 
         .btn-reset {
           padding: 0.6rem 1.25rem;
-          background: var(--primary);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+          background-size: 300% 300%;
+          animation: btn-gradient-shift 4s ease infinite;
           color: white;
           border: none;
           border-radius: 8px;
@@ -1758,6 +1768,11 @@ const Library = () => {
           cursor: pointer;
           transition: all 0.2s;
           margin-top: 0.5rem;
+        }
+        
+        :root.light .btn-reset {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+          background-size: 300% 300%;
         }
 
         .btn-reset:hover {

@@ -348,7 +348,9 @@ const QuizSection = ({ questions }) => {
 
         .quiz-submit {
           padding: 0.875rem 2rem;
-          background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+          background-size: 300% 300%;
+          animation: btn-gradient-shift 4s ease infinite;
           color: white;
           border: none;
           border-radius: 12px;
@@ -358,10 +360,20 @@ const QuizSection = ({ questions }) => {
           transition: all 0.3s ease;
           box-shadow: 0 4px 14px -2px rgba(139, 92, 246, 0.4);
         }
+        
+        :root.light .quiz-submit {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+          background-size: 300% 300%;
+          box-shadow: 0 4px 14px -2px rgba(124, 58, 237, 0.3);
+        }
 
         .quiz-submit:hover:not(:disabled) {
           transform: translateY(-2px);
           box-shadow: 0 8px 20px -4px rgba(139, 92, 246, 0.5);
+        }
+        
+        :root.light .quiz-submit:hover:not(:disabled) {
+          box-shadow: 0 8px 20px -4px rgba(124, 58, 237, 0.4);
         }
 
         .quiz-submit:disabled {

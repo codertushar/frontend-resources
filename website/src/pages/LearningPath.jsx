@@ -253,9 +253,13 @@ const LearningPath = () => {
         }
 
         .marker-dot.completed {
-          background: var(--primary);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4);
           border-color: var(--primary);
           color: white;
+        }
+        
+        :root.light .marker-dot.completed {
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2);
         }
 
         .step-number {

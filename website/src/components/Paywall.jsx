@@ -243,7 +243,9 @@ const Paywall = ({ articleTitle }) => {
           position: relative;
           width: 72px;
           height: 72px;
-          background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+          background-size: 300% 300%;
+          animation: btn-gradient-shift 4s ease infinite;
           border-radius: 20px;
           display: flex;
           align-items: center;
@@ -256,7 +258,8 @@ const Paywall = ({ articleTitle }) => {
         }
 
         :root.light .paywall-icon {
-          background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+          background-size: 300% 300%;
           box-shadow:
             0 8px 24px -4px rgba(124, 58, 237, 0.35),
             inset 0 1px 1px rgba(255, 255, 255, 0.3);
@@ -369,14 +372,17 @@ const Paywall = ({ articleTitle }) => {
         .price-amount {
           font-size: 2.25rem;
           font-weight: 800;
-          background: linear-gradient(135deg, #a78bfa, #c4b5fd);
+          background: linear-gradient(90deg, #8b5cf6 0%, #ec4899 25%, #06b6d4 50%, #ec4899 75%, #8b5cf6 100%);
+          background-size: 200% auto;
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
+          animation: text-gradient-shift 4s linear infinite;
         }
 
         :root.light .price-amount {
-          background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+          background: linear-gradient(90deg, #7c3aed 0%, #db2777 25%, #0891b2 50%, #db2777 75%, #7c3aed 100%);
+          background-size: 200% auto;
           -webkit-background-clip: text;
           background-clip: text;
         }
@@ -400,7 +406,9 @@ const Paywall = ({ articleTitle }) => {
           align-items: center;
           justify-content: center;
           gap: 0.625rem;
-          background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+          background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4, #ec4899, #8b5cf6);
+          background-size: 300% 300%;
+          animation: btn-gradient-shift 4s ease infinite;
           color: white !important;
           padding: 1rem 2rem;
           border-radius: 14px;
@@ -417,7 +425,8 @@ const Paywall = ({ articleTitle }) => {
         }
 
         :root.light .btn-primary {
-          background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+          background: linear-gradient(135deg, #7c3aed, #db2777, #0891b2, #db2777, #7c3aed);
+          background-size: 300% 300%;
           box-shadow:
             0 4px 14px -2px rgba(124, 58, 237, 0.3),
             inset 0 1px 1px rgba(255, 255, 255, 0.2);
