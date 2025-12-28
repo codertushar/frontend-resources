@@ -14,7 +14,7 @@ const publicDir = path.join(projectRoot, 'website', 'public');
 const sitemapPath = path.join(publicDir, 'sitemap.xml');
 
 // Base URL of the deployed site
-const BASE_URL = 'https://frontend-resources-chi.vercel.app';
+const BASE_URL = 'https://crackfrontend.vercel.app';
 
 // Helper: recursively collect .md files (excluding hidden dirs)
 function collectMarkdownFiles(dir) {

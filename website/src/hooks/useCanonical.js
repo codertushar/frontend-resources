@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const BASE_URL = 'https://frontend-resources-chi.vercel.app';
+const BASE_URL = 'https://crackfrontend.vercel.app';
 
 export function useCanonical() {
     const location = useLocation();

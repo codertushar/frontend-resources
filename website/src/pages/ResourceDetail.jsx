@@ -151,7 +151,7 @@ const ResourceDetail = () => {
       const twitterDescription = document.querySelector('meta[name="twitter:description"]');
       const canonical = document.querySelector('link[rel="canonical"]');
 
-      const url = `https://frontend-resources-chi.vercel.app/resource/${resource.id}`;
+      const url = `https://crackfrontend.vercel.app/resource/${resource.id}`;
       const title = `${resource.title} | Frontend Resources`;
       const desc = resource.fullContent
         .replace(/```[\s\S]*?```/g, '')

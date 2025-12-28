@@ -5,13 +5,13 @@
 <h3>Your one-stop destination for mastering frontend development concepts, patterns, and interview questions.</h3>
 
 <p align="center">
-  <a href="https://frontend-resources-chi.vercel.app/" target="_blank">
+  <a href="https://crackfrontend.vercel.app/" target="_blank">
     <img src="https://img.shields.io/badge/Visit%20Website-Click%20Here-blue?style=for-the-badge&logo=vercel&logoColor=white" alt="Visit Website" />
   </a>
 </p>
 
 <p align="center">
-  <a href="https://frontend-resources-chi.vercel.app/"><strong>Explore the Documentation »</strong></a>
+  <a href="https://crackfrontend.vercel.app/"><strong>Explore the Documentation »</strong></a>
 </p>
 
 </div>
@@ -22,7 +22,7 @@
 
 This repository contains a curated collection of resources for frontend developers, covering topics from **Data Structures & Algorithms** to **System Design** and **Machine Coding** challenges.
 
-For the best reading experience, we highly recommend visiting our **[Live Website](https://frontend-resources-chi.vercel.app/)**.
+For the best reading experience, we highly recommend visiting our **[Live Website](https://crackfrontend.vercel.app/)**.
 
 ---
 
