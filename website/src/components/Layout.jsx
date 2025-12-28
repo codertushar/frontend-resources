@@ -61,7 +61,7 @@ const Layout = ({ children }) => {
           <Link to="/" className="logo">
             <Logo className="logo-icon" />
             <span className="logo-text">
-              <span className="logo-text-full">Frontend Resources</span>
+              <span className="logo-text-full">CrackFrontend</span>
               <span className="logo-text-short">FR</span>
             </span>
           </Link>

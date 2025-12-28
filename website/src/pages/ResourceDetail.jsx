@@ -128,7 +128,7 @@ const ResourceDetail = () => {
   useEffect(() => {
     if (resource) {
       // Update document title and meta tags for SEO during client-side navigation
-      document.title = `${resource.title} | Frontend Resources`;
+      document.title = `${resource.title} | CrackFrontend`;
 
       // Update meta description
       const metaDescription = document.querySelector('meta[name="description"]');
@@ -152,7 +152,7 @@ const ResourceDetail = () => {
       const canonical = document.querySelector('link[rel="canonical"]');
 
       const url = `https://crackfrontend.vercel.app/resource/${resource.id}`;
-      const title = `${resource.title} | Frontend Resources`;
+      const title = `${resource.title} | CrackFrontend`;
       const desc = resource.fullContent
         .replace(/```[\s\S]*?```/g, '')
         .replace(/`([^`]+)`/g, '$1')

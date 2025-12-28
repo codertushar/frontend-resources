@@ -84,7 +84,7 @@ function generateArticleJsonLd(resource) {
         },
         publisher: {
             '@type': 'Organization',
-            name: 'Frontend Resources',
+            name: 'CrackFrontend',
             url: BASE_URL
         },
         mainEntityOfPage: {
@@ -98,7 +98,7 @@ function generateArticleJsonLd(resource) {
 
 // Generate HTML with pre-rendered content for a resource page
 function generateResourceHtml(resource) {
-    const title = `${resource.title} | Frontend Resources`;
+    const title = `${resource.title} | CrackFrontend`;
     const description = extractDescription(resource.fullContent);
     const url = `${BASE_URL}/resource/${resource.id}`;
     const jsonLd = JSON.stringify(generateArticleJsonLd(resource));
@@ -132,7 +132,7 @@ function generateResourceHtml(resource) {
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:url" content="${url}">
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="Frontend Resources">
+  <meta property="og:site_name" content="CrackFrontend">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="${escapeHtml(title)}">
   <meta name="twitter:description" content="${escapeHtml(description)}">
@@ -177,7 +177,7 @@ function generateStaticPageHtml(route, title, description) {
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:url" content="${url}">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Frontend Resources">
+  <meta property="og:site_name" content="CrackFrontend">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="${escapeHtml(title)}">
   <meta name="twitter:description" content="${escapeHtml(description)}">
@@ -191,11 +191,11 @@ function generateStaticPageHtml(route, title, description) {
 // Static page definitions
 const staticPages = {
     '/library': {
-        title: 'Library | Frontend Resources',
+        title: 'Library | CrackFrontend',
         description: 'Browse our complete collection of frontend engineering resources – JavaScript fundamentals, React patterns, system design, and interview preparation materials.'
     },
     '/learning-path': {
-        title: 'Learning Path | Frontend Resources',
+        title: 'Learning Path | CrackFrontend',
         description: 'Follow a structured learning path from beginner to advanced frontend engineering. Track your progress through JavaScript, React, and system design topics.'
     }
 };
@@ -241,7 +241,7 @@ for (const category of categories) {
     // Only create if doesn't already exist (don't overwrite actual resource pages)
     if (!fs.existsSync(routeIndex)) {
         const categoryName = category.split('/').pop().replace(/[-_]/g, ' ');
-        const title = `${categoryName.charAt(0).toUpperCase() + categoryName.slice(1)} | Frontend Resources`;
+        const title = `${categoryName.charAt(0).toUpperCase() + categoryName.slice(1)} | CrackFrontend`;
         const description = `Browse ${categoryName} resources – tutorials, guides, and interview preparation materials for frontend engineers.`;
 
         fs.mkdirSync(routeDir, { recursive: true });

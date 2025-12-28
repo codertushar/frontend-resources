@@ -110,8 +110,8 @@ Sitemap: ${BASE_URL}/sitemap.xml
     // Generate manifest.json
     const manifestPath = path.join(publicDir, 'manifest.json');
     const manifest = {
-        name: 'Frontend Resources',
-        short_name: 'FE Resources',
+        name: 'CrackFrontend',
+        short_name: 'CrackFE',
         description: 'Curated frontend concepts, patterns & interview prep.',
         start_url: '/',
         scope: '/',

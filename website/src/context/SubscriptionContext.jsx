@@ -160,7 +160,7 @@ export const SubscriptionProvider = ({ children }) => {
         key: orderData.keyId,
         amount: orderData.amount,
         currency: orderData.currency,
-        name: 'Frontend Resources',
+        name: 'CrackFrontend',
         description: 'Lifetime Premium Access',
         order_id: orderData.orderId,
         prefill: {

@@ -1,5 +1,5 @@
 /**
- * Shared constants for the Frontend Resources PWA
+ * Shared constants for the CrackFrontend PWA
  */
 
 // Base path for the application (GitHub Pages subdirectory)
