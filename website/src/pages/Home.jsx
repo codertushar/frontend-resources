@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Zap, Code, Database, Brain, Layout, Sparkles, BookOpen, Crown, Trophy, Terminal, Lightbulb, Rocket } from 'lucide-react';
@@ -111,6 +111,257 @@ const FloatingParticles = () => {
   );
 };
 
+// Interactive Constellation Network - Mouse-based connecting nodes
+const InteractiveConstellation = () => {
+  const canvasRef = useRef(null);
+  const mouseRef = useRef({ x: -1000, y: -1000 });
+  const nodesRef = useRef([]);
+  const animationRef = useRef(null);
+  const isMobileRef = useRef(false);
+
+  // Initialize nodes
+  const initNodes = useCallback((width, height) => {
+    const nodes = [];
+    // Dramatically reduce nodes on mobile for performance
+    const isMobile = width < 768;
+    isMobileRef.current = isMobile;
+    const nodeCount = isMobile
+      ? Math.min(30, Math.floor((width * height) / 25000))  // 30 max on mobile
+      : Math.min(80, Math.floor((width * height) / 15000)); // 80 max on desktop
+
+    for (let i = 0; i < nodeCount; i++) {
+      nodes.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 2 + 1,
+        baseRadius: Math.random() * 2 + 1,
+      });
+    }
+    return nodes;
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let width = canvas.offsetWidth;
+    let height = canvas.offsetHeight;
+
+    const setCanvasSize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      width = canvas.offsetWidth;
+      height = canvas.offsetHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+
+      if (nodesRef.current.length === 0) {
+        nodesRef.current = initNodes(width, height);
+      }
+    };
+
+    setCanvasSize();
+
+    const handleMouseMove = (e) => {
+      if (isMobileRef.current) return; // Disable on mobile for performance
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      };
+    };
+
+    const handleTouchMove = (e) => {
+      if (!isMobileRef.current) return;
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      if (touch) {
+        mouseRef.current = {
+          x: touch.clientX - rect.left,
+          y: touch.clientY - rect.top,
+        };
+      }
+    };
+
+    const handleTouchEnd = () => {
+      mouseRef.current = { x: -1000, y: -1000 };
+    };
+
+    const handleMouseLeave = () => {
+      mouseRef.current = { x: -1000, y: -1000 };
+    };
+
+    const handleResize = () => {
+      setCanvasSize();
+      nodesRef.current = initNodes(width, height);
+    };
+
+    // Animation loop
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height);
+      const mouse = mouseRef.current;
+      const nodes = nodesRef.current;
+      const isMobile = isMobileRef.current;
+
+      // Reduced distances on mobile for better performance
+      const connectionDistance = isMobile ? 100 : 120;
+      const mouseRadius = isMobile ? 150 : 200;
+
+      // Update and draw nodes
+      nodes.forEach((node, i) => {
+        // Move nodes
+        node.x += node.vx;
+        node.y += node.vy;
+
+        // Bounce off edges
+        if (node.x < 0 || node.x > width) node.vx *= -1;
+        if (node.y < 0 || node.y > height) node.vy *= -1;
+
+        // Keep in bounds
+        node.x = Math.max(0, Math.min(width, node.x));
+        node.y = Math.max(0, Math.min(height, node.y));
+
+        // Mouse interaction - attract nodes slightly
+        const dx = mouse.x - node.x;
+        const dy = mouse.y - node.y;
+        const distToMouse = Math.sqrt(dx * dx + dy * dy);
+
+        if (distToMouse < mouseRadius && distToMouse > 0) {
+          const force = (mouseRadius - distToMouse) / mouseRadius;
+          node.x += dx * force * 0.02;
+          node.y += dy * force * 0.02;
+          node.radius = node.baseRadius + force * 3;
+        } else {
+          node.radius = node.baseRadius;
+        }
+
+        // Draw connections to nearby nodes
+        for (let j = i + 1; j < nodes.length; j++) {
+          const other = nodes[j];
+          const ndx = other.x - node.x;
+          const ndy = other.y - node.y;
+          const dist = Math.sqrt(ndx * ndx + ndy * ndy);
+
+          if (dist < connectionDistance) {
+            // Check if either node is near mouse for enhanced effect
+            const node1ToMouse = Math.sqrt((mouse.x - node.x) ** 2 + (mouse.y - node.y) ** 2);
+            const node2ToMouse = Math.sqrt((mouse.x - other.x) ** 2 + (mouse.y - other.y) ** 2);
+            const nearMouse = node1ToMouse < mouseRadius || node2ToMouse < mouseRadius;
+
+            const opacity = nearMouse
+              ? (1 - dist / connectionDistance) * 0.8
+              : (1 - dist / connectionDistance) * 0.15;
+
+            ctx.beginPath();
+            ctx.moveTo(node.x, node.y);
+            ctx.lineTo(other.x, other.y);
+
+            if (nearMouse) {
+              // Gradient line for mouse-affected connections
+              const gradient = ctx.createLinearGradient(node.x, node.y, other.x, other.y);
+              gradient.addColorStop(0, `rgba(139, 92, 246, ${opacity})`);
+              gradient.addColorStop(0.5, `rgba(236, 72, 153, ${opacity})`);
+              gradient.addColorStop(1, `rgba(6, 182, 212, ${opacity})`);
+              ctx.strokeStyle = gradient;
+              ctx.lineWidth = 1.5;
+            } else {
+              ctx.strokeStyle = `rgba(139, 92, 246, ${opacity})`;
+              ctx.lineWidth = 0.5;
+            }
+            ctx.stroke();
+          }
+        }
+
+        // Draw line from node to mouse if close enough
+        if (distToMouse < mouseRadius && distToMouse > 0) {
+          const opacity = (1 - distToMouse / mouseRadius) * 0.6;
+          const gradient = ctx.createLinearGradient(node.x, node.y, mouse.x, mouse.y);
+          gradient.addColorStop(0, `rgba(139, 92, 246, ${opacity})`);
+          gradient.addColorStop(1, `rgba(236, 72, 153, ${opacity * 0.5})`);
+
+          ctx.beginPath();
+          ctx.moveTo(node.x, node.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = gradient;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+
+        // Draw node
+        const nodeOpacity = distToMouse < mouseRadius ? 0.9 : 0.4;
+        const gradient = ctx.createRadialGradient(
+          node.x, node.y, 0,
+          node.x, node.y, node.radius * 2
+        );
+        gradient.addColorStop(0, `rgba(139, 92, 246, ${nodeOpacity})`);
+        gradient.addColorStop(0.5, `rgba(236, 72, 153, ${nodeOpacity * 0.7})`);
+        gradient.addColorStop(1, 'rgba(139, 92, 246, 0)');
+
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      });
+
+      // Draw mouse glow
+      if (mouse.x > 0 && mouse.y > 0) {
+        const mouseGlow = ctx.createRadialGradient(
+          mouse.x, mouse.y, 0,
+          mouse.x, mouse.y, 60
+        );
+        mouseGlow.addColorStop(0, 'rgba(236, 72, 153, 0.15)');
+        mouseGlow.addColorStop(0.5, 'rgba(139, 92, 246, 0.08)');
+        mouseGlow.addColorStop(1, 'rgba(139, 92, 246, 0)');
+
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 60, 0, Math.PI * 2);
+        ctx.fillStyle = mouseGlow;
+        ctx.fill();
+      }
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mouseleave', handleMouseLeave);
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: true });
+    canvas.addEventListener('touchend', handleTouchEnd);
+    window.addEventListener('resize', handleResize);
+
+    animate();
+
+    return () => {
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('mouseleave', handleMouseLeave);
+      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('resize', handleResize);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [initNodes]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="constellation-canvas"
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'auto',
+        zIndex: 0,
+      }}
+    />
+  );
+};
+
 const Home = () => {
   const { getStats } = useProgress();
   const resourceCount = contentData.length;
@@ -134,6 +385,9 @@ const Home = () => {
         animate="show"
         className="hero"
       >
+        {/* Interactive Constellation Background */}
+        <InteractiveConstellation />
+
         {/* Floating Particles Background */}
         <FloatingParticles />
 
@@ -284,6 +538,14 @@ const Home = () => {
           border-radius: 50%;
           background: linear-gradient(135deg, var(--primary), #ec4899);
           box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+
+        /* Reduce particle intensity on mobile */
+        @media (max-width: 768px) {
+          .particle {
+            opacity: 0.4;
+            box-shadow: 0 0 5px rgba(139, 92, 246, 0.3);
+          }
         }
 
         /* Hero Section */

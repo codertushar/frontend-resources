@@ -490,7 +490,7 @@ const Layout = ({ children }) => {
             <Logo className="logo-icon" />
             <span className="logo-text">
               <span className="logo-text-full">CrackFrontend</span>
-              <span className="logo-text-short">FR</span>
+              <span className="logo-text-short">CF</span>
             </span>
           </Link>
           <div className="nav-links">
