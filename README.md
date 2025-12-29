@@ -42,7 +42,10 @@ For the best reading experience, we highly recommend visiting our **[Live Websit
 
 <pre>
 ├── 📄 <a href="dsa/30_day_dsa_guide_senior_frontend.md">30_day_dsa_guide_senior_frontend.md</a>
+├── 📄 <a href="dsa/bfs.md">bfs.md</a>
+├── 📄 <a href="dsa/dfs.md">dfs.md</a>
 ├── 📊 <a href="dsa/merge_two_sorted_arrays.md">merge_two_sorted_arrays.md</a>
+├── 📄 <a href="dsa/prefix_sum.md">prefix_sum.md</a>
 ├── 📄 <a href="dsa/sliding_window.md">sliding_window.md</a>
 └── 📄 <a href="dsa/two_pointer_technique.md">two_pointer_technique.md</a>
 </pre>
