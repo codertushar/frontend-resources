@@ -13,4 +13,7 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['src/data/content.json'],
   },
+  resolve: {
+    dedupe: ['react', 'react-dom'],
+  },
 })
