@@ -128,7 +128,7 @@ const LearningPath = () => {
               {index !== stepsWithStats.length - 1 && <div className="marker-line" />}
             </div>
 
-            <Link to={step.link} className={`timeline-content glass-panel ${step.percentage === 100 ? 'completed' : ''}`}>
+            <Link to={step.link} className={`timeline-content glass-panel animated-card ${step.percentage === 100 ? 'completed' : ''}`}>
               <div className="timeline-header">
                 <h3>{step.title}</h3>
                 <span className="article-count">

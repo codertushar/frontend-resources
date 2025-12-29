@@ -9,6 +9,8 @@ import LearningPath from './pages/LearningPath';
 import ResourceDetail from './pages/ResourceDetail';
 import Pricing from './pages/Pricing';
 import Admin from './pages/Admin';
+import MachineCodingList from './pages/MachineCodingList';
+import MachineCodingDetail from './pages/MachineCodingDetail';
 import { useCanonical } from './hooks/useCanonical';
 
 import { ThemeProvider } from './context/ThemeContext';
@@ -28,6 +30,8 @@ function AppContent() {
           <Route path="/learning-path" element={<LearningPath />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/practice" element={<MachineCodingList />} />
+          <Route path="/practice/:questionId" element={<MachineCodingDetail />} />
           <Route path="/resource/*" element={<ResourceDetail />} />
         </Routes>
       </Layout>
