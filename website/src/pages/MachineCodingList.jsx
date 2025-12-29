@@ -310,7 +310,7 @@ const MachineCodingList = () => {
               </p>
             </div>
           ) : (
-            <div className="glass-panel animated-card" style={{ padding: '0', overflow: 'hidden' }}>
+            <div className="glass-panel" style={{ padding: '0', overflow: 'hidden' }}>
               {/* Table */}
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -344,10 +344,14 @@ const MachineCodingList = () => {
                         style={{
                           borderBottom: index < filteredQuestions.length - 1 ? '1px solid var(--border-color)' : 'none',
                           cursor: 'pointer',
-                          transition: 'background 0.15s ease'
+                          transition: 'background 0.2s ease'
                         }}
-                        onMouseEnter={(e) => e.currentTarget.style.background = 'var(--surface-hover)'}
-                        onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = 'var(--surface-hover)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = 'transparent';
+                        }}
                       >
                         {/* Question Title & Description */}
                         <td style={{ padding: '1rem', maxWidth: '400px' }}>

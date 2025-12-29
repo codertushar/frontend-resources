@@ -1,6 +1,6 @@
 // Service Worker for CrackFrontend PWA
 // Cache version is auto-updated during build via generate-sw-version.js
-const CACHE_NAME = 'frontend-resources-v1766943904864';
+const CACHE_NAME = 'frontend-resources-v1767001709275';
 const BASE_PATH = '/frontend-resources';
 const CORE_ASSETS = [
     `${BASE_PATH}/`,

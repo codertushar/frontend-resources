@@ -1,10 +1,11 @@
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
+import { HelmetProvider } from 'react-helmet-async';
 import Layout from './components/Layout';
 import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
-import Library from './pages/Library';
+import Library from './pages/LibraryRefactored';
 import LearningPath from './pages/LearningPath';
 import ResourceDetail from './pages/ResourceDetail';
 import Pricing from './pages/Pricing';
@@ -41,16 +42,18 @@ function AppContent() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <ProgressProvider>
-        <SubscriptionProvider>
-          <Router>
-            <AppContent />
-          </Router>
-          <Analytics />
-        </SubscriptionProvider>
-      </ProgressProvider>
-    </ThemeProvider>
+    <HelmetProvider>
+      <ThemeProvider>
+        <ProgressProvider>
+          <SubscriptionProvider>
+            <Router>
+              <AppContent />
+            </Router>
+            <Analytics />
+          </SubscriptionProvider>
+        </ProgressProvider>
+      </ThemeProvider>
+    </HelmetProvider>
   );
 }
 

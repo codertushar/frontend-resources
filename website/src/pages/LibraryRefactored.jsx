@@ -1,68 +1,18 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ChevronRight, ChevronDown, LayoutGrid, List, X, CheckCircle, Crown, BookOpen, Trophy, Shuffle, Target, Clock, SlidersHorizontal, Layers, Code2, Binary, Brain, Terminal, Server, Globe } from 'lucide-react';
-import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-import Fuse from 'fuse.js';
+import { Search, ChevronRight, ChevronDown, LayoutGrid, List, X, CheckCircle, Crown, BookOpen, Trophy, Shuffle, Target, Clock, SlidersHorizontal } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import contentData from '../data/content.json';
 import { useProgress } from '../context/ProgressContext';
 import { useSubscription } from '../context/SubscriptionContext';
+import { useLibraryFilters } from '../hooks/useLibraryFilters';
+import { CATEGORIES, FILTERS, FILTER_PRESETS, extractTags, CATEGORY_DISPLAY_NAMES, SUBCATEGORY_DISPLAY_NAMES } from '../config/filters';
 
-const CATEGORIES = [
-  { id: 'all', label: 'All Resources', icon: Layers, color: '#8b5cf6' },
-  { id: 'js', label: 'JavaScript', icon: Code2, color: '#f59e0b' },
-  { id: 'dsa', label: 'DSA', icon: Binary, color: '#22c55e' },
-  { id: 'ai', label: 'AI Engineering', icon: Brain, color: '#ec4899' },
-  { id: 'machine-coding', label: 'Machine Coding', icon: Terminal, color: '#06b6d4' },
-  { id: 'system-design', label: 'System Design', icon: Server, color: '#f97316' },
-  { id: 'general', label: 'Browser & Patterns', icon: Globe, color: '#6366f1' },
-];
-
-// Display name mappings for clearer UI labels
-const CATEGORY_DISPLAY_NAMES = {
-  'general': 'Browser & Patterns',
-  'js': 'JavaScript',
-  'dsa': 'DSA',
-  'ai': 'AI',
-  'machine-coding': 'Machine Coding',
-  'system-design': 'System Design',
-};
-
-const SUBCATEGORY_DISPLAY_NAMES = {
-  'general-concepts': 'Core Concepts',
-  'polyfills': 'Polyfills',
-  'promises': 'Promises',
-  'utils': 'Utilities',
-  'design-patterns': 'Design Patterns',
-  'arrays': 'Arrays',
-  'general': 'General',
-};
-
-const DIFFICULTIES = [
-  { id: 'all', label: 'Difficulty' },
-  { id: 'easy', label: 'Easy', color: '#22c55e' },
-  { id: 'medium', label: 'Medium', color: '#f59e0b' },
-  { id: 'hard', label: 'Hard', color: '#ef4444' },
-];
-
-const ACCESS_OPTIONS = [
-  { id: 'all', label: 'Pricing' },
-  { id: 'free', label: 'Free' },
-  { id: 'premium', label: 'Premium' },
-];
-
-
-// Map articles to interview frequency based on topic patterns
-// Now more selective - only truly common interview topics get 'critical'
+// Get interview frequency (keep existing logic)
 const getInterviewFrequency = (item) => {
-  // 1. Frontmatter override takes priority
-  if (item.interviewFrequency) {
-    return item.interviewFrequency;
-  }
+  if (item.interviewFrequency) return item.interviewFrequency;
 
-  // 2. More selective auto-detection
-  // Only the absolute core JS interview topics (the "big 5" that appear in almost every interview)
   const criticalTopics = ['closures', 'event_loop', 'hoisting'];
-  // Must be an exact match or the primary topic, not just mentioned
   const criticalExactIds = [
     'js/general-concepts/closures',
     'js/general-concepts/event_loop',
@@ -73,94 +23,47 @@ const getInterviewFrequency = (item) => {
   ];
 
   const idLower = item.id.toLowerCase();
+  if (criticalExactIds.some(id => idLower === id.toLowerCase())) return 'critical';
 
-  // Exact ID match for truly critical topics
-  if (criticalExactIds.some(id => idLower === id.toLowerCase())) {
-    return 'critical';
-  }
-
-  // Check if the article is primarily about a critical topic (not just mentions it)
-  // The topic must be in the filename/id, not just in content
   const fileName = idLower.split('/').pop();
-  if (criticalTopics.some(topic => fileName === topic || fileName.startsWith(topic + '_'))) {
-    return 'critical';
-  }
+  if (criticalTopics.some(topic => fileName === topic || fileName.startsWith(topic + '_'))) return 'critical';
 
-  // Everything else uses 'common' or 'occasional' - no more auto-critical
-  // Hard difficulty polyfills are common
-  if ((item.subcategory === 'polyfills' || item.tags?.includes('polyfill')) && item.difficulty === 'hard') {
-    return 'common';
-  }
+  if ((item.subcategory === 'polyfills' || item.tags?.includes('polyfill')) && item.difficulty === 'hard') return 'common';
+  if (item.category === 'dsa' && item.difficulty === 'hard') return 'common';
 
-  // DSA hard is common
-  if (item.category === 'dsa' && item.difficulty === 'hard') {
-    return 'common';
-  }
-
-  // Everything else is occasional (no badge shown)
   return 'occasional';
 };
 
-const SORT_OPTIONS = [
-  { id: 'default', label: 'Newest First' },
-  { id: 'difficulty-asc', label: 'Easy → Hard' },
-  { id: 'difficulty-desc', label: 'Hard → Easy' },
-  { id: 'title-asc', label: 'A → Z' },
-  { id: 'title-desc', label: 'Z → A' },
-];
-
-
-const DIFFICULTY_ORDER = { easy: 1, medium: 2, hard: 3 };
-
-// Popular tags - consolidated for clarity
-const POPULAR_TAGS = [
-  'polyfill',
-  'async',        // combines promises + async
-  'closures',
-  'functional',
-  'react',
-  'design-patterns',
-  'caching',
-  'recursion',
-  'dom',
-  'api',
-];
-
-const fuseOptions = {
-  keys: ['title', 'category', 'subcategory', 'content', 'difficulty', 'tags'],
-  threshold: 0.3,
-};
-
-// Start here - beginner friendly FREE articles
+// Start here article IDs
 const START_HERE_IDS = [
-  'js/general-concepts/function_vs_arrow_function',  // Easy, foundational
-  'js/polyfills/arrays/filter',                       // Easy, common
-  'dsa/30_day_dsa_guide_senior_frontend',            // Guide/roadmap
-  'general/design-patterns/general',                  // Overview
+  'js/general-concepts/function_vs_arrow_function',
+  'js/polyfills/arrays/filter',
+  'dsa/30_day_dsa_guide_senior_frontend',
+  'general/design-patterns/general',
 ];
-
 
 const Library = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const { isRead, getStats } = useProgress();
   const { isPremium } = useSubscription();
+  const navigate = useNavigate();
 
-  const initialQuery = searchParams.get('q') || '';
-  const initialCategory = searchParams.get('category') || 'all';
-  const initialDifficulty = searchParams.get('difficulty') || 'all';
-  const initialSort = searchParams.get('sort') || 'default';
-  const initialTag = searchParams.get('tag') || 'all';
-  const initialAccess = searchParams.get('access') || 'all';
+  // 🎯 NEW: Single hook manages ALL filter state
+  const {
+    filterState,
+    filteredData,
+    activeFilterCount,
+    hasActiveFilters,
+    updateFilter,
+    updateFilters,
+    resetAllFilters,
+  } = useLibraryFilters(contentData, { isRead, getInterviewFrequency });
 
-  const [query, setQuery] = useState(initialQuery);
-  const [activeCategory, setActiveCategory] = useState(initialCategory);
-  const [activeDifficulty, setActiveDifficulty] = useState(initialDifficulty);
-  const [sortBy, setSortBy] = useState(initialSort);
-  const [activeTag, setActiveTag] = useState(initialTag);
-  const [activeAccess, setActiveAccess] = useState(initialAccess);
-  const [viewMode, setViewMode] = useState('list'); // 'grid' or 'list' - list is default
+  // UI state
+  const [viewMode, setViewMode] = useState('list');
   const [showMoreFilters, setShowMoreFilters] = useState(false);
   const [isFilterSticky, setIsFilterSticky] = useState(false);
+  const [expandedCategory, setExpandedCategory] = useState(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const filterRef = useRef(null);
 
   // Handle sticky filter bar
@@ -175,95 +78,35 @@ const Library = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close dropdown when clicking outside or scrolling
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.category-wrapper')) {
+        setExpandedCategory(null);
+      }
+    };
+    const handleScroll = () => {
+      setExpandedCategory(null);
+    };
+    document.addEventListener('click', handleClickOutside);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   // Get progress stats
   const stats = getStats(contentData.length);
 
-  // Update URL when state changes (optional but good for sharing)
-  useEffect(() => {
-    const params = {};
-    if (query) params.q = query;
-    if (activeCategory !== 'all') params.category = activeCategory;
-    if (activeDifficulty !== 'all') params.difficulty = activeDifficulty;
-    if (sortBy !== 'default') params.sort = sortBy;
-    if (activeTag !== 'all') params.tag = activeTag;
-    if (activeAccess !== 'all') params.access = activeAccess;
-    setSearchParams(params, { replace: true });
-  }, [query, activeCategory, activeDifficulty, sortBy, activeTag, activeAccess, setSearchParams]);
-
-  const fuse = useMemo(() => new Fuse(contentData, fuseOptions), []);
-
-  const filteredContent = useMemo(() => {
-    let result = contentData;
-
-    if (query) {
-      result = fuse.search(query).map(r => r.item);
-    }
-
-    if (activeCategory !== 'all') {
-      result = result.filter(item => item.category === activeCategory);
-    }
-
-    if (activeDifficulty !== 'all') {
-      result = result.filter(item => item.difficulty === activeDifficulty);
-    }
-
-    if (activeTag !== 'all') {
-      result = result.filter(item => item.tags?.includes(activeTag));
-    }
-
-    if (activeAccess !== 'all') {
-      result = result.filter(item =>
-        activeAccess === 'free' ? !item.premium : item.premium
-      );
-    }
-
-    // Apply sorting
-    if (sortBy !== 'default') {
-      result = [...result].sort((a, b) => {
-        switch (sortBy) {
-          case 'difficulty-asc': {
-            // First sort by difficulty level, then by difficultyScore within same level
-            const levelDiff = (DIFFICULTY_ORDER[a.difficulty] || 2) - (DIFFICULTY_ORDER[b.difficulty] || 2);
-            if (levelDiff !== 0) return levelDiff;
-            // Within same difficulty level, sort by score (lower = easier first)
-            return (a.difficultyScore || 50) - (b.difficultyScore || 50);
-          }
-          case 'difficulty-desc': {
-            // First sort by difficulty level (hard first), then by difficultyScore within same level
-            const levelDiff = (DIFFICULTY_ORDER[b.difficulty] || 2) - (DIFFICULTY_ORDER[a.difficulty] || 2);
-            if (levelDiff !== 0) return levelDiff;
-            // Within same difficulty level, sort by score (higher = harder first)
-            return (b.difficultyScore || 50) - (a.difficultyScore || 50);
-          }
-          case 'title-asc':
-            return a.title.localeCompare(b.title);
-          case 'title-desc':
-            return b.title.localeCompare(a.title);
-          default:
-            return 0;
-        }
-      });
-    } else {
-      // Default sorting: newest first (by publish date, falling back to createdAt)
-      result = [...result].sort((a, b) => {
-        // Prefer frontmatter 'date' (original publish date), fallback to file createdAt
-        const dateA = a.date ? new Date(a.date) : (a.createdAt ? new Date(a.createdAt) : new Date(0));
-        const dateB = b.date ? new Date(b.date) : (b.createdAt ? new Date(b.createdAt) : new Date(0));
-        return dateB - dateA; // Newest first
-      });
-    }
-
-    return result;
-  }, [query, activeCategory, activeDifficulty, activeTag, activeAccess, sortBy, fuse]);
-
-  // Get "Start Here" beginner articles
+  // Get "Start Here" articles
   const startHereArticles = useMemo(() => {
     return START_HERE_IDS
       .map(id => contentData.find(item => item.id === id))
       .filter(Boolean);
   }, []);
 
-  // Calculate category-wise progress
+  // Calculate category progress
   const categoryProgress = useMemo(() => {
     const progress = {};
     CATEGORIES.forEach(cat => {
@@ -279,49 +122,32 @@ const Library = () => {
     return progress;
   }, [isRead]);
 
-  // Count active filters
-  const activeFilterCount = useMemo(() => {
-    let count = 0;
-    if (activeCategory !== 'all') count++;
-    if (activeDifficulty !== 'all') count++;
-    if (activeTag !== 'all') count++;
-    if (activeAccess !== 'all') count++;
-    if (sortBy !== 'default') count++;
-    if (query) count++;
-    return count;
-  }, [activeCategory, activeDifficulty, activeTag, activeAccess, sortBy, query]);
-
-  // Clear all filters
-  const clearAllFilters = useCallback(() => {
-    setQuery('');
-    setActiveCategory('all');
-    setActiveDifficulty('all');
-    setActiveTag('all');
-    setActiveAccess('all');
-    setSortBy('default');
-  }, []);
-
   // Random article picker
-  const getRandomUnreadArticle = useCallback(() => {
+  const handleSurpriseMe = useCallback(() => {
     const unreadArticles = contentData.filter(item => !isRead(item.id) && !item.premium);
-    if (unreadArticles.length === 0) return null;
-    return unreadArticles[Math.floor(Math.random() * unreadArticles.length)];
-  }, [isRead]);
-
-  const navigate = useNavigate();
-
-  const handleSurpriseMe = () => {
-    const randomArticle = getRandomUnreadArticle();
-    if (randomArticle) {
+    if (unreadArticles.length > 0) {
+      const randomArticle = unreadArticles[Math.floor(Math.random() * unreadArticles.length)];
       navigate(`/resource/${randomArticle.id}`);
     }
-  };
+  }, [isRead, navigate]);
 
-  // Check if any filters are active
-  const hasActiveFilters = query || activeCategory !== 'all' || activeDifficulty !== 'all' || activeTag !== 'all' || activeAccess !== 'all';
+  // Apply preset filters
+  const applyPreset = useCallback((preset) => {
+    updateFilters(preset.filters);
+  }, [updateFilters]);
+
+  // Get all available tags
+  const availableTags = useMemo(() => extractTags(contentData), []);
+
+  // Apply subcategory filter on top of hook's filtered data
+  const finalFilteredData = useMemo(() => {
+    if (!selectedSubcategory) return filteredData;
+    return filteredData.filter(item => item.subcategory === selectedSubcategory);
+  }, [filteredData, selectedSubcategory]);
 
   return (
     <div className="container page-container">
+      {/* Header Section */}
       <div className="header-section">
         <h1 className="heading-gradient">Resource Library</h1>
         <p className="subtitle">Explore {contentData.length} curated resources to boost your skills.</p>
@@ -361,7 +187,7 @@ const Library = () => {
             </div>
           </div>
 
-          {/* Start Here Section - for newcomers */}
+          {/* Start Here Section */}
           {stats.completed < 5 && startHereArticles.length > 0 && (
             <div className="start-here-section">
               <div className="section-header">
@@ -406,17 +232,14 @@ const Library = () => {
                     <button
                       key={cat.id}
                       className={`category-progress-card ${progress.percentage === 100 ? 'completed' : ''}`}
-                      onClick={() => setActiveCategory(cat.id)}
+                      onClick={() => updateFilter('category', cat.id)}
                     >
                       <div className="cat-progress-header">
                         <span className="cat-progress-label">{cat.label}</span>
                         <span className="cat-progress-count">{progress.read}/{progress.total}</span>
                       </div>
                       <div className="cat-progress-bar">
-                        <div
-                          className="cat-progress-fill"
-                          style={{ width: `${progress.percentage}%` }}
-                        ></div>
+                        <div className="cat-progress-fill" style={{ width: `${progress.percentage}%` }}></div>
                       </div>
                     </button>
                   );
@@ -427,71 +250,136 @@ const Library = () => {
         </>
       )}
 
+      {/* TIER 1: PRIMARY FILTERS - Categories (Always Visible) */}
       <div ref={filterRef} className={`controls-section glass-panel ${isFilterSticky ? 'is-sticky' : ''}`}>
-        {/* Categories - moved to top for better UX */}
         <div className="categories">
           {CATEGORIES.map(cat => {
             const IconComponent = cat.icon;
+            const isActive = filterState.category === cat.id;
+            const hasSubcategories = cat.hasSubcategories;
+            const isExpanded = expandedCategory === cat.id;
+
             return (
-              <button
-                key={cat.id}
-                className={`category-pill ${activeCategory === cat.id ? 'active' : ''}`}
-                onClick={() => setActiveCategory(cat.id)}
-                style={{ '--cat-color': cat.color }}
-              >
-                <IconComponent size={16} className="category-icon" />
-                <span>{cat.label}</span>
-              </button>
+              <div key={cat.id} className="category-wrapper">
+                <button
+                  className={`category-pill ${isActive ? 'active' : ''}`}
+                  onClick={() => {
+                    updateFilter('category', cat.id);
+                    if (hasSubcategories) {
+                      setExpandedCategory(isExpanded ? null : cat.id);
+                      // Don't reset subcategory when reopening dropdown
+                    } else {
+                      setExpandedCategory(null);
+                      setSelectedSubcategory(null);
+                    }
+                  }}
+                  style={{ '--cat-color': cat.color }}
+                >
+                  <IconComponent size={16} className="category-icon" />
+                  <span>{cat.label}</span>
+                  {hasSubcategories && (
+                    <motion.div
+                      animate={{ rotate: isExpanded ? 180 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ChevronDown size={14} />
+                    </motion.div>
+                  )}
+                </button>
+
+                {/* Floating Dropdown for Subcategories */}
+                <AnimatePresence>
+                  {hasSubcategories && isExpanded && isActive && (
+                    <motion.div
+                      className="subcategories-dropdown"
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <div className="dropdown-header">
+                        {cat.label} Sections
+                      </div>
+                      <button
+                        className={`dropdown-item ${!selectedSubcategory ? 'active' : ''}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedSubcategory(null);
+                          setExpandedCategory(null);
+                        }}
+                      >
+                        <span>All {cat.label}</span>
+                        <span className="item-count">{cat.subcategories.reduce((sum, s) => sum + s.count, 0)}</span>
+                      </button>
+                      {cat.subcategories.map(subcat => (
+                        <button
+                          key={subcat.id}
+                          className={`dropdown-item ${selectedSubcategory === subcat.id ? 'active' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedSubcategory(subcat.id);
+                            setExpandedCategory(null);
+                          }}
+                        >
+                          <span>{subcat.label}</span>
+                          <span className="item-count">{subcat.count}</span>
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             );
           })}
         </div>
 
+        {/* TIER 2: SECONDARY FILTERS - Quick Refinement */}
         <div className="search-row">
+          {/* Search */}
           <div className="search-bar">
             <Search size={20} className="search-icon" />
             <input
               type="text"
-              placeholder="Search resources..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              placeholder={FILTERS.primary.search.placeholder}
+              value={filterState.search}
+              onChange={(e) => updateFilter('search', e.target.value)}
             />
-            {query && (
+            {filterState.search && (
               <button
                 className="clear-search-btn"
-                onClick={() => setQuery('')}
+                onClick={() => updateFilter('search', '')}
                 title="Clear search"
-                aria-label="Clear search"
               >
                 <X size={18} />
               </button>
             )}
           </div>
 
+          {/* Quick Filters */}
           <div className="filter-dropdowns">
+            {/* Difficulty */}
             <select
-              value={activeDifficulty}
-              onChange={(e) => setActiveDifficulty(e.target.value)}
-              className={`filter-select ${activeDifficulty !== 'all' ? 'active' : ''}`}
+              value={filterState.difficulty}
+              onChange={(e) => updateFilter('difficulty', e.target.value)}
+              className={`filter-select ${filterState.difficulty !== 'all' ? 'active' : ''}`}
             >
-              {DIFFICULTIES.map(diff => (
-                <option key={diff.id} value={diff.id}>
-                  {diff.label}
-                </option>
+              {FILTERS.secondary.difficulty.values.map(opt => (
+                <option key={opt.id} value={opt.id}>{opt.label}</option>
               ))}
             </select>
 
+            {/* Access/Pricing */}
             <select
-              value={activeAccess}
-              onChange={(e) => setActiveAccess(e.target.value)}
-              className={`filter-select ${activeAccess !== 'all' ? 'active' : ''}`}
+              value={filterState.access}
+              onChange={(e) => updateFilter('access', e.target.value)}
+              className={`filter-select ${filterState.access !== 'all' ? 'active' : ''}`}
             >
-              {ACCESS_OPTIONS.map(option => (
-                <option key={option.id} value={option.id}>
-                  {option.label}
-                </option>
+              {FILTERS.secondary.access.values.map(opt => (
+                <option key={opt.id} value={opt.id}>{opt.label}</option>
               ))}
             </select>
 
+            {/* More Filters Button */}
             <button
               className={`filter-btn more-filters ${showMoreFilters ? 'active' : ''}`}
               onClick={() => setShowMoreFilters(!showMoreFilters)}
@@ -502,6 +390,7 @@ const Library = () => {
             </button>
           </div>
 
+          {/* View Toggle */}
           <div className="view-toggle">
             <button
               className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
@@ -520,7 +409,7 @@ const Library = () => {
           </div>
         </div>
 
-        {/* Expandable filters */}
+        {/* TIER 4: ADVANCED FILTERS - Expandable Panel */}
         <AnimatePresence>
           {showMoreFilters && (
             <motion.div
@@ -530,50 +419,92 @@ const Library = () => {
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
+              {/* Sort */}
               <select
-                value={activeTag}
-                onChange={(e) => setActiveTag(e.target.value)}
-                className={`filter-select ${activeTag !== 'all' ? 'active' : ''}`}
+                value={filterState.sort}
+                onChange={(e) => updateFilter('sort', e.target.value)}
+                className={`filter-select ${filterState.sort !== 'default' ? 'active' : ''}`}
               >
-                <option value="all">All Tags</option>
-                {POPULAR_TAGS.map(tag => (
-                  <option key={tag} value={tag}>
-                    #{tag}
-                  </option>
+                {FILTERS.secondary.sort.values.map(opt => (
+                  <option key={opt.id} value={opt.id}>{opt.label}</option>
                 ))}
               </select>
 
+              {/* Interview Frequency */}
               <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className={`filter-select ${sortBy !== 'default' ? 'active' : ''}`}
+                value={filterState.interviewFrequency}
+                onChange={(e) => updateFilter('interviewFrequency', e.target.value)}
+                className={`filter-select ${filterState.interviewFrequency !== 'all' ? 'active' : ''}`}
               >
-                {SORT_OPTIONS.map(option => (
-                  <option key={option.id} value={option.id}>
-                    {option.label}
-                  </option>
+                {FILTERS.advanced.interviewFrequency.values.map(opt => (
+                  <option key={opt.id} value={opt.id}>{opt.label}</option>
+                ))}
+              </select>
+
+              {/* Read Status */}
+              <select
+                value={filterState.readStatus}
+                onChange={(e) => updateFilter('readStatus', e.target.value)}
+                className={`filter-select ${filterState.readStatus !== 'all' ? 'active' : ''}`}
+              >
+                {FILTERS.advanced.readStatus.values.map(opt => (
+                  <option key={opt.id} value={opt.id}>{opt.label}</option>
+                ))}
+              </select>
+
+              {/* Date Added */}
+              <select
+                value={filterState.dateAdded}
+                onChange={(e) => updateFilter('dateAdded', e.target.value)}
+                className={`filter-select ${filterState.dateAdded !== 'all' ? 'active' : ''}`}
+              >
+                {FILTERS.advanced.dateAdded.values.map(opt => (
+                  <option key={opt.id} value={opt.id}>{opt.label}</option>
                 ))}
               </select>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Results count and Clear All */}
+        {/* Results Bar */}
         <div className="results-bar">
           <span className="results-count">
-            Showing <strong>{filteredContent.length}</strong> of {contentData.length} resources
+            Showing <strong>{finalFilteredData.length}</strong> of {contentData.length} resources
           </span>
-          {activeFilterCount > 0 && (
-            <button className="clear-all-btn" onClick={clearAllFilters}>
+          {(activeFilterCount > 0 || selectedSubcategory) && (
+            <button className="clear-all-btn" onClick={() => {
+              resetAllFilters();
+              setSelectedSubcategory(null);
+            }}>
               <X size={14} />
-              Clear {activeFilterCount} filter{activeFilterCount > 1 ? 's' : ''}
+              Clear {activeFilterCount + (selectedSubcategory ? 1 : 0)} filter{(activeFilterCount + (selectedSubcategory ? 1 : 0)) > 1 ? 's' : ''}
             </button>
           )}
         </div>
       </div>
 
-      {/* Sticky Table Header - Outside of scrollable content */}
-      {viewMode === 'list' && filteredContent.length > 0 && (
+      {/* TIER 3: FILTER PRESETS - Quick Access */}
+      {!hasActiveFilters && FILTER_PRESETS.length > 0 && (
+        <div className="filter-presets">
+          <div className="preset-chips">
+            {FILTER_PRESETS.map(preset => (
+              <button
+                key={preset.id}
+                className="preset-chip"
+                onClick={() => applyPreset(preset)}
+                title={preset.description}
+                style={{ '--preset-color': preset.color }}
+              >
+                <span className="emoji">{preset.emoji}</span>
+                <span>{preset.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* List Header (Sticky) */}
+      {viewMode === 'list' && finalFilteredData.length > 0 && (
         <div className="list-header glass-panel" style={{ marginBottom: 0, borderRadius: '12px 12px 0 0' }}>
           <div style={{ flex: 1, minWidth: 0, paddingLeft: '0.5rem' }}>QUESTION</div>
           <div style={{ width: '200px', flexShrink: 0 }}>CATEGORY</div>
@@ -582,11 +513,11 @@ const Library = () => {
         </div>
       )}
 
+      {/* Results */}
       <div className={`resources-grid ${viewMode === 'list' ? 'list-view' : ''}`}>
-        {viewMode === 'list' && filteredContent.length > 0 && (
+        {viewMode === 'list' && finalFilteredData.length > 0 && (
           <div className="glass-panel" style={{ padding: 0, overflow: 'hidden', borderRadius: '0 0 12px 12px' }}>
-            {/* All filtered items */}
-            {filteredContent.map((item, index) => {
+            {finalFilteredData.map((item, index) => {
               const interviewFreq = getInterviewFrequency(item);
               return (
                 <motion.div
@@ -598,14 +529,9 @@ const Library = () => {
                   <Link
                     to={`/resource/${item.id}`}
                     className={`resource-card ${item.premium && !isPremium() ? 'is-premium-locked' : ''} ${isRead(item.id) ? 'is-read' : ''}`}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'var(--surface-hover)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'transparent';
-                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = 'var(--surface-hover)'}
+                    onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                   >
-                    {/* Left: Read indicator and Title */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flex: 1, minWidth: 0 }}>
                       {isRead(item.id) ? (
                         <span className="read-indicator" title="Completed" style={{ width: '16px', flexShrink: 0 }}>
@@ -617,7 +543,6 @@ const Library = () => {
                       <h3 style={{ margin: 0, fontSize: '0.95rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</h3>
                     </div>
 
-                    {/* Middle: Category & Subcategory */}
                     <div className="card-meta" style={{ width: '200px', flexShrink: 0 }}>
                       <span className="meta-category">{CATEGORY_DISPLAY_NAMES[item.category] || item.category}</span>
                       {item.subcategory && (
@@ -628,7 +553,6 @@ const Library = () => {
                       )}
                     </div>
 
-                    {/* Right: Difficulty Badge */}
                     <div style={{ width: '100px', flexShrink: 0, display: 'flex', justifyContent: 'center' }}>
                       {item.difficulty && (
                         <span className={`badge difficulty ${item.difficulty}`}>
@@ -637,7 +561,6 @@ const Library = () => {
                       )}
                     </div>
 
-                    {/* Far Right: Type Badges */}
                     <div className="card-header" style={{ width: '200px', flexShrink: 0, margin: 0, gap: '0.5rem', display: 'flex', justifyContent: 'flex-end' }}>
                       {item.premium && (
                         <span className={`badge premium ${isPremium() ? 'unlocked' : ''}`}>
@@ -657,78 +580,80 @@ const Library = () => {
           </div>
         )}
 
-        {viewMode === 'grid' && filteredContent.length > 0 && filteredContent.map((item) => {
-            const interviewFreq = getInterviewFrequency(item);
-            return (
-              <motion.div
-                key={item.id}
-                layout
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2 }}
+        {viewMode === 'grid' && finalFilteredData.length > 0 && finalFilteredData.map((item) => {
+          const interviewFreq = getInterviewFrequency(item);
+          return (
+            <motion.div
+              key={item.id}
+              layout
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Link
+                to={`/resource/${item.id}`}
+                className={`resource-card glass-panel animated-card subtle ${item.premium && !isPremium() ? 'is-premium-locked' : ''} ${isRead(item.id) ? 'is-read' : ''}`}
               >
-                <Link
-                  to={`/resource/${item.id}`}
-                  className={`resource-card glass-panel animated-card subtle ${item.premium && !isPremium() ? 'is-premium-locked' : ''} ${isRead(item.id) ? 'is-read' : ''}`}
-                >
-                  <div className="card-header">
-                    {isRead(item.id) && (
-                      <span className="read-indicator" title="Completed">
-                        <CheckCircle size={16} />
-                      </span>
-                    )}
-                    {item.premium && (
-                      <span className={`badge premium ${isPremium() ? 'unlocked' : ''}`}>
-                        Premium
-                      </span>
-                    )}
-                    {interviewFreq === 'critical' && (
-                      <span className="badge interview-favorite" title="Frequently asked in interviews">
-                        Interview Favorite
-                      </span>
-                    )}
-                    {item.difficulty && (
-                      <span className={`badge difficulty ${item.difficulty}`}>
-                        {item.difficulty}
-                      </span>
-                    )}
-                  </div>
-                  <h3>{item.title}</h3>
-                  <div className="card-meta">
-                    <span className="meta-category">{CATEGORY_DISPLAY_NAMES[item.category] || item.category}</span>
-                    {item.subcategory && (
-                      <>
-                        <span className="meta-separator">•</span>
-                        <span className="meta-subcategory">{SUBCATEGORY_DISPLAY_NAMES[item.subcategory] || item.subcategory}</span>
-                      </>
-                    )}
-                    <span className="meta-separator">•</span>
-                    <span className="meta-time">
-                      <Clock size={12} />
-                      {item.readTime || 5} min
+                <div className="card-header">
+                  {isRead(item.id) && (
+                    <span className="read-indicator" title="Completed">
+                      <CheckCircle size={16} />
                     </span>
-                  </div>
-                  <p className="card-description">{item.description || item.content.substring(0, 120)}</p>
-                  <div className="card-footer">
-                    <span>{isRead(item.id) ? 'Review' : 'Read Article'}</span>
-                    <ChevronRight size={16} />
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })}
-        {filteredContent.length === 0 && (
+                  )}
+                  {item.premium && (
+                    <span className={`badge premium ${isPremium() ? 'unlocked' : ''}`}>
+                      Premium
+                    </span>
+                  )}
+                  {interviewFreq === 'critical' && (
+                    <span className="badge interview-favorite" title="Frequently asked in interviews">
+                      Interview Favorite
+                    </span>
+                  )}
+                  {item.difficulty && (
+                    <span className={`badge difficulty ${item.difficulty}`}>
+                      {item.difficulty}
+                    </span>
+                  )}
+                </div>
+                <h3>{item.title}</h3>
+                <div className="card-meta">
+                  <span className="meta-category">{CATEGORY_DISPLAY_NAMES[item.category] || item.category}</span>
+                  {item.subcategory && (
+                    <>
+                      <span className="meta-separator">•</span>
+                      <span className="meta-subcategory">{SUBCATEGORY_DISPLAY_NAMES[item.subcategory] || item.subcategory}</span>
+                    </>
+                  )}
+                  <span className="meta-separator">•</span>
+                  <span className="meta-time">
+                    <Clock size={12} />
+                    {item.readTime || 5} min
+                  </span>
+                </div>
+                <p className="card-description">{item.description || item.content.substring(0, 120)}</p>
+                <div className="card-footer">
+                  <span>{isRead(item.id) ? 'Review' : 'Read Article'}</span>
+                  <ChevronRight size={16} />
+                </div>
+              </Link>
+            </motion.div>
+          );
+        })}
+
+        {finalFilteredData.length === 0 && (
           <div className="empty-state">
             <Search size={48} />
             <h3>No resources found</h3>
             <p>Try adjusting your filters or search terms</p>
-            <button className="btn-reset" onClick={clearAllFilters}>
+            <button className="btn-reset" onClick={resetAllFilters}>
               Clear all filters
             </button>
           </div>
         )}
       </div>
 
+      {/* Import all styles from original Library.jsx */}
       <style>{`
         .page-container {
           padding-top: 2rem;
@@ -1345,6 +1270,48 @@ const Library = () => {
           overflow: hidden;
         }
 
+        /* Filter Presets */
+        .filter-presets {
+          padding: 1rem 0;
+          margin-bottom: 1rem;
+        }
+
+        .preset-chips {
+          display: flex;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+        }
+
+        .preset-chip {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.5rem 1rem;
+
+          background: rgba(139, 92, 246, 0.1);
+          border: 1px solid rgba(139, 92, 246, 0.3);
+          border-radius: 20px;
+
+          font-size: 0.85rem;
+          font-weight: 500;
+          color: var(--text-main);
+
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .preset-chip:hover {
+          background: rgba(139, 92, 246, 0.2);
+          border-color: var(--preset-color, rgba(139, 92, 246, 0.5));
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+        }
+
+        .preset-chip .emoji {
+          font-size: 1rem;
+          line-height: 1;
+        }
+
         /* Results Bar */
         .results-bar {
           display: flex;
@@ -1598,6 +1565,84 @@ const Library = () => {
 
         .category-pill.active::before {
           opacity: 0;
+        }
+
+        /* Category Wrapper for Dropdown */
+        .category-wrapper {
+          position: relative;
+        }
+
+        /* Floating Dropdown for Subcategories */
+        .subcategories-dropdown {
+          position: absolute;
+          top: calc(100% + 0.5rem);
+          left: 0;
+          z-index: 101;
+          min-width: 220px;
+          background: var(--bg-primary, #1a1a2e);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          padding: 0.5rem;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+        }
+
+        :root.light .subcategories-dropdown {
+          background: rgba(255, 255, 255, 0.98);
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .dropdown-header {
+          font-size: 0.75rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          color: var(--text-muted);
+          padding: 0.5rem 0.75rem;
+          letter-spacing: 0.05em;
+        }
+
+        .dropdown-item {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 0.75rem;
+          padding: 0.65rem 0.75rem;
+          background: transparent;
+          border: none;
+          border-radius: 8px;
+          color: var(--text-main);
+          font-size: 0.9rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          text-align: left;
+        }
+
+        .dropdown-item:hover {
+          background: var(--surface-hover);
+        }
+
+        .dropdown-item.active {
+          background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.1));
+          color: var(--primary);
+          font-weight: 600;
+        }
+
+        .item-count {
+          font-size: 0.75rem;
+          padding: 0.2rem 0.5rem;
+          background: var(--surface-hover);
+          border-radius: 10px;
+          color: var(--text-muted);
+          font-weight: 600;
+          min-width: 28px;
+          text-align: center;
+        }
+
+        .dropdown-item.active .item-count {
+          background: rgba(139, 92, 246, 0.2);
+          color: var(--primary);
         }
 
         .resources-grid {
@@ -1877,7 +1922,7 @@ const Library = () => {
           letter-spacing: 0.5px;
           position: sticky;
           top: 220px;
-          z-index: 45;
+          z-index: 0;
           backdrop-filter: blur(24px);
           -webkit-backdrop-filter: blur(24px);
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);

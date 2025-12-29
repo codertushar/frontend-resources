@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://crackfrontend.vercel.app/sitemap.xml
+Sitemap: https://crackfrontend.in/sitemap.xml

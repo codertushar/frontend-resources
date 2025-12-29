@@ -160,7 +160,7 @@ a {
 
 /* Utilities */
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
@@ -244,10 +244,32 @@ a {
 }
 
 .heading-gradient {
-  background: var(--heading-gradient);
+  background: linear-gradient(
+    90deg,
+    #06b6d4 0%,
+    #3b82f6 20%,
+    #8b5cf6 40%,
+    #c084fc 50%,
+    #8b5cf6 60%,
+    #3b82f6 80%,
+    #06b6d4 100%
+  );
+  background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  animation: aurora-shimmer-heading 5s ease-in-out infinite;
+}
+
+@keyframes aurora-shimmer-heading {
+  0%, 100% {
+    background-position: 0% center;
+    filter: brightness(1);
+  }
+  50% {
+    background-position: 100% center;
+    filter: brightness(1.2);
+  }
 }
 
 .theme-toggle {
@@ -733,13 +755,33 @@ a {
   font-size: 3.5rem;
   font-weight: 800;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--primary), var(--accent-pink), var(--accent-cyan));
+  background: linear-gradient(
+    90deg,
+    #06b6d4 0%,
+    #3b82f6 20%,
+    #8b5cf6 40%,
+    #c084fc 50%,
+    #8b5cf6 60%,
+    #3b82f6 80%,
+    #06b6d4 100%
+  );
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradient-shift 4s linear infinite;
+  animation: aurora-shimmer-title 5s ease-in-out infinite;
   letter-spacing: -0.02em;
+}
+
+@keyframes aurora-shimmer-title {
+  0%, 100% {
+    background-position: 0% center;
+    filter: brightness(1);
+  }
+  50% {
+    background-position: 100% center;
+    filter: brightness(1.2);
+  }
 }
 
 .practice-subtitle {

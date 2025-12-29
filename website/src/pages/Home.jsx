@@ -2,9 +2,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Zap, Code, Database, Brain, Layout, Sparkles, BookOpen, Crown, Trophy, Terminal, Lightbulb, Rocket } from 'lucide-react';
+import { Zap, Code, Database, Brain, Layout, Sparkles, BookOpen, Crown, Trophy, Terminal, Lightbulb, Rocket, ArrowRight } from 'lucide-react';
 import contentData from '../data/content.json';
 import { useProgress } from '../context/ProgressContext';
+import SEO from '../components/SEO';
+import { WebsiteStructuredData } from '../components/StructuredData';
 
 const container = {
   hidden: { opacity: 0 },
@@ -231,8 +233,8 @@ const InteractiveConstellation = () => {
 
         if (distToMouse < mouseRadius && distToMouse > 0) {
           const force = (mouseRadius - distToMouse) / mouseRadius;
-          node.x += dx * force * 0.02;
-          node.y += dy * force * 0.02;
+          node.x += dx * force * 0.004;
+          node.y += dy * force * 0.004;
           node.radius = node.baseRadius + force * 3;
         } else {
           node.radius = node.baseRadius;
@@ -291,7 +293,7 @@ const InteractiveConstellation = () => {
         }
 
         // Draw node
-        const nodeOpacity = distToMouse < mouseRadius ? 0.9 : 0.4;
+        const nodeOpacity = distToMouse < mouseRadius ? 0.4 : 0.25;
         const gradient = ctx.createRadialGradient(
           node.x, node.y, 0,
           node.x, node.y, node.radius * 2
@@ -378,18 +380,27 @@ const Home = () => {
   }, {});
 
   return (
-    <div className="container">
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="hero"
-      >
-        {/* Interactive Constellation Background */}
-        <InteractiveConstellation />
+    <>
+      <SEO
+        title="CrackFrontend - Master Frontend Interviews"
+        description="A curated collection of in-depth resources, real-world patterns, and interview-focused guides to land your dream frontend role. Learn JavaScript, React, System Design, and more."
+        url="/"
+        keywords="frontend interview, javascript interview, react interview, system design, coding interview prep, javascript polyfills, design patterns, DSA for frontend"
+      />
+      <WebsiteStructuredData />
 
-        {/* Floating Particles Background */}
-        <FloatingParticles />
+      <div className="container">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="hero"
+        >
+          {/* Interactive Constellation Background */}
+          <InteractiveConstellation />
+
+          {/* Floating Particles Background */}
+          <FloatingParticles />
 
         <motion.div variants={item} className="hero-badge">
           <Sparkles size={14} />
@@ -464,7 +475,25 @@ const Home = () => {
         )}
 
         <motion.div variants={item} className="section-header">
-          <h2>Explore by Category</h2>
+          <h2>Popular Topics</h2>
+          <p>Jump straight to what you want to learn</p>
+        </motion.div>
+
+        <motion.div variants={item} className="popular-topics">
+          <Link to="/library?tag=react" className="topic-tag">React</Link>
+          <Link to="/library?subcategory=design-patterns" className="topic-tag">Design Patterns</Link>
+          <Link to="/library?tag=promises" className="topic-tag">Promises</Link>
+          <Link to="/library?subcategory=polyfills" className="topic-tag">Polyfills</Link>
+          <Link to="/library?tag=closures" className="topic-tag">Closures</Link>
+          <Link to="/library?tag=memoization" className="topic-tag">Memoization</Link>
+          <Link to="/library?tag=async" className="topic-tag">Async Programming</Link>
+          <Link to="/library?tag=performance" className="topic-tag">Performance</Link>
+          <Link to="/library?tag=algorithms" className="topic-tag">Algorithms</Link>
+          <Link to="/library?tag=dom" className="topic-tag">DOM Manipulation</Link>
+        </motion.div>
+
+        <motion.div variants={item} className="section-header" style={{ marginTop: '4rem' }}>
+          <h2>Browse by Category</h2>
           <p>Deep-dive into curated content tailored for frontend interviews and real-world development.</p>
         </motion.div>
 
@@ -935,6 +964,41 @@ const Home = () => {
           margin: 0 auto;
         }
 
+        /* Popular Topics Tag Cloud */
+        .popular-topics {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+          justify-content: center;
+          max-width: 900px;
+          margin: 0 auto 1rem;
+          padding: 0 1rem;
+          position: relative;
+          z-index: 1;
+        }
+
+        .topic-tag {
+          padding: 0.625rem 1.25rem;
+          background: var(--surface-color);
+          border: 1px solid var(--border-color);
+          border-radius: 999px;
+          font-size: 0.875rem;
+          font-weight: 500;
+          color: var(--text-main);
+          transition: all 0.25s ease;
+          cursor: pointer;
+          text-decoration: none;
+          white-space: nowrap;
+        }
+
+        .topic-tag:hover {
+          background: var(--primary);
+          color: white;
+          border-color: var(--primary);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
         .features-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -1141,6 +1205,7 @@ const Home = () => {
         }
       `}</style>
     </div>
+    </>
   );
 };
 

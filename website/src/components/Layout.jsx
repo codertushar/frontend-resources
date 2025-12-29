@@ -594,8 +594,8 @@ const InteractiveConstellation = () => {
 
         if (distToMouse < mouseRadius && distToMouse > 0) {
           const force = (mouseRadius - distToMouse) / mouseRadius;
-          node.x += dx * force * 0.02;
-          node.y += dy * force * 0.02;
+          node.x += dx * force * 0.004;
+          node.y += dy * force * 0.004;
           node.radius = node.baseRadius + force * 3;
         } else {
           node.radius = node.baseRadius;
@@ -654,7 +654,7 @@ const InteractiveConstellation = () => {
         }
 
         // Draw node
-        const nodeOpacity = distToMouse < mouseRadius ? 0.9 : 0.4;
+        const nodeOpacity = distToMouse < mouseRadius ? 0.4 : 0.25;
         const gradient = ctx.createRadialGradient(
           node.x, node.y, 0,
           node.x, node.y, node.radius * 2
@@ -997,25 +997,29 @@ const Layout = ({ children }) => {
         .logo-text-short {
           background: linear-gradient(
             90deg,
-            #8b5cf6 0%,
-            #ec4899 25%,
-            #06b6d4 50%,
-            #ec4899 75%,
-            #8b5cf6 100%
+            #06b6d4 0%,
+            #3b82f6 20%,
+            #8b5cf6 40%,
+            #c084fc 50%,
+            #8b5cf6 60%,
+            #3b82f6 80%,
+            #06b6d4 100%
           );
           background-size: 200% auto;
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
-          animation: logo-gradient-shift 4s linear infinite;
+          animation: logo-gradient-shift 5s ease-in-out infinite;
         }
 
         @keyframes logo-gradient-shift {
-          0% {
+          0%, 100% {
             background-position: 0% center;
+            filter: brightness(1);
           }
-          100% {
-            background-position: 200% center;
+          50% {
+            background-position: 100% center;
+            filter: brightness(1.2);
           }
         }
 

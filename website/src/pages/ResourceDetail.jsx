@@ -12,6 +12,8 @@ import { useSubscription } from '../context/SubscriptionContext';
 import { useAuth } from '../context/AuthContext';
 import Paywall from '../components/Paywall';
 import QuizSection, { parseQuizFromMarkdown, removeQuizFromContent } from '../components/QuizSection';
+import SEO from '../components/SEO';
+import { ArticleStructuredData, BreadcrumbStructuredData } from '../components/StructuredData';
 
 const SUBCATEGORY_DISPLAY_NAMES = {
   'general-concepts': 'Core Concepts',
@@ -253,8 +255,52 @@ const ResourceDetail = () => {
     );
   }
 
+  // Generate breadcrumbs for structured data
+  const breadcrumbItems = [
+    { name: 'Home', url: '/' },
+    { name: CATEGORY_DISPLAY_NAMES[resource.category] || resource.category, url: `/resource/${resource.category}` }
+  ];
+
+  if (resource.subcategory) {
+    breadcrumbItems.push({
+      name: SUBCATEGORY_DISPLAY_NAMES[resource.subcategory] || resource.subcategory,
+      url: `/resource/${resource.category}/${resource.subcategory}`
+    });
+  }
+
+  breadcrumbItems.push({
+    name: resource.title,
+    url: location.pathname
+  });
+
   return (
     <>
+      <SEO
+        title={resource.title}
+        description={resource.description || `Learn about ${resource.title} in our comprehensive guide. ${resource.premium ? 'Premium content' : 'Free resource'} for frontend developers.`}
+        url={location.pathname}
+        type="article"
+        keywords={`${resource.title}, ${resource.category}, frontend interview, ${resource.difficulty} level, ${resource.premium ? 'premium tutorial' : 'free tutorial'}`}
+        article={{
+          publishedTime: resource.date,
+          modifiedTime: resource.date,
+          tags: [resource.category, resource.subcategory, resource.difficulty].filter(Boolean)
+        }}
+      />
+
+      <ArticleStructuredData
+        title={resource.title}
+        description={resource.description || `Comprehensive guide on ${resource.title}`}
+        url={location.pathname}
+        publishedDate={resource.date}
+        modifiedDate={resource.date}
+        category={CATEGORY_DISPLAY_NAMES[resource.category] || resource.category}
+        difficulty={resource.difficulty}
+        isPremium={resource.premium}
+      />
+
+      <BreadcrumbStructuredData items={breadcrumbItems} />
+
       {/* Reading Progress Bar */}
       <div className="reading-progress-container">
         <div
@@ -775,10 +821,32 @@ const ResourceDetail = () => {
         }
 
         .article-title .title-text {
-          background: var(--heading-gradient);
+          background: linear-gradient(
+            90deg,
+            #06b6d4 0%,
+            #3b82f6 20%,
+            #8b5cf6 40%,
+            #c084fc 50%,
+            #8b5cf6 60%,
+            #3b82f6 80%,
+            #06b6d4 100%
+          );
+          background-size: 200% auto;
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
+          animation: aurora-shimmer-article 5s ease-in-out infinite;
+        }
+
+        @keyframes aurora-shimmer-article {
+          0%, 100% {
+            background-position: 0% center;
+            filter: brightness(1);
+          }
+          50% {
+            background-position: 100% center;
+            filter: brightness(1.2);
+          }
         }
 
         .article-title .title-emoji {
