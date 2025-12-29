@@ -1,4 +1,4 @@
-
+import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import { HelmetProvider } from 'react-helmet-async';
@@ -11,12 +11,14 @@ import ResourceDetail from './pages/ResourceDetail';
 import Pricing from './pages/Pricing';
 import Admin from './pages/Admin';
 import MachineCodingList from './pages/MachineCodingList';
-import MachineCodingDetail from './pages/MachineCodingDetail';
 import { useCanonical } from './hooks/useCanonical';
 
 import { ThemeProvider } from './context/ThemeContext';
 import { ProgressProvider } from './context/ProgressContext';
 import { SubscriptionProvider } from './context/SubscriptionContext';
+
+// Lazy load MachineCodingDetail to isolate Sandpack's React instance
+const MachineCodingDetail = lazy(() => import('./pages/MachineCodingDetail'));
 
 
 function AppContent() {
@@ -32,7 +34,11 @@ function AppContent() {
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/practice" element={<MachineCodingList />} />
-          <Route path="/practice/:questionId" element={<MachineCodingDetail />} />
+          <Route path="/practice/:questionId" element={
+            <Suspense fallback={<div style={{ padding: '2rem', textAlign: 'center' }}>Loading editor...</div>}>
+              <MachineCodingDetail />
+            </Suspense>
+          } />
           <Route path="/resource/*" element={<ResourceDetail />} />
         </Routes>
       </Layout>

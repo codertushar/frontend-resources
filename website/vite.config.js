@@ -12,8 +12,29 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ['src/data/content.json'],
+    include: ['react', 'react-dom', '@codesandbox/sandpack-react'],
   },
   resolve: {
     dedupe: ['react', 'react-dom'],
+  },
+  build: {
+    commonjsOptions: {
+      include: [/node_modules/],
+      transformMixedEsModules: true,
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'react-vendor';
+            }
+            if (id.includes('@codesandbox/sandpack-react')) {
+              return 'sandpack';
+            }
+          }
+        },
+      },
+    },
   },
 })
