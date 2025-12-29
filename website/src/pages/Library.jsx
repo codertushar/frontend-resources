@@ -1953,22 +1953,32 @@ const Library = () => {
             display: flex;
             gap: 0.5rem;
             order: 2;
-            flex: 1;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding-bottom: 2px;
+          }
+
+          .filter-dropdowns::-webkit-scrollbar {
+            display: none;
           }
 
           .filter-select {
-            min-width: unset;
-            font-size: 0.8rem;
-            padding: 0.5rem 0.75rem;
-            padding-right: 1.75rem;
-            flex: 1;
-            background-position: right 0.5rem center;
-            background-size: 12px;
+            min-width: 90px;
+            font-size: 0.75rem;
+            padding: 0.5rem 0.6rem;
+            padding-right: 1.5rem;
+            flex-shrink: 0;
+            background-position: right 0.4rem center;
+            background-size: 11px;
           }
 
           .filter-btn {
-            padding: 0.5rem 0.75rem;
-            font-size: 0.8rem;
+            padding: 0.5rem 0.65rem;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            min-width: auto;
           }
 
           .filter-btn span {

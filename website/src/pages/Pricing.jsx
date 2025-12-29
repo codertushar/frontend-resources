@@ -238,7 +238,7 @@ const Pricing = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3 }}
-          className="pricing-card glass-panel"
+          className="pricing-card glass-panel animated-card"
         >
           <div className="card-badge">Best Value</div>
 
@@ -360,22 +360,22 @@ const Pricing = () => {
           <h2>Frequently Asked Questions</h2>
 
           <div className="faq-grid">
-            <div className="faq-item glass-panel">
+            <div className="faq-item glass-panel animated-card subtle">
               <h3>Is this a subscription?</h3>
               <p>No! This is a one-time payment for lifetime access. Pay once, learn forever.</p>
             </div>
 
-            <div className="faq-item glass-panel">
+            <div className="faq-item glass-panel animated-card subtle">
               <h3>What payment methods are accepted?</h3>
               <p>We accept UPI, credit/debit cards, net banking, and wallets through Razorpay.</p>
             </div>
 
-            <div className="faq-item glass-panel">
+            <div className="faq-item glass-panel animated-card subtle">
               <h3>Do I get future updates?</h3>
               <p>Yes! All future premium content is included in your lifetime access.</p>
             </div>
 
-            <div className="faq-item glass-panel">
+            <div className="faq-item glass-panel animated-card subtle">
               <h3>Can I get a refund?</h3>
               <p>We offer a 7-day refund policy if you're not satisfied with the content.</p>
             </div>

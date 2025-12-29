@@ -1,7 +1,8 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { BookOpen, Layers, Map, Mail, Github, Linkedin, LogOut, User, Crown, Sparkles, Music, Play, Pause, Volume2, VolumeX, RotateCcw, Flame, Code2 } from 'lucide-react';
 import { XIcon } from './SocialIcons';
+import { motion } from 'framer-motion';
 
 import ThemeToggle from './ThemeToggle';
 import NotificationPrompt from './NotificationPrompt';
@@ -451,6 +452,278 @@ const Logo = ({ className }) => (
   </svg>
 );
 
+// Pre-generated particle positions (pure/deterministic)
+const PARTICLES = [
+  { id: 0, x: 12, y: 8, size: 3, duration: 18, delay: 1, xOffset: 5 },
+  { id: 1, x: 85, y: 15, size: 2, duration: 22, delay: 0, xOffset: -8 },
+  { id: 2, x: 45, y: 25, size: 4, duration: 15, delay: 2, xOffset: 10 },
+  { id: 3, x: 72, y: 42, size: 2, duration: 25, delay: 3, xOffset: -5 },
+  { id: 4, x: 28, y: 55, size: 3, duration: 20, delay: 1, xOffset: 7 },
+  { id: 5, x: 92, y: 68, size: 2, duration: 17, delay: 4, xOffset: -10 },
+  { id: 6, x: 8, y: 75, size: 4, duration: 23, delay: 0, xOffset: 8 },
+  { id: 7, x: 55, y: 82, size: 2, duration: 19, delay: 2, xOffset: -6 },
+  { id: 8, x: 38, y: 12, size: 3, duration: 21, delay: 3, xOffset: 9 },
+  { id: 9, x: 65, y: 35, size: 2, duration: 16, delay: 1, xOffset: -7 },
+  { id: 10, x: 18, y: 48, size: 4, duration: 24, delay: 4, xOffset: 6 },
+  { id: 11, x: 78, y: 58, size: 2, duration: 18, delay: 0, xOffset: -9 },
+  { id: 12, x: 52, y: 72, size: 3, duration: 22, delay: 2, xOffset: 8 },
+  { id: 13, x: 25, y: 88, size: 2, duration: 15, delay: 3, xOffset: -5 },
+  { id: 14, x: 88, y: 22, size: 4, duration: 20, delay: 1, xOffset: 10 },
+  { id: 15, x: 5, y: 38, size: 2, duration: 26, delay: 4, xOffset: -8 },
+  { id: 16, x: 42, y: 5, size: 3, duration: 17, delay: 0, xOffset: 7 },
+  { id: 17, x: 68, y: 92, size: 2, duration: 23, delay: 2, xOffset: -6 },
+  { id: 18, x: 95, y: 45, size: 4, duration: 19, delay: 3, xOffset: 9 },
+  { id: 19, x: 32, y: 65, size: 2, duration: 21, delay: 1, xOffset: -10 },
+];
+
+// Interactive Constellation Network - Mouse-based connecting nodes
+const InteractiveConstellation = () => {
+  const canvasRef = useRef(null);
+  const mouseRef = useRef({ x: -1000, y: -1000 });
+  const nodesRef = useRef([]);
+  const animationRef = useRef(null);
+  const isMobileRef = useRef(false);
+
+  // Initialize nodes
+  const initNodes = useCallback((width, height) => {
+    const nodes = [];
+    // Dramatically reduce nodes on mobile for performance
+    const isMobile = width < 768;
+    isMobileRef.current = isMobile;
+    const nodeCount = isMobile
+      ? Math.min(30, Math.floor((width * height) / 25000))  // 30 max on mobile
+      : Math.min(80, Math.floor((width * height) / 15000)); // 80 max on desktop
+
+    for (let i = 0; i < nodeCount; i++) {
+      nodes.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 2 + 1,
+        baseRadius: Math.random() * 2 + 1,
+      });
+    }
+    return nodes;
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    const setCanvasSize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+
+      if (nodesRef.current.length === 0) {
+        nodesRef.current = initNodes(width, height);
+      }
+    };
+
+    setCanvasSize();
+
+    const handleMouseMove = (e) => {
+      if (isMobileRef.current) return; // Disable on mobile for performance
+      mouseRef.current = {
+        x: e.clientX,
+        y: e.clientY,
+      };
+    };
+
+    const handleTouchMove = (e) => {
+      if (!isMobileRef.current) return;
+      const touch = e.touches[0];
+      if (touch) {
+        mouseRef.current = {
+          x: touch.clientX,
+          y: touch.clientY,
+        };
+      }
+    };
+
+    const handleTouchEnd = () => {
+      mouseRef.current = { x: -1000, y: -1000 };
+    };
+
+    const handleMouseLeave = () => {
+      mouseRef.current = { x: -1000, y: -1000 };
+    };
+
+    const handleResize = () => {
+      setCanvasSize();
+      nodesRef.current = initNodes(width, height);
+    };
+
+    // Animation loop
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height);
+      const mouse = mouseRef.current;
+      const nodes = nodesRef.current;
+      const isMobile = isMobileRef.current;
+
+      // Reduced distances on mobile for better performance
+      const connectionDistance = isMobile ? 100 : 120;
+      const mouseRadius = isMobile ? 150 : 200;
+
+      // Update and draw nodes
+      nodes.forEach((node, i) => {
+        // Move nodes
+        node.x += node.vx;
+        node.y += node.vy;
+
+        // Bounce off edges
+        if (node.x < 0 || node.x > width) node.vx *= -1;
+        if (node.y < 0 || node.y > height) node.vy *= -1;
+
+        // Keep in bounds
+        node.x = Math.max(0, Math.min(width, node.x));
+        node.y = Math.max(0, Math.min(height, node.y));
+
+        // Mouse interaction - attract nodes slightly
+        const dx = mouse.x - node.x;
+        const dy = mouse.y - node.y;
+        const distToMouse = Math.sqrt(dx * dx + dy * dy);
+
+        if (distToMouse < mouseRadius && distToMouse > 0) {
+          const force = (mouseRadius - distToMouse) / mouseRadius;
+          node.x += dx * force * 0.02;
+          node.y += dy * force * 0.02;
+          node.radius = node.baseRadius + force * 3;
+        } else {
+          node.radius = node.baseRadius;
+        }
+
+        // Draw connections to nearby nodes
+        for (let j = i + 1; j < nodes.length; j++) {
+          const other = nodes[j];
+          const ndx = other.x - node.x;
+          const ndy = other.y - node.y;
+          const dist = Math.sqrt(ndx * ndx + ndy * ndy);
+
+          if (dist < connectionDistance) {
+            // Check if either node is near mouse for enhanced effect
+            const node1ToMouse = Math.sqrt((mouse.x - node.x) ** 2 + (mouse.y - node.y) ** 2);
+            const node2ToMouse = Math.sqrt((mouse.x - other.x) ** 2 + (mouse.y - other.y) ** 2);
+            const nearMouse = node1ToMouse < mouseRadius || node2ToMouse < mouseRadius;
+
+            const opacity = nearMouse
+              ? (1 - dist / connectionDistance) * 0.8
+              : (1 - dist / connectionDistance) * 0.15;
+
+            ctx.beginPath();
+            ctx.moveTo(node.x, node.y);
+            ctx.lineTo(other.x, other.y);
+
+            if (nearMouse) {
+              // Gradient line for mouse-affected connections
+              const gradient = ctx.createLinearGradient(node.x, node.y, other.x, other.y);
+              gradient.addColorStop(0, `rgba(139, 92, 246, ${opacity})`);
+              gradient.addColorStop(0.5, `rgba(236, 72, 153, ${opacity})`);
+              gradient.addColorStop(1, `rgba(6, 182, 212, ${opacity})`);
+              ctx.strokeStyle = gradient;
+              ctx.lineWidth = 1.5;
+            } else {
+              ctx.strokeStyle = `rgba(139, 92, 246, ${opacity})`;
+              ctx.lineWidth = 0.5;
+            }
+            ctx.stroke();
+          }
+        }
+
+        // Draw line from node to mouse if close enough
+        if (distToMouse < mouseRadius && distToMouse > 0) {
+          const opacity = (1 - distToMouse / mouseRadius) * 0.6;
+          const gradient = ctx.createLinearGradient(node.x, node.y, mouse.x, mouse.y);
+          gradient.addColorStop(0, `rgba(139, 92, 246, ${opacity})`);
+          gradient.addColorStop(1, `rgba(236, 72, 153, ${opacity * 0.5})`);
+
+          ctx.beginPath();
+          ctx.moveTo(node.x, node.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = gradient;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+
+        // Draw node
+        const nodeOpacity = distToMouse < mouseRadius ? 0.9 : 0.4;
+        const gradient = ctx.createRadialGradient(
+          node.x, node.y, 0,
+          node.x, node.y, node.radius * 2
+        );
+        gradient.addColorStop(0, `rgba(139, 92, 246, ${nodeOpacity})`);
+        gradient.addColorStop(0.5, `rgba(236, 72, 153, ${nodeOpacity * 0.7})`);
+        gradient.addColorStop(1, 'rgba(139, 92, 246, 0)');
+
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      });
+
+      // Draw mouse glow
+      if (mouse.x > 0 && mouse.y > 0) {
+        const mouseGlow = ctx.createRadialGradient(
+          mouse.x, mouse.y, 0,
+          mouse.x, mouse.y, 60
+        );
+        mouseGlow.addColorStop(0, 'rgba(236, 72, 153, 0.15)');
+        mouseGlow.addColorStop(0.5, 'rgba(139, 92, 246, 0.08)');
+        mouseGlow.addColorStop(1, 'rgba(139, 92, 246, 0)');
+
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 60, 0, Math.PI * 2);
+        ctx.fillStyle = mouseGlow;
+        ctx.fill();
+      }
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd);
+    window.addEventListener('resize', handleResize);
+
+    animate();
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('resize', handleResize);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [initNodes]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        pointerEvents: 'none',
+        zIndex: -3,
+      }}
+    />
+  );
+};
+
 const Layout = ({ children }) => {
   const { user, isSignedIn, isLoaded, signInWithGoogle, signOut } = useAuth();
   const { isPremium, subscription } = useSubscription();
@@ -484,13 +757,33 @@ const Layout = ({ children }) => {
 
   return (
     <div className="layout">
+      {/* Interactive constellation network - mouse tracking */}
+      <InteractiveConstellation />
+
+      {/* Site-wide animated background particles */}
+      <div className="site-particles-container">
+        {PARTICLES.map((particle) => (
+          <div
+            key={particle.id}
+            className="site-particle"
+            style={{
+              left: `${particle.x}%`,
+              top: `${particle.y}%`,
+              width: `${particle.size}px`,
+              height: `${particle.size}px`,
+              animation: `site-particle-float ${particle.duration}s ease-in-out ${particle.delay}s infinite`,
+              '--x-offset': `${particle.xOffset}px`,
+            }}
+          />
+        ))}
+      </div>
       <nav className="navbar glass-panel">
         <div className="container nav-content">
           <Link to="/" className="logo">
             <Logo className="logo-icon" />
             <span className="logo-text">
               <span className="logo-text-full">CrackFrontend</span>
-              <span className="logo-text-short">FR</span>
+              <span className="logo-text-short">CF</span>
             </span>
           </Link>
           <div className="nav-links">
@@ -601,6 +894,61 @@ const Layout = ({ children }) => {
       <PomodoroTimer />
 
       <style>{`
+        /* Site-wide Animated Particles Background */
+        .site-particles-container {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          width: 100vw;
+          height: 100vh;
+          overflow: hidden;
+          pointer-events: none;
+          z-index: -2;
+        }
+
+        .layout {
+          position: relative;
+          min-height: 100vh;
+        }
+
+        .site-particle {
+          position: absolute;
+          border-radius: 50%;
+          background: linear-gradient(135deg, var(--primary), var(--accent-pink));
+          box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+          animation: site-particle-float 18s ease-in-out infinite;
+          will-change: transform, opacity;
+        }
+
+        @keyframes site-particle-float {
+          0%, 100% {
+            transform: translate(0, 0);
+            opacity: 0.2;
+          }
+          25% {
+            transform: translate(var(--x-offset, 5px), -30px);
+            opacity: 0.5;
+          }
+          50% {
+            transform: translate(calc(var(--x-offset, 5px) * 2), -60px);
+            opacity: 0.8;
+          }
+          75% {
+            transform: translate(var(--x-offset, 5px), -30px);
+            opacity: 0.5;
+          }
+        }
+
+        /* Reduce particle intensity on mobile */
+        @media (max-width: 768px) {
+          .site-particle {
+            opacity: 0.3;
+            box-shadow: 0 0 5px rgba(139, 92, 246, 0.3);
+          }
+        }
+
         .navbar {
           position: fixed;
           top: 1rem;
