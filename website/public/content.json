@@ -1951,6 +1951,34 @@
     "description": "Comprehensive interview preparation guide for senior frontend engineers with 15 years of experience - covering system design, leadership, architecture, and technical depth expectations for Staff/Principal roles."
   },
   {
+    "id": "general/web_rendering_strategies",
+    "title": "🎯 Web Rendering Strategies: Complete Guide to CSR, SSR, SSG, ISR & Hydration",
+    "category": "general",
+    "subcategory": "",
+    "difficulty": "hard",
+    "difficultyScore": 80,
+    "premium": true,
+    "readTime": 29,
+    "createdAt": "2026-01-02T08:30:20.808Z",
+    "filePath": "/content/general/web_rendering_strategies.md",
+    "content": "This comprehensive guide covers all major web rendering strategies, their trade-offs, and when to use each approach. We'll explore both general concepts and React-specific implementations. 1️⃣ The Rendering Landscape Overview Before diving deep, let's understand the rendering spectrum: Quick Compari",
+    "fullContent": "> **Interview Importance:** 🔴 Critical — Understanding rendering strategies is essential for modern frontend development and a common topic in senior-level interviews.\r\n\r\nThis comprehensive guide covers all major web rendering strategies, their trade-offs, and when to use each approach. We'll explore both general concepts and React-specific implementations.\r\n\r\n---\r\n\r\n## 1️⃣ The Rendering Landscape Overview\r\n\r\nBefore diving deep, let's understand the rendering spectrum:\r\n\r\n```\r\n┌─────────────────────────────────────────────────────────────────────────────┐\r\n│                        WEB RENDERING STRATEGIES                             │\r\n├─────────────────────────────────────────────────────────────────────────────┤\r\n│                                                                             │\r\n│  BUILD TIME              REQUEST TIME              CLIENT RUNTIME           │\r\n│  ──────────              ────────────              ──────────────           │\r\n│      │                        │                         │                   │\r\n│      ▼                        ▼                         ▼                   │\r\n│  ┌───────┐              ┌───────────┐              ┌─────────┐             │\r\n│  │  SSG  │              │    SSR    │              │   CSR   │             │\r\n│  │Static │              │  Server   │              │ Client  │             │\r\n│  │ Gen   │              │  Render   │              │ Render  │             │\r\n│  └───────┘              └───────────┘              └─────────┘             │\r\n│      │                        │                         │                   │\r\n│      │     ┌──────────────────┼──────────────────┐      │                   │\r\n│      │     │                  │                  │      │                   │\r\n│      ▼     ▼                  ▼                  ▼      ▼                   │\r\n│  ┌─────────────┐      ┌─────────────┐      ┌─────────────┐                 │\r\n│  │     ISR     │      │  Streaming  │      │  Hydration  │                 │\r\n│  │ Incremental │      │    SSR      │      │  (Client)   │                 │\r\n│  │   Static    │      │             │      │             │                 │\r\n│  │   Regen     │      │             │      │             │                 │\r\n│  └─────────────┘      └─────────────┘      └─────────────┘                 │\r\n│                                                                             │\r\n│  ┌─────────────────────────────────────────────────────────────────────┐   │\r\n│  │                    REACT SERVER COMPONENTS (RSC)                    │   │\r\n│  │              Hybrid: Server renders components, client hydrates     │   │\r\n│  └─────────────────────────────────────────────────────────────────────┘   │\r\n│                                                                             │\r\n└─────────────────────────────────────────────────────────────────────────────┘\r\n```\r\n\r\n### Quick Comparison Table\r\n\r\n| Strategy | HTML Generation | Initial Load | SEO | Data Freshness | Interactivity |\r\n|----------|-----------------|--------------|-----|----------------|---------------|\r\n| **CSR** | Client | Slow | Poor | Fresh | Immediate after JS loads |\r\n| **SSR** | Server (per request) | Fast | Excellent | Fresh | After hydration |\r\n| **SSG** | Build time | Fastest | Excellent | Stale (until rebuild) | After hydration |\r\n| **ISR** | Build + Background | Fast | Excellent | Configurable | After hydration |\r\n| **Streaming SSR** | Server (chunked) | Progressive | Excellent | Fresh | Progressive |\r\n| **RSC** | Server (hybrid) | Fast | Excellent | Fresh | Selective hydration |\r",
+    "hasFullContent": false,
+    "tags": [
+      "api",
+      "async",
+      "caching",
+      "concepts",
+      "dom",
+      "events",
+      "graphs",
+      "react",
+      "searching",
+      "this-binding"
+    ],
+    "description": "This comprehensive guide covers all major web rendering strategies, their trade-offs, and when to use each approach."
+  },
+  {
     "id": "machine-coding/analytics_sdk",
     "title": "📊 Analytics SDK with Retry Logic",
     "category": "machine-coding",

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSubscription } from '../context/SubscriptionContext';
 
 const AdUnit = ({
@@ -8,10 +8,30 @@ const AdUnit = ({
   className = "",
   style = {}
 }) => {
-  const adRef = useRef(null);
+  const containerRef = useRef(null);
   const isLoaded = useRef(false);
+  const [isVisible, setIsVisible] = useState(false);
   const { isPremium } = useSubscription();
 
+  // Check if container is visible and has width
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Load ad only when visible and container has width
   useEffect(() => {
     // Don't show ads to premium users
     if (isPremium()) return;
@@ -22,14 +42,25 @@ const AdUnit = ({
     // Prevent duplicate ad loading
     if (isLoaded.current) return;
 
-    try {
-      // Push the ad
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-      isLoaded.current = true;
-    } catch (error) {
-      console.error('AdSense error:', error);
-    }
-  }, [isPremium]);
+    // Wait for visibility
+    if (!isVisible) return;
+
+    // Wait for container to have width
+    const container = containerRef.current;
+    if (!container || container.offsetWidth === 0) return;
+
+    // Small delay to ensure layout is stable
+    const timer = setTimeout(() => {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        isLoaded.current = true;
+      } catch (error) {
+        console.error('AdSense error:', error);
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [isPremium, isVisible]);
 
   // Don't render for premium users
   if (isPremium()) {
@@ -56,9 +87,12 @@ const AdUnit = ({
   }
 
   return (
-    <div className={`ad-container ${className}`} style={{ margin: '2rem 0', textAlign: 'center', ...style }}>
+    <div
+      ref={containerRef}
+      className={`ad-container ${className}`}
+      style={{ margin: '2rem 0', textAlign: 'center', minHeight: '100px', ...style }}
+    >
       <ins
-        ref={adRef}
         className="adsbygoogle"
         style={{ display: 'block' }}
         data-ad-client="ca-pub-6335516948550888"
