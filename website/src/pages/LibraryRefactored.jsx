@@ -163,7 +163,11 @@ const Library = () => {
   return (
     <div className="container page-container">
       {/* Header Section */}
-      <div className="header-section">
+      <motion.div
+        className="header-section"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
         <h1 className="heading-gradient">
           {filterState.category !== 'all'
             ? CATEGORY_DISPLAY_NAMES[filterState.category] || filterState.category
@@ -187,13 +191,18 @@ const Library = () => {
             </div>
           </div>
         )}
-      </div>
+      </motion.div>
 
       {/* Discovery Section - only show when no filters active */}
       {!hasActiveFilters && (
         <>
           {/* Quick Actions Bar */}
-          <div className="quick-actions glass-panel">
+          <motion.div
+            className="quick-actions glass-panel"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
             <button className="quick-action-btn surprise-btn" onClick={handleSurpriseMe}>
               <Shuffle size={18} />
               <span>Surprise Me</span>
@@ -208,11 +217,16 @@ const Library = () => {
                 {contentData.filter(i => i.premium).length} Premium
               </span>
             </div>
-          </div>
+          </motion.div>
 
           {/* Start Here Section */}
           {stats.completed < 5 && startHereArticles.length > 0 && (
-            <div className="start-here-section">
+            <motion.div
+              className="start-here-section"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
               <div className="section-header">
                 <Target size={20} />
                 <h2>Start Here</h2>
@@ -237,18 +251,23 @@ const Library = () => {
                   </Link>
                 ))}
               </div>
-            </div>
+            </motion.div>
           )}
 
           {/* Category Progress */}
           {stats.completed > 0 && (
-            <div className="category-progress-section">
+            <motion.div
+              className="category-progress-section"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
               <div className="section-header">
                 <Trophy size={20} />
                 <h2>Your Progress</h2>
               </div>
               <div className="category-progress-grid">
-                {CATEGORIES.filter(cat => cat.id !== 'all').map(cat => {
+                {CATEGORIES.filter(cat => cat.id !== 'all').map((cat) => {
                   const progress = categoryProgress[cat.id];
                   if (!progress || progress.total === 0) return null;
                   return (
@@ -268,13 +287,19 @@ const Library = () => {
                   );
                 })}
               </div>
-            </div>
+            </motion.div>
           )}
         </>
       )}
 
       {/* TIER 1: PRIMARY FILTERS */}
-      <div ref={filterRef} className={`controls-section glass-panel ${isFilterSticky ? 'is-sticky' : ''}`}>
+      <motion.div
+        ref={filterRef}
+        className={`controls-section glass-panel ${isFilterSticky ? 'is-sticky' : ''}`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
         {/* TIER 2: SECONDARY FILTERS - Quick Refinement */}
         <div className="search-row">
           {/* Search */}
@@ -425,13 +450,18 @@ const Library = () => {
             </button>
           )}
         </div>
-      </div>
+      </motion.div>
 
       {/* TIER 3: FILTER PRESETS - Quick Access */}
       {!hasActiveFilters && FILTER_PRESETS.length > 0 && (
-        <div className="filter-presets">
+        <motion.div
+          className="filter-presets"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
           <div className="preset-chips">
-            {FILTER_PRESETS.map(preset => (
+            {FILTER_PRESETS.map((preset) => (
               <button
                 key={preset.id}
                 className="preset-chip"
@@ -444,32 +474,39 @@ const Library = () => {
               </button>
             ))}
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* List Header (Sticky) */}
       {effectiveViewMode === 'list' && finalFilteredData.length > 0 && (
-        <div className="list-header glass-panel" style={{ marginBottom: 0, borderRadius: '12px 12px 0 0' }}>
+        <motion.div
+          className="list-header glass-panel"
+          style={{ marginBottom: 0, borderRadius: '12px 12px 0 0' }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
           <div style={{ flex: 1, minWidth: 0, paddingLeft: '0.5rem' }}>QUESTION</div>
           <div style={{ width: '200px', flexShrink: 0 }}>CATEGORY</div>
           <div style={{ width: '100px', flexShrink: 0, textAlign: 'center' }}>DIFFICULTY</div>
           <div style={{ width: '200px', flexShrink: 0, textAlign: 'right' }}>TYPE</div>
-        </div>
+        </motion.div>
       )}
 
       {/* Results */}
       <div className={`resources-grid ${effectiveViewMode === 'list' ? 'list-view' : ''}`}>
         {effectiveViewMode === 'list' && finalFilteredData.length > 0 && (
-          <div className="glass-panel" style={{ padding: 0, overflow: 'hidden', borderRadius: '0 0 12px 12px' }}>
-            {finalFilteredData.map((item, index) => {
+          <motion.div
+            className="glass-panel"
+            style={{ padding: 0, overflow: 'hidden', borderRadius: '0 0 12px 12px' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            {finalFilteredData.map((item) => {
               const interviewFreq = getInterviewFrequency(item);
               return (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: index * 0.02 }}
-                >
+                <div key={item.id}>
                   <Link
                     to={`/resource/${item.id}`}
                     className={`resource-card ${item.premium && !isPremium() ? 'is-premium-locked' : ''} ${isRead(item.id) ? 'is-read' : ''}`}
@@ -518,21 +555,20 @@ const Library = () => {
                       )}
                     </div>
                   </Link>
-                </motion.div>
+                </div>
               );
             })}
-          </div>
+          </motion.div>
         )}
 
-        {effectiveViewMode === 'grid' && finalFilteredData.length > 0 && finalFilteredData.map((item) => {
+        {effectiveViewMode === 'grid' && finalFilteredData.length > 0 && finalFilteredData.map((item, index) => {
           const interviewFreq = getInterviewFrequency(item);
           return (
             <motion.div
               key={item.id}
-              layout
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ delay: 0.3 + index * 0.02 }}
             >
               <Link
                 to={`/resource/${item.id}`}
@@ -837,117 +873,6 @@ const Library = () => {
         .start-here-difficulty.medium {
           background: rgba(245, 158, 11, 0.15);
           color: #f59e0b;
-        }
-
-        /* Learning Paths Section */
-        .learning-paths-section {
-          margin-bottom: 2rem;
-        }
-
-        .paths-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1rem;
-        }
-
-        .path-card {
-          padding: 1.25rem;
-          transition: all 0.2s;
-        }
-
-        .path-card:hover {
-          transform: translateY(-2px);
-          border-color: var(--primary);
-        }
-
-        .path-card.completed {
-          border-color: rgba(34, 197, 94, 0.3);
-          background: rgba(34, 197, 94, 0.05);
-        }
-
-        .path-header {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          margin-bottom: 0.75rem;
-        }
-
-        .path-icon {
-          color: var(--primary);
-        }
-
-        .path-card.completed .path-icon {
-          color: #22c55e;
-        }
-
-        .path-header h3 {
-          font-size: 0.95rem;
-          margin: 0;
-          flex: 1;
-        }
-
-        .path-complete-icon {
-          color: #fbbf24;
-        }
-
-        .path-progress {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          margin-bottom: 1rem;
-        }
-
-        .path-progress-bar {
-          flex: 1;
-          height: 6px;
-          background: var(--surface-hover);
-          border-radius: 3px;
-          overflow: hidden;
-        }
-
-        .path-progress-fill {
-          height: 100%;
-          background: linear-gradient(90deg, var(--primary), #ec4899);
-          border-radius: 3px;
-          transition: width 0.3s;
-        }
-
-        .path-card.completed .path-progress-fill {
-          background: #22c55e;
-        }
-
-        .path-progress-text {
-          font-size: 0.8rem;
-          color: var(--text-muted);
-          min-width: 30px;
-        }
-
-        .path-articles {
-          display: flex;
-          flex-direction: column;
-          gap: 0.35rem;
-        }
-
-        .path-article {
-          display: flex;
-          align-items: center;
-          gap: 0.35rem;
-          font-size: 0.8rem;
-          color: var(--text-muted);
-          padding: 0.25rem 0;
-          transition: color 0.2s;
-        }
-
-        .path-article:hover {
-          color: var(--primary);
-        }
-
-        .path-article.read {
-          color: #22c55e;
-        }
-
-        .path-article.read:hover {
-          color: #16a34a;
         }
 
         /* Category Progress Section */
@@ -2103,28 +2028,6 @@ const Library = () => {
 
           .section-subtitle {
             font-size: 0.8rem;
-          }
-
-          /* Learning Paths Mobile */
-          .learning-paths-section {
-            margin-bottom: 1.5rem;
-          }
-
-          .paths-grid {
-            grid-template-columns: 1fr;
-            gap: 0.75rem;
-          }
-
-          .path-card {
-            padding: 1rem;
-          }
-
-          .path-header h3 {
-            font-size: 0.9rem;
-          }
-
-          .path-article span {
-            font-size: 0.75rem;
           }
 
           /* Category Progress Mobile */

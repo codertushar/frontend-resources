@@ -6,7 +6,6 @@ import Layout from './components/Layout';
 import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import Library from './pages/LibraryRefactored';
-import LearningPath from './pages/LearningPath';
 import ResourceDetail from './pages/ResourceDetail';
 import Pricing from './pages/Pricing';
 import Admin from './pages/Admin';
@@ -30,7 +29,6 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/library" element={<Library />} />
-          <Route path="/learning-path" element={<LearningPath />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/practice" element={<MachineCodingList />} />

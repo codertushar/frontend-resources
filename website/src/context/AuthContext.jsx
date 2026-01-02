@@ -116,9 +116,9 @@ export const AuthProvider = ({ children }) => {
   const signOut = useCallback(async () => {
     if (!supabase) return;
 
-    // Sign out and reload page to get clean state
+    // Sign out and navigate to homepage
     await supabase.auth.signOut();
-    window.location.reload();
+    window.location.href = '/';
   }, []);
 
   const getAccessToken = useCallback(async () => {

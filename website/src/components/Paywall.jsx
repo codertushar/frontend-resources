@@ -25,6 +25,10 @@ const Paywall = ({ articleTitle }) => {
     return rupees.toLocaleString('en-IN');
   };
 
+  const handleSignInClick = () => {
+    setIsAuthModalOpen(true);
+  };
+
   return (
     <div className="paywall-container">
       {/* Multi-layer gradient overlay for premium blur effect */}
@@ -97,7 +101,7 @@ const Paywall = ({ articleTitle }) => {
 
         {!isSignedIn ? (
           <div className="paywall-actions">
-            <button className="btn-primary" onClick={() => setIsAuthModalOpen(true)}>
+            <button className="btn-primary" onClick={handleSignInClick}>
               <span>Sign In to Unlock</span>
               <ArrowRight size={18} />
             </button>

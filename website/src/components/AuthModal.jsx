@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X, Mail, Lock, AlertCircle, CheckCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -10,6 +10,30 @@ const AuthModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const modalRef = useRef(null);
+
+  // Scroll modal into view when opened and prevent body scroll
+  useEffect(() => {
+    if (isOpen) {
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden';
+
+      // Scroll to top to ensure modal is visible
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Focus the modal for accessibility
+      if (modalRef.current) {
+        modalRef.current.focus();
+      }
+    } else {
+      // Restore body scroll when modal closes
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -89,7 +113,7 @@ const AuthModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="auth-modal-overlay" onClick={handleClose}>
-      <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
+      <div className="auth-modal" ref={modalRef} tabIndex={-1} onClick={(e) => e.stopPropagation()}>
         <button className="auth-modal-close" onClick={handleClose}>
           <X size={20} />
         </button>
@@ -179,6 +203,8 @@ const AuthModal = ({ isOpen, onClose }) => {
             justify-content: center;
             z-index: 10000;
             padding: 1rem;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
           }
 
           .auth-modal {

@@ -155,7 +155,7 @@ function generateResourceHtml(resource) {
     return html;
 }
 
-// Generate HTML for static pages (library, learning-path)
+// Generate HTML for static pages (library)
 function generateStaticPageHtml(route, title, description) {
     const url = `${BASE_URL}${route}`;
 
@@ -193,10 +193,6 @@ const staticPages = {
     '/library': {
         title: 'Library | CrackFrontend',
         description: 'Browse our complete collection of frontend engineering resources – JavaScript fundamentals, React patterns, system design, and interview preparation materials.'
-    },
-    '/learning-path': {
-        title: 'Learning Path | CrackFrontend',
-        description: 'Follow a structured learning path from beginner to advanced frontend engineering. Track your progress through JavaScript, React, and system design topics.'
     }
 };
 

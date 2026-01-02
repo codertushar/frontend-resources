@@ -373,7 +373,7 @@ const Admin = () => {
   return (
     <div className="admin-container container">
       <motion.h1
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="heading-gradient"
       >
@@ -381,7 +381,12 @@ const Admin = () => {
       </motion.h1>
 
       {/* Tabs */}
-      <div className="admin-tabs">
+      <motion.div
+        className="admin-tabs"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
         <button
           className={`tab ${activeTab === 'coupons' ? 'active' : ''}`}
           onClick={() => setActiveTab('coupons')}
@@ -403,10 +408,15 @@ const Admin = () => {
           <BarChart3 size={18} />
           Stats
         </button>
-      </div>
+      </motion.div>
 
       {/* Tab Content */}
-      <div className="tab-content glass-panel">
+      <motion.div
+        className="tab-content glass-panel"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+      >
         {/* Coupons Tab */}
         {activeTab === 'coupons' && (
           <div className="coupons-tab">
@@ -568,7 +578,7 @@ const Admin = () => {
             </div>
           </div>
         )}
-      </div>
+      </motion.div>
 
       <style>{`
         .admin-container {

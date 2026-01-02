@@ -293,8 +293,8 @@ root.render(
       <div className="practice-container">
         {/* Back Button */}
         <motion.button
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
           onClick={() => navigate('/practice')}
           className="btn-secondary"
           style={{
@@ -311,8 +311,9 @@ root.render(
 
         {/* Problem Statement Section */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
           className="question-card"
           style={{ marginBottom: '2rem' }}
         >
@@ -401,7 +402,7 @@ root.render(
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.1 }}
+          transition={{ delay: 0.3 }}
           className="tips-panel"
           style={{ marginBottom: '2rem' }}
         >
@@ -449,7 +450,7 @@ root.render(
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.3 }}
           style={{ marginBottom: '2rem' }}
         >
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text-main)' }}>

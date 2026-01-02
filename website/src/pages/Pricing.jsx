@@ -191,29 +191,24 @@ const Pricing = () => {
 
   return (
     <div className="container page-container">
-      <div className="pricing-header">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="heading-gradient"
-        >
+      <motion.div
+        className="pricing-header"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <h1 className="heading-gradient">
           Unlock Premium Access
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="pricing-subtitle"
-        >
+        </h1>
+        <p className="pricing-subtitle">
           One-time payment. Lifetime access. No subscriptions.
-        </motion.p>
-      </div>
+        </p>
+      </motion.div>
 
       <div className="pricing-content">
         {/* Stats */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
           className="stats-bar glass-panel"
         >
@@ -235,8 +230,8 @@ const Pricing = () => {
 
         {/* Pricing Card */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
           className="pricing-card glass-panel animated-card"
         >
@@ -352,9 +347,9 @@ const Pricing = () => {
 
         {/* FAQ Section */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
           className="faq-section"
         >
           <h2>Frequently Asked Questions</h2>

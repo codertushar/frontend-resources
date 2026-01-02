@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Zap, Code, Database, Brain, Layout, Sparkles, BookOpen, Crown, Trophy, Terminal, Lightbulb, Rocket, ArrowRight } from 'lucide-react';
+import { Zap, Code, Database, Brain, Layout, Sparkles, BookOpen, Crown, Trophy, Terminal, Lightbulb, ArrowRight } from 'lucide-react';
 import contentData from '../data/content.json';
 import { useProgress } from '../context/ProgressContext';
 import SEO from '../components/SEO';
@@ -426,10 +426,6 @@ const Home = () => {
           <Link to="/library" className="btn-primary">
             <Zap size={18} />
             <span>Dive In</span>
-          </Link>
-          <Link to="/learning-path" className="btn-gradient-border">
-            <Rocket size={18} />
-            <span>Start Learning Path</span>
           </Link>
         </motion.div>
 

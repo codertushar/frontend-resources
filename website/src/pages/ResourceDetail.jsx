@@ -1,6 +1,7 @@
 
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -825,7 +826,13 @@ const ResourceDetail = () => {
             </span>
           </nav>
 
-      <div className="article-header">
+      <motion.div
+        className="article-header"
+        key={resourceId}
+        initial={{ opacity: 0, y: -15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+      >
         <h1 className="article-title">
           {(() => {
             // Extract leading emojis from title so they render with native colors
@@ -883,14 +890,20 @@ const ResourceDetail = () => {
             </button>
           )}
         </div>
-      </div>
+      </motion.div>
 
       {/* Mobile Ad - shown for all users (AdUnit handles premium check internally) */}
       <div className="mobile-ad">
         <AdUnit slot="1909064105" format="horizontal" responsive={true} />
       </div>
 
-      <div className={`article-content glass-panel ${showPaywall ? 'has-paywall' : ''}`}>
+      <motion.div
+        className={`article-content glass-panel ${showPaywall ? 'has-paywall' : ''}`}
+        key={`content-${resourceId}`}
+        initial={{ opacity: 0, y: -15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.2, delay: 0.1, ease: "easeOut" }}
+      >
                 {loading || premiumContentLoading ? (
           <div className="loading">Loading content...</div>
         ) : (
@@ -938,7 +951,7 @@ const ResourceDetail = () => {
             )}
           </>
         )}
-      </div>
+      </motion.div>
 
       {/* Prev/Next Navigation */}
       {(prevArticle || nextArticle) && (
