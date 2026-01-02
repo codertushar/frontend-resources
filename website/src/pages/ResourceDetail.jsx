@@ -796,10 +796,6 @@ const ResourceDetail = () => {
               {sidebarArticles.findIndex(a => a.id === resourceId) + 1} of {sidebarArticles.length}
             </span>
           </div>
-          {/* Left Sidebar Ad */}
-          <div className="sidebar-ad">
-            <AdUnit slot="1909064105" format="vertical" responsive={false} style={{ margin: 0 }} />
-          </div>
         </aside>
 
         {/* Main Content */}
@@ -889,6 +885,11 @@ const ResourceDetail = () => {
         </div>
       </div>
 
+      {/* Mobile Ad - shown for all users (AdUnit handles premium check internally) */}
+      <div className="mobile-ad">
+        <AdUnit slot="1909064105" format="horizontal" responsive={true} />
+      </div>
+
       <div className={`article-content glass-panel ${showPaywall ? 'has-paywall' : ''}`}>
                 {loading || premiumContentLoading ? (
           <div className="loading">Loading content...</div>
@@ -964,9 +965,6 @@ const ResourceDetail = () => {
         </div>
       )}
 
-      {/* Ad Unit - shown after article content */}
-      {!showPaywall && <AdUnit />}
-
       {/* Related Articles */}
       {relatedArticles.length > 0 && (
         <div className="related-section">
@@ -994,11 +992,14 @@ const ResourceDetail = () => {
       )}
         </div>{/* End detail-main */}
 
-        {/* Right Sidebar - Ad Unit */}
-        <aside className="article-sidebar-right">
-          <div className="right-sidebar-ad">
-            <AdUnit slot="1909064105" format="vertical" responsive={false} style={{ margin: 0 }} />
-          </div>
+        {/* Left Rail Ad */}
+        <aside className="rail-ad rail-ad-left">
+          <AdUnit slot="1909064105" format="vertical" responsive={false} />
+        </aside>
+
+        {/* Right Rail Ad */}
+        <aside className="rail-ad rail-ad-right">
+          <AdUnit slot="1909064105" format="vertical" responsive={false} />
         </aside>
 
       <style>{`
@@ -1035,7 +1036,6 @@ const ResourceDetail = () => {
           max-width: 800px;
           min-width: 0;
           margin-left: 300px;
-          margin-right: 180px;
         }
 
         /* Sidebar Styles */
@@ -1050,27 +1050,6 @@ const ResourceDetail = () => {
           display: flex;
           flex-direction: column;
           z-index: 50;
-        }
-
-        .sidebar-ad {
-          margin-top: auto;
-          padding-top: 1rem;
-          border-top: 1px solid var(--border-color);
-          flex-shrink: 0;
-        }
-
-        /* Right Sidebar - Ads */
-        .article-sidebar-right {
-          position: fixed;
-          top: 100px;
-          right: max(calc((100vw - 1400px) / 2 + 1.5rem), 1.5rem);
-          width: 160px;
-          z-index: 50;
-        }
-
-        .right-sidebar-ad {
-          position: sticky;
-          top: 100px;
         }
 
         .sidebar-header {
@@ -1702,14 +1681,42 @@ const ResourceDetail = () => {
           font-weight: 500;
         }
 
-        /* Hide right sidebar on screens smaller than 1400px */
-        @media (max-width: 1400px) {
-          .article-sidebar-right {
+        /* Rail Ads - Extreme left and right */
+        .rail-ad {
+          position: fixed;
+          top: 120px;
+          width: 160px;
+          z-index: 40;
+        }
+
+        .rail-ad-left {
+          left: 20px;
+        }
+
+        .rail-ad-right {
+          right: 20px;
+        }
+
+        /* Mobile Ad - shown by default */
+        .mobile-ad {
+          display: block;
+          margin: 2rem 0;
+          padding: 1rem 0;
+          border-top: 1px solid var(--border-color);
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        /* On large screens, hide mobile ad and show rail ads */
+        @media (min-width: 1601px) {
+          .mobile-ad {
             display: none;
           }
+        }
 
-          .detail-main {
-            margin-right: 0;
+        /* Hide rail ads on smaller screens */
+        @media (max-width: 1600px) {
+          .rail-ad {
+            display: none;
           }
         }
 
