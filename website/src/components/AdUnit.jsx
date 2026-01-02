@@ -3,7 +3,6 @@ import { useSubscription } from '../context/SubscriptionContext';
 
 const AdUnit = ({
   slot = "1909064105",
-  format = "auto",
   responsive = true,
   className = "",
   style = {}
@@ -12,8 +11,6 @@ const AdUnit = ({
   const isLoaded = useRef(false);
   const [isVisible, setIsVisible] = useState(false);
   const { isPremium } = useSubscription();
-
-  const [width, setWidth] = useState(0);
 
   // Check if container is visible
   useEffect(() => {
@@ -33,38 +30,31 @@ const AdUnit = ({
     return () => observer.disconnect();
   }, []);
 
-  // Monitor container width
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    const resizeObserver = new ResizeObserver(entries => {
-      if (entries[0]) {
-        const newWidth = Math.floor(entries[0].contentRect.width);
-        if (newWidth > 0) {
-          setWidth(newWidth);
-        }
-      }
-    });
-
-    resizeObserver.observe(containerRef.current);
-    return () => resizeObserver.disconnect();
-  }, []);
-
   // Load ad only when visible and container has width
   useEffect(() => {
-    if (isPremium() || window.location.hostname === 'localhost' || !isVisible || width === 0) {
+    if (isPremium() || window.location.hostname === 'localhost' || !isVisible) {
       return;
     }
 
     if (isLoaded.current) return;
 
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-      isLoaded.current = true;
-    } catch (error) {
-      console.error('AdSense error:', error);
-    }
-  }, [isPremium, isVisible, width]);
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Use a timeout to wait for the container to be painted
+    const timer = setTimeout(() => {
+      if (container.offsetWidth > 0) {
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          isLoaded.current = true;
+        } catch (error) {
+          console.error('AdSense error:', error);
+        }
+      }
+    }, 100); // A small delay to ensure layout is stable
+
+    return () => clearTimeout(timer);
+  }, [isPremium, isVisible]);
 
   // Don't render for premium users
   if (isPremium()) {
@@ -91,32 +81,32 @@ const AdUnit = ({
   }
 
   return (
-    <div
-      ref={containerRef}
-      className={`ad-container ${className}`}
-      style={{
-        margin: '2rem 0',
-        textAlign: 'center',
-        minHeight: '100px',
-        width: '100%',
-        maxWidth: '100%',
-        overflow: 'hidden',
-        ...style
-      }}
-    >
-      <ins
-        className="adsbygoogle"
+    <div style={{ display: 'block', width: '100%', ...style }}>
+      <div
+        ref={containerRef}
+        className={`ad-container ${className}`}
         style={{
-          display: 'block',
+          margin: '2rem auto',
+          textAlign: 'center',
           minHeight: '100px',
           width: '100%',
-          maxWidth: '100%'
+          maxWidth: '100%',
+          overflow: 'hidden',
         }}
-        data-ad-client="ca-pub-6335516948550888"
-        data-ad-slot={slot}
-        data-ad-format={format}
-        data-full-width-responsive={responsive ? "true" : "false"}
-      />
+      >
+        <ins
+          className="adsbygoogle"
+          style={{
+            display: 'block',
+            minHeight: '100px',
+            width: '100%',
+            maxWidth: '100%'
+          }}
+          data-ad-client="ca-pub-6335516948550888"
+          data-ad-slot={slot}
+          data-full-width-responsive={responsive ? "true" : "false"}
+        />
+      </div>
     </div>
   );
 };
