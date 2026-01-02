@@ -1250,94 +1250,6 @@ const ResourceDetail = () => {
           max-width: 900px;
         }
 
-        .breadcrumb {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          margin-bottom: 2rem;
-          font-size: 0.85rem;
-          flex-wrap: wrap;
-        }
-
-        .breadcrumb-segment {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-
-        .breadcrumb-item {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.35rem;
-          padding: 0.5rem 1rem;
-          border-radius: 8px;
-          transition: all 0.2s ease;
-          text-transform: capitalize;
-          font-weight: 500;
-          text-decoration: none;
-        }
-
-        a.breadcrumb-item {
-          color: var(--text-muted);
-          background: var(--surface-color);
-          border: 1px solid var(--border-color);
-        }
-
-        a.breadcrumb-item:hover {
-          color: var(--primary);
-          background: var(--surface-hover);
-          border-color: var(--primary);
-        }
-
-        .breadcrumb-home {
-          padding: 0.5rem;
-          background: var(--surface-color);
-          border: 1px solid var(--border-color);
-          color: var(--primary);
-          position: relative;
-        }
-
-        .breadcrumb-home svg {
-          transition: transform 0.2s ease;
-        }
-
-        .breadcrumb-home:hover {
-          background: var(--primary);
-          border-color: var(--primary);
-          color: #fff;
-        }
-
-        .breadcrumb-home:hover svg {
-          transform: scale(1.1);
-        }
-
-        .breadcrumb-chevron {
-          color: var(--text-muted);
-          opacity: 0.4;
-          flex-shrink: 0;
-        }
-
-        .breadcrumb-current {
-          color: var(--primary);
-          background: rgba(139, 92, 246, 0.1);
-          border: 1px solid var(--primary);
-        }
-
-        .breadcrumb-position {
-          font-size: 0.8rem;
-          font-weight: 600;
-        }
-
-        .breadcrumb-position::before {
-          content: '';
-          display: inline-block;
-          width: 6px;
-          height: 6px;
-          background: var(--primary);
-          border-radius: 50%;
-          margin-right: 0.5rem;
-        }
-
         .article-header {
           margin-bottom: 3rem;
         }
@@ -1822,31 +1734,6 @@ const ResourceDetail = () => {
           .detail-container {
             padding-top: 1rem;
             overflow-x: hidden;
-          }
-
-          .breadcrumb {
-            gap: 0.35rem;
-            font-size: 0.75rem;
-          }
-
-          .breadcrumb-item {
-            padding: 0.4rem 0.7rem;
-            border-radius: 6px;
-          }
-
-          .breadcrumb-home {
-            padding: 0.4rem;
-          }
-
-          .breadcrumb-chevron {
-            width: 12px;
-            height: 12px;
-          }
-
-          .breadcrumb-position::before {
-            width: 5px;
-            height: 5px;
-            margin-right: 0.35rem;
           }
 
           .article-title {
