@@ -64,7 +64,8 @@ For the best reading experience, we highly recommend visiting our **[Live Websit
 │   └── 📄 <a href="general/design-patterns/singelton.md">singelton.md</a>
 ├── 📄 <a href="general/browser_rendering.md">browser_rendering.md</a>
 ├── 📄 <a href="general/critical_rendering_path.md">critical_rendering_path.md</a>
-└── 📄 <a href="general/frontend_interview_15_years_experience.md">frontend_interview_15_years_experience.md</a>
+├── 📄 <a href="general/frontend_interview_15_years_experience.md">frontend_interview_15_years_experience.md</a>
+└── 📄 <a href="general/web_rendering_strategies.md">web_rendering_strategies.md</a>
 </pre>
 
 ### 📚 js
