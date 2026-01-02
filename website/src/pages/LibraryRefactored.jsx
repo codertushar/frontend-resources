@@ -164,8 +164,16 @@ const Library = () => {
     <div className="container page-container">
       {/* Header Section */}
       <div className="header-section">
-        <h1 className="heading-gradient">Resource Library</h1>
-        <p className="subtitle">Explore {contentData.length} curated resources to boost your skills.</p>
+        <h1 className="heading-gradient">
+          {filterState.category !== 'all'
+            ? CATEGORY_DISPLAY_NAMES[filterState.category] || filterState.category
+            : 'Resource Library'}
+        </h1>
+        <p className="subtitle">
+          {filterState.category !== 'all'
+            ? `Explore ${finalFilteredData.length} ${CATEGORY_DISPLAY_NAMES[filterState.category] || filterState.category} resources.`
+            : `Explore ${contentData.length} curated resources to boost your skills.`}
+        </p>
 
         {stats.completed > 0 && (
           <div className="library-progress">
@@ -265,89 +273,8 @@ const Library = () => {
         </>
       )}
 
-      {/* TIER 1: PRIMARY FILTERS - Categories (Always Visible) */}
+      {/* TIER 1: PRIMARY FILTERS */}
       <div ref={filterRef} className={`controls-section glass-panel ${isFilterSticky ? 'is-sticky' : ''}`}>
-        <div className="categories">
-          {CATEGORIES.map(cat => {
-            const IconComponent = cat.icon;
-            const isActive = filterState.category === cat.id;
-            const hasSubcategories = cat.hasSubcategories;
-            const isExpanded = expandedCategory === cat.id;
-
-            return (
-              <div key={cat.id} className="category-wrapper">
-                <button
-                  className={`category-pill ${isActive ? 'active' : ''}`}
-                  onClick={() => {
-                    updateFilter('category', cat.id);
-                    if (hasSubcategories) {
-                      setExpandedCategory(isExpanded ? null : cat.id);
-                      // Don't reset subcategory when reopening dropdown
-                    } else {
-                      setExpandedCategory(null);
-                      setSelectedSubcategory(null);
-                    }
-                  }}
-                  style={{ '--cat-color': cat.color }}
-                >
-                  <IconComponent size={16} className="category-icon" />
-                  <span>{cat.label}</span>
-                  {hasSubcategories && (
-                    <motion.div
-                      animate={{ rotate: isExpanded ? 180 : 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <ChevronDown size={14} />
-                    </motion.div>
-                  )}
-                </button>
-
-                {/* Floating Dropdown for Subcategories */}
-                <AnimatePresence>
-                  {hasSubcategories && isExpanded && isActive && (
-                    <motion.div
-                      className="subcategories-dropdown"
-                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                      transition={{ duration: 0.15 }}
-                    >
-                      <div className="dropdown-header">
-                        {cat.label} Sections
-                      </div>
-                      <button
-                        className={`dropdown-item ${!selectedSubcategory ? 'active' : ''}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedSubcategory(null);
-                          setExpandedCategory(null);
-                        }}
-                      >
-                        <span>All {cat.label}</span>
-                        <span className="item-count">{cat.subcategories.reduce((sum, s) => sum + s.count, 0)}</span>
-                      </button>
-                      {cat.subcategories.map(subcat => (
-                        <button
-                          key={subcat.id}
-                          className={`dropdown-item ${selectedSubcategory === subcat.id ? 'active' : ''}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedSubcategory(subcat.id);
-                            setExpandedCategory(null);
-                          }}
-                        >
-                          <span>{subcat.label}</span>
-                          <span className="item-count">{subcat.count}</span>
-                        </button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            );
-          })}
-        </div>
-
         {/* TIER 2: SECONDARY FILTERS - Quick Refinement */}
         <div className="search-row">
           {/* Search */}

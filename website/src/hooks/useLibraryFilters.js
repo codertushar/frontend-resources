@@ -3,7 +3,7 @@
  * Manages all filter state and applies filters to content
  */
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import { getAllFilters, getDefaultFilterState, countActiveFilters } from '../config/filters';
@@ -185,8 +185,8 @@ const applySorting = (data, sortBy) => {
 export const useLibraryFilters = (contentData, additionalContext = {}) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Initialize state from URL or defaults
-  const [filterState, setFilterState] = useState(() => parseUrlParams(searchParams));
+  // Derive filter state directly from URL - single source of truth
+  const filterState = useMemo(() => parseUrlParams(searchParams), [searchParams]);
 
   // Fuse.js for search
   const fuse = useMemo(() => {
@@ -197,9 +197,10 @@ export const useLibraryFilters = (contentData, additionalContext = {}) => {
     return new Fuse(contentData, fuseOptions);
   }, [contentData]);
 
-  // Sync URL with state
-  useEffect(() => {
-    const params = buildUrlParams(filterState);
+  // Helper to update URL (which will update filterState via useMemo)
+  const setFilterState = useCallback((updater) => {
+    const newState = typeof updater === 'function' ? updater(filterState) : updater;
+    const params = buildUrlParams(newState);
     setSearchParams(params, { replace: true });
   }, [filterState, setSearchParams]);
 

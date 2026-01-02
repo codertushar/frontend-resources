@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { BookOpen, Layers, Map, Mail, Github, Linkedin, LogOut, User, Crown, Sparkles, Music, Play, Pause, Volume2, VolumeX, RotateCcw, Flame, Code2 } from 'lucide-react';
+import { BookOpen, Mail, Github, Linkedin, LogOut, User, Crown, Sparkles, Music, Play, Pause, Volume2, VolumeX, RotateCcw, Flame, Code2, ChevronDown } from 'lucide-react';
 import { XIcon } from './SocialIcons';
-import { motion } from 'framer-motion';
 
 import ThemeToggle from './ThemeToggle';
 import NotificationPrompt from './NotificationPrompt';
 import AuthModal from './AuthModal';
+import MegaMenu from './MegaMenu';
 import { useAuth } from '../context/AuthContext';
 import { useSubscription } from '../context/SubscriptionContext';
 import { supabase } from '../lib/supabase';
@@ -714,8 +714,60 @@ const Layout = ({ children }) => {
   const { isPremium, subscription } = useSubscription();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const dropdownRef = useRef(null);
+  const megaMenuTimeoutRef = useRef(null);
+  const megaMenuWrapperRef = useRef(null);
   const userIsPremium = isPremium();
+
+  // Detect mobile
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Close mega menu when clicking outside on mobile
+  useEffect(() => {
+    if (!isMobile || !isMegaMenuOpen) return;
+
+    const handleClickOutside = (e) => {
+      if (megaMenuWrapperRef.current && !megaMenuWrapperRef.current.contains(e.target)) {
+        setIsMegaMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isMobile, isMegaMenuOpen]);
+
+  const handleMegaMenuEnter = () => {
+    if (isMobile) return; // Disable hover on mobile
+    if (megaMenuTimeoutRef.current) {
+      clearTimeout(megaMenuTimeoutRef.current);
+    }
+    setIsMegaMenuOpen(true);
+  };
+
+  const handleMegaMenuLeave = () => {
+    if (isMobile) return; // Disable hover on mobile
+    megaMenuTimeoutRef.current = setTimeout(() => {
+      setIsMegaMenuOpen(false);
+    }, 300);
+  };
+
+  const handleMegaMenuClick = (e) => {
+    if (isMobile) {
+      e.preventDefault();
+      setIsMegaMenuOpen(!isMegaMenuOpen);
+    }
+  };
+
+  const closeMegaMenu = () => {
+    setIsMegaMenuOpen(false);
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -766,18 +818,28 @@ const Layout = ({ children }) => {
             </span>
           </Link>
           <div className="nav-links">
-            <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-              <Layers size={18} />
-              <span>Home</span>
-            </NavLink>
-            <NavLink to="/library" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-              <BookOpen size={18} />
-              <span>Library</span>
-            </NavLink>
-            <NavLink to="/learning-path" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-              <Map size={18} />
-              <span>Path</span>
-            </NavLink>
+            <div
+              className="nav-item-wrapper"
+              ref={megaMenuWrapperRef}
+              onMouseEnter={handleMegaMenuEnter}
+              onMouseLeave={handleMegaMenuLeave}
+            >
+              <NavLink
+                to="/library"
+                className={({ isActive }) => `nav-item has-dropdown ${isActive ? 'active' : ''}`}
+                onClick={handleMegaMenuClick}
+              >
+                <BookOpen size={18} />
+                <span>Resources</span>
+                <ChevronDown size={14} className={`nav-chevron ${isMegaMenuOpen ? 'open' : ''}`} />
+              </NavLink>
+              <MegaMenu
+                isOpen={isMegaMenuOpen}
+                onClose={closeMegaMenu}
+                onMouseEnter={handleMegaMenuEnter}
+                onMouseLeave={handleMegaMenuLeave}
+              />
+            </div>
             <NavLink to="/practice" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
               <Code2 size={18} />
               <span>Practice</span>
@@ -942,6 +1004,7 @@ const Layout = ({ children }) => {
           box-shadow:
             0 4px 20px -2px rgba(0, 0, 0, 0.15),
             0 0 40px -10px var(--primary-glow);
+          overflow: visible;
         }
 
         .nav-content {
@@ -949,6 +1012,7 @@ const Layout = ({ children }) => {
           align-items: center;
           justify-content: space-between;
           padding: 0;
+          overflow: visible;
         }
 
         .logo {
@@ -1012,6 +1076,7 @@ const Layout = ({ children }) => {
           display: flex;
           align-items: center;
           gap: 0.5rem;
+          overflow: visible;
         }
 
         .nav-separator {
@@ -1041,6 +1106,28 @@ const Layout = ({ children }) => {
         .nav-item.active {
           background: var(--surface-hover);
           color: var(--primary);
+        }
+
+        .nav-item-wrapper {
+          position: relative;
+        }
+
+        .nav-item.has-dropdown {
+          padding-right: 0.625rem;
+        }
+
+        .nav-chevron {
+          transition: transform 0.2s ease;
+          opacity: 0.6;
+          margin-left: -0.125rem;
+        }
+
+        .nav-chevron.open {
+          transform: rotate(180deg);
+        }
+
+        .nav-item:hover .nav-chevron {
+          opacity: 1;
         }
 
         .auth-section {
@@ -1272,6 +1359,11 @@ const Layout = ({ children }) => {
 
           .nav-item {
             padding: 0.5rem;
+          }
+
+          .nav-chevron {
+            display: flex;
+            margin-left: -0.25rem;
           }
 
           .nav-separator {
