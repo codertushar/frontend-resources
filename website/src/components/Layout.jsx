@@ -719,6 +719,7 @@ const Layout = ({ children }) => {
   const dropdownRef = useRef(null);
   const megaMenuTimeoutRef = useRef(null);
   const megaMenuWrapperRef = useRef(null);
+  const isMouseInMenuRef = useRef(false);
   const userIsPremium = isPremium();
 
   // Detect mobile
@@ -745,17 +746,23 @@ const Layout = ({ children }) => {
 
   const handleMegaMenuEnter = () => {
     if (isMobile) return; // Disable hover on mobile
+    isMouseInMenuRef.current = true;
     if (megaMenuTimeoutRef.current) {
       clearTimeout(megaMenuTimeoutRef.current);
+      megaMenuTimeoutRef.current = null;
     }
     setIsMegaMenuOpen(true);
   };
 
   const handleMegaMenuLeave = () => {
     if (isMobile) return; // Disable hover on mobile
+    isMouseInMenuRef.current = false;
     megaMenuTimeoutRef.current = setTimeout(() => {
-      setIsMegaMenuOpen(false);
-    }, 300);
+      // Only close if mouse is still outside
+      if (!isMouseInMenuRef.current) {
+        setIsMegaMenuOpen(false);
+      }
+    }, 100);
   };
 
   const handleMegaMenuClick = (e) => {

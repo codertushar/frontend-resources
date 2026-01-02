@@ -144,7 +144,7 @@ const MegaMenu = ({ isOpen, onClose, onMouseEnter, onMouseLeave }) => {
       <style>{`
         .mega-menu {
           position: absolute;
-          top: calc(100% + 8px);
+          top: calc(100% + 4px);
           left: 50%;
           transform: translateX(-50%);
           min-width: 760px;
@@ -163,7 +163,7 @@ const MegaMenu = ({ isOpen, onClose, onMouseEnter, onMouseLeave }) => {
         @keyframes menuFadeIn {
           from {
             opacity: 0;
-            transform: translateX(-50%) translateY(-8px);
+            transform: translateX(-50%) translateY(-4px);
           }
           to {
             opacity: 1;
@@ -175,8 +175,8 @@ const MegaMenu = ({ isOpen, onClose, onMouseEnter, onMouseLeave }) => {
           content: '';
           position: absolute;
           top: -20px;
-          left: -20px;
-          right: -20px;
+          left: 0;
+          right: 0;
           height: 20px;
           background: transparent;
         }
