@@ -13,7 +13,9 @@ const AdUnit = ({
   const [isVisible, setIsVisible] = useState(false);
   const { isPremium } = useSubscription();
 
-  // Check if container is visible and has width
+  const [width, setWidth] = useState(0);
+
+  // Check if container is visible
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -31,39 +33,38 @@ const AdUnit = ({
     return () => observer.disconnect();
   }, []);
 
-  // Load ad only when visible and container has width
+  // Monitor container width
   useEffect(() => {
-    if (isPremium() || window.location.hostname === 'localhost' || !isVisible || !containerRef.current) {
-      return;
-    }
-
-    const container = containerRef.current;
-
-    const loadAd = () => {
-      if (isLoaded.current) return;
-      try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        isLoaded.current = true;
-      } catch (error) {
-        console.error('AdSense error:', error);
-      }
-    };
+    if (!containerRef.current) return;
 
     const resizeObserver = new ResizeObserver(entries => {
-      for (let entry of entries) {
-        // We only care about the container width.
-        if (entry.contentRect.width > 0) {
-          loadAd();
-          // Once the ad is loaded, we don't need to observe anymore.
-          resizeObserver.disconnect();
+      if (entries[0]) {
+        const newWidth = Math.floor(entries[0].contentRect.width);
+        if (newWidth > 0) {
+          setWidth(newWidth);
         }
       }
     });
 
-    resizeObserver.observe(container);
-
+    resizeObserver.observe(containerRef.current);
     return () => resizeObserver.disconnect();
-  }, [isPremium, isVisible]);
+  }, []);
+
+  // Load ad only when visible and container has width
+  useEffect(() => {
+    if (isPremium() || window.location.hostname === 'localhost' || !isVisible || width === 0) {
+      return;
+    }
+
+    if (isLoaded.current) return;
+
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      isLoaded.current = true;
+    } catch (error) {
+      console.error('AdSense error:', error);
+    }
+  }, [isPremium, isVisible, width]);
 
   // Don't render for premium users
   if (isPremium()) {
