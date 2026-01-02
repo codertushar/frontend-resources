@@ -33,69 +33,36 @@ const AdUnit = ({
 
   // Load ad only when visible and container has width
   useEffect(() => {
-    // Don't show ads to premium users
-    if (isPremium()) return;
-
-    // Don't load in development
-    if (window.location.hostname === 'localhost') return;
-
-    // Prevent duplicate ad loading
-    if (isLoaded.current) return;
-
-    // Wait for visibility
-    if (!isVisible) return;
+    if (isPremium() || window.location.hostname === 'localhost' || !isVisible || !containerRef.current) {
+      return;
+    }
 
     const container = containerRef.current;
-    if (!container) return;
 
-    // Check if element is actually visible and has dimensions
-    const checkAndLoadAd = () => {
-      const rect = container.getBoundingClientRect();
-
-      // Check if element or any parent is hidden
-      const isHidden = (element) => {
-        while (element) {
-          const style = window.getComputedStyle(element);
-          if (style.display === 'none' || style.visibility === 'hidden') {
-            return true;
-          }
-          element = element.parentElement;
-        }
-        return false;
-      };
-
-      // Don't load if element is hidden or has no width
-      if (isHidden(container) || rect.width === 0) {
-        return false;
-      }
-
+    const loadAd = () => {
+      if (isLoaded.current) return;
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
         isLoaded.current = true;
-        return true;
       } catch (error) {
         console.error('AdSense error:', error);
-        return false;
       }
     };
 
-    // Small delay to ensure layout is stable, then check
-    const timer = setTimeout(() => {
-      if (!checkAndLoadAd()) {
-        // If failed, try again on next resize (in case element becomes visible)
-        let resizeAttempts = 0;
-        const handleResize = () => {
-          resizeAttempts++;
-          if (checkAndLoadAd() || resizeAttempts > 10) {
-            window.removeEventListener('resize', handleResize);
-          }
-        };
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+    const resizeObserver = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        // We only care about the container width.
+        if (entry.contentRect.width > 0) {
+          loadAd();
+          // Once the ad is loaded, we don't need to observe anymore.
+          resizeObserver.disconnect();
+        }
       }
-    }, 300);
+    });
 
-    return () => clearTimeout(timer);
+    resizeObserver.observe(container);
+
+    return () => resizeObserver.disconnect();
   }, [isPremium, isVisible]);
 
   // Don't render for premium users
