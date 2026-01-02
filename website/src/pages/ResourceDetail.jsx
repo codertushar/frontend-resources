@@ -612,7 +612,7 @@ const ResourceDetail = () => {
           top: 100px;
           left: max(calc((100vw - 1400px) / 2 + 1.5rem), 1.5rem);
           width: 280px;
-          max-height: calc(100vh - 120px);
+          height: calc(100vh - 120px);
           overflow-y: auto;
           padding: 1.25rem;
           display: flex;
