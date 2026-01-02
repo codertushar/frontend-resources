@@ -1103,10 +1103,9 @@ console.log('2: After call (continues synchronously)');
 
 ## 🔗 Related Resources
 
-- See [closures.md](./closures.md) for understanding function scope and callbacks
-- Learn about [promises](../promises/) for async patterns and microtask behavior
-- Review [async/await patterns](../promises/) for modern asynchronous code
-- Check [debounce.md](../utils/debounce.md) and [throttle.md](../utils/throttle.md) for practical event loop applications
+- **Closures** (`js/general-concepts/closures.md`) - Understanding function scope and callbacks
+- **Promises** (`js/promises/`) - Async patterns and microtask behavior
+- **Debounce** (`js/utils/debounce.md`) and **Throttle** (`js/utils/throttle.md`) - Practical event loop applications
 
 ---
 

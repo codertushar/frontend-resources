@@ -1,6 +1,6 @@
 ---
 description: Garbage collection automatically reclaims memory from unused objects. Understanding GC prevents memory leaks and optimizes JavaScript application performance.
-date: 2025-12-16T01:30:00+05:30
+date: 2025-12-16T07:14:50+05:30
 premium: true
 ---
 

@@ -1451,10 +1451,8 @@ function InteractiveComponent() { }
 
 ## 📚 Related Resources
 
-- [Browser Rendering](./browser_rendering.md) - How browsers render pages
-- [Critical Rendering Path](./critical_rendering_path.md) - Performance optimization
-- [Next.js Documentation](https://nextjs.org/docs) - Framework implementing all strategies
-- [React Documentation](https://react.dev) - Official React docs
+- **Browser Rendering** (`general/browser_rendering.md`) - How browsers render pages
+- **Critical Rendering Path** (`general/critical_rendering_path.md`) - Performance optimization
 
 ---
 
@@ -1462,7 +1460,9 @@ function InteractiveComponent() { }
 
 - [Patterns.dev - Rendering Patterns](https://www.patterns.dev/react/rendering-patterns)
 - [web.dev - Rendering on the Web](https://web.dev/rendering-on-the-web/)
+- [Next.js Documentation](https://nextjs.org/docs) - Framework implementing all strategies
 - [Next.js - Data Fetching](https://nextjs.org/docs/app/building-your-application/data-fetching)
+- [React Documentation](https://react.dev) - Official React docs
 
 ---
 

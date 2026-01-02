@@ -8,7 +8,7 @@ premium: true
 
 Here's the **full detailed flow** of how a browser renders a webpage, from receiving HTML to displaying pixels. This includes networking, parsing, DOM/CSSOM construction, layout, painting, and compositing.
 
-> **📚 Want Deep Dive Details?** See [Critical Rendering Path](./critical_rendering_path.md) for comprehensive coverage of CRP, optimization strategies, and performance metrics.
+> **📚 Want Deep Dive Details?** See **Critical Rendering Path** (`general/critical_rendering_path.md`) for comprehensive coverage of CRP, optimization strategies, and performance metrics.
 
 ---
 

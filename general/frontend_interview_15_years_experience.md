@@ -990,13 +990,13 @@ Asking zero questions signals lack of interest or preparation. Strong questions 
 
 ### Related Resources in This Repository
 
-- [System Design: API Integration & Caching](../system-design/api_integration_caching.md) — Deep dive into API orchestration, caching strategies, and observability for Staff engineers
-- [System Design: Dynamic eCommerce UIs](../system-design/dynamic_ecommerce_ui.md) — BFF pattern, config-driven UIs, feature flags, A/B testing strategies
-- [System Design: Netflix Design System](../system-design/netflix_design_system.md) — Building design systems at scale, component architecture, theming strategies
-- [Sliding Window Technique](../dsa/sliding_window.md) — Critical DSA pattern for frontend coding interviews (substring problems)
-- [Two-Pointer Technique](../dsa/two_pointer_technique.md) — Essential algorithm pattern for array/string manipulation interviews
-- [Debounce](../js/utils/debounce.md) — Classic interview question with production implementation
-- [Design Patterns Overview](./design-patterns/general.md) — Understand when to use factory, singleton, observer patterns in interviews
+- **System Design: API Integration & Caching** (`system-design/api_integration_caching.md`) — Deep dive into API orchestration, caching strategies, and observability for Staff engineers
+- **System Design: Dynamic eCommerce UIs** (`system-design/dynamic_ecommerce_ui.md`) — BFF pattern, config-driven UIs, feature flags, A/B testing strategies
+- **System Design: Netflix Design System** (`system-design/netflix_design_system.md`) — Building design systems at scale, component architecture, theming strategies
+- **Sliding Window Technique** (`dsa/sliding_window.md`) — Critical DSA pattern for frontend coding interviews (substring problems)
+- **Two-Pointer Technique** (`dsa/two_pointer_technique.md`) — Essential algorithm pattern for array/string manipulation interviews
+- **Debounce** (`js/utils/debounce.md`) — Classic interview question with production implementation
+- **Design Patterns Overview** (`general/design-patterns/general.md`) — Understand when to use factory, singleton, observer patterns in interviews
 
 ---
 

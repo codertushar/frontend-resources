@@ -239,10 +239,10 @@ Script loading attributes control **how and when** JavaScript files are download
 
 ## 🌐 Related Resources
 
-- [Browser Rendering Path](../general/browser_rendering.md) - How scripts affect rendering
-- [Critical Rendering Path](../general/critical_rendering_path.md) - Advanced optimization
-- [ES6 Modules](es6_modules.md) - Modern module loading
-- [Promises](../promises/) - Async JavaScript patterns
+- **Browser Rendering Path** (`general/browser_rendering.md`) - How scripts affect rendering
+- **Critical Rendering Path** (`general/critical_rendering_path.md`) - Advanced optimization
+- **ES6 Modules** (`js/general-concepts/es6_modules.md`) - Modern module loading
+- **Promises** (`js/promises/`) - Async JavaScript patterns
 
 ---
 

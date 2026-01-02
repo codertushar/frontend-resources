@@ -666,9 +666,9 @@ element.setAttribute('style', 'color: red'); // MutationObserver will detect thi
 
 ## 🌐 Related Resources
 
-* [Proxy](./proxy.md) — For intercepting object operations
-* [AbortController](./abort_controller.md) — For canceling operations
-* [Event Listeners](./general.md) — Traditional way to listen for events
+* **Proxy** (`js/general-concepts/proxy.md`) — For intercepting object operations
+* **AbortController** (`js/general-concepts/abort_controller.md`) — For canceling operations
+* **Event Listeners** (`js/general-concepts/general.md`) — Traditional way to listen for events
 * [Web API MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver)
 
 ---

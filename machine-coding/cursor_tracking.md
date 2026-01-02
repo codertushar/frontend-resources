@@ -1230,8 +1230,8 @@ document.body.appendChild(tracker);
 - [MDN: MouseEvent API](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent) - Complete reference for mouse event properties
 - [MDN: Touch Events](https://developer.mozilla.org/en-US/docs/Web/API/Touch_events) - Handling touch input on mobile devices
 - [Web.dev: Optimize Input Delay](https://web.dev/optimize-input-delay/) - Performance optimization for input events
-- [JavaScript Event Loop Article](../js/general-concepts/event_loop.md) - Understanding event processing
-- [Debounce & Throttle Implementation](../js/utils/debounce_throttle.md) - Performance optimization patterns
+- **JavaScript Event Loop** (`js/general-concepts/event_loop.md`) - Understanding event processing
+- **Debounce & Throttle Implementation** (`js/utils/debounce_throttle.md`) - Performance optimization patterns
 
 ---
 

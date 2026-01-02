@@ -1515,9 +1515,9 @@ observer.observe(document.querySelector('.content-section'));
 
 ## 🌐 Related Resources
 
-- [Browser Rendering Basics](./browser_rendering.md) - Visual flow of rendering stages
-- [Promises and Async Patterns](../js/promises/) - Understand async JavaScript patterns
-- **JavaScript Event Loop** - Deep understanding of microtasks, macrotasks, and rendering synchronization
+- **Browser Rendering Basics** (`general/browser_rendering.md`) - Visual flow of rendering stages
+- **Promises and Async Patterns** (`js/promises/`) - Understand async JavaScript patterns
+- **JavaScript Event Loop** (`js/general-concepts/event_loop.md`) - Deep understanding of microtasks, macrotasks, and rendering synchronization
 - [Performance API and Monitoring](https://developer.mozilla.org/en-US/docs/Web/API/Performance)
 - [Web Vitals](https://web.dev/vitals/) - Google's performance metrics
 - [Chrome DevTools Performance](https://developer.chrome.com/docs/devtools/performance/)
