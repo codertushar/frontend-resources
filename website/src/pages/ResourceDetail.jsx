@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, Check, Circle, Crown, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, Check, Circle, Crown, ChevronDown, ChevronUp, Folder, FileText, Home, ChevronRight as ChevronRightIcon } from 'lucide-react';
 import contentData from '../data/content.json';
 import { useProgress } from '../context/ProgressContext';
 import { useSubscription } from '../context/SubscriptionContext';
@@ -61,6 +61,52 @@ const ResourceDetail = () => {
   const resource = useMemo(() => {
     return contentData.find(r => r.id === resourceId) || null;
   }, [resourceId]);
+
+  // Check if this is a category/folder path (not an individual article)
+  const categoryInfo = useMemo(() => {
+    if (resource) return null; // It's an article, not a category
+
+    // Find all articles that start with this path
+    const matchingArticles = contentData.filter(r =>
+      r.id.startsWith(resourceId + '/') || r.id === resourceId
+    );
+
+    if (matchingArticles.length === 0) return null;
+
+    // Get unique subcategories/subfolders at this level
+    const subfolders = new Set();
+    const directArticles = [];
+
+    matchingArticles.forEach(article => {
+      const remainingPath = article.id.slice(resourceId.length + 1);
+      if (!remainingPath) {
+        directArticles.push(article);
+      } else {
+        const nextPart = remainingPath.split('/')[0];
+        if (remainingPath.includes('/')) {
+          subfolders.add(nextPart);
+        } else {
+          directArticles.push(article);
+        }
+      }
+    });
+
+    // Determine category display name
+    const pathParts = resourceId.split('/');
+    const categoryName = pathParts[pathParts.length - 1];
+    const displayName = CATEGORY_DISPLAY_NAMES[categoryName] ||
+                       SUBCATEGORY_DISPLAY_NAMES[categoryName] ||
+                       categoryName.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+
+    return {
+      path: resourceId,
+      displayName,
+      subfolders: Array.from(subfolders).sort(),
+      articles: directArticles,
+      totalArticles: matchingArticles.length,
+      pathParts
+    };
+  }, [resourceId, resource]);
 
   // Determine if we should show paywall
   const showPaywall = resource?.premium && !isPremium();
@@ -247,6 +293,395 @@ const ResourceDetail = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // If it's a category page, render the category view
+  if (!resource && categoryInfo) {
+    const categoryBreadcrumbs = [
+      { name: 'Home', url: '/' },
+      { name: 'Library', url: '/library' }
+    ];
+
+    // Build breadcrumb path
+    let currentPath = '';
+    categoryInfo.pathParts.forEach((part, index) => {
+      currentPath += (index === 0 ? '' : '/') + part;
+      const isLast = index === categoryInfo.pathParts.length - 1;
+      categoryBreadcrumbs.push({
+        name: CATEGORY_DISPLAY_NAMES[part] || SUBCATEGORY_DISPLAY_NAMES[part] || part,
+        url: isLast ? null : `/resource/${currentPath}`
+      });
+    });
+
+    return (
+      <>
+        <SEO
+          title={`${categoryInfo.displayName} Resources`}
+          description={`Browse ${categoryInfo.totalArticles} articles in ${categoryInfo.displayName}. Frontend interview preparation resources and tutorials.`}
+          url={location.pathname}
+          type="website"
+        />
+        <BreadcrumbStructuredData items={categoryBreadcrumbs} />
+
+        <div className="container category-container">
+          {/* Breadcrumb */}
+          <nav className="breadcrumb">
+            <Link to="/" className="breadcrumb-item breadcrumb-home">
+              <Home size={14} />
+            </Link>
+            <ChevronRightIcon size={14} className="breadcrumb-chevron" />
+            <Link to="/library" className="breadcrumb-item">Library</Link>
+            {categoryInfo.pathParts.map((part, index) => {
+              const pathUpTo = categoryInfo.pathParts.slice(0, index + 1).join('/');
+              const isLast = index === categoryInfo.pathParts.length - 1;
+              const displayName = CATEGORY_DISPLAY_NAMES[part] || SUBCATEGORY_DISPLAY_NAMES[part] || part;
+              return (
+                <span key={pathUpTo} className="breadcrumb-segment">
+                  <ChevronRightIcon size={14} className="breadcrumb-chevron" />
+                  {isLast ? (
+                    <span className="breadcrumb-item breadcrumb-current">
+                      {displayName}
+                    </span>
+                  ) : (
+                    <Link to={`/resource/${pathUpTo}`} className="breadcrumb-item">
+                      {displayName}
+                    </Link>
+                  )}
+                </span>
+              );
+            })}
+          </nav>
+
+          {/* Category Header */}
+          <div className="category-header">
+            <h1 className="category-title">
+              <span className="title-text">{categoryInfo.displayName}</span>
+            </h1>
+            <p className="category-description">
+              {categoryInfo.totalArticles} article{categoryInfo.totalArticles !== 1 ? 's' : ''} available
+            </p>
+          </div>
+
+          {/* Subfolders */}
+          {categoryInfo.subfolders.length > 0 && (
+            <div className="category-section">
+              <h2 className="section-title">
+                <Folder size={20} />
+                Subcategories
+              </h2>
+              <div className="subfolder-grid">
+                {categoryInfo.subfolders.map(subfolder => {
+                  const subfolderPath = `${resourceId}/${subfolder}`;
+                  const articleCount = contentData.filter(r => r.id.startsWith(subfolderPath)).length;
+                  const displayName = SUBCATEGORY_DISPLAY_NAMES[subfolder] ||
+                                     CATEGORY_DISPLAY_NAMES[subfolder] ||
+                                     subfolder.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                  return (
+                    <Link
+                      key={subfolder}
+                      to={`/resource/${subfolderPath}`}
+                      className="subfolder-card glass-panel"
+                    >
+                      <Folder size={24} className="subfolder-icon" />
+                      <div className="subfolder-info">
+                        <h3>{displayName}</h3>
+                        <span className="subfolder-count">{articleCount} article{articleCount !== 1 ? 's' : ''}</span>
+                      </div>
+                      <ArrowRight size={16} className="subfolder-arrow" />
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Direct Articles */}
+          {categoryInfo.articles.length > 0 && (
+            <div className="category-section">
+              <h2 className="section-title">
+                <FileText size={20} />
+                Articles
+              </h2>
+              <div className="articles-grid">
+                {categoryInfo.articles.map(article => (
+                  <Link
+                    key={article.id}
+                    to={`/resource/${article.id}`}
+                    className="article-card glass-panel"
+                  >
+                    <div className="article-card-header">
+                      {article.premium && (
+                        <span className="article-premium">
+                          <Crown size={12} />
+                          Premium
+                        </span>
+                      )}
+                      {article.difficulty && (
+                        <span className={`article-difficulty ${article.difficulty}`}>
+                          {article.difficulty}
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="article-card-title">{article.title}</h3>
+                    <p className="article-card-description">
+                      {article.description || article.content?.substring(0, 100) + '...'}
+                    </p>
+                    <div className="article-card-footer">
+                      <span className="read-time">{article.readTime} min read</span>
+                      <span className="read-more">
+                        Read Article <ArrowRight size={14} />
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <style>{`
+          .category-container {
+            max-width: 1000px;
+            padding-top: 2rem;
+            padding-bottom: 4rem;
+          }
+
+          .category-header {
+            margin-bottom: 3rem;
+            text-align: center;
+          }
+
+          .category-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+          }
+
+          .category-title .title-text {
+            background: linear-gradient(
+              90deg,
+              #06b6d4 0%,
+              #3b82f6 20%,
+              #8b5cf6 40%,
+              #c084fc 50%,
+              #8b5cf6 60%,
+              #3b82f6 80%,
+              #06b6d4 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+
+          .category-description {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+          }
+
+          .category-section {
+            margin-bottom: 3rem;
+          }
+
+          .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+          }
+
+          .section-title svg {
+            color: var(--primary);
+          }
+
+          .subfolder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+          }
+
+          .subfolder-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+          }
+
+          .subfolder-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+            background: var(--card-hover-bg);
+          }
+
+          .subfolder-icon {
+            color: var(--primary);
+            flex-shrink: 0;
+          }
+
+          .subfolder-info {
+            flex: 1;
+          }
+
+          .subfolder-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+          }
+
+          .subfolder-count {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+          }
+
+          .subfolder-arrow {
+            color: var(--text-muted);
+            transition: transform 0.2s;
+          }
+
+          .subfolder-card:hover .subfolder-arrow {
+            transform: translateX(4px);
+            color: var(--primary);
+          }
+
+          .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+          }
+
+          .article-card {
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+          }
+
+          .article-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            background: var(--card-hover-bg);
+          }
+
+          .article-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+          }
+
+          .article-premium {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+            color: #a78bfa;
+          }
+
+          .article-difficulty {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            text-transform: capitalize;
+          }
+
+          .article-difficulty.easy {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+          }
+
+          .article-difficulty.medium {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+          }
+
+          .article-difficulty.hard {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+          }
+
+          .article-card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+          }
+
+          .article-card-description {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            flex: 1;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+
+          .article-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+          }
+
+          .read-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+          }
+
+          .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 500;
+          }
+
+          @media (max-width: 768px) {
+            .category-title {
+              font-size: 2rem;
+            }
+
+            .subfolder-grid,
+            .articles-grid {
+              grid-template-columns: 1fr;
+            }
+
+            .breadcrumb {
+              gap: 0.35rem;
+              font-size: 0.75rem;
+            }
+
+            .breadcrumb-item {
+              padding: 0.4rem 0.7rem;
+              border-radius: 6px;
+            }
+
+            .breadcrumb-home {
+              padding: 0.4rem;
+            }
+
+            .breadcrumb-chevron {
+              width: 12px;
+              height: 12px;
+            }
+          }
+        `}</style>
+      </>
+    );
+  }
+
   if (!resource) {
     return (
       <div className="container error-container">
@@ -390,11 +825,27 @@ const ResourceDetail = () => {
         <div className="detail-main">
           {/* Breadcrumb Navigation */}
           <nav className="breadcrumb">
-            <Link to="/library" className="breadcrumb-link">Library</Link>
-            <span className="breadcrumb-sep">/</span>
-            <Link to={`/library?category=${resource.category}`} className="breadcrumb-link">{resource.category}</Link>
-            <span className="breadcrumb-sep">/</span>
-            <span className="breadcrumb-current">{currentIndex + 1} of {categoryArticles.length}</span>
+            <Link to="/" className="breadcrumb-item breadcrumb-home">
+              <Home size={14} />
+            </Link>
+            <ChevronRightIcon size={14} className="breadcrumb-chevron" />
+            <Link to="/library" className="breadcrumb-item">Library</Link>
+            <ChevronRightIcon size={14} className="breadcrumb-chevron" />
+            <Link to={`/resource/${resource.category}`} className="breadcrumb-item">
+              {CATEGORY_DISPLAY_NAMES[resource.category] || resource.category}
+            </Link>
+            {resource.subcategory && (
+              <>
+                <ChevronRightIcon size={14} className="breadcrumb-chevron" />
+                <Link to={`/resource/${resource.category}/${resource.subcategory}`} className="breadcrumb-item">
+                  {SUBCATEGORY_DISPLAY_NAMES[resource.subcategory] || resource.subcategory}
+                </Link>
+              </>
+            )}
+            <ChevronRightIcon size={14} className="breadcrumb-chevron" />
+            <span className="breadcrumb-item breadcrumb-current breadcrumb-position">
+              {currentIndex + 1} of {categoryArticles.length}
+            </span>
           </nav>
 
       <div className="article-header">
@@ -621,9 +1072,10 @@ const ResourceDetail = () => {
         }
 
         .sidebar-ad {
-          margin-top: 1rem;
+          margin-top: auto;
           padding-top: 1rem;
           border-top: 1px solid var(--border-color);
+          flex-shrink: 0;
         }
 
         /* Right Sidebar - Ads */
@@ -692,11 +1144,11 @@ const ResourceDetail = () => {
           display: flex;
           flex-direction: column;
           gap: 0.35rem;
-          flex: 1;
+          flex: 1 1 auto;
           overflow-y: auto;
           margin: 0 -0.5rem;
           padding: 0 0.5rem;
-          min-height: 0;
+          min-height: 100px;
         }
 
         .sidebar-item {
@@ -780,9 +1232,9 @@ const ResourceDetail = () => {
         }
 
         .sidebar-footer {
-          margin-top: auto;
           padding-top: 1rem;
           border-top: 1px solid var(--border-color);
+          flex-shrink: 0;
         }
 
         .sidebar-count {
@@ -822,26 +1274,87 @@ const ResourceDetail = () => {
           align-items: center;
           gap: 0.5rem;
           margin-bottom: 2rem;
-          font-size: 0.9rem;
+          font-size: 0.85rem;
+          flex-wrap: wrap;
         }
 
-        .breadcrumb-link {
-          color: var(--text-muted);
-          transition: color 0.2s;
+        .breadcrumb-segment {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .breadcrumb-item {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          padding: 0.5rem 1rem;
+          border-radius: 8px;
+          transition: all 0.2s ease;
           text-transform: capitalize;
+          font-weight: 500;
+          text-decoration: none;
         }
 
-        .breadcrumb-link:hover {
+        a.breadcrumb-item {
+          color: var(--text-muted);
+          background: var(--surface-color);
+          border: 1px solid var(--border-color);
+        }
+
+        a.breadcrumb-item:hover {
           color: var(--primary);
+          background: var(--surface-hover);
+          border-color: var(--primary);
         }
 
-        .breadcrumb-sep {
-          color: var(--border-color);
+        .breadcrumb-home {
+          padding: 0.5rem;
+          background: var(--surface-color);
+          border: 1px solid var(--border-color);
+          color: var(--primary);
+          position: relative;
+        }
+
+        .breadcrumb-home svg {
+          transition: transform 0.2s ease;
+        }
+
+        .breadcrumb-home:hover {
+          background: var(--primary);
+          border-color: var(--primary);
+          color: #fff;
+        }
+
+        .breadcrumb-home:hover svg {
+          transform: scale(1.1);
+        }
+
+        .breadcrumb-chevron {
+          color: var(--text-muted);
+          opacity: 0.4;
+          flex-shrink: 0;
         }
 
         .breadcrumb-current {
-          color: var(--text-muted);
-          font-size: 0.85rem;
+          color: var(--primary);
+          background: rgba(139, 92, 246, 0.1);
+          border: 1px solid var(--primary);
+        }
+
+        .breadcrumb-position {
+          font-size: 0.8rem;
+          font-weight: 600;
+        }
+
+        .breadcrumb-position::before {
+          content: '';
+          display: inline-block;
+          width: 6px;
+          height: 6px;
+          background: var(--primary);
+          border-radius: 50%;
+          margin-right: 0.5rem;
         }
 
         .article-header {
@@ -1328,6 +1841,31 @@ const ResourceDetail = () => {
           .detail-container {
             padding-top: 1rem;
             overflow-x: hidden;
+          }
+
+          .breadcrumb {
+            gap: 0.35rem;
+            font-size: 0.75rem;
+          }
+
+          .breadcrumb-item {
+            padding: 0.4rem 0.7rem;
+            border-radius: 6px;
+          }
+
+          .breadcrumb-home {
+            padding: 0.4rem;
+          }
+
+          .breadcrumb-chevron {
+            width: 12px;
+            height: 12px;
+          }
+
+          .breadcrumb-position::before {
+            width: 5px;
+            height: 5px;
+            margin-right: 0.35rem;
           }
 
           .article-title {
