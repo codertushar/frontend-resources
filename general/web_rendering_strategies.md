@@ -1,5 +1,5 @@
 ---
-date: 2025-01-02T10:00:00+05:30
+date: 2026-01-02T10:00:00+05:30
 description: Master all web rendering strategies including CSR, SSR, SSG, ISR, hydration, streaming SSR, and React Server Components with practical examples and trade-offs.
 premium: true
 ---
