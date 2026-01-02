@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Code2, Terminal, ChevronRight, Search, Filter, X } from 'lucide-react';
@@ -13,6 +13,18 @@ const MachineCodingList = () => {
     difficulty: '',
     search: ''
   });
+
+  // Mobile detection for auto card view
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Get filtered questions
   const filteredQuestions = getQuestions(filters);
@@ -309,9 +321,86 @@ const MachineCodingList = () => {
                 No challenges found matching your filters.
               </p>
             </div>
+          ) : isMobile ? (
+            /* Mobile Card View */
+            <div style={{ display: 'grid', gap: '1rem' }}>
+              {filteredQuestions.map((question, index) => (
+                <motion.div
+                  key={question.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.03 }}
+                  onClick={() => handleQuestionClick(question.id)}
+                  className="glass-panel"
+                  style={{
+                    padding: '1rem',
+                    cursor: 'pointer',
+                    transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                  }}
+                >
+                  {/* Header: Title + Difficulty */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem', gap: '0.5rem' }}>
+                    <h3 style={{ fontWeight: 600, color: 'var(--text-main)', fontSize: '1rem', margin: 0, flex: 1 }}>
+                      {question.title}
+                    </h3>
+                    <span className={getDifficultyClass(question.difficulty)} style={{ fontSize: '0.7rem', padding: '0.25rem 0.5rem', flexShrink: 0 }}>
+                      {question.difficulty === 'easy' && '🟢'}
+                      {question.difficulty === 'medium' && '🟡'}
+                      {question.difficulty === 'hard' && '🔴'}
+                      {' '}{question.difficulty}
+                    </span>
+                  </div>
+
+                  {/* Description */}
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5, margin: '0 0 0.75rem 0', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                    {question.description}
+                  </p>
+
+                  {/* Meta: Category + Type */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8rem', color: 'var(--text-main)' }}>
+                      {question.category === 'JavaScript' && '📜'}
+                      {question.category === 'React' && '⚛️'}
+                      {question.category === 'Algorithms' && '🧮'}
+                      <span>{question.category}</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                      {question.type === 'output' ? <Terminal size={14} /> : <Code2 size={14} />}
+                      <span>{question.type === 'output' ? 'Output' : 'Preview'}</span>
+                    </div>
+                  </div>
+
+                  {/* Tags */}
+                  {question.tags && question.tags.length > 0 && (
+                    <div style={{ display: 'flex', gap: '0.375rem', flexWrap: 'wrap' }}>
+                      {question.tags.slice(0, 4).map(tag => (
+                        <span
+                          key={tag}
+                          style={{
+                            padding: '0.25rem 0.5rem',
+                            background: 'rgba(139, 92, 246, 0.1)',
+                            borderRadius: '4px',
+                            fontSize: '0.7rem',
+                            color: 'var(--primary)',
+                            fontWeight: 500
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      {question.tags.length > 4 && (
+                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', padding: '0.25rem 0' }}>
+                          +{question.tags.length - 4}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </div>
           ) : (
+            /* Desktop Table View */
             <div className="glass-panel" style={{ padding: '0', overflow: 'hidden' }}>
-              {/* Table */}
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                   <thead>

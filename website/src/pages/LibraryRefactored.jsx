@@ -60,11 +60,25 @@ const Library = () => {
 
   // UI state
   const [viewMode, setViewMode] = useState('list');
+  const [isMobile, setIsMobile] = useState(false);
   const [showMoreFilters, setShowMoreFilters] = useState(false);
   const [isFilterSticky, setIsFilterSticky] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const filterRef = useRef(null);
+
+  // Detect mobile/tablet and auto-switch to grid view
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 1024);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Always use grid view on mobile, regardless of viewMode state
+  const effectiveViewMode = isMobile ? 'grid' : viewMode;
 
   // Handle sticky filter bar
   useEffect(() => {
@@ -390,23 +404,25 @@ const Library = () => {
             </button>
           </div>
 
-          {/* View Toggle */}
-          <div className="view-toggle">
-            <button
-              className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
-              onClick={() => setViewMode('grid')}
-              title="Grid view"
-            >
-              <LayoutGrid size={18} />
-            </button>
-            <button
-              className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
-              onClick={() => setViewMode('list')}
-              title="List view"
-            >
-              <List size={18} />
-            </button>
-          </div>
+          {/* View Toggle - hidden on mobile since we force grid view */}
+          {!isMobile && (
+            <div className="view-toggle">
+              <button
+                className={`view-btn ${effectiveViewMode === 'grid' ? 'active' : ''}`}
+                onClick={() => setViewMode('grid')}
+                title="Grid view"
+              >
+                <LayoutGrid size={18} />
+              </button>
+              <button
+                className={`view-btn ${effectiveViewMode === 'list' ? 'active' : ''}`}
+                onClick={() => setViewMode('list')}
+                title="List view"
+              >
+                <List size={18} />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* TIER 4: ADVANCED FILTERS - Expandable Panel */}
@@ -504,7 +520,7 @@ const Library = () => {
       )}
 
       {/* List Header (Sticky) */}
-      {viewMode === 'list' && finalFilteredData.length > 0 && (
+      {effectiveViewMode === 'list' && finalFilteredData.length > 0 && (
         <div className="list-header glass-panel" style={{ marginBottom: 0, borderRadius: '12px 12px 0 0' }}>
           <div style={{ flex: 1, minWidth: 0, paddingLeft: '0.5rem' }}>QUESTION</div>
           <div style={{ width: '200px', flexShrink: 0 }}>CATEGORY</div>
@@ -514,8 +530,8 @@ const Library = () => {
       )}
 
       {/* Results */}
-      <div className={`resources-grid ${viewMode === 'list' ? 'list-view' : ''}`}>
-        {viewMode === 'list' && finalFilteredData.length > 0 && (
+      <div className={`resources-grid ${effectiveViewMode === 'list' ? 'list-view' : ''}`}>
+        {effectiveViewMode === 'list' && finalFilteredData.length > 0 && (
           <div className="glass-panel" style={{ padding: 0, overflow: 'hidden', borderRadius: '0 0 12px 12px' }}>
             {finalFilteredData.map((item, index) => {
               const interviewFreq = getInterviewFrequency(item);
@@ -580,7 +596,7 @@ const Library = () => {
           </div>
         )}
 
-        {viewMode === 'grid' && finalFilteredData.length > 0 && finalFilteredData.map((item) => {
+        {effectiveViewMode === 'grid' && finalFilteredData.length > 0 && finalFilteredData.map((item) => {
           const interviewFreq = getInterviewFrequency(item);
           return (
             <motion.div
