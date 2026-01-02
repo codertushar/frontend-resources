@@ -82,16 +82,18 @@ const AdUnit = ({
     // Small delay to ensure layout is stable, then check
     const timer = setTimeout(() => {
       if (!checkAndLoadAd()) {
-        // If failed, try again on resize (in case element becomes visible)
+        // If failed, try again on next resize (in case element becomes visible)
+        let resizeAttempts = 0;
         const handleResize = () => {
-          if (checkAndLoadAd()) {
+          resizeAttempts++;
+          if (checkAndLoadAd() || resizeAttempts > 10) {
             window.removeEventListener('resize', handleResize);
           }
         };
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
       }
-    }, 200);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [isPremium, isVisible]);
@@ -124,11 +126,24 @@ const AdUnit = ({
     <div
       ref={containerRef}
       className={`ad-container ${className}`}
-      style={{ margin: '2rem 0', textAlign: 'center', minHeight: '100px', ...style }}
+      style={{
+        margin: '2rem 0',
+        textAlign: 'center',
+        minHeight: '100px',
+        width: '100%',
+        maxWidth: '100%',
+        overflow: 'hidden',
+        ...style
+      }}
     >
       <ins
         className="adsbygoogle"
-        style={{ display: 'block' }}
+        style={{
+          display: 'block',
+          minHeight: '100px',
+          width: '100%',
+          maxWidth: '100%'
+        }}
         data-ad-client="ca-pub-6335516948550888"
         data-ad-slot={slot}
         data-ad-format={format}
