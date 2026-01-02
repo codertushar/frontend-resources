@@ -657,25 +657,6 @@ const ResourceDetail = () => {
             .articles-grid {
               grid-template-columns: 1fr;
             }
-
-            .breadcrumb {
-              gap: 0.35rem;
-              font-size: 0.75rem;
-            }
-
-            .breadcrumb-item {
-              padding: 0.4rem 0.7rem;
-              border-radius: 6px;
-            }
-
-            .breadcrumb-home {
-              padding: 0.4rem;
-            }
-
-            .breadcrumb-chevron {
-              width: 12px;
-              height: 12px;
-            }
           }
         `}</style>
       </>
