@@ -7,6 +7,7 @@ import contentData from '../data/content.json';
 import { useProgress } from '../context/ProgressContext';
 import SEO from '../components/SEO';
 import { WebsiteStructuredData } from '../components/StructuredData';
+import AdUnit from '../components/AdUnit';
 
 const container = {
   hidden: { opacity: 0 },
@@ -491,6 +492,9 @@ const Home = () => {
           <Link to="/library?tag=algorithms" className="topic-tag">Algorithms</Link>
           <Link to="/library?tag=dom" className="topic-tag">DOM Manipulation</Link>
         </motion.div>
+
+        {/* Ad Unit */}
+        <AdUnit style={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
         <motion.div variants={item} className="section-header" style={{ marginTop: '4rem' }}>
           <h2>Browse by Category</h2>

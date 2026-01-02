@@ -7,6 +7,7 @@ import { useProgress } from '../context/ProgressContext';
 import { useSubscription } from '../context/SubscriptionContext';
 import { useLibraryFilters } from '../hooks/useLibraryFilters';
 import { CATEGORIES, FILTERS, FILTER_PRESETS, extractTags, CATEGORY_DISPLAY_NAMES, SUBCATEGORY_DISPLAY_NAMES } from '../config/filters';
+import AdUnit from '../components/AdUnit';
 
 // Get interview frequency (keep existing logic)
 const getInterviewFrequency = (item) => {
@@ -668,6 +669,9 @@ const Library = () => {
           </div>
         )}
       </div>
+
+      {/* Ad Unit - shown below results */}
+      {finalFilteredData.length > 0 && <AdUnit />}
 
       {/* Import all styles from original Library.jsx */}
       <style>{`

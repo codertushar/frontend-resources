@@ -13,6 +13,7 @@ import { useAuth } from '../context/AuthContext';
 import Paywall from '../components/Paywall';
 import QuizSection, { parseQuizFromMarkdown, removeQuizFromContent } from '../components/QuizSection';
 import SEO from '../components/SEO';
+import AdUnit from '../components/AdUnit';
 import { ArticleStructuredData, BreadcrumbStructuredData } from '../components/StructuredData';
 
 const SUBCATEGORY_DISPLAY_NAMES = {
@@ -379,6 +380,10 @@ const ResourceDetail = () => {
               {sidebarArticles.findIndex(a => a.id === resourceId) + 1} of {sidebarArticles.length}
             </span>
           </div>
+          {/* Left Sidebar Ad */}
+          <div className="sidebar-ad">
+            <AdUnit slot="1909064105" format="vertical" responsive={false} style={{ margin: 0 }} />
+          </div>
         </aside>
 
         {/* Main Content */}
@@ -527,6 +532,9 @@ const ResourceDetail = () => {
         </div>
       )}
 
+      {/* Ad Unit - shown after article content */}
+      {!showPaywall && <AdUnit />}
+
       {/* Related Articles */}
       {relatedArticles.length > 0 && (
         <div className="related-section">
@@ -554,6 +562,13 @@ const ResourceDetail = () => {
       )}
         </div>{/* End detail-main */}
 
+        {/* Right Sidebar - Ad Unit */}
+        <aside className="article-sidebar-right">
+          <div className="right-sidebar-ad">
+            <AdUnit slot="1909064105" format="vertical" responsive={false} style={{ margin: 0 }} />
+          </div>
+        </aside>
+
       <style>{`
         /* Reading Progress Bar */
         .reading-progress-container {
@@ -580,21 +595,22 @@ const ResourceDetail = () => {
           display: flex;
           gap: 2rem;
           padding-top: 2rem;
-          max-width: 1200px;
+          max-width: 1400px;
         }
 
         .detail-main {
           flex: 1;
-          max-width: 900px;
+          max-width: 800px;
           min-width: 0;
           margin-left: 300px;
+          margin-right: 180px;
         }
 
         /* Sidebar Styles */
         .article-sidebar {
           position: fixed;
           top: 100px;
-          left: max(calc((100vw - 1200px) / 2 + 1.5rem), 1.5rem);
+          left: max(calc((100vw - 1400px) / 2 + 1.5rem), 1.5rem);
           width: 280px;
           max-height: calc(100vh - 120px);
           overflow-y: auto;
@@ -602,6 +618,26 @@ const ResourceDetail = () => {
           display: flex;
           flex-direction: column;
           z-index: 50;
+        }
+
+        .sidebar-ad {
+          margin-top: 1rem;
+          padding-top: 1rem;
+          border-top: 1px solid var(--border-color);
+        }
+
+        /* Right Sidebar - Ads */
+        .article-sidebar-right {
+          position: fixed;
+          top: 100px;
+          right: max(calc((100vw - 1400px) / 2 + 1.5rem), 1.5rem);
+          width: 160px;
+          z-index: 50;
+        }
+
+        .right-sidebar-ad {
+          position: sticky;
+          top: 100px;
         }
 
         .sidebar-header {
@@ -1260,7 +1296,18 @@ const ResourceDetail = () => {
           font-weight: 500;
         }
 
-        /* Hide sidebar on smaller screens */
+        /* Hide right sidebar on screens smaller than 1400px */
+        @media (max-width: 1400px) {
+          .article-sidebar-right {
+            display: none;
+          }
+
+          .detail-main {
+            margin-right: 0;
+          }
+        }
+
+        /* Hide left sidebar on smaller screens */
         @media (max-width: 1024px) {
           .article-sidebar {
             display: none;
