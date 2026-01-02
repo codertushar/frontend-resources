@@ -649,6 +649,37 @@ a {
 .sp-console {
   background: var(--surface-color) !important;
   border-top: 1px solid var(--border-color) !important;
+  border-radius: 0 12px 12px 0;
+}
+
+.sp-console-header {
+  background: var(--surface-hover) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-main) !important;
+}
+
+.sp-console-list {
+  font-family: var(--font-mono) !important;
+  font-size: 0.875rem !important;
+}
+
+.sp-console-item {
+  border-bottom: 1px solid var(--border-color) !important;
+  padding: 0.5rem 1rem !important;
+}
+
+.sp-console-item--log {
+  color: var(--text-main) !important;
+}
+
+.sp-console-item--warn {
+  background: rgba(245, 158, 11, 0.1) !important;
+  color: var(--warning) !important;
+}
+
+.sp-console-item--error {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: var(--error) !important;
 }
 
 /* Tab styling */

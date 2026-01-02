@@ -46,10 +46,10 @@ class ChainCalculator {
   }
 }
 
-// Test your implementation (uncomment after implementing)
-// const calculator = new ChainCalculator(10);
-// const result = calculator.add(5).subtract(3).multiply(4).divide(2).getResult();
-// console.log('Result:', result); // Should log: 24
+// Test your implementation
+const calculator = new ChainCalculator(10);
+const result = calculator.add(5).subtract(3).multiply(4).divide(2).getResult();
+console.log(\`Result: \${result}\`); // Should log: Result: 24
 `
   },
   solution: {

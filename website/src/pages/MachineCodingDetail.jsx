@@ -6,16 +6,18 @@ import {
   SandpackLayout,
   SandpackCodeEditor,
   SandpackPreview,
+  SandpackConsole,
   useSandpack
 } from '@codesandbox/sandpack-react';
-import { Code2, Play, CheckCircle, XCircle, Terminal, Info, ChevronDown, ChevronUp, ArrowLeft, Lightbulb } from 'lucide-react';
+import { Code2, Play, CheckCircle, XCircle, Terminal, Info, ChevronDown, ChevronUp, ArrowLeft, Lightbulb, Send, RotateCw } from 'lucide-react';
 import { getQuestionById } from '../data/practice-questions/index.js';
 
 // Custom editor that syncs code changes
-const CustomSandpackEditor = ({ onCodeChange, isReact }) => {
+const CustomSandpackEditor = ({ onCodeChange, isReact, questionType, runTrigger }) => {
   const { sandpack } = useSandpack();
   const { files } = sandpack;
   const lastCodeRef = useRef('');
+  const prevRunTriggerRef = useRef(runTrigger);
 
   useEffect(() => {
     const mainFile = isReact ? '/App.js' : '/index.js';
@@ -27,6 +29,18 @@ const CustomSandpackEditor = ({ onCodeChange, isReact }) => {
     }
   }, [files, isReact, onCodeChange]);
 
+  // Run code when runTrigger changes
+  useEffect(() => {
+    if (runTrigger !== prevRunTriggerRef.current) {
+      prevRunTriggerRef.current = runTrigger;
+      // Run the sandpack bundler
+      sandpack.runSandpack();
+    }
+  }, [runTrigger, sandpack]);
+
+  // For output-based questions, show console instead of preview
+  const showConsole = questionType === 'output';
+
   return (
     <SandpackLayout>
       <SandpackCodeEditor
@@ -35,11 +49,27 @@ const CustomSandpackEditor = ({ onCodeChange, isReact }) => {
         wrapContent
         style={{ height: '500px' }}
       />
-      <SandpackPreview
-        showOpenInCodeSandbox={false}
-        showRefreshButton
-        style={{ height: '500px' }}
-      />
+      {showConsole ? (
+        <>
+          {/* Hidden preview to execute code - console needs an active client */}
+          <SandpackPreview
+            showOpenInCodeSandbox={false}
+            showRefreshButton={false}
+            style={{ display: 'none' }}
+          />
+          <SandpackConsole
+            style={{ height: '500px' }}
+            showHeader
+            resetOnPreviewRestart
+          />
+        </>
+      ) : (
+        <SandpackPreview
+          showOpenInCodeSandbox={false}
+          showRefreshButton
+          style={{ height: '500px' }}
+        />
+      )}
     </SandpackLayout>
   );
 };
@@ -123,7 +153,12 @@ const MachineCodingDetail = () => {
   const [showTips, setShowTips] = useState(false);
   const [isLightTheme, setIsLightTheme] = useState(document.documentElement.classList.contains('light'));
   const [sandpackKey, setSandpackKey] = useState(0);
-  const isLanguageChangeRef = useRef(false);
+  const [runTrigger, setRunTrigger] = useState(0);
+
+  // Handle Run button click - re-executes the code
+  const handleRun = () => {
+    setRunTrigger(prev => prev + 1);
+  };
 
   // Watch for theme changes
   useEffect(() => {
@@ -139,15 +174,6 @@ const MachineCodingDetail = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Update code when language changes
-  useEffect(() => {
-    if (isLanguageChangeRef.current && question) {
-      setUserCode(question.starterCode[currentLanguage]);
-      setSandpackKey(prev => prev + 1);
-      isLanguageChangeRef.current = false;
-    }
-  }, [currentLanguage, question]);
-
   // If question not found, redirect back
   if (!question) {
     navigate('/practice');
@@ -155,8 +181,9 @@ const MachineCodingDetail = () => {
   }
 
   const handleLanguageChange = (lang) => {
-    isLanguageChangeRef.current = true;
     setCurrentLanguage(lang);
+    setUserCode(question.starterCode[lang]);
+    setSandpackKey(prev => prev + 1);
   };
 
   const runTests = () => {
@@ -473,17 +500,35 @@ root.render(
                 editorWidthPercentage: 60,
                 activeFile: currentLanguage === 'react' ? '/App.js' : '/index.js',
                 visibleFiles: currentLanguage === 'react' ? ['/App.js'] : ['/index.js'],
+                autorun: question.type !== 'output', // Don't auto-run for output-based questions
               }}
             >
               <CustomSandpackEditor
                 onCodeChange={setUserCode}
                 isReact={currentLanguage === 'react'}
+                questionType={question.type}
+                runTrigger={runTrigger}
               />
             </SandpackProvider>
           </div>
 
           {/* Action Buttons */}
           <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
+            <button
+              onClick={handleRun}
+              className="btn-secondary"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                padding: '0.875rem 1.5rem',
+                fontSize: '0.95rem'
+              }}
+            >
+              <Play size={18} />
+              <span>Run</span>
+            </button>
             <button
               onClick={runTests}
               className="btn-primary"
@@ -497,8 +542,8 @@ root.render(
                 fontSize: '0.95rem'
               }}
             >
-              <Play size={20} />
-              <span>Run Tests</span>
+              <Send size={18} />
+              <span>Submit</span>
             </button>
             <button
               onClick={() => setShowSolution(!showSolution)}

@@ -20,7 +20,7 @@ function debounce(func, wait) {
 let callCount = 0;
 const debouncedFn = debounce(() => {
   callCount++;
-  console.log('Called:', callCount);
+  console.log(\`Called: \${callCount}\`);
 }, 300);
 
 // These calls should be debounced
@@ -30,7 +30,7 @@ debouncedFn();
 
 // Wait and check result
 setTimeout(() => {
-  console.log('Final count:', callCount);
+  console.log(\`Final count: \${callCount}\`);
 }, 500);
 `
   },
