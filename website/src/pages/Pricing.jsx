@@ -27,14 +27,14 @@ const Pricing = () => {
       .then(data => {
         console.log('Settings API response:', data);
         // Ensure we have a valid base price (in paise)
-        const price = data.basePrice || 49900; // Default to ₹499 if not set
+        const price = data.basePrice || 150000; // Default to ₹1500 if not set
         console.log('Setting base price to:', price);
         setBasePrice(price);
       })
       .catch(err => {
         console.error('Error fetching settings:', err);
         // Fallback to default price if API fails
-        setBasePrice(49900); // Default to ₹499
+        setBasePrice(150000); // Default to ₹1500
       })
       .finally(() => setIsPriceLoading(false));
   }, []);

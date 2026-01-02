@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Lock, Sparkles, ArrowRight, Crown } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
 import { useSubscription } from '../context/SubscriptionContext';
+import AuthModal from './AuthModal';
 
 const Paywall = ({ articleTitle }) => {
-  const { signInWithGoogle } = useAuth();
   const { isSignedIn } = useSubscription();
   const [basePrice, setBasePrice] = useState(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   useEffect(() => {
     fetch('/api/settings')
@@ -23,10 +23,6 @@ const Paywall = ({ articleTitle }) => {
   const formatPrice = (paise) => {
     const rupees = paise / 100;
     return rupees.toLocaleString('en-IN');
-  };
-
-  const handleSignIn = async () => {
-    await signInWithGoogle();
   };
 
   return (
@@ -101,7 +97,7 @@ const Paywall = ({ articleTitle }) => {
 
         {!isSignedIn ? (
           <div className="paywall-actions">
-            <button className="btn-primary" onClick={handleSignIn}>
+            <button className="btn-primary" onClick={() => setIsAuthModalOpen(true)}>
               <span>Sign In to Unlock</span>
               <ArrowRight size={18} />
             </button>
@@ -113,6 +109,8 @@ const Paywall = ({ articleTitle }) => {
             <ArrowRight size={18} />
           </Link>
         )}
+
+        <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
       </div>
 
       <style>{`

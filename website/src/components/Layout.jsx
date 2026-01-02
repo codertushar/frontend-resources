@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 
 import ThemeToggle from './ThemeToggle';
 import NotificationPrompt from './NotificationPrompt';
+import AuthModal from './AuthModal';
 import { useAuth } from '../context/AuthContext';
 import { useSubscription } from '../context/SubscriptionContext';
 import { supabase } from '../lib/supabase';
@@ -709,18 +710,12 @@ const InteractiveConstellation = () => {
 };
 
 const Layout = ({ children }) => {
-  const { user, isSignedIn, isLoaded, signInWithGoogle, signOut } = useAuth();
+  const { user, isSignedIn, isLoaded, signOut } = useAuth();
   const { isPremium, subscription } = useSubscription();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const dropdownRef = useRef(null);
   const userIsPremium = isPremium();
-
-  const handleSignIn = async () => {
-    const { error } = await signInWithGoogle();
-    if (error) {
-      console.error('Sign in error:', error);
-    }
-  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -840,7 +835,7 @@ const Layout = ({ children }) => {
                   )}
                 </>
               ) : (
-                <button className="btn-auth btn-signup" onClick={handleSignIn}>
+                <button className="btn-auth btn-signup" onClick={() => setIsAuthModalOpen(true)}>
                   Sign In
                 </button>
               )}
@@ -876,6 +871,7 @@ const Layout = ({ children }) => {
       <NotificationPrompt />
       <FocusMusicPlayer />
       <PomodoroTimer />
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
 
       <style>{`
         /* Site-wide Animated Particles Background */

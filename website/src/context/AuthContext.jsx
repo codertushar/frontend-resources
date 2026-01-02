@@ -84,6 +84,35 @@ export const AuthProvider = ({ children }) => {
     return { data, error };
   }, []);
 
+  const signInWithEmail = useCallback(async (email, password) => {
+    if (!supabase) {
+      return { error: new Error('Supabase not configured') };
+    }
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    return { data, error };
+  }, []);
+
+  const signUpWithEmail = useCallback(async (email, password) => {
+    if (!supabase) {
+      return { error: new Error('Supabase not configured') };
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: window.location.origin,
+      },
+    });
+
+    return { data, error };
+  }, []);
+
   const signOut = useCallback(async () => {
     if (!supabase) return;
 
@@ -104,10 +133,12 @@ export const AuthProvider = ({ children }) => {
     isSignedIn: !!user,
     isLoaded: !isLoading,
     signInWithGoogle,
+    signInWithEmail,
+    signUpWithEmail,
     signOut,
     getAccessToken,
     supabase,
-  }), [user, session, isLoading, signInWithGoogle, signOut, getAccessToken]);
+  }), [user, session, isLoading, signInWithGoogle, signInWithEmail, signUpWithEmail, signOut, getAccessToken]);
 
   return (
     <AuthContext.Provider value={value}>
