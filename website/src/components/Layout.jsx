@@ -257,7 +257,6 @@ const PomodoroTimer = () => {
 // Focus Music Player Component
 const FocusMusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [wantsToResume, setWantsToResume] = useState(false);
   const [volume, setVolume] = useState(() => {
     const saved = localStorage.getItem('musicVolume');
     return saved ? parseFloat(saved) : 1;
@@ -279,23 +278,9 @@ const FocusMusicPlayer = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Check if music was playing before refresh
+  // Clear any stored playing state on mount - user must manually play
   useEffect(() => {
-    const wasPlaying = localStorage.getItem('musicPlaying') === 'true';
-    if (wasPlaying && audioRef.current) {
-      // Try to auto-resume, but if blocked, show "wants to resume" state
-      const timer = setTimeout(async () => {
-        try {
-          await audioRef.current.play();
-          setIsPlaying(true);
-        } catch (error) {
-          // Autoplay blocked - show visual indicator
-          console.log('Auto-resume blocked, showing resume indicator');
-          setWantsToResume(true);
-        }
-      }, 500);
-      return () => clearTimeout(timer);
-    }
+    localStorage.setItem('musicPlaying', 'false');
   }, []);
 
   useEffect(() => {
@@ -351,7 +336,6 @@ const FocusMusicPlayer = () => {
         } else {
           await audioRef.current.play();
           setIsPlaying(true);
-          setWantsToResume(false);
           localStorage.setItem('musicPlaying', 'true');
         }
       } catch (error) {
@@ -364,7 +348,7 @@ const FocusMusicPlayer = () => {
 
   return (
     <div
-      className={`focus-music-player ${isExpanded ? 'expanded' : ''} ${isPlaying ? 'playing' : ''} ${wantsToResume ? 'wants-resume' : ''}`}
+      className={`focus-music-player ${isExpanded ? 'expanded' : ''} ${isPlaying ? 'playing' : ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -372,8 +356,8 @@ const FocusMusicPlayer = () => {
 
       <button
         className="music-toggle-btn"
-        onClick={wantsToResume ? togglePlay : handleMobileToggle}
-        title={wantsToResume ? 'Click to resume music' : 'Lofi Radio'}
+        onClick={handleMobileToggle}
+        title="Lofi Radio"
       >
         {isPlaying ? (
           <div className="music-bars">
@@ -382,7 +366,7 @@ const FocusMusicPlayer = () => {
             <div className="bar"></div>
           </div>
         ) : (
-          <Music size={18} className={wantsToResume ? 'resume-icon' : ''} />
+          <Music size={18} />
         )}
       </button>
 
@@ -1400,32 +1384,6 @@ const Layout = ({ children }) => {
         .focus-music-player.playing {
           border-color: rgba(139, 92, 246, 0.4);
           box-shadow: 0 4px 24px rgba(139, 92, 246, 0.2);
-        }
-
-        .focus-music-player.wants-resume {
-          animation: wantsResume 2s ease-in-out infinite;
-        }
-
-        .focus-music-player.wants-resume .music-toggle-btn {
-          background: linear-gradient(135deg, #f59e0b, #d97706);
-        }
-
-        @keyframes wantsResume {
-          0%, 100% {
-            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
-          }
-          50% {
-            box-shadow: 0 4px 30px rgba(245, 158, 11, 0.6);
-          }
-        }
-
-        .resume-icon {
-          animation: bounce 1s ease-in-out infinite;
-        }
-
-        @keyframes bounce {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.2); }
         }
 
         .focus-music-player.expanded {
