@@ -51,14 +51,21 @@ const AdUnit = ({
     // Check if element is actually visible and has dimensions
     const checkAndLoadAd = () => {
       const rect = container.getBoundingClientRect();
-      const computedStyle = window.getComputedStyle(container);
+
+      // Check if element or any parent is hidden
+      const isHidden = (element) => {
+        while (element) {
+          const style = window.getComputedStyle(element);
+          if (style.display === 'none' || style.visibility === 'hidden') {
+            return true;
+          }
+          element = element.parentElement;
+        }
+        return false;
+      };
 
       // Don't load if element is hidden or has no width
-      if (
-        computedStyle.display === 'none' ||
-        computedStyle.visibility === 'hidden' ||
-        rect.width === 0
-      ) {
+      if (isHidden(container) || rect.width === 0) {
         return false;
       }
 
