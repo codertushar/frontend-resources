@@ -1026,24 +1026,26 @@ const ResourceDetail = () => {
         /* Grid Layout Wrapper */
         .detail-container-wrapper {
           display: flex;
-          gap: 2rem;
+          gap: 1rem;
           padding-top: 2rem;
-          max-width: 1400px;
+          max-width: 1200px;
+          margin: 0 auto;
+          justify-content: center;
         }
 
         .detail-main {
           flex: 1;
-          max-width: 800px;
+          max-width: 850px;
           min-width: 0;
-          margin-left: 300px;
+          margin-left: 280px;
         }
 
         /* Sidebar Styles */
         .article-sidebar {
           position: fixed;
           top: 100px;
-          left: max(calc((100vw - 1400px) / 2 + 1.5rem), 1.5rem);
-          width: 280px;
+          left: max(calc((100vw - 1200px) / 2), 1.5rem);
+          width: 300px;
           height: calc(100vh - 120px);
           overflow-y: auto;
           padding: 1.25rem;

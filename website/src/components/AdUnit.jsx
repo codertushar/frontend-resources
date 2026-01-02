@@ -45,19 +45,46 @@ const AdUnit = ({
     // Wait for visibility
     if (!isVisible) return;
 
-    // Wait for container to have width
     const container = containerRef.current;
-    if (!container || container.offsetWidth === 0) return;
+    if (!container) return;
 
-    // Small delay to ensure layout is stable
-    const timer = setTimeout(() => {
+    // Check if element is actually visible and has dimensions
+    const checkAndLoadAd = () => {
+      const rect = container.getBoundingClientRect();
+      const computedStyle = window.getComputedStyle(container);
+
+      // Don't load if element is hidden or has no width
+      if (
+        computedStyle.display === 'none' ||
+        computedStyle.visibility === 'hidden' ||
+        rect.width === 0
+      ) {
+        return false;
+      }
+
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
         isLoaded.current = true;
+        return true;
       } catch (error) {
         console.error('AdSense error:', error);
+        return false;
       }
-    }, 100);
+    };
+
+    // Small delay to ensure layout is stable, then check
+    const timer = setTimeout(() => {
+      if (!checkAndLoadAd()) {
+        // If failed, try again on resize (in case element becomes visible)
+        const handleResize = () => {
+          if (checkAndLoadAd()) {
+            window.removeEventListener('resize', handleResize);
+          }
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+      }
+    }, 200);
 
     return () => clearTimeout(timer);
   }, [isPremium, isVisible]);
