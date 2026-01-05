@@ -868,8 +868,9 @@ const Layout = ({ children }) => {
                     {(user?.user_metadata?.avatar_url || user?.user_metadata?.picture) ? (
                       <img
                         src={user.user_metadata.avatar_url || user.user_metadata.picture}
-                        alt="Profile"
+                        alt="User profile avatar"
                         className="avatar-img"
+                        loading="lazy"
                       />
                     ) : (
                       <User size={18} />
@@ -919,20 +920,47 @@ const Layout = ({ children }) => {
 
       <footer className="footer">
         <div className="container footer-content">
-          <p>Built with ❤️ by Tushar Khanna</p>
-          <div className="social-links">
-            <a href="mailto:hellokhannatushar@gmail.com" className="social-link" title="Email">
-              <Mail size={20} />
-            </a>
-            <a href="https://x.com/iamtusharkhanna" target="_blank" rel="noopener noreferrer" className="social-link" title="X (Twitter)">
-              <XIcon size={18} />
-            </a>
-            <a href="https://www.linkedin.com/in/khannatushar/" target="_blank" rel="noopener noreferrer" className="social-link" title="LinkedIn">
-              <Linkedin size={20} />
-            </a>
-            <a href="https://github.com/codertushar/frontend-resources" target="_blank" rel="noopener noreferrer" className="social-link" title="GitHub">
-              <Github size={20} />
-            </a>
+          <div className="footer-main">
+            <div className="footer-brand">
+              <Logo className="footer-logo" />
+              <span className="footer-brand-name">CrackFrontend</span>
+            </div>
+            <p className="footer-tagline">Your guide to mastering frontend interviews</p>
+          </div>
+          <div className="footer-links">
+            <div className="footer-section">
+              <h4>Resources</h4>
+              <Link to="/library">Library</Link>
+              <Link to="/practice">Practice</Link>
+              <Link to="/pricing">Pricing</Link>
+            </div>
+            <div className="footer-section">
+              <h4>Company</h4>
+              <Link to="/about">About Us</Link>
+              <Link to="/contact">Contact</Link>
+            </div>
+            <div className="footer-section">
+              <h4>Legal</h4>
+              <Link to="/privacy">Privacy Policy</Link>
+              <Link to="/terms">Terms of Service</Link>
+            </div>
+          </div>
+          <div className="footer-bottom">
+            <p>Built with ❤️ by Tushar Khanna</p>
+            <div className="social-links">
+              <a href="mailto:hellokhannatushar@gmail.com" className="social-link" title="Email">
+                <Mail size={20} />
+              </a>
+              <a href="https://x.com/iamtusharkhanna" target="_blank" rel="noopener noreferrer" className="social-link" title="X (Twitter)">
+                <XIcon size={18} />
+              </a>
+              <a href="https://www.linkedin.com/in/khannatushar/" target="_blank" rel="noopener noreferrer" className="social-link" title="LinkedIn">
+                <Linkedin size={20} />
+              </a>
+              <a href="https://github.com/codertushar/frontend-resources" target="_blank" rel="noopener noreferrer" className="social-link" title="GitHub">
+                <Github size={20} />
+              </a>
+            </div>
           </div>
         </div>
       </footer>
@@ -1295,24 +1323,99 @@ const Layout = ({ children }) => {
         }
 
         .footer {
-          padding: 3rem 0;
+          position: relative;
+          z-index: 60;
+          padding: 4rem 0 2rem;
           color: var(--text-muted);
           font-size: 0.9rem;
           margin-top: auto;
           border-top: 1px solid var(--border-color);
+          background: var(--bg-color);
         }
 
         .footer-content {
           display: flex;
           flex-direction: column;
+          gap: 3rem;
+        }
+
+        .footer-main {
+          text-align: center;
+        }
+
+        .footer-brand {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .footer-logo {
+          width: 28px;
+          height: 28px;
+        }
+
+        .footer-brand-name {
+          font-family: 'Space Grotesk', sans-serif;
+          font-weight: 700;
+          font-size: 1.25rem;
+          background: linear-gradient(90deg, #8b5cf6, #ec4899, #06b6d4);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .footer-tagline {
+          color: var(--text-muted);
+          font-size: 0.9rem;
+        }
+
+        .footer-links {
+          display: flex;
+          justify-content: center;
+          gap: 4rem;
+          flex-wrap: wrap;
+        }
+
+        .footer-section {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .footer-section h4 {
+          color: var(--text-main);
+          font-size: 0.85rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          margin-bottom: 0.25rem;
+        }
+
+        .footer-section a {
+          color: var(--text-muted);
+          font-size: 0.9rem;
+          transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+          color: var(--primary);
+        }
+
+        .footer-bottom {
+          display: flex;
+          flex-direction: column;
           align-items: center;
           gap: 1.5rem;
+          padding-top: 2rem;
+          border-top: 1px solid var(--border-color);
         }
 
         .social-links {
           display: flex;
           align-items: center;
-          gap: 1.5rem;
+          gap: 1rem;
         }
 
         .social-link {
@@ -1419,15 +1522,23 @@ const Layout = ({ children }) => {
           }
 
           .footer {
-            padding: 2rem 0;
+            padding: 2rem 0 1.5rem;
           }
 
           .footer-content {
-            gap: 1rem;
+            gap: 2rem;
+          }
+
+          .footer-links {
+            gap: 2rem;
+          }
+
+          .footer-bottom {
+            padding-top: 1.5rem;
           }
 
           .social-links {
-            gap: 1rem;
+            gap: 0.75rem;
           }
         }
 

@@ -76,6 +76,7 @@ const MegaMenu = ({ isOpen, onClose, onMouseEnter, onMouseLeave }) => {
     e.preventDefault();
     onClose();
     navigate(href);
+    window.scrollTo(0, 0);
   };
 
   return (

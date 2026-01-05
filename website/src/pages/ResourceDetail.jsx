@@ -260,7 +260,7 @@ const ResourceDetail = () => {
       const twitterDescription = document.querySelector('meta[name="twitter:description"]');
       const canonical = document.querySelector('link[rel="canonical"]');
 
-      const url = `https://crackfrontend.vercel.app/resource/${resource.id}`;
+      const url = `https://crackfrontend.in/resource/${resource.id}`;
       const title = `${resource.title} | CrackFrontend`;
       const desc = resource.fullContent
         .replace(/```[\s\S]*?```/g, '')
@@ -933,6 +933,16 @@ const ResourceDetail = () => {
                     <div className="table-wrapper">
                       <table {...props}>{children}</table>
                     </div>
+                  )
+                },
+                img({ node, src, alt, ...props }) {
+                  return (
+                    <img
+                      src={src}
+                      alt={alt || 'Article image'}
+                      loading="lazy"
+                      {...props}
+                    />
                   )
                 }
               }}

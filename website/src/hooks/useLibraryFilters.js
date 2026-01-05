@@ -79,6 +79,11 @@ const applyAllFilters = (contentData, filterState, fuse, additionalContext = {})
     result = result.filter(item => item.category === filterState.category);
   }
 
+  // Subcategory filter
+  if (filterState.subcategory) {
+    result = result.filter(item => item.subcategory === filterState.subcategory);
+  }
+
   // Difficulty filter
   if (filterState.difficulty !== 'all') {
     result = result.filter(item => item.difficulty === filterState.difficulty);

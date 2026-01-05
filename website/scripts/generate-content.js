@@ -193,34 +193,42 @@ const SMART_TAGS = {
         'general': ['concepts'],
     },
     // Content pattern-based tags (keyword -> tag)
+    // These patterns are always applied (technical patterns that are specific enough)
     patterns: [
         { match: /Array\.prototype\./i, tag: 'array-methods' },
-        { match: /Promise\./i, tag: 'promises' },
         { match: /polyfill/i, tag: 'polyfill' },
         { match: /\bcurry|\bcurried/i, tag: 'functional' },
-        { match: /\bmemoiz/i, tag: 'memoization' },
-        { match: /\bdebounce|\bthrottle/i, tag: 'performance' },
         { match: /\bevent\s*(emitter|listener|handler)/i, tag: 'events' },
-        { match: /\bDOM\b|\bdocument\./i, tag: 'dom' },
-        { match: /\bfetch\b|\bAPI\b|\bHTTP/i, tag: 'api' },
-        { match: /\bReact\b/i, tag: 'react' },
-        { match: /\bclosure/i, tag: 'closures' },
-        { match: /\bthis\b.*binding|\bbind\b|\bcall\b|\bapply\b/i, tag: 'this-binding' },
-        { match: /\basync|\bawait|\bPromise/i, tag: 'async' },
-        { match: /\brecursion|\brecursive/i, tag: 'recursion' },
         { match: /\bObject\.(keys|values|entries|assign|freeze)/i, tag: 'object-methods' },
         { match: /\bString\.prototype\./i, tag: 'string-methods' },
         { match: /\bFunction\.prototype\./i, tag: 'function-methods' },
-        { match: /\bLRU|\bcache|\bcaching/i, tag: 'caching' },
         { match: /\bpagination/i, tag: 'pagination' },
-        { match: /\bsorting|sort\(/i, tag: 'sorting' },
-        { match: /\bsearch|binary search/i, tag: 'searching' },
         { match: /\btwo pointer|\bsliding window/i, tag: 'two-pointers' },
         { match: /\blinked list/i, tag: 'linked-list' },
-        { match: /\btree|\bBST|\bbinary tree/i, tag: 'trees' },
-        { match: /\bgraph|\bBFS|\bDFS/i, tag: 'graphs' },
-        { match: /\bdynamic programming|\bDP\b/i, tag: 'dp' },
-        { match: /\binterval/i, tag: 'intervals' },
+        { match: /\bdynamic programming/i, tag: 'dp' },
+    ],
+    // These patterns require either title match OR multiple occurrences in content
+    // to avoid false positives from passing mentions
+    strictPatterns: [
+        { match: /\bPromise\b/i, tag: 'promises', minCount: 8 },
+        { match: /\bmemoiz/i, tag: 'memoization', minCount: 5 },
+        { match: /\bdebounce|\bthrottle/i, tag: 'performance', minCount: 8 },
+        { match: /\bDOM\b/i, tag: 'dom', minCount: 10 },
+        { match: /\bclosure/i, tag: 'closures', minCount: 10 },
+        { match: /\basync\b|\bawait\b/i, tag: 'async', minCount: 10 },
+        { match: /\brecursion|\brecursive/i, tag: 'recursion', minCount: 5 },
+        { match: /\bLRU|\bcaching/i, tag: 'caching', minCount: 5 },
+        { match: /\bsorting|\.sort\(/i, tag: 'sorting', minCount: 5 },
+        { match: /\bbinary search/i, tag: 'searching', minCount: 3 },
+        { match: /\btree\b|\bBST\b|\bbinary tree/i, tag: 'trees', minCount: 8 },
+        { match: /\bgraph\b|\bBFS\b|\bDFS\b/i, tag: 'graphs', minCount: 5 },
+        { match: /\binterval/i, tag: 'intervals', minCount: 5 },
+    ],
+    // Title-only patterns - only match if the keyword is in the title
+    titlePatterns: [
+        { match: /\bthis\b/i, tag: 'this-binding' },
+        { match: /\bfetch\b|\bAPI\b|\bHTTP/i, tag: 'api' },
+        { match: /\bcache\b/i, tag: 'caching' },
     ]
 };
 
@@ -237,12 +245,50 @@ function generateSmartTags(category, subcategory, content, title) {
         SMART_TAGS.subcategory[subcategory].forEach(tag => tags.add(tag));
     }
 
-    // Add pattern-based tags from content and title
     const searchText = `${title}\n${content}`;
+
+    // Add simple pattern-based tags (always applied)
     for (const { match, tag } of SMART_TAGS.patterns) {
         if (match.test(searchText)) {
             tags.add(tag);
         }
+    }
+
+    // Add strict pattern-based tags (require title match OR minimum count)
+    for (const { match, tag, minCount } of SMART_TAGS.strictPatterns) {
+        const inTitle = match.test(title);
+        const matches = content.match(new RegExp(match.source, 'gi')) || [];
+        if (inTitle || matches.length >= minCount) {
+            tags.add(tag);
+        }
+    }
+
+    // Add title-only pattern tags
+    for (const { match, tag } of SMART_TAGS.titlePatterns) {
+        if (match.test(title)) {
+            tags.add(tag);
+        }
+    }
+
+    // Special handling for React tag - only tag if article is primarily about React
+    // Not just mentioning React as an example use case
+    // Check for React as the framework (not "react to" as a verb)
+    const titleHasReact = /\bReact\b(?!\s+to\b)/i.test(title);
+    const reactImportCount = (content.match(/import.*from ['"]react/gi) || []).length;
+
+    const isReactArticle = (
+        // Title explicitly mentions React (as a framework, not "react to")
+        titleHasReact ||
+        // Is in ai category and mentions React for streaming (specific use case)
+        (category === 'ai' && /streaming.*\bReact\b(?!\s+to)/i.test(title)) ||
+        // Has multiple React imports (3+) suggesting it's React-focused, not just an example
+        reactImportCount >= 3 ||
+        // Machine-coding articles with significant React code (2+ imports)
+        (category === 'machine-coding' && reactImportCount >= 2)
+    );
+
+    if (isReactArticle) {
+        tags.add('react');
     }
 
     return [...tags].sort();

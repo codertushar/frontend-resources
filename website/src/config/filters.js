@@ -47,6 +47,13 @@ export const FILTERS = {
       defaultValue: 'all',
       values: CATEGORIES,
     },
+    subcategory: {
+      id: 'subcategory',
+      label: 'Subcategory',
+      type: 'single',
+      urlParam: 'subcategory',
+      defaultValue: '',
+    },
     search: {
       id: 'search',
       label: 'Search',

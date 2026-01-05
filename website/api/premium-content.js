@@ -7,8 +7,18 @@ export const config = {
   runtime: 'nodejs',
 };
 
-// Load premium content at runtime
+// Module-level cache for premium content (persists across requests in serverless warm instances)
+let cachedPremiumContent = null;
+let cacheLoadedAt = null;
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes TTL for cache refresh
+
+// Load premium content with caching
 function getPremiumContent() {
+  // Return cached content if still valid
+  if (cachedPremiumContent && cacheLoadedAt && (Date.now() - cacheLoadedAt < CACHE_TTL)) {
+    return cachedPremiumContent;
+  }
+
   try {
     const possiblePaths = [
       join(process.cwd(), 'src', 'data', 'premium-content.json'),
@@ -19,7 +29,9 @@ function getPremiumContent() {
     for (const filePath of possiblePaths) {
       try {
         const content = readFileSync(filePath, 'utf-8');
-        return JSON.parse(content);
+        cachedPremiumContent = JSON.parse(content);
+        cacheLoadedAt = Date.now();
+        return cachedPremiumContent;
       } catch (e) {
         // Try next path
       }

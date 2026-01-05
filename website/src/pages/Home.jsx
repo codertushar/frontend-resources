@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Zap, Code, Database, Brain, Layout, Sparkles, BookOpen, Crown, Trophy, Terminal, Lightbulb, ArrowRight } from 'lucide-react';
@@ -58,313 +58,6 @@ const useTypewriter = (text, speed = 50, delay = 500) => {
   return { displayText, isComplete };
 };
 
-// Pre-generated particle positions (pure/deterministic)
-const PARTICLES = [
-  { id: 0, x: 12, y: 8, size: 3, duration: 18, delay: 1, xOffset: 5 },
-  { id: 1, x: 85, y: 15, size: 2, duration: 22, delay: 0, xOffset: -8 },
-  { id: 2, x: 45, y: 25, size: 4, duration: 15, delay: 2, xOffset: 10 },
-  { id: 3, x: 72, y: 42, size: 2, duration: 25, delay: 3, xOffset: -5 },
-  { id: 4, x: 28, y: 55, size: 3, duration: 20, delay: 1, xOffset: 7 },
-  { id: 5, x: 92, y: 68, size: 2, duration: 17, delay: 4, xOffset: -10 },
-  { id: 6, x: 8, y: 75, size: 4, duration: 23, delay: 0, xOffset: 8 },
-  { id: 7, x: 55, y: 82, size: 2, duration: 19, delay: 2, xOffset: -6 },
-  { id: 8, x: 38, y: 12, size: 3, duration: 21, delay: 3, xOffset: 9 },
-  { id: 9, x: 65, y: 35, size: 2, duration: 16, delay: 1, xOffset: -7 },
-  { id: 10, x: 18, y: 48, size: 4, duration: 24, delay: 4, xOffset: 6 },
-  { id: 11, x: 78, y: 58, size: 2, duration: 18, delay: 0, xOffset: -9 },
-  { id: 12, x: 52, y: 72, size: 3, duration: 22, delay: 2, xOffset: 8 },
-  { id: 13, x: 25, y: 88, size: 2, duration: 15, delay: 3, xOffset: -5 },
-  { id: 14, x: 88, y: 22, size: 4, duration: 20, delay: 1, xOffset: 10 },
-  { id: 15, x: 5, y: 38, size: 2, duration: 26, delay: 4, xOffset: -8 },
-  { id: 16, x: 42, y: 5, size: 3, duration: 17, delay: 0, xOffset: 7 },
-  { id: 17, x: 68, y: 92, size: 2, duration: 23, delay: 2, xOffset: -6 },
-  { id: 18, x: 95, y: 45, size: 4, duration: 19, delay: 3, xOffset: 9 },
-  { id: 19, x: 32, y: 65, size: 2, duration: 21, delay: 1, xOffset: -10 },
-];
-
-// Floating Particles Component
-const FloatingParticles = () => {
-  return (
-    <div className="particles-container">
-      {PARTICLES.map((particle) => (
-        <motion.div
-          key={particle.id}
-          className="particle"
-          style={{
-            left: `${particle.x}%`,
-            top: `${particle.y}%`,
-            width: particle.size,
-            height: particle.size,
-          }}
-          animate={{
-            y: [0, -30, 0],
-            x: [0, particle.xOffset, 0],
-            opacity: [0.2, 0.8, 0.2],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: particle.duration,
-            delay: particle.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
-// Interactive Constellation Network - Mouse-based connecting nodes
-const InteractiveConstellation = () => {
-  const canvasRef = useRef(null);
-  const mouseRef = useRef({ x: -1000, y: -1000 });
-  const nodesRef = useRef([]);
-  const animationRef = useRef(null);
-  const isMobileRef = useRef(false);
-
-  // Initialize nodes
-  const initNodes = useCallback((width, height) => {
-    const nodes = [];
-    // Dramatically reduce nodes on mobile for performance
-    const isMobile = width < 768;
-    isMobileRef.current = isMobile;
-    const nodeCount = isMobile
-      ? Math.min(30, Math.floor((width * height) / 25000))  // 30 max on mobile
-      : Math.min(80, Math.floor((width * height) / 15000)); // 80 max on desktop
-
-    for (let i = 0; i < nodeCount; i++) {
-      nodes.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        radius: Math.random() * 2 + 1,
-        baseRadius: Math.random() * 2 + 1,
-      });
-    }
-    return nodes;
-  }, []);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    let width = canvas.offsetWidth;
-    let height = canvas.offsetHeight;
-
-    const setCanvasSize = () => {
-      const dpr = window.devicePixelRatio || 1;
-      width = canvas.offsetWidth;
-      height = canvas.offsetHeight;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      ctx.scale(dpr, dpr);
-
-      if (nodesRef.current.length === 0) {
-        nodesRef.current = initNodes(width, height);
-      }
-    };
-
-    setCanvasSize();
-
-    const handleMouseMove = (e) => {
-      if (isMobileRef.current) return; // Disable on mobile for performance
-      const rect = canvas.getBoundingClientRect();
-      mouseRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      };
-    };
-
-    const handleTouchMove = (e) => {
-      if (!isMobileRef.current) return;
-      const rect = canvas.getBoundingClientRect();
-      const touch = e.touches[0];
-      if (touch) {
-        mouseRef.current = {
-          x: touch.clientX - rect.left,
-          y: touch.clientY - rect.top,
-        };
-      }
-    };
-
-    const handleTouchEnd = () => {
-      mouseRef.current = { x: -1000, y: -1000 };
-    };
-
-    const handleMouseLeave = () => {
-      mouseRef.current = { x: -1000, y: -1000 };
-    };
-
-    const handleResize = () => {
-      setCanvasSize();
-      nodesRef.current = initNodes(width, height);
-    };
-
-    // Animation loop
-    const animate = () => {
-      ctx.clearRect(0, 0, width, height);
-      const mouse = mouseRef.current;
-      const nodes = nodesRef.current;
-      const isMobile = isMobileRef.current;
-
-      // Reduced distances on mobile for better performance
-      const connectionDistance = isMobile ? 100 : 120;
-      const mouseRadius = isMobile ? 150 : 200;
-
-      // Update and draw nodes
-      nodes.forEach((node, i) => {
-        // Move nodes
-        node.x += node.vx;
-        node.y += node.vy;
-
-        // Bounce off edges
-        if (node.x < 0 || node.x > width) node.vx *= -1;
-        if (node.y < 0 || node.y > height) node.vy *= -1;
-
-        // Keep in bounds
-        node.x = Math.max(0, Math.min(width, node.x));
-        node.y = Math.max(0, Math.min(height, node.y));
-
-        // Mouse interaction - attract nodes slightly
-        const dx = mouse.x - node.x;
-        const dy = mouse.y - node.y;
-        const distToMouse = Math.sqrt(dx * dx + dy * dy);
-
-        if (distToMouse < mouseRadius && distToMouse > 0) {
-          const force = (mouseRadius - distToMouse) / mouseRadius;
-          node.x += dx * force * 0.004;
-          node.y += dy * force * 0.004;
-          node.radius = node.baseRadius + force * 3;
-        } else {
-          node.radius = node.baseRadius;
-        }
-
-        // Draw connections to nearby nodes
-        for (let j = i + 1; j < nodes.length; j++) {
-          const other = nodes[j];
-          const ndx = other.x - node.x;
-          const ndy = other.y - node.y;
-          const dist = Math.sqrt(ndx * ndx + ndy * ndy);
-
-          if (dist < connectionDistance) {
-            // Check if either node is near mouse for enhanced effect
-            const node1ToMouse = Math.sqrt((mouse.x - node.x) ** 2 + (mouse.y - node.y) ** 2);
-            const node2ToMouse = Math.sqrt((mouse.x - other.x) ** 2 + (mouse.y - other.y) ** 2);
-            const nearMouse = node1ToMouse < mouseRadius || node2ToMouse < mouseRadius;
-
-            const opacity = nearMouse
-              ? (1 - dist / connectionDistance) * 0.8
-              : (1 - dist / connectionDistance) * 0.15;
-
-            ctx.beginPath();
-            ctx.moveTo(node.x, node.y);
-            ctx.lineTo(other.x, other.y);
-
-            if (nearMouse) {
-              // Gradient line for mouse-affected connections
-              const gradient = ctx.createLinearGradient(node.x, node.y, other.x, other.y);
-              gradient.addColorStop(0, `rgba(139, 92, 246, ${opacity})`);
-              gradient.addColorStop(0.5, `rgba(236, 72, 153, ${opacity})`);
-              gradient.addColorStop(1, `rgba(6, 182, 212, ${opacity})`);
-              ctx.strokeStyle = gradient;
-              ctx.lineWidth = 1.5;
-            } else {
-              ctx.strokeStyle = `rgba(139, 92, 246, ${opacity})`;
-              ctx.lineWidth = 0.5;
-            }
-            ctx.stroke();
-          }
-        }
-
-        // Draw line from node to mouse if close enough
-        if (distToMouse < mouseRadius && distToMouse > 0) {
-          const opacity = (1 - distToMouse / mouseRadius) * 0.6;
-          const gradient = ctx.createLinearGradient(node.x, node.y, mouse.x, mouse.y);
-          gradient.addColorStop(0, `rgba(139, 92, 246, ${opacity})`);
-          gradient.addColorStop(1, `rgba(236, 72, 153, ${opacity * 0.5})`);
-
-          ctx.beginPath();
-          ctx.moveTo(node.x, node.y);
-          ctx.lineTo(mouse.x, mouse.y);
-          ctx.strokeStyle = gradient;
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        }
-
-        // Draw node
-        const nodeOpacity = distToMouse < mouseRadius ? 0.4 : 0.25;
-        const gradient = ctx.createRadialGradient(
-          node.x, node.y, 0,
-          node.x, node.y, node.radius * 2
-        );
-        gradient.addColorStop(0, `rgba(139, 92, 246, ${nodeOpacity})`);
-        gradient.addColorStop(0.5, `rgba(236, 72, 153, ${nodeOpacity * 0.7})`);
-        gradient.addColorStop(1, 'rgba(139, 92, 246, 0)');
-
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-      });
-
-      // Draw mouse glow
-      if (mouse.x > 0 && mouse.y > 0) {
-        const mouseGlow = ctx.createRadialGradient(
-          mouse.x, mouse.y, 0,
-          mouse.x, mouse.y, 60
-        );
-        mouseGlow.addColorStop(0, 'rgba(236, 72, 153, 0.15)');
-        mouseGlow.addColorStop(0.5, 'rgba(139, 92, 246, 0.08)');
-        mouseGlow.addColorStop(1, 'rgba(139, 92, 246, 0)');
-
-        ctx.beginPath();
-        ctx.arc(mouse.x, mouse.y, 60, 0, Math.PI * 2);
-        ctx.fillStyle = mouseGlow;
-        ctx.fill();
-      }
-
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    canvas.addEventListener('mousemove', handleMouseMove);
-    canvas.addEventListener('mouseleave', handleMouseLeave);
-    canvas.addEventListener('touchmove', handleTouchMove, { passive: true });
-    canvas.addEventListener('touchend', handleTouchEnd);
-    window.addEventListener('resize', handleResize);
-
-    animate();
-
-    return () => {
-      canvas.removeEventListener('mousemove', handleMouseMove);
-      canvas.removeEventListener('mouseleave', handleMouseLeave);
-      canvas.removeEventListener('touchmove', handleTouchMove);
-      canvas.removeEventListener('touchend', handleTouchEnd);
-      window.removeEventListener('resize', handleResize);
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [initNodes]);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="constellation-canvas"
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        pointerEvents: 'auto',
-        zIndex: 0,
-      }}
-    />
-  );
-};
-
 const Home = () => {
   const { getStats } = useProgress();
   const resourceCount = contentData.length;
@@ -397,11 +90,6 @@ const Home = () => {
           animate="show"
           className="hero"
         >
-          {/* Interactive Constellation Background */}
-          <InteractiveConstellation />
-
-          {/* Floating Particles Background */}
-          <FloatingParticles />
 
         <motion.div variants={item} className="hero-badge">
           <Sparkles size={14} />
@@ -477,16 +165,16 @@ const Home = () => {
         </motion.div>
 
         <motion.div variants={item} className="popular-topics">
-          <Link to="/library?tag=react" className="topic-tag">React</Link>
+          <Link to="/library?tags=react" className="topic-tag">React</Link>
           <Link to="/library?subcategory=design-patterns" className="topic-tag">Design Patterns</Link>
-          <Link to="/library?tag=promises" className="topic-tag">Promises</Link>
+          <Link to="/library?tags=promises" className="topic-tag">Promises</Link>
           <Link to="/library?subcategory=polyfills" className="topic-tag">Polyfills</Link>
-          <Link to="/library?tag=closures" className="topic-tag">Closures</Link>
-          <Link to="/library?tag=memoization" className="topic-tag">Memoization</Link>
-          <Link to="/library?tag=async" className="topic-tag">Async Programming</Link>
-          <Link to="/library?tag=performance" className="topic-tag">Performance</Link>
-          <Link to="/library?tag=algorithms" className="topic-tag">Algorithms</Link>
-          <Link to="/library?tag=dom" className="topic-tag">DOM Manipulation</Link>
+          <Link to="/library?tags=closures" className="topic-tag">Closures</Link>
+          <Link to="/library?tags=memoization" className="topic-tag">Memoization</Link>
+          <Link to="/library?tags=async" className="topic-tag">Async Programming</Link>
+          <Link to="/library?tags=performance" className="topic-tag">Performance</Link>
+          <Link to="/library?tags=algorithms" className="topic-tag">Algorithms</Link>
+          <Link to="/library?tags=dom" className="topic-tag">DOM Manipulation</Link>
         </motion.div>
 
         {/* Ad Unit */}
@@ -550,33 +238,6 @@ const Home = () => {
       </motion.div>
 
       <style>{`
-        /* Floating Particles */
-        .particles-container {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          overflow: hidden;
-          pointer-events: none;
-          z-index: 0;
-        }
-
-        .particle {
-          position: absolute;
-          border-radius: 50%;
-          background: linear-gradient(135deg, var(--primary), #ec4899);
-          box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
-        }
-
-        /* Reduce particle intensity on mobile */
-        @media (max-width: 768px) {
-          .particle {
-            opacity: 0.4;
-            box-shadow: 0 0 5px rgba(139, 92, 246, 0.3);
-          }
-        }
-
         /* Hero Section */
         .hero {
           display: flex;

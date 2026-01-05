@@ -65,7 +65,6 @@ const Library = () => {
   const [showMoreFilters, setShowMoreFilters] = useState(false);
   const [isFilterSticky, setIsFilterSticky] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState(null);
-  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const filterRef = useRef(null);
 
   // Detect mobile/tablet and auto-switch to grid view
@@ -154,11 +153,8 @@ const Library = () => {
   // Get all available tags
   const availableTags = useMemo(() => extractTags(contentData), []);
 
-  // Apply subcategory filter on top of hook's filtered data
-  const finalFilteredData = useMemo(() => {
-    if (!selectedSubcategory) return filteredData;
-    return filteredData.filter(item => item.subcategory === selectedSubcategory);
-  }, [filteredData, selectedSubcategory]);
+  // Use filteredData directly (subcategory filter now handled by hook)
+  const finalFilteredData = filteredData;
 
   return (
     <div className="container page-container">
@@ -169,14 +165,18 @@ const Library = () => {
         animate={{ opacity: 1, y: 0 }}
       >
         <h1 className="heading-gradient">
-          {filterState.category !== 'all'
-            ? CATEGORY_DISPLAY_NAMES[filterState.category] || filterState.category
-            : 'Resource Library'}
+          {filterState.subcategory
+            ? SUBCATEGORY_DISPLAY_NAMES[filterState.subcategory] || filterState.subcategory
+            : filterState.category !== 'all'
+              ? CATEGORY_DISPLAY_NAMES[filterState.category] || filterState.category
+              : 'Resource Library'}
         </h1>
         <p className="subtitle">
-          {filterState.category !== 'all'
-            ? `Explore ${finalFilteredData.length} ${CATEGORY_DISPLAY_NAMES[filterState.category] || filterState.category} resources.`
-            : `Explore ${contentData.length} curated resources to boost your skills.`}
+          {filterState.subcategory
+            ? `Explore ${finalFilteredData.length} ${SUBCATEGORY_DISPLAY_NAMES[filterState.subcategory] || filterState.subcategory} resources.`
+            : filterState.category !== 'all'
+              ? `Explore ${finalFilteredData.length} ${CATEGORY_DISPLAY_NAMES[filterState.category] || filterState.category} resources.`
+              : `Explore ${contentData.length} curated resources to boost your skills.`}
         </p>
 
         {stats.completed > 0 && (
@@ -440,13 +440,10 @@ const Library = () => {
           <span className="results-count">
             Showing <strong>{finalFilteredData.length}</strong> of {contentData.length} resources
           </span>
-          {(activeFilterCount > 0 || selectedSubcategory) && (
-            <button className="clear-all-btn" onClick={() => {
-              resetAllFilters();
-              setSelectedSubcategory(null);
-            }}>
+          {activeFilterCount > 0 && (
+            <button className="clear-all-btn" onClick={resetAllFilters}>
               <X size={14} />
-              Clear {activeFilterCount + (selectedSubcategory ? 1 : 0)} filter{(activeFilterCount + (selectedSubcategory ? 1 : 0)) > 1 ? 's' : ''}
+              Clear {activeFilterCount} filter{activeFilterCount > 1 ? 's' : ''}
             </button>
           )}
         </div>

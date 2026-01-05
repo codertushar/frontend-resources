@@ -1,7 +1,42 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from './AuthContext';
 
 const SubscriptionContext = createContext();
+
+// Session storage key for subscription caching
+const SUBSCRIPTION_CACHE_KEY = 'cf_subscription_cache';
+const SUBSCRIPTION_CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+
+// Helper to get cached subscription from sessionStorage
+const getCachedSubscription = (userId) => {
+  try {
+    const cached = sessionStorage.getItem(SUBSCRIPTION_CACHE_KEY);
+    if (!cached) return null;
+
+    const { data, userId: cachedUserId, timestamp } = JSON.parse(cached);
+
+    // Validate cache: same user and not expired
+    if (cachedUserId === userId && Date.now() - timestamp < SUBSCRIPTION_CACHE_TTL) {
+      return data;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};
+
+// Helper to set subscription cache
+const setCachedSubscription = (userId, data) => {
+  try {
+    sessionStorage.setItem(SUBSCRIPTION_CACHE_KEY, JSON.stringify({
+      data,
+      userId,
+      timestamp: Date.now()
+    }));
+  } catch {
+    // Ignore storage errors
+  }
+};
 
 export const useSubscription = () => {
   const context = useContext(SubscriptionContext);
@@ -16,12 +51,23 @@ export const SubscriptionProvider = ({ children }) => {
   const [subscription, setSubscription] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Load subscription from Supabase profiles table
+  // Premium content cache (in-memory for session)
+  const premiumContentCache = useRef(new Map());
+
+  // Load subscription from Supabase profiles table (with caching)
   useEffect(() => {
     if (!isLoaded) return;
 
     const loadSubscription = async () => {
       if (isSignedIn && user && supabase) {
+        // Check cache first
+        const cachedSub = getCachedSubscription(user.id);
+        if (cachedSub) {
+          setSubscription(cachedSub);
+          setIsInitialized(true);
+          return;
+        }
+
         try {
           const { data: profile, error } = await supabase
             .from('profiles')
@@ -33,15 +79,17 @@ export const SubscriptionProvider = ({ children }) => {
             console.error('Error loading subscription:', error);
           }
 
-          if (profile) {
-            setSubscription({
-              status: profile.subscription_status || 'free',
-              plan: profile.subscription_plan || 'free',
-              expiresAt: profile.subscription_expires_at,
-            });
-          } else {
-            setSubscription({ status: 'free', plan: 'free' });
-          }
+          const subData = profile
+            ? {
+                status: profile.subscription_status || 'free',
+                plan: profile.subscription_plan || 'free',
+                expiresAt: profile.subscription_expires_at,
+              }
+            : { status: 'free', plan: 'free' };
+
+          setSubscription(subData);
+          // Cache the subscription
+          setCachedSubscription(user.id, subData);
         } catch (error) {
           console.error('Error loading subscription:', error);
           setSubscription({ status: 'free', plan: 'free' });
@@ -68,7 +116,7 @@ export const SubscriptionProvider = ({ children }) => {
     return true;
   }, [subscription]);
 
-  // Fetch premium content from API
+  // Fetch premium content from API (with client-side caching)
   const fetchPremiumContent = useCallback(async (articleId) => {
     if (!isSignedIn) {
       throw new Error('Authentication required');
@@ -76,6 +124,11 @@ export const SubscriptionProvider = ({ children }) => {
 
     if (!isPremium()) {
       throw new Error('Premium subscription required');
+    }
+
+    // Check in-memory cache first
+    if (premiumContentCache.current.has(articleId)) {
+      return premiumContentCache.current.get(articleId);
     }
 
     try {
@@ -92,6 +145,10 @@ export const SubscriptionProvider = ({ children }) => {
       }
 
       const data = await response.json();
+
+      // Cache the content in memory
+      premiumContentCache.current.set(articleId, data.content);
+
       return data.content;
     } catch (error) {
       console.error('Error fetching premium content:', error);
@@ -193,7 +250,7 @@ export const SubscriptionProvider = ({ children }) => {
     });
   }, [createOrder]);
 
-  // Refresh subscription status (after payment)
+  // Refresh subscription status (after payment) - also updates cache
   const refreshSubscription = useCallback(async () => {
     if (user && supabase) {
       const { data: profile } = await supabase
@@ -203,11 +260,14 @@ export const SubscriptionProvider = ({ children }) => {
         .single();
 
       if (profile) {
-        setSubscription({
+        const subData = {
           status: profile.subscription_status || 'free',
           plan: profile.subscription_plan || 'free',
           expiresAt: profile.subscription_expires_at,
-        });
+        };
+        setSubscription(subData);
+        // Update the cache with fresh data
+        setCachedSubscription(user.id, subData);
       }
     }
   }, [user, supabase]);
