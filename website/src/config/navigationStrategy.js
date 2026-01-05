@@ -37,7 +37,7 @@ export const PRIMARY_FILTERS = {
     showInHeader: true,
     values: [
       { id: 'all', label: 'All Resources', icon: Layers, color: '#8b5cf6', description: 'Browse everything' },
-      { id: 'js', label: 'JavaScript', icon: Code2, color: '#f59e0b', description: '45+ JS concepts & patterns' },
+      { id: 'js', label: 'JavaScript', icon: Code2, color: '#f59e0b', description: '60+ JS concepts & patterns' },
       { id: 'dsa', label: 'Data Structures', icon: Binary, color: '#22c55e', description: 'Algorithms & DS fundamentals' },
       { id: 'ai', label: 'AI Engineering', icon: Brain, color: '#ec4899', description: 'LLMs, prompts, AI tools' },
       { id: 'machine-coding', label: 'Machine Coding', icon: Terminal, color: '#06b6d4', description: 'Real-world implementations' },

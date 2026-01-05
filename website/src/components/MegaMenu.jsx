@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import {
   Code2, Binary, Brain, Terminal, Server, Globe,
-  BookOpen, Sparkles, Clock, Zap, ChevronRight, Layers
+  BookOpen, Sparkles, Clock, Zap, ChevronRight, Layers,
+  TrendingUp, Target
 } from 'lucide-react';
 import contentData from '../data/content.json';
 
@@ -21,12 +22,20 @@ const getCounts = () => {
       return acc;
     }, {});
 
-  return { categoryCounts, jsSubcategories, total: contentData.length };
+  // Count by difficulty
+  const difficultyCounts = contentData.reduce((acc, item) => {
+    if (item.difficulty) {
+      acc[item.difficulty] = (acc[item.difficulty] || 0) + 1;
+    }
+    return acc;
+  }, {});
+
+  return { categoryCounts, jsSubcategories, difficultyCounts, total: contentData.length };
 };
 
-const { categoryCounts, jsSubcategories, total } = getCounts();
+const { categoryCounts, jsSubcategories, difficultyCounts, total } = getCounts();
 
-// Menu structure
+// Menu structure - 3 columns with existing content only
 const MENU_COLUMNS = [
   {
     title: 'JavaScript',
@@ -64,7 +73,14 @@ const MENU_COLUMNS = [
 const QUICK_LINKS = [
   { label: 'All Resources', href: '/library', icon: Layers },
   { label: 'New Articles', href: '/library?date=last-30', icon: Sparkles },
+  { label: 'Popular', href: '/library?sort=popular', icon: TrendingUp },
   { label: 'Quick Reads', href: '/library?sort=read-time-asc', icon: Clock },
+];
+
+const DIFFICULTY_LINKS = [
+  { label: 'Easy', href: '/library?difficulty=easy', color: '#22c55e', count: difficultyCounts['easy'] || 0 },
+  { label: 'Medium', href: '/library?difficulty=medium', color: '#f59e0b', count: difficultyCounts['medium'] || 0 },
+  { label: 'Hard', href: '/library?difficulty=hard', color: '#ef4444', count: difficultyCounts['hard'] || 0 },
 ];
 
 const MegaMenu = ({ isOpen, onClose, onMouseEnter, onMouseLeave }) => {
@@ -134,6 +150,28 @@ const MegaMenu = ({ isOpen, onClose, onMouseEnter, onMouseLeave }) => {
               </li>
             ))}
           </ul>
+
+          {/* By Difficulty */}
+          <div className="sidebar-header difficulty-header">
+            <Target size={14} />
+            <span>By Difficulty</span>
+          </div>
+          <div className="difficulty-pills">
+            {DIFFICULTY_LINKS.map((diff) => (
+              <a
+                key={diff.href}
+                href={diff.href}
+                className="difficulty-pill"
+                style={{ '--pill-color': diff.color }}
+                onClick={(e) => handleLinkClick(e, diff.href)}
+              >
+                <span className="difficulty-dot" style={{ background: diff.color }} />
+                <span>{diff.label}</span>
+                <span className="difficulty-count">{diff.count}</span>
+              </a>
+            ))}
+          </div>
+
           <div className="sidebar-stats">
             <span className="stat-total">{total} resources</span>
             <span className="stat-divider">•</span>
@@ -354,6 +392,54 @@ const MegaMenu = ({ isOpen, onClose, onMouseEnter, onMouseLeave }) => {
           opacity: 0.5;
         }
 
+        .difficulty-header {
+          margin-top: 0.75rem;
+        }
+
+        .difficulty-pills {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          margin-bottom: 0.75rem;
+        }
+
+        .difficulty-pill {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.375rem 0.5rem;
+          border-radius: 6px;
+          color: var(--text-muted);
+          font-size: 0.75rem;
+          font-weight: 500;
+          transition: all 0.15s ease;
+          text-decoration: none;
+          cursor: pointer;
+        }
+
+        .difficulty-pill:hover {
+          background: var(--surface-hover);
+          color: var(--pill-color);
+        }
+
+        .difficulty-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          flex-shrink: 0;
+        }
+
+        .difficulty-count {
+          margin-left: auto;
+          font-size: 0.65rem;
+          color: var(--text-muted);
+          opacity: 0.7;
+        }
+
+        .difficulty-pill:hover .difficulty-count {
+          opacity: 1;
+        }
+
         /* Light mode adjustments */
         :root.light .mega-menu {
           box-shadow:
@@ -418,6 +504,16 @@ const MegaMenu = ({ isOpen, onClose, onMouseEnter, onMouseLeave }) => {
 
           .sidebar-stats {
             justify-content: center;
+          }
+
+          .difficulty-pills {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+          }
+
+          .difficulty-pill {
+            flex: 0 0 auto;
           }
         }
       `}</style>
