@@ -7,9 +7,11 @@ import AuthModal from './AuthModal';
 const Paywall = ({ articleTitle }) => {
   const { isSignedIn } = useSubscription();
   const [basePrice, setBasePrice] = useState(null);
+  const [isPriceLoading, setIsPriceLoading] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   useEffect(() => {
+    setIsPriceLoading(true);
     fetch('/api/settings')
       .then(res => res.json())
       .then(data => {
@@ -17,7 +19,8 @@ const Paywall = ({ articleTitle }) => {
           setBasePrice(data.basePrice);
         }
       })
-      .catch(err => console.error('Error fetching settings:', err));
+      .catch(err => console.error('Error fetching settings:', err))
+      .finally(() => setIsPriceLoading(false));
   }, []);
 
   const formatPrice = (paise) => {
@@ -95,7 +98,11 @@ const Paywall = ({ articleTitle }) => {
         </div>
 
         <div className="paywall-price">
-          <span className="price-amount">₹{formatPrice(basePrice)}</span>
+          {isPriceLoading || !basePrice ? (
+            <span className="price-skeleton" />
+          ) : (
+            <span className="price-amount">₹{formatPrice(basePrice)}</span>
+          )}
           <span className="price-note">one-time payment</span>
         </div>
 
@@ -381,6 +388,30 @@ const Paywall = ({ articleTitle }) => {
           background: linear-gradient(135deg, #7c3aed, #8b5cf6);
           -webkit-background-clip: text;
           background-clip: text;
+        }
+
+        .price-skeleton {
+          display: inline-block;
+          width: 100px;
+          height: 36px;
+          background: linear-gradient(
+            90deg,
+            var(--surface-hover) 25%,
+            var(--border-color) 50%,
+            var(--surface-hover) 75%
+          );
+          background-size: 200% 100%;
+          animation: shimmer 1.5s infinite;
+          border-radius: 8px;
+        }
+
+        @keyframes shimmer {
+          0% {
+            background-position: 200% 0;
+          }
+          100% {
+            background-position: -200% 0;
+          }
         }
 
         .price-note {

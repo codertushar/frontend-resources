@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Mail, Lock, AlertCircle, CheckCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -111,7 +112,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     setMode(mode === 'signin' ? 'signup' : 'signin');
   };
 
-  return (
+  return createPortal(
     <div className="auth-modal-overlay" onClick={handleClose}>
       <div className="auth-modal" ref={modalRef} tabIndex={-1} onClick={(e) => e.stopPropagation()}>
         <button className="auth-modal-close" onClick={handleClose}>
@@ -427,7 +428,8 @@ const AuthModal = ({ isOpen, onClose }) => {
           }
         `}</style>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
