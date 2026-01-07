@@ -238,7 +238,7 @@ const Pricing = () => {
           <div className="card-badge">Best Value</div>
 
           <div className="price-section">
-            {isPriceLoading ? (
+            {isPriceLoading || !basePrice ? (
               <div className="price-loading">
                 <div className="price-skeleton" />
               </div>
@@ -719,6 +719,36 @@ const Pricing = () => {
           margin-top: 1rem;
           color: var(--text-muted);
           font-size: 0.85rem;
+        }
+
+        .price-loading {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 80px;
+        }
+
+        .price-skeleton {
+          width: 180px;
+          height: 60px;
+          background: linear-gradient(
+            90deg,
+            var(--surface-hover) 25%,
+            var(--border-color) 50%,
+            var(--surface-hover) 75%
+          );
+          background-size: 200% 100%;
+          animation: shimmer 1.5s infinite;
+          border-radius: 12px;
+        }
+
+        @keyframes shimmer {
+          0% {
+            background-position: 200% 0;
+          }
+          100% {
+            background-position: -200% 0;
+          }
         }
 
         .faq-section {
