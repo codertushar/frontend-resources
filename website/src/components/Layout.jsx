@@ -905,7 +905,7 @@ const Layout = ({ children }) => {
                   )}
                 </>
               ) : (
-                <button className="btn-auth btn-signup" onClick={() => setIsAuthModalOpen(true)}>
+                <button className="btn-auth btn-signup" onClick={() => { setIsMegaMenuOpen(false); setIsAuthModalOpen(true); }}>
                   Sign In
                 </button>
               )}
