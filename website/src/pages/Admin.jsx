@@ -183,7 +183,7 @@ const Admin = () => {
 
     if (!selectedArticle) return;
 
-    const article = contentData.find(a => a.slug === selectedArticle);
+    const article = contentData.find(a => a.id === selectedArticle);
     if (!article) return;
 
     setNotificationLoading(true);
@@ -195,7 +195,7 @@ const Admin = () => {
         body: JSON.stringify({
           title: `New Article: ${article.title}`,
           body: article.description || 'Check out this new article!',
-          url: `/resource/${article.slug}`,
+          url: `/resource/${article.id}`,
         }),
       });
 
@@ -610,7 +610,7 @@ const Admin = () => {
                     .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
                     .slice(0, 50)
                     .map(article => (
-                      <option key={article.slug} value={article.slug}>
+                      <option key={article.id} value={article.id}>
                         {article.title}
                       </option>
                     ))}
@@ -619,7 +619,7 @@ const Admin = () => {
 
 
               {selectedArticle && (() => {
-                const article = contentData.find(a => a.slug === selectedArticle);
+                const article = contentData.find(a => a.id === selectedArticle);
                 return (
                   <div className="notification-preview">
                     <h4>Preview</h4>
