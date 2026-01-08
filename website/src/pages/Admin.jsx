@@ -606,21 +606,22 @@ const Admin = () => {
           <div className="notifications-tab">
             <h2>Send Push Notification</h2>
             <p className="tab-description">
-              Send push notifications to all subscribed users. You can select an article or write a custom message.
+              Select an article to notify all subscribed users. Title and body are auto-filled.
             </p>
 
             <form className="notification-form" onSubmit={handleSendNotification}>
               <div className="form-group">
-                <label>Quick Select Article (optional)</label>
+                <label>Select Article</label>
                 <select
                   value={selectedArticle}
                   onChange={handleArticleSelect}
                   className="article-select"
+                  required
                 >
                   <option value="">-- Select an article --</option>
                   {contentData
                     .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
-                    .slice(0, 20)
+                    .slice(0, 50)
                     .map(article => (
                       <option key={article.slug} value={article.slug}>
                         {article.title}
@@ -629,40 +630,31 @@ const Admin = () => {
                 </select>
               </div>
 
-              <div className="form-group">
-                <label>Title *</label>
-                <input
-                  type="text"
-                  placeholder="e.g., New Article Published!"
-                  value={notification.title}
-                  onChange={(e) => setNotification({ ...notification, title: e.target.value })}
-                  required
-                  maxLength={100}
-                />
-              </div>
+              {selectedArticle && (
+                <>
+                  <div className="form-group">
+                    <label>Title</label>
+                    <input
+                      type="text"
+                      value={notification.title}
+                      onChange={(e) => setNotification({ ...notification, title: e.target.value })}
+                      required
+                      maxLength={100}
+                    />
+                  </div>
 
-              <div className="form-group">
-                <label>Body *</label>
-                <textarea
-                  placeholder="e.g., Check out our latest article on JavaScript closures!"
-                  value={notification.body}
-                  onChange={(e) => setNotification({ ...notification, body: e.target.value })}
-                  required
-                  maxLength={200}
-                  rows={3}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>URL (optional)</label>
-                <input
-                  type="text"
-                  placeholder="e.g., /resource/closures"
-                  value={notification.url}
-                  onChange={(e) => setNotification({ ...notification, url: e.target.value })}
-                />
-                <span className="setting-hint">Leave empty to open the library page</span>
-              </div>
+                  <div className="form-group">
+                    <label>Body</label>
+                    <textarea
+                      value={notification.body}
+                      onChange={(e) => setNotification({ ...notification, body: e.target.value })}
+                      required
+                      maxLength={200}
+                      rows={3}
+                    />
+                  </div>
+                </>
+              )}
 
               {notification.title && (
                 <div className="notification-preview">
