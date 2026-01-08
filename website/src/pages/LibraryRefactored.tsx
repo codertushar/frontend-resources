@@ -803,16 +803,17 @@ const Library = (): JSX.Element => {
         .section-header {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          margin-bottom: 1rem;
+          gap: 0.75rem;
+          margin-bottom: 1.5rem;
           color: var(--primary);
         }
 
         .section-header h2 {
-          font-size: 1.1rem;
-          font-weight: 600;
+          font-size: 1.3rem;
+          font-weight: 700;
           color: var(--text-main);
           margin: 0;
+          letter-spacing: -0.5px;
         }
 
         .section-badge {
@@ -837,68 +838,123 @@ const Library = (): JSX.Element => {
 
         /* Category Progress Section */
         .category-progress-section {
-          margin-bottom: 2rem;
+          margin-bottom: 3rem;
+          padding: 2rem;
+          background: var(--glass-bg);
+          backdrop-filter: blur(16px);
+          border: 1px solid var(--glass-border);
+          border-radius: 16px;
+          box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
         }
 
         .category-progress-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-          gap: 0.75rem;
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          gap: 1rem;
         }
 
         .category-progress-card {
-          background: var(--surface-hover);
-          border: 1px solid var(--border-color);
-          border-radius: 8px;
-          padding: 0.75rem 1rem;
+          position: relative;
+          background: linear-gradient(135deg, var(--surface-color) 0%, var(--surface-hover) 100%);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+          padding: 1.25rem;
           cursor: pointer;
-          transition: all 0.2s;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           text-align: left;
+          overflow: hidden;
+        }
+
+        .category-progress-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg, var(--primary), var(--accent-pink));
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          pointer-events: none;
         }
 
         .category-progress-card:hover {
           border-color: var(--primary);
-          transform: translateY(-2px);
+          transform: translateY(-4px);
+          box-shadow: 0 12px 32px rgba(139, 92, 246, 0.2);
+        }
+
+        .category-progress-card:hover::before {
+          opacity: 0.08;
         }
 
         .category-progress-card.completed {
-          border-color: rgba(34, 197, 94, 0.3);
-          background: rgba(34, 197, 94, 0.05);
+          border-color: rgba(34, 197, 94, 0.5);
+          background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(34, 197, 94, 0.03) 100%);
+        }
+
+        .category-progress-card.completed:hover {
+          box-shadow: 0 12px 32px rgba(34, 197, 94, 0.2);
+          border-color: rgba(34, 197, 94, 0.7);
         }
 
         .cat-progress-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.875rem;
+          position: relative;
+          z-index: 1;
         }
 
         .cat-progress-label {
-          font-size: 0.85rem;
-          font-weight: 500;
+          font-size: 0.95rem;
+          font-weight: 600;
+          color: var(--text-main);
+          letter-spacing: -0.3px;
         }
 
         .cat-progress-count {
-          font-size: 0.75rem;
+          font-size: 0.8rem;
+          font-weight: 500;
           color: var(--text-muted);
+          background: var(--surface-hover);
+          padding: 0.25rem 0.625rem;
+          border-radius: 6px;
         }
 
         .cat-progress-bar {
-          height: 4px;
-          background: var(--border-color);
-          border-radius: 2px;
+          height: 6px;
+          background: var(--surface-hover);
+          border-radius: 3px;
           overflow: hidden;
+          position: relative;
+          z-index: 1;
+        }
+
+        .cat-progress-bar::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(90deg, var(--primary), var(--accent-pink));
+          opacity: 0.1;
+          pointer-events: none;
         }
 
         .cat-progress-fill {
           height: 100%;
-          background: var(--primary);
-          border-radius: 2px;
-          transition: width 0.3s;
+          background: linear-gradient(90deg, var(--primary), var(--accent-pink));
+          border-radius: 3px;
+          transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 0 12px var(--primary-glow);
         }
 
         .category-progress-card.completed .cat-progress-fill {
-          background: #22c55e;
+          background: linear-gradient(90deg, #10b981, #34d399);
+          box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
         }
 
         .featured-section {
@@ -1764,6 +1820,33 @@ const Library = (): JSX.Element => {
           background: rgba(255, 255, 255, 0.95);
         }
 
+        /* Light mode progress section */
+        :root.light .category-progress-section {
+          background: var(--glass-bg);
+          border-color: rgba(124, 58, 237, 0.15);
+          box-shadow: 0 2px 16px rgba(124, 58, 237, 0.08);
+        }
+
+        :root.light .category-progress-card {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(241, 245, 249, 0.5) 100%);
+          border-color: rgba(124, 58, 237, 0.2);
+        }
+
+        :root.light .category-progress-card:hover {
+          border-color: rgba(124, 58, 237, 0.4);
+          box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
+        }
+
+        :root.light .category-progress-card.completed {
+          background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(52, 211, 153, 0.03) 100%);
+          border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        :root.light .cat-progress-count {
+          background: rgba(124, 58, 237, 0.08);
+          color: rgba(124, 58, 237, 0.8);
+        }
+
         /* Category Section */
         .category-section {
           border-bottom: 1px solid var(--border-color);
@@ -1974,24 +2057,36 @@ const Library = (): JSX.Element => {
 
           /* Category Progress Mobile */
           .category-progress-section {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem 1rem;
+            border-radius: 12px;
+          }
+
+          .section-header h2 {
+            font-size: 1.1rem;
           }
 
           .category-progress-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.5rem;
+            gap: 0.75rem;
           }
 
           .category-progress-card {
-            padding: 0.6rem 0.75rem;
+            padding: 0.875rem;
+            border-radius: 10px;
           }
 
           .cat-progress-label {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
           }
 
           .cat-progress-count {
             font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+          }
+
+          .cat-progress-bar {
+            height: 5px;
           }
 
           .featured-section {
