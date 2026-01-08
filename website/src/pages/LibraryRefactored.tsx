@@ -803,13 +803,13 @@ const Library = (): JSX.Element => {
         .section-header {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
-          margin-bottom: 1.5rem;
+          gap: 0.6rem;
+          margin-bottom: 0.9rem;
           color: var(--primary);
         }
 
         .section-header h2 {
-          font-size: 1.3rem;
+          font-size: 1.1rem;
           font-weight: 700;
           color: var(--text-main);
           margin: 0;
@@ -838,8 +838,8 @@ const Library = (): JSX.Element => {
 
         /* Category Progress Section */
         .category-progress-section {
-          margin-bottom: 3rem;
-          padding: 2rem;
+          margin-bottom: 2rem;
+          padding: 1.25rem;
           background: var(--glass-bg);
           backdrop-filter: blur(16px);
           border: 1px solid var(--glass-border);
@@ -849,8 +849,8 @@ const Library = (): JSX.Element => {
 
         .category-progress-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-          gap: 1rem;
+          grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+          gap: 0.75rem;
         }
 
         .category-progress-card {
@@ -858,7 +858,7 @@ const Library = (): JSX.Element => {
           background: linear-gradient(135deg, var(--surface-color) 0%, var(--surface-hover) 100%);
           border: 1px solid var(--glass-border);
           border-radius: 12px;
-          padding: 1.25rem;
+          padding: 0.875rem;
           cursor: pointer;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           text-align: left;
@@ -880,12 +880,12 @@ const Library = (): JSX.Element => {
 
         .category-progress-card:hover {
           border-color: var(--primary);
-          transform: translateY(-4px);
-          box-shadow: 0 12px 32px rgba(139, 92, 246, 0.2);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
         }
 
         .category-progress-card:hover::before {
-          opacity: 0.08;
+          opacity: 0.06;
         }
 
         .category-progress-card.completed {
@@ -894,7 +894,7 @@ const Library = (): JSX.Element => {
         }
 
         .category-progress-card.completed:hover {
-          box-shadow: 0 12px 32px rgba(34, 197, 94, 0.2);
+          box-shadow: 0 8px 24px rgba(34, 197, 94, 0.15);
           border-color: rgba(34, 197, 94, 0.7);
         }
 
@@ -902,29 +902,29 @@ const Library = (): JSX.Element => {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 0.875rem;
+          margin-bottom: 0.6rem;
           position: relative;
           z-index: 1;
         }
 
         .cat-progress-label {
-          font-size: 0.95rem;
+          font-size: 0.85rem;
           font-weight: 600;
           color: var(--text-main);
           letter-spacing: -0.3px;
         }
 
         .cat-progress-count {
-          font-size: 0.8rem;
+          font-size: 0.7rem;
           font-weight: 500;
           color: var(--text-muted);
           background: var(--surface-hover);
-          padding: 0.25rem 0.625rem;
-          border-radius: 6px;
+          padding: 0.2rem 0.5rem;
+          border-radius: 4px;
         }
 
         .cat-progress-bar {
-          height: 6px;
+          height: 5px;
           background: var(--surface-hover);
           border-radius: 3px;
           overflow: hidden;
@@ -949,12 +949,12 @@ const Library = (): JSX.Element => {
           background: linear-gradient(90deg, var(--primary), var(--accent-pink));
           border-radius: 3px;
           transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow: 0 0 12px var(--primary-glow);
+          box-shadow: 0 0 8px var(--primary-glow);
         }
 
         .category-progress-card.completed .cat-progress-fill {
           background: linear-gradient(90deg, #10b981, #34d399);
-          box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+          box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
         }
 
         .featured-section {
@@ -2057,36 +2057,36 @@ const Library = (): JSX.Element => {
 
           /* Category Progress Mobile */
           .category-progress-section {
-            margin-bottom: 2rem;
-            padding: 1.5rem 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
             border-radius: 12px;
           }
 
           .section-header h2 {
-            font-size: 1.1rem;
+            font-size: 1rem;
           }
 
           .category-progress-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
+            gap: 0.6rem;
           }
 
           .category-progress-card {
-            padding: 0.875rem;
+            padding: 0.75rem;
             border-radius: 10px;
           }
 
           .cat-progress-label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
           }
 
           .cat-progress-count {
-            font-size: 0.7rem;
-            padding: 0.2rem 0.5rem;
+            font-size: 0.65rem;
+            padding: 0.15rem 0.4rem;
           }
 
           .cat-progress-bar {
-            height: 5px;
+            height: 4px;
           }
 
           .featured-section {
