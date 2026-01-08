@@ -136,7 +136,7 @@ const About: React.FC = () => {
               succeed in technical interviews at top tech companies.
             </p>
             <div className="creator-links">
-              <a href="mailto:hellokhannatushar@gmail.com" className="creator-link" title="Email">
+              <a href="mailto:iamtusharkhanna@gmail.com" className="creator-link" title="Email">
                 <Mail size={18} />
               </a>
               <a href="https://x.com/iamtusharkhanna" target="_blank" rel="noopener noreferrer" className="creator-link" title="X (Twitter)">

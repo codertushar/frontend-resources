@@ -402,7 +402,7 @@ const Pricing = (): JSX.Element => {
 
             <div className="faq-item glass-panel animated-card subtle">
               <h3>Can I get a refund?</h3>
-              <p>We offer a 7-day refund policy if you're not satisfied with the content.</p>
+              <p>As this is a digital product with instant access, we don't offer refunds. However, if you're unsatisfied, please share your feedback—we're committed to addressing your concerns and improving our content.</p>
             </div>
           </div>
         </motion.div>

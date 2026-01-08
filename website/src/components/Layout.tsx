@@ -1001,7 +1001,7 @@ const Layout = ({ children }: LayoutProps) => {
           <div className="footer-bottom">
             <p>Built with ❤️ by Tushar Khanna</p>
             <div className="social-links">
-              <a href="mailto:hellokhannatushar@gmail.com" className="social-link" title="Email">
+              <a href="mailto:iamtusharkhanna@gmail.com" className="social-link" title="Email">
                 <Mail size={20} />
               </a>
               <a href="https://x.com/iamtusharkhanna" target="_blank" rel="noopener noreferrer" className="social-link" title="X (Twitter)">

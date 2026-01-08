@@ -197,8 +197,8 @@ const Privacy: React.FC = () => {
           If you have any questions about this privacy policy or how we handle your data,
           please contact us at:
         </p>
-        <a href="mailto:hellokhannatushar@gmail.com" className="contact-email">
-          hellokhannatushar@gmail.com
+        <a href="mailto:iamtusharkhanna@gmail.com" className="contact-email">
+          iamtusharkhanna@gmail.com
         </a>
       </motion.div>
 

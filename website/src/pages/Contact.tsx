@@ -46,7 +46,7 @@ const Contact = (): JSX.Element => {
     setSubmitStatus(null);
 
     // Create mailto link with form data
-    const mailtoLink = `mailto:hellokhannatushar@gmail.com?subject=${encodeURIComponent(
+    const mailtoLink = `mailto:iamtusharkhanna@gmail.com?subject=${encodeURIComponent(
       formData.subject || 'Contact from CrackFrontend'
     )}&body=${encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
@@ -62,8 +62,8 @@ const Contact = (): JSX.Element => {
     {
       icon: Mail,
       title: 'Email',
-      value: 'hellokhannatushar@gmail.com',
-      link: 'mailto:hellokhannatushar@gmail.com',
+      value: 'iamtusharkhanna@gmail.com',
+      link: 'mailto:iamtusharkhanna@gmail.com',
       description: 'Best for detailed inquiries',
     },
     {
@@ -93,7 +93,7 @@ const Contact = (): JSX.Element => {
     },
     {
       question: 'Do you offer refunds?',
-      answer: 'Yes, we offer a 7-day refund policy for premium access if not satisfied.',
+      answer: 'As this is a digital product with instant access, we don\'t offer refunds. However, we\'re committed to your satisfaction—please share any feedback or concerns so we can address them.',
     },
   ];
 

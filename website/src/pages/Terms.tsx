@@ -38,10 +38,11 @@ We reserve the right to modify, suspend, or discontinue any part of the Service 
 • Payment is processed securely through Razorpay
 • The purchase grants lifetime access to all current and future premium content
 • Prices are subject to change, but existing purchases will be honored
-• We offer a 7-day refund policy if you are not satisfied with your purchase
-• To request a refund, contact us within 7 days of purchase with your order details
+• As this is a digital product with instant access, we do not offer refunds
+• However, if you're unsatisfied with your purchase, please share your feedback with us
+• We are committed to addressing your concerns and continuously improving our content
 
-All payments are final after the 7-day refund period. We do not offer partial refunds or prorated refunds.`,
+We take your satisfaction seriously and will work with you to ensure you get value from your purchase.`,
     },
     {
       icon: Scale,
@@ -119,7 +120,7 @@ Our total liability for any claim arising from your use of the Service is limite
         <div className="key-points">
           <div className="key-point">
             <CheckCircle size={18} className="point-icon green" />
-            <span>7-day refund policy for premium purchases</span>
+            <span>Commitment to addressing feedback and concerns</span>
           </div>
           <div className="key-point">
             <CheckCircle size={18} className="point-icon green" />
@@ -193,8 +194,8 @@ Our total liability for any claim arising from your use of the Service is limite
         <p>
           If you have any questions about these Terms of Service, please contact us at:
         </p>
-        <a href="mailto:hellokhannatushar@gmail.com" className="contact-email">
-          hellokhannatushar@gmail.com
+        <a href="mailto:iamtusharkhanna@gmail.com" className="contact-email">
+          iamtusharkhanna@gmail.com
         </a>
       </motion.div>
 
