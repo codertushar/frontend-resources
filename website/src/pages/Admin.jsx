@@ -630,33 +630,8 @@ const Admin = () => {
                 </select>
               </div>
 
+
               {selectedArticle && (
-                <>
-                  <div className="form-group">
-                    <label>Title</label>
-                    <input
-                      type="text"
-                      value={notification.title}
-                      onChange={(e) => setNotification({ ...notification, title: e.target.value })}
-                      required
-                      maxLength={100}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Body</label>
-                    <textarea
-                      value={notification.body}
-                      onChange={(e) => setNotification({ ...notification, body: e.target.value })}
-                      required
-                      maxLength={200}
-                      rows={3}
-                    />
-                  </div>
-                </>
-              )}
-
-              {notification.title && (
                 <div className="notification-preview">
                   <h4>Preview</h4>
                   <div className="preview-card">
@@ -681,7 +656,7 @@ const Admin = () => {
               <button
                 type="submit"
                 className="send-notification-btn"
-                disabled={notificationLoading || !notification.title || !notification.body}
+                disabled={notificationLoading || !selectedArticle}
               >
                 <Send size={18} />
                 {notificationLoading ? 'Sending...' : 'Send Notification'}
