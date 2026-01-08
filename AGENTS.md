@@ -1,6 +1,6 @@
-# 🤖 AGENTS.md: AI Agent Guidelines
+# 🤖 AGENTS.md: Development Guidelines
 
-This document provides comprehensive guidance for AI agents, LLMs, and coding assistants working with the **frontend-resources** repository. It complements the repository instructions and ensures consistent, high-quality contributions.
+This document provides comprehensive guidance for working with the **frontend-resources** repository, covering both educational content and website codebase development. It complements the `AGENTS.md` and `copilot-instructions.md` files and ensures consistent, high-quality contributions.
 
 ---
 
@@ -691,7 +691,147 @@ Step 2: Next operation
 
 ---
 
-**Last Updated**: December 11, 2025
-**Version**: 1.1
+## 🌐 Website Codebase (`/website`)
+
+The **website directory** contains the React-based frontend application that serves educational content to users. This section provides guidance for working with the website codebase.
+
+### Tech Stack
+
+- **React 19** - UI component library with hooks
+- **TypeScript** - Static typing for better developer experience
+- **Vite** - Fast build tool and dev server
+- **Framer Motion** - Smooth animations and transitions
+- **Supabase** - Backend-as-a-service (auth, database, storage)
+- **React Router** - Client-side routing
+- **React Markdown** - Markdown rendering with syntax highlighting
+
+### Key Directories
+
+```
+website/src/
+├── components/        # Reusable UI components (AdUnit, Paywall, QuizSection, etc.)
+├── pages/             # Route page components (LibraryRefactored, ResourceDetail, Admin)
+├── context/           # React Context for state management
+│   ├── AuthContext.tsx
+│   ├── SubscriptionContext.tsx
+│   ├── ThemeContext.tsx
+│   └── ProgressContext.tsx
+├── hooks/             # Custom React hooks (useLibraryFilters, useNotifications, etc.)
+├── types/             # Centralized TypeScript type definitions (See Type Organization below)
+├── lib/               # Utility functions and Supabase integration
+├── config/            # Configuration files (filters, categories, constants)
+└── data/              # Generated JSON data (content.json from markdown files)
+
+website/api/           # Serverless API routes (Vercel Functions)
+├── create-order.js    # Razorpay payment order creation
+├── premium-content.js # Premium content delivery
+├── notify-new-content.js
+└── razorpay-webhook.js
+
+website/scripts/       # Build and utility scripts
+└── generate-content.js # Content generation from markdown to JSON
+```
+
+### Common Development Commands
+
+| Command | Description |
+|---------|-------------|
+| `cd website && npm run dev` | Start Vite dev server (HMR enabled) |
+| `npm run build` | Production build with content generation |
+| `npm run lint` | ESLint code quality check |
+| `npm run type-check` | TypeScript compilation check |
+| `cd .. && node check-distribution.js` | Verify premium/free content split |
+
+### Type Organization
+
+All TypeScript types are centralized in `src/types/` for consistency:
+
+| File | Types |
+|------|-------|
+| `types/index.ts` | Re-exports all types |
+| `types/auth.ts` | User, Session, AuthContextValue, AuthMode |
+| `types/content.ts` | Article, ContentItem, CategoryInfo, BreadcrumbItem |
+| `types/filters.ts` | FilterState, FilterPreset, Subcategory, Filter types |
+| `types/notifications.ts` | NotificationState, PermissionResult, PushResult, UseNotificationsReturn |
+| `types/quiz.ts` | QuizQuestion, QuizSectionProps, AnswersState |
+| `types/subscription.ts` | Payment, Razorpay, SubscriptionContextValue, AppliedCoupon |
+| `types/admin.ts` | Coupon, Settings, Message, Stats, AdminTab |
+| `types/theme.ts` | Theme, ThemeContextValue |
+| `types/progress.ts` | ProgressStats, ProgressContextValue, CategoryProgress |
+
+### TypeScript Guidelines
+
+- **Use `interface` for component props** - Prefer interfaces over types for object shapes
+- **Import from `src/types/`** - Never duplicate type definitions across files
+- **Export re-exports** - Keep backward compatibility when moving types
+- **Functional components only** - No class components
+- **Use React.FC<Props>** - Explicit component type annotations
+- **Avoid `any`** - Use proper typing even with `// @ts-expect-error` comments when necessary
+
+### Component Patterns
+
+#### Large Components Needing Refactoring
+
+| Component | Lines | Issue |
+|-----------|-------|-------|
+| LibraryRefactored.tsx | 2,209 | Filtering/sorting logic needs extraction |
+| ResourceDetail.tsx | 1,905 | Mixed rendering/premium/navigation concerns |
+| Layout.tsx | 2,100 | Contains 6+ independent features |
+| Admin.tsx | 1,182 | Tab-based features should be separate |
+
+#### Reusable Component Examples
+
+- `QuizSection.tsx` - Quiz rendering with parseQuizFromMarkdown utility
+- `Paywall.tsx` - Premium content protection
+- `AdUnit.tsx` - Ad placement
+- `AuthModal.tsx` - Sign in/signup flow
+
+### Context Patterns
+
+| Context | Purpose |
+|---------|---------|
+| AuthContext | User authentication and session management |
+| SubscriptionContext | Premium content access, payments |
+| ProgressContext | Track read articles (Supabase sync) |
+| ThemeContext | Dark/light mode, system preferences |
+
+### Content Pipeline
+
+1. **Markdown files** created in root directories (e.g., `/js/utils/debounce.md`)
+2. **Run `npm run build`** in website directory
+3. **generate-content.js** scans markdown files and creates `website/src/data/content.json`
+4. **Premium status** automatically assigned based on rules in CLAUDE.md
+5. **Override with frontmatter** if specific `premium: true/false` needed in markdown
+
+### Performance Considerations
+
+- Content data is generated at build time (not fetched dynamically)
+- Quiz parsing happens at render time (consider memoization for large lists)
+- Progress tracking syncs with Supabase only when signed in
+- Use React.lazy + Suspense for large route pages
+
+### API Integration
+
+All serverless functions expect environment variables:
+
+```bash
+SUPABASE_URL
+SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY (for server-side operations)
+RAZORPAY_KEY_ID
+RAZORPAY_KEY_SECRET
+```
+
+### Debugging Tips
+
+- **Content not updating?** → Run `npm run build` to regenerate content.json
+- **Types missing?** → Check `types/index.ts` has re-export
+- **Supabase issues?** → Verify environment variables in Vercel/local .env
+- **Premium content not gating?** → Check SubscriptionContext.isPremium logic
+
+---
+
+**Last Updated**: January 8, 2026
+**Version**: 1.2
 **Maintained by**: frontend-resources repository
 ```

@@ -1,0 +1,585 @@
+import { useNavigate } from 'react-router-dom';
+import {
+  Code2, Binary, Brain, Terminal, Server, Globe,
+  BookOpen, Sparkles, Clock, Zap, ChevronRight, Layers,
+  TrendingUp, Target, LucideIcon
+} from 'lucide-react';
+import contentData from '../data/content.json';
+import React, { MouseEvent, CSSProperties } from 'react';
+
+// Type definitions
+interface ContentItem {
+  category: string;
+  subcategory?: string;
+  difficulty?: string;
+}
+
+interface CategoryCounts {
+  [key: string]: number;
+}
+
+interface DifficultyCounts {
+  easy?: number;
+  medium?: number;
+  hard?: number;
+  [key: string]: number | undefined;
+}
+
+interface CountsResult {
+  categoryCounts: CategoryCounts;
+  jsSubcategories: CategoryCounts;
+  difficultyCounts: DifficultyCounts;
+  total: number;
+}
+
+interface MenuItem {
+  label: string;
+  href: string;
+  count: number;
+  isMain?: boolean;
+  icon?: LucideIcon;
+}
+
+interface MenuColumn {
+  title: string;
+  icon: LucideIcon;
+  color: string;
+  items: MenuItem[];
+}
+
+interface QuickLink {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+}
+
+interface DifficultyLink {
+  label: string;
+  href: string;
+  color: string;
+  count: number;
+}
+
+interface MegaMenuProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+}
+
+// Calculate counts from actual data
+const getCounts = (): CountsResult => {
+  const categoryCounts = (contentData as ContentItem[]).reduce<CategoryCounts>((acc, item) => {
+    acc[item.category] = (acc[item.category] || 0) + 1;
+    return acc;
+  }, {});
+
+  const jsSubcategories = (contentData as ContentItem[])
+    .filter(i => i.category === 'js')
+    .reduce<CategoryCounts>((acc, item) => {
+      if (item.subcategory) {
+        acc[item.subcategory] = (acc[item.subcategory] || 0) + 1;
+      }
+      return acc;
+    }, {});
+
+  // Count by difficulty
+  const difficultyCounts = (contentData as ContentItem[]).reduce<DifficultyCounts>((acc, item) => {
+    if (item.difficulty) {
+      acc[item.difficulty] = (acc[item.difficulty] || 0) + 1;
+    }
+    return acc;
+  }, {});
+
+  return { categoryCounts, jsSubcategories, difficultyCounts, total: contentData.length };
+};
+
+const { categoryCounts, jsSubcategories, difficultyCounts, total } = getCounts();
+
+// Menu structure - 3 columns with existing content only
+const MENU_COLUMNS: MenuColumn[] = [
+  {
+    title: 'JavaScript',
+    icon: Code2,
+    color: '#f59e0b',
+    items: [
+      { label: 'All JavaScript', href: '/library?category=js', count: categoryCounts['js'] || 0, isMain: true },
+      { label: 'Polyfills', href: '/library?category=js&subcategory=polyfills', count: jsSubcategories['polyfills'] || 0 },
+      { label: 'Core Concepts', href: '/library?category=js&subcategory=general-concepts', count: jsSubcategories['general-concepts'] || 0 },
+      { label: 'Utilities', href: '/library?category=js&subcategory=utils', count: jsSubcategories['utils'] || 0 },
+      { label: 'Promises', href: '/library?category=js&subcategory=promises', count: jsSubcategories['promises'] || 0 },
+    ]
+  },
+  {
+    title: 'Interview Prep',
+    icon: Zap,
+    color: '#22c55e',
+    items: [
+      { label: 'DSA', href: '/library?category=dsa', count: categoryCounts['dsa'] || 0, icon: Binary },
+      { label: 'Machine Coding', href: '/library?category=machine-coding', count: categoryCounts['machine-coding'] || 0, icon: Terminal },
+      { label: 'System Design', href: '/library?category=system-design', count: categoryCounts['system-design'] || 0, icon: Server },
+    ]
+  },
+  {
+    title: 'Advanced',
+    icon: Brain,
+    color: '#ec4899',
+    items: [
+      { label: 'Browser & Patterns', href: '/library?category=general', count: categoryCounts['general'] || 0, icon: Globe },
+      { label: 'AI Engineering', href: '/library?category=ai', count: categoryCounts['ai'] || 0, icon: Brain },
+    ]
+  }
+];
+
+const QUICK_LINKS: QuickLink[] = [
+  { label: 'All Resources', href: '/library', icon: Layers },
+  { label: 'New Articles', href: '/library?date=last-30', icon: Sparkles },
+  { label: 'Popular', href: '/library?sort=popular', icon: TrendingUp },
+  { label: 'Quick Reads', href: '/library?sort=read-time-asc', icon: Clock },
+];
+
+const DIFFICULTY_LINKS: DifficultyLink[] = [
+  { label: 'Easy', href: '/library?difficulty=easy', color: '#22c55e', count: difficultyCounts['easy'] || 0 },
+  { label: 'Medium', href: '/library?difficulty=medium', color: '#f59e0b', count: difficultyCounts['medium'] || 0 },
+  { label: 'Hard', href: '/library?difficulty=hard', color: '#ef4444', count: difficultyCounts['hard'] || 0 },
+];
+
+const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose, onMouseEnter, onMouseLeave }) => {
+  const navigate = useNavigate();
+
+  if (!isOpen) return null;
+
+  const handleLinkClick = (e: MouseEvent<HTMLAnchorElement>, href: string): void => {
+    e.preventDefault();
+    onClose();
+    navigate(href);
+    window.scrollTo(0, 0);
+  };
+
+  return (
+    <div
+      className="mega-menu"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <div className="mega-menu-container">
+        {/* Main columns */}
+        <div className="mega-menu-columns">
+          {MENU_COLUMNS.map((column) => (
+            <div key={column.title} className="mega-menu-column">
+              <div className="column-header">
+                <column.icon size={16} style={{ color: column.color }} />
+                <span>{column.title}</span>
+              </div>
+              <ul className="column-items">
+                {column.items.map((item) => (
+                  <li key={item.href}>
+                    <a
+                      href={item.href}
+                      className={`menu-item ${item.isMain ? 'main-item' : ''}`}
+                      onClick={(e) => handleLinkClick(e, item.href)}
+                    >
+                      {item.icon && <item.icon size={14} className="item-icon" />}
+                      <span className="item-label">{item.label}</span>
+                      <span className="item-count">{item.count}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Quick links sidebar */}
+        <div className="mega-menu-sidebar">
+          <div className="sidebar-header">
+            <BookOpen size={14} />
+            <span>Quick Access</span>
+          </div>
+          <ul className="sidebar-links">
+            {QUICK_LINKS.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  className="sidebar-link"
+                  onClick={(e) => handleLinkClick(e, link.href)}
+                >
+                  <link.icon size={14} />
+                  <span>{link.label}</span>
+                  <ChevronRight size={14} className="chevron" />
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          {/* By Difficulty */}
+          <div className="sidebar-header difficulty-header">
+            <Target size={14} />
+            <span>By Difficulty</span>
+          </div>
+          <div className="difficulty-pills">
+            {DIFFICULTY_LINKS.map((diff) => (
+              <a
+                key={diff.href}
+                href={diff.href}
+                className="difficulty-pill"
+                style={{ '--pill-color': diff.color } as CSSProperties}
+                onClick={(e) => handleLinkClick(e, diff.href)}
+              >
+                <span className="difficulty-dot" style={{ background: diff.color }} />
+                <span>{diff.label}</span>
+                <span className="difficulty-count">{diff.count}</span>
+              </a>
+            ))}
+          </div>
+
+          <div className="sidebar-stats">
+            <span className="stat-total">{total} resources</span>
+            <span className="stat-divider">•</span>
+            <span className="stat-categories">6 categories</span>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        .mega-menu {
+          position: absolute;
+          top: calc(100% + 4px);
+          left: 50%;
+          transform: translateX(-50%);
+          min-width: 760px;
+          background: var(--surface-color);
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          box-shadow:
+            0 20px 40px rgba(0, 0, 0, 0.15),
+            0 0 60px rgba(139, 92, 246, 0.1);
+          z-index: 1000;
+          animation: menuFadeIn 0.2s ease-out forwards;
+          overflow: hidden;
+          will-change: transform, opacity;
+        }
+
+        @keyframes menuFadeIn {
+          from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-4px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+          }
+        }
+
+        .mega-menu::before {
+          content: '';
+          position: absolute;
+          top: -20px;
+          left: 0;
+          right: 0;
+          height: 20px;
+          background: transparent;
+        }
+
+        .mega-menu-container {
+          display: flex;
+          padding: 1.25rem;
+          gap: 1rem;
+        }
+
+        .mega-menu-columns {
+          display: flex;
+          gap: 1.5rem;
+          flex: 1;
+        }
+
+        .mega-menu-column {
+          min-width: 160px;
+        }
+
+        .column-header {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.7rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: var(--text-muted);
+          padding-bottom: 0.75rem;
+          margin-bottom: 0.5rem;
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .column-items {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+
+        .menu-item {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.5rem 0.75rem;
+          border-radius: 8px;
+          color: var(--text-main);
+          font-size: 0.875rem;
+          transition: all 0.15s ease;
+          text-decoration: none;
+        }
+
+        .menu-item:hover {
+          background: var(--surface-hover);
+          color: var(--primary);
+        }
+
+        .menu-item.main-item {
+          font-weight: 600;
+          background: rgba(139, 92, 246, 0.08);
+          border: 1px solid rgba(139, 92, 246, 0.15);
+        }
+
+        .menu-item.main-item:hover {
+          background: rgba(139, 92, 246, 0.15);
+          border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .item-icon {
+          color: var(--text-muted);
+          flex-shrink: 0;
+        }
+
+        .menu-item:hover .item-icon {
+          color: var(--primary);
+        }
+
+        .item-label {
+          flex: 1;
+          white-space: nowrap;
+        }
+
+        .item-count {
+          font-size: 0.7rem;
+          font-weight: 600;
+          color: var(--text-muted);
+          background: var(--surface-hover);
+          padding: 0.125rem 0.4rem;
+          border-radius: 4px;
+        }
+
+        .menu-item:hover .item-count {
+          background: var(--primary);
+          color: white;
+        }
+
+        .mega-menu-sidebar {
+          width: 160px;
+          padding-left: 1rem;
+          border-left: 1px solid var(--border-color);
+          display: flex;
+          flex-direction: column;
+        }
+
+        .sidebar-header {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.7rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: var(--text-muted);
+          padding-bottom: 0.75rem;
+          margin-bottom: 0.5rem;
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-links {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          flex: 1;
+        }
+
+        .sidebar-link {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.5rem 0.625rem;
+          border-radius: 8px;
+          color: var(--text-muted);
+          font-size: 0.8rem;
+          font-weight: 500;
+          transition: all 0.15s ease;
+          text-decoration: none;
+        }
+
+        .sidebar-link:hover {
+          background: var(--surface-hover);
+          color: var(--primary);
+        }
+
+        .sidebar-link .chevron {
+          margin-left: auto;
+          opacity: 0;
+          transform: translateX(-4px);
+          transition: all 0.15s ease;
+        }
+
+        .sidebar-link:hover .chevron {
+          opacity: 1;
+          transform: translateX(0);
+        }
+
+        .sidebar-stats {
+          font-size: 0.7rem;
+          color: var(--text-muted);
+          padding-top: 0.75rem;
+          margin-top: auto;
+          border-top: 1px solid var(--border-color);
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+        }
+
+        .stat-divider {
+          opacity: 0.5;
+        }
+
+        .difficulty-header {
+          margin-top: 0.75rem;
+        }
+
+        .difficulty-pills {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          margin-bottom: 0.75rem;
+        }
+
+        .difficulty-pill {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.375rem 0.5rem;
+          border-radius: 6px;
+          color: var(--text-muted);
+          font-size: 0.75rem;
+          font-weight: 500;
+          transition: all 0.15s ease;
+          text-decoration: none;
+          cursor: pointer;
+        }
+
+        .difficulty-pill:hover {
+          background: var(--surface-hover);
+          color: var(--pill-color);
+        }
+
+        .difficulty-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          flex-shrink: 0;
+        }
+
+        .difficulty-count {
+          margin-left: auto;
+          font-size: 0.65rem;
+          color: var(--text-muted);
+          opacity: 0.7;
+        }
+
+        .difficulty-pill:hover .difficulty-count {
+          opacity: 1;
+        }
+
+        /* Light mode adjustments */
+        :root.light .mega-menu {
+          box-shadow:
+            0 20px 40px rgba(0, 0, 0, 0.08),
+            0 0 60px rgba(139, 92, 246, 0.05);
+        }
+
+        /* Mobile - make mega menu full width and scrollable */
+        @media (max-width: 768px) {
+          .mega-menu {
+            position: fixed;
+            top: 70px;
+            left: 16px;
+            right: 16px;
+            transform: translateZ(0);
+            min-width: unset;
+            max-height: calc(100vh - 90px);
+            overflow-y: auto;
+            border-radius: 12px;
+            animation: mobileMenuFadeIn 0.25s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+          }
+
+          @keyframes mobileMenuFadeIn {
+            from {
+              opacity: 0;
+              transform: translateY(-12px) translateZ(0) scale(0.98);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0) translateZ(0) scale(1);
+            }
+          }
+
+          .mega-menu::before {
+            display: none;
+          }
+
+          .mega-menu-container {
+            flex-direction: column;
+            padding: 1rem;
+            gap: 0.75rem;
+          }
+
+          .mega-menu-columns {
+            flex-direction: column;
+            gap: 1rem;
+          }
+
+          .mega-menu-column {
+            min-width: unset;
+          }
+
+          .mega-menu-sidebar {
+            width: 100%;
+            padding-left: 0;
+            padding-top: 0.75rem;
+            border-left: none;
+            border-top: 1px solid var(--border-color);
+          }
+
+          .sidebar-stats {
+            justify-content: center;
+          }
+
+          .difficulty-pills {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+          }
+
+          .difficulty-pill {
+            flex: 0 0 auto;
+          }
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default MegaMenu;
