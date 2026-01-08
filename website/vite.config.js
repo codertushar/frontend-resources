@@ -5,7 +5,12 @@ import viteCompression from 'vite-plugin-compression'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
+    react({
+      jsxRuntime: 'automatic',
+      babel: {
+        plugins: [],
+      },
+    }),
     // Gzip compression - only for larger files to speed up build
     viteCompression({
       algorithm: 'gzip',
@@ -31,10 +36,14 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ['src/data/content.json'],
-    include: ['react', 'react-dom', '@codesandbox/sandpack-react'],
+    include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', '@codesandbox/sandpack-react'],
   },
   resolve: {
     dedupe: ['react', 'react-dom'],
+    alias: {
+      'react': 'react',
+      'react-dom': 'react-dom',
+    },
   },
   build: {
     // Use esbuild for faster minification (much faster than terser)
@@ -55,24 +64,24 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        // Simplified manual chunking strategy
+        // Manual chunking - keep React completely together
         manualChunks: (id) => {
           if (id.includes('node_modules')) {
-            // Keep React together to avoid import issues
-            if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
+            // Critical: Keep all React-related modules together
+            if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler') || id.includes('react/jsx-runtime')) {
               return 'react-vendor';
             }
-            // Large dependencies get their own chunks
-            if (id.includes('@codesandbox/sandpack-react')) {
+            // Large dependencies
+            if (id.includes('@codesandbox/sandpack')) {
               return 'sandpack';
             }
             if (id.includes('@supabase')) {
               return 'supabase';
             }
-            if (id.includes('react-syntax-highlighter')) {
+            if (id.includes('react-syntax-highlighter') || id.includes('refractor') || id.includes('prismjs')) {
               return 'syntax-highlighter';
             }
-            // Everything else in vendor
+            // Other vendors
             return 'vendor';
           }
         },
@@ -89,10 +98,9 @@ export default defineConfig({
           return `assets/[ext]/[name]-[hash][extname]`;
         },
       },
-      // Tree shaking optimizations
+      // Disable aggressive tree shaking to fix import issues
       treeshake: {
-        moduleSideEffects: false,
-        propertyReadSideEffects: false,
+        moduleSideEffects: 'no-external',
       },
     },
   },
