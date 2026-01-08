@@ -3,7 +3,33 @@
  * Handles subscribing/unsubscribing to push notifications
  */
 
-const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+// Try to get VAPID key from build-time env, otherwise fetch from API
+let VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY || null;
+let vapidKeyPromise = null;
+
+/**
+ * Get the VAPID public key (from env or API)
+ */
+const getVapidPublicKey = async () => {
+  if (VAPID_PUBLIC_KEY) return VAPID_PUBLIC_KEY;
+
+  // Only fetch once
+  if (!vapidKeyPromise) {
+    vapidKeyPromise = fetch('/api/push/vapid-public-key')
+      .then((res) => res.json())
+      .then((data) => {
+        VAPID_PUBLIC_KEY = data.publicKey;
+        return VAPID_PUBLIC_KEY;
+      })
+      .catch((err) => {
+        console.error('Failed to fetch VAPID key:', err);
+        vapidKeyPromise = null;
+        return null;
+      });
+  }
+
+  return vapidKeyPromise;
+};
 
 /**
  * Convert a base64 string to a Uint8Array for the applicationServerKey
@@ -27,7 +53,7 @@ const urlBase64ToUint8Array = (base64String) => {
  * Check if push notifications are supported
  */
 export const isPushSupported = () => {
-  return 'serviceWorker' in navigator && 'PushManager' in window && VAPID_PUBLIC_KEY;
+  return 'serviceWorker' in navigator && 'PushManager' in window;
 };
 
 /**
@@ -54,7 +80,8 @@ export const subscribeToPush = async (userId = null) => {
     return { success: false, error: 'Push notifications not supported' };
   }
 
-  if (!VAPID_PUBLIC_KEY) {
+  const vapidKey = await getVapidPublicKey();
+  if (!vapidKey) {
     return { success: false, error: 'VAPID key not configured' };
   }
 
@@ -68,7 +95,7 @@ export const subscribeToPush = async (userId = null) => {
       // Create new subscription
       subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+        applicationServerKey: urlBase64ToUint8Array(vapidKey),
       });
     }
 

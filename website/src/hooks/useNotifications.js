@@ -63,10 +63,11 @@ const useNotifications = () => {
 
       if (result === 'granted') {
         // Subscribe to push notifications for server-sent notifications
-        if (state.isPushSupported) {
+        // Always try to subscribe - subscribeToPush handles its own checks
+        if (isPushSupported()) {
           const pushResult = await subscribeToPush(userId);
           if (pushResult.success) {
-            setState(prev => ({ ...prev, isPushSubscribed: true }));
+            setState(prev => ({ ...prev, isPushSubscribed: true, isPushSupported: true }));
           } else {
             console.warn('Push subscription failed:', pushResult.error);
           }
