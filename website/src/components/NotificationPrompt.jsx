@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Bell, X } from 'lucide-react';
 import useNotifications from '../hooks/useNotifications';
+import { useAuth } from '../context/AuthContext';
 import { ICON_192 } from '../constants/app';
 
 const NotificationPrompt = () => {
   const { isSupported, isDefault, requestPermission } = useNotifications();
+  const { user } = useAuth();
   const [showPrompt, setShowPrompt] = useState(false);
 
   useEffect(() => {
@@ -18,7 +20,8 @@ const NotificationPrompt = () => {
   }, [isDefault, isSupported]);
 
   const handleEnable = async () => {
-    const result = await requestPermission();
+    // Pass user ID if logged in for associating push subscription with user
+    const result = await requestPermission(user?.id || null);
     
     if (result.success) {
       setShowPrompt(false);

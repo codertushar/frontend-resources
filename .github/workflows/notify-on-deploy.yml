@@ -1,0 +1,56 @@
+name: Notify Users on Deploy
+
+on:
+  # Triggers when Vercel deployment status changes
+  deployment_status:
+
+jobs:
+  send-notification:
+    # Only run on successful production deployments
+    if: |
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment_status.environment == 'Production'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get article count from content.json
+        id: content
+        run: |
+          if [ -f "website/src/data/content.json" ]; then
+            COUNT=$(cat website/src/data/content.json | jq length)
+            echo "article_count=$COUNT" >> $GITHUB_OUTPUT
+            echo "Found $COUNT articles"
+          else
+            echo "article_count=0" >> $GITHUB_OUTPUT
+            echo "content.json not found, skipping notification"
+          fi
+
+      - name: Send push notification to subscribers
+        if: steps.content.outputs.article_count != '0'
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+          WEBHOOK_SECRET: ${{ secrets.NOTIFICATION_WEBHOOK_SECRET }}
+        run: |
+          echo "Sending notification webhook..."
+
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "${SITE_URL}/api/notify-new-content" \
+            -H "Content-Type: application/json" \
+            -H "x-webhook-secret: ${WEBHOOK_SECRET}" \
+            -d "{\"articleCount\": ${{ steps.content.outputs.article_count }}}")
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "Response: $BODY"
+          echo "HTTP Status: $HTTP_CODE"
+
+          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+            echo "Notification sent successfully!"
+          else
+            echo "Warning: Notification request returned status $HTTP_CODE"
+            # Don't fail the workflow, just warn
+          fi

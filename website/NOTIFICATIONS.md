@@ -301,14 +301,107 @@ setTimeout(() => setShowPrompt(true), 0);
 - **Expected behavior**: Service worker stores baseline count on first visit
 - **Notifications appear**: Only on subsequent visits when new articles are detected
 
+## Server-Side Push Notifications (NEW)
+
+The system now supports **true push notifications** via Web Push API. Users will receive notifications even when they're not on the site.
+
+### How It Works
+
+```
+User Subscribes → Subscription saved to Supabase → Admin sends notification
+                                                         ↓
+                                            web-push library sends to all subscribers
+                                                         ↓
+                                            Service Worker receives 'push' event
+                                                         ↓
+                                            Notification shown to user
+```
+
+### Setup Steps
+
+1. **Generate VAPID Keys** (one-time):
+   ```bash
+   cd website && node scripts/generate-vapid-keys.js
+   ```
+
+2. **Add Environment Variables** (Vercel dashboard):
+   ```
+   VAPID_PUBLIC_KEY=<from step 1>
+   VAPID_PRIVATE_KEY=<from step 1>
+   VAPID_SUBJECT=mailto:admin@crackfrontend.dev
+   NOTIFICATION_WEBHOOK_SECRET=<random-secret>
+   ```
+
+3. **Add to `.env`** (for frontend):
+   ```
+   VITE_VAPID_PUBLIC_KEY=<public key from step 1>
+   ```
+
+4. **Create Supabase Tables**:
+   Run the SQL in `website/supabase/push_subscriptions.sql` in your Supabase SQL editor.
+
+### Triggering Notifications
+
+#### Option 1: Admin Panel (Manual)
+1. Go to `/admin` → Notifications tab
+2. Select an article or write a custom message
+3. Click "Send Notification"
+
+#### Option 2: Deploy Webhook (Automatic)
+Call the webhook after deployments:
+```bash
+curl -X POST https://your-site.com/api/notify-new-content \
+  -H "Content-Type: application/json" \
+  -H "x-webhook-secret: YOUR_SECRET" \
+  -d '{"articleCount": 95}'
+```
+
+Or with a custom message:
+```bash
+curl -X POST https://your-site.com/api/notify-new-content \
+  -H "Content-Type: application/json" \
+  -H "x-webhook-secret: YOUR_SECRET" \
+  -d '{
+    "title": "New Article!",
+    "body": "Check out our latest article",
+    "url": "/frontend-resources/resource/my-article"
+  }'
+```
+
+### API Endpoints
+
+| Endpoint | Method | Auth | Purpose |
+|----------|--------|------|---------|
+| `/api/push/subscribe` | POST | None | Save push subscription |
+| `/api/push/unsubscribe` | POST | None | Remove subscription |
+| `/api/admin/send-notification` | POST | Admin | Send to all subscribers |
+| `/api/notify-new-content` | POST | Webhook Secret | Auto-trigger on deploy |
+
+### Files Added/Modified
+
+**New Files:**
+- `website/api/push/subscribe.js` - Save subscription endpoint
+- `website/api/push/unsubscribe.js` - Remove subscription endpoint
+- `website/api/admin/send-notification.js` - Admin send endpoint
+- `website/api/notify-new-content.js` - Deploy webhook endpoint
+- `website/src/lib/pushNotifications.js` - Client-side helper
+- `website/scripts/generate-vapid-keys.js` - VAPID key generator
+- `website/supabase/push_subscriptions.sql` - Database schema
+
+**Modified Files:**
+- `website/public/service-worker.js` - Added push event listener
+- `website/src/hooks/useNotifications.js` - Added push subscription support
+- `website/src/components/NotificationPrompt.jsx` - Auto-subscribes on permission grant
+- `website/src/pages/Admin.jsx` - Added Notifications tab
+
 ## Future Enhancements
 
 Potential improvements for future versions:
 
+- [x] ~~Implement server-sent push notifications (requires backend)~~ DONE
 - [ ] Allow users to choose notification frequency
 - [ ] Add notification preferences (categories, tags)
-- [ ] Implement server-sent push notifications (requires backend)
-- [ ] Add notification history panel
+- [ ] Add notification history panel in admin
 - [ ] Support for notification grouping
 - [ ] Rich notification content with images
 - [ ] Badge counter on app icon

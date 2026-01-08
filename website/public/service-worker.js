@@ -1,6 +1,6 @@
 // Service Worker for CrackFrontend PWA
 // Cache version is auto-updated during build via generate-sw-version.js
-const CACHE_NAME = 'frontend-resources-v1767603524354';
+const CACHE_NAME = 'frontend-resources-v1767853147779';
 const BASE_PATH = '/frontend-resources';
 const CORE_ASSETS = [
     `${BASE_PATH}/`,
@@ -219,11 +219,33 @@ self.addEventListener('notificationclick', (event) => {
     );
 });
 
-// Periodic background sync to check for new content
-self.addEventListener('periodicsync', (event) => {
-    if (event.tag === 'check-new-content') {
-        event.waitUntil(checkForNewContent());
+// Handle push notifications from server
+self.addEventListener('push', (event) => {
+    console.log('[SW] Push notification received');
+
+    let data = {};
+    try {
+        data = event.data?.json() || {};
+    } catch (e) {
+        console.error('[SW] Error parsing push data:', e);
+        data = { title: 'New Content Available!' };
     }
+
+    const options = {
+        body: data.body || 'Check out what\'s new!',
+        icon: `${BASE_PATH}/android-launchericon-192-192.png`,
+        badge: `${BASE_PATH}/android-launchericon-192-192.png`,
+        tag: 'push-notification',
+        requireInteraction: false,
+        data: {
+            url: data.url || `${BASE_PATH}/library`,
+            timestamp: Date.now()
+        }
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(data.title || 'New Article!', options)
+    );
 });
 
 // Message handler for manual content check

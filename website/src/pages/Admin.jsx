@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   Tag, FileText, Settings, BarChart3, Plus, Trash2, ToggleLeft, ToggleRight,
-  Save, AlertCircle, CheckCircle, Crown, Lock, Unlock
+  Save, AlertCircle, CheckCircle, Crown, Lock, Unlock, Bell, Send
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import contentData from '../data/content.json';
@@ -23,6 +23,12 @@ const Admin = () => {
   const [settings, setSettings] = useState({ base_price: '' });
   const [settingsLoading, setSettingsLoading] = useState(false);
   const [settingsMessage, setSettingsMessage] = useState(null);
+
+  // Notifications state
+  const [notification, setNotification] = useState({ title: '', body: '', url: '' });
+  const [notificationLoading, setNotificationLoading] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState(null);
+  const [selectedArticle, setSelectedArticle] = useState('');
 
   const fetchWithAuth = useCallback(async (url, options = {}) => {
     const token = await getAccessToken();
@@ -169,6 +175,58 @@ const Admin = () => {
       setSettingsMessage({ type: 'error', text: 'Failed to save settings' });
     } finally {
       setSettingsLoading(false);
+    }
+  };
+
+  // Notification handlers
+  const handleSendNotification = async (e) => {
+    e.preventDefault();
+    setNotificationLoading(true);
+    setNotificationMessage(null);
+
+    try {
+      const res = await fetchWithAuth('/api/admin/send-notification', {
+        method: 'POST',
+        body: JSON.stringify({
+          title: notification.title,
+          body: notification.body,
+          url: notification.url || undefined,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setNotificationMessage({
+          type: 'success',
+          text: `Notification sent! ${data.sent} delivered, ${data.failed} failed${data.removedInvalid > 0 ? `, ${data.removedInvalid} invalid removed` : ''}`,
+        });
+        setNotification({ title: '', body: '', url: '' });
+        setSelectedArticle('');
+      } else {
+        setNotificationMessage({ type: 'error', text: data.error || 'Failed to send notification' });
+      }
+    } catch (error) {
+      setNotificationMessage({ type: 'error', text: 'Failed to send notification' });
+    } finally {
+      setNotificationLoading(false);
+    }
+  };
+
+  const handleArticleSelect = (e) => {
+    const slug = e.target.value;
+    setSelectedArticle(slug);
+
+    if (slug) {
+      const article = contentData.find(a => a.slug === slug);
+      if (article) {
+        setNotification({
+          title: `New Article: ${article.title}`,
+          body: article.description || 'Check out this new article!',
+          url: `/frontend-resources/resource/${article.slug}`,
+        });
+      }
+    } else {
+      setNotification({ title: '', body: '', url: '' });
     }
   };
 
@@ -402,6 +460,13 @@ const Admin = () => {
           Settings
         </button>
         <button
+          className={`tab ${activeTab === 'notifications' ? 'active' : ''}`}
+          onClick={() => setActiveTab('notifications')}
+        >
+          <Bell size={18} />
+          Notifications
+        </button>
+        <button
           className={`tab ${activeTab === 'stats' ? 'active' : ''}`}
           onClick={() => setActiveTab('stats')}
         >
@@ -533,6 +598,103 @@ const Admin = () => {
               <Save size={18} />
               {settingsLoading ? 'Saving...' : 'Save Settings'}
             </button>
+          </div>
+        )}
+
+        {/* Notifications Tab */}
+        {activeTab === 'notifications' && (
+          <div className="notifications-tab">
+            <h2>Send Push Notification</h2>
+            <p className="tab-description">
+              Send push notifications to all subscribed users. You can select an article or write a custom message.
+            </p>
+
+            <form className="notification-form" onSubmit={handleSendNotification}>
+              <div className="form-group">
+                <label>Quick Select Article (optional)</label>
+                <select
+                  value={selectedArticle}
+                  onChange={handleArticleSelect}
+                  className="article-select"
+                >
+                  <option value="">-- Select an article --</option>
+                  {contentData
+                    .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+                    .slice(0, 20)
+                    .map(article => (
+                      <option key={article.slug} value={article.slug}>
+                        {article.title}
+                      </option>
+                    ))}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Title *</label>
+                <input
+                  type="text"
+                  placeholder="e.g., New Article Published!"
+                  value={notification.title}
+                  onChange={(e) => setNotification({ ...notification, title: e.target.value })}
+                  required
+                  maxLength={100}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Body *</label>
+                <textarea
+                  placeholder="e.g., Check out our latest article on JavaScript closures!"
+                  value={notification.body}
+                  onChange={(e) => setNotification({ ...notification, body: e.target.value })}
+                  required
+                  maxLength={200}
+                  rows={3}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>URL (optional)</label>
+                <input
+                  type="text"
+                  placeholder="e.g., /frontend-resources/resource/closures"
+                  value={notification.url}
+                  onChange={(e) => setNotification({ ...notification, url: e.target.value })}
+                />
+                <span className="setting-hint">Leave empty to open the library page</span>
+              </div>
+
+              {notification.title && (
+                <div className="notification-preview">
+                  <h4>Preview</h4>
+                  <div className="preview-card">
+                    <div className="preview-icon">
+                      <Bell size={20} />
+                    </div>
+                    <div className="preview-content">
+                      <strong>{notification.title}</strong>
+                      <p>{notification.body}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {notificationMessage && (
+                <div className={`message ${notificationMessage.type}`}>
+                  {notificationMessage.type === 'success' ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
+                  {notificationMessage.text}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="send-notification-btn"
+                disabled={notificationLoading || !notification.title || !notification.body}
+              >
+                <Send size={18} />
+                {notificationLoading ? 'Sending...' : 'Send Notification'}
+              </button>
+            </form>
           </div>
         )}
 
@@ -916,6 +1078,127 @@ const Admin = () => {
           margin-top: 0.5rem;
           font-size: 0.85rem;
           color: var(--text-muted);
+        }
+
+        /* Notifications Tab */
+        .notifications-tab .notification-form {
+          max-width: 600px;
+        }
+
+        .form-group {
+          margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 500;
+          color: var(--text-main);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          background: var(--surface-hover);
+          color: var(--text-main);
+          font-size: 0.9rem;
+          font-family: inherit;
+        }
+
+        .form-group textarea {
+          resize: vertical;
+          min-height: 80px;
+        }
+
+        .form-group select {
+          cursor: pointer;
+        }
+
+        .article-select {
+          max-width: 100%;
+        }
+
+        .notification-preview {
+          margin: 1.5rem 0;
+          padding: 1rem;
+          background: var(--surface-hover);
+          border-radius: 12px;
+          border: 1px solid var(--border-color);
+        }
+
+        .notification-preview h4 {
+          margin-bottom: 0.75rem;
+          font-size: 0.85rem;
+          color: var(--text-muted);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .preview-card {
+          display: flex;
+          gap: 1rem;
+          padding: 1rem;
+          background: var(--background-color);
+          border-radius: 8px;
+          border: 1px solid var(--border-color);
+        }
+
+        .preview-icon {
+          width: 40px;
+          height: 40px;
+          background: var(--primary);
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          flex-shrink: 0;
+        }
+
+        .preview-content {
+          flex: 1;
+        }
+
+        .preview-content strong {
+          display: block;
+          margin-bottom: 0.25rem;
+          font-size: 0.95rem;
+        }
+
+        .preview-content p {
+          color: var(--text-muted);
+          font-size: 0.85rem;
+          margin: 0;
+          line-height: 1.4;
+        }
+
+        .send-notification-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.875rem 1.5rem;
+          background: linear-gradient(135deg, #22c55e, #16a34a);
+          color: white;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: 600;
+          font-size: 0.95rem;
+          transition: all 0.2s;
+        }
+
+        .send-notification-btn:hover:not(:disabled) {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+
+        .send-notification-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
         }
 
         @media (max-width: 640px) {
