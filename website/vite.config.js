@@ -6,19 +6,21 @@ import viteCompression from 'vite-plugin-compression'
 export default defineConfig({
   plugins: [
     react(),
-    // Gzip compression
+    // Gzip compression - only for larger files to speed up build
     viteCompression({
       algorithm: 'gzip',
       ext: '.gz',
-      threshold: 1024, // Only compress files > 1KB
+      threshold: 10240, // Only compress files > 10KB (reduced processing)
       deleteOriginFile: false,
+      filter: /\.(js|mjs|json|css|html)$/i, // Only compress text files
     }),
-    // Brotli compression (better compression than gzip)
+    // Brotli compression - best compression for modern browsers
     viteCompression({
       algorithm: 'brotliCompress',
       ext: '.br',
-      threshold: 1024,
+      threshold: 10240, // Only compress files > 10KB
       deleteOriginFile: false,
+      filter: /\.(js|mjs|json|css|html)$/i,
     }),
   ],
   base: '/',
@@ -35,18 +37,8 @@ export default defineConfig({
     dedupe: ['react', 'react-dom'],
   },
   build: {
-    // Enable minification
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true, // Remove console.logs in production
-        drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug'],
-      },
-      format: {
-        comments: false, // Remove all comments
-      },
-    },
+    // Use esbuild for faster minification (much faster than terser)
+    minify: 'esbuild',
     // Optimize chunk size
     chunkSizeWarningLimit: 1000,
     // Enable CSS code splitting
@@ -55,53 +47,32 @@ export default defineConfig({
     sourcemap: false,
     // Optimize assets
     assetsInlineLimit: 4096, // Inline assets < 4KB as base64
+    // Reduce target for better compatibility and smaller output
+    target: 'es2015',
     commonjsOptions: {
       include: [/node_modules/],
       transformMixedEsModules: true,
     },
     rollupOptions: {
       output: {
-        // Improved manual chunking strategy
+        // Simplified manual chunking strategy
         manualChunks: (id) => {
-          // Vendor chunks
           if (id.includes('node_modules')) {
-            // React core
+            // Keep React together to avoid import issues
             if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
               return 'react-vendor';
             }
-            // Router
-            if (id.includes('react-router')) {
-              return 'router';
-            }
-            // UI libraries
-            if (id.includes('framer-motion')) {
-              return 'animations';
-            }
-            // Markdown and syntax highlighting
-            if (id.includes('react-markdown') || id.includes('react-syntax-highlighter') || id.includes('remark') || id.includes('rehype')) {
-              return 'markdown';
-            }
-            // Code sandbox
+            // Large dependencies get their own chunks
             if (id.includes('@codesandbox/sandpack-react')) {
               return 'sandpack';
             }
-            // Supabase
-            if (id.includes('@supabase') || id.includes('supabase')) {
+            if (id.includes('@supabase')) {
               return 'supabase';
             }
-            // Search
-            if (id.includes('fuse.js')) {
-              return 'search';
+            if (id.includes('react-syntax-highlighter')) {
+              return 'syntax-highlighter';
             }
-            // Icons
-            if (id.includes('lucide-react')) {
-              return 'icons';
-            }
-            // Analytics
-            if (id.includes('@vercel/analytics') || id.includes('@vercel/speed-insights')) {
-              return 'analytics';
-            }
-            // Other vendor code
+            // Everything else in vendor
             return 'vendor';
           }
         },
@@ -125,10 +96,10 @@ export default defineConfig({
       },
     },
   },
-  // Experimental features for better performance
+  // esbuild optimizations for production
   esbuild: {
-    // Remove console and debugger in production
     drop: ['console', 'debugger'],
     legalComments: 'none',
+    logOverride: { 'this-is-undefined-in-esm': 'silent' },
   },
 })
