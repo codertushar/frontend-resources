@@ -12,6 +12,17 @@
       ],
       "destination": "https://crackfrontend.in/:path*",
       "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.crackfrontend.in"
+        }
+      ],
+      "destination": "https://crackfrontend.in/:path*",
+      "permanent": true
     }
   ],
   "rewrites": [
