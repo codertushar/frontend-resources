@@ -105,7 +105,7 @@ export default async function handler(req, res) {
     const payload = JSON.stringify({
       title: notificationTitle,
       body: notificationBody,
-      url: url || '/frontend-resources/library',
+      url: url || '/library',
     });
 
     let sent = 0;

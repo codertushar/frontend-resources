@@ -2,24 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CrackFrontend</title>
+  <title>CrackFrontend - Page Not Found</title>
   <script>
-    // Single Page App GitHub Pages redirect
-    // Redirects 404 requests to index.html with the path preserved
-    (function() {
-      var loc = window.location;
-      // Redirect to the base with the full path as a query param
-      // Keep /frontend-resources as the base
-      loc.replace(
-        loc.protocol + '//' + loc.hostname + (loc.port ? ':' + loc.port : '') +
-        '/frontend-resources/?p=' +
-        encodeURIComponent(loc.pathname.replace('/frontend-resources', '') + loc.search) +
-        (loc.hash ? '&h=' + encodeURIComponent(loc.hash.slice(1)) : '')
-      );
-    })();
+    // Vercel handles SPA routing via vercel.json rewrites
+    // This 404.html is only a fallback - redirect to home
+    window.location.replace('/');
   </script>
 </head>
 <body>
-  Redirecting...
+  <p>Redirecting to homepage...</p>
 </body>
 </html>

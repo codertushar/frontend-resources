@@ -222,7 +222,7 @@ const Admin = () => {
         setNotification({
           title: `New Article: ${article.title}`,
           body: article.description || 'Check out this new article!',
-          url: `/frontend-resources/resource/${article.slug}`,
+          url: `/resource/${article.slug}`,
         });
       }
     } else {
@@ -657,7 +657,7 @@ const Admin = () => {
                 <label>URL (optional)</label>
                 <input
                   type="text"
-                  placeholder="e.g., /frontend-resources/resource/closures"
+                  placeholder="e.g., /resource/closures"
                   value={notification.url}
                   onChange={(e) => setNotification({ ...notification, url: e.target.value })}
                 />

@@ -259,7 +259,7 @@ setTimeout(() => setShowPrompt(true), 0);
    - Should see: `[SW] Checking for new content...`
    - Should see: `[SW] Current article count: X`
    - If you see: `[SW] Failed to fetch content.json` - the file is missing (build issue)
-4. **Verify content.json exists**: Navigate to `/frontend-resources/content.json` in browser
+4. **Verify content.json exists**: Navigate to `/content.json` in browser
 5. **Test manually**: Open console and run:
    ```javascript
    // Check if service worker is active
@@ -281,7 +281,7 @@ setTimeout(() => setShowPrompt(true), 0);
 
 ### Content Check Not Working
 
-1. **Verify content.json exists**: Navigate to `/frontend-resources/content.json`
+1. **Verify content.json exists**: Navigate to `/content.json`
    - If 404: Build process may have failed
    - Check that `node scripts/generate-content.js` was run during build
 2. **Check service worker**: Should be active in DevTools
@@ -364,7 +364,7 @@ curl -X POST https://your-site.com/api/notify-new-content \
   -d '{
     "title": "New Article!",
     "body": "Check out our latest article",
-    "url": "/frontend-resources/resource/my-article"
+    "url": "/resource/my-article"
   }'
 ```
 

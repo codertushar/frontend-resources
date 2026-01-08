@@ -89,7 +89,7 @@ export default async function handler(req, res) {
     const payload = JSON.stringify({
       title,
       body: body || '',
-      url: url || '/frontend-resources/library',
+      url: url || '/library',
     });
 
     let sent = 0;
