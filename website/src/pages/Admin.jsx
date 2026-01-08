@@ -25,7 +25,6 @@ const Admin = () => {
   const [settingsMessage, setSettingsMessage] = useState(null);
 
   // Notifications state
-  const [notification, setNotification] = useState({ title: '', body: '', url: '' });
   const [notificationLoading, setNotificationLoading] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(null);
   const [selectedArticle, setSelectedArticle] = useState('');
@@ -181,6 +180,12 @@ const Admin = () => {
   // Notification handlers
   const handleSendNotification = async (e) => {
     e.preventDefault();
+
+    if (!selectedArticle) return;
+
+    const article = contentData.find(a => a.slug === selectedArticle);
+    if (!article) return;
+
     setNotificationLoading(true);
     setNotificationMessage(null);
 
@@ -188,9 +193,9 @@ const Admin = () => {
       const res = await fetchWithAuth('/api/admin/send-notification', {
         method: 'POST',
         body: JSON.stringify({
-          title: notification.title,
-          body: notification.body,
-          url: notification.url || undefined,
+          title: `New Article: ${article.title}`,
+          body: article.description || 'Check out this new article!',
+          url: `/resource/${article.slug}`,
         }),
       });
 
@@ -200,7 +205,6 @@ const Admin = () => {
           type: 'success',
           text: `Notification sent! ${data.sent} delivered, ${data.failed} failed${data.removedInvalid > 0 ? `, ${data.removedInvalid} invalid removed` : ''}`,
         });
-        setNotification({ title: '', body: '', url: '' });
         setSelectedArticle('');
       } else {
         setNotificationMessage({ type: 'error', text: data.error || 'Failed to send notification' });
@@ -212,23 +216,6 @@ const Admin = () => {
     }
   };
 
-  const handleArticleSelect = (e) => {
-    const slug = e.target.value;
-    setSelectedArticle(slug);
-
-    if (slug) {
-      const article = contentData.find(a => a.slug === slug);
-      if (article) {
-        setNotification({
-          title: `New Article: ${article.title}`,
-          body: article.description || 'Check out this new article!',
-          url: `/resource/${article.slug}`,
-        });
-      }
-    } else {
-      setNotification({ title: '', body: '', url: '' });
-    }
-  };
 
   // Calculate stats
   const stats = {
@@ -614,7 +601,7 @@ const Admin = () => {
                 <label>Select Article</label>
                 <select
                   value={selectedArticle}
-                  onChange={handleArticleSelect}
+                  onChange={(e) => setSelectedArticle(e.target.value)}
                   className="article-select"
                   required
                 >
@@ -631,20 +618,23 @@ const Admin = () => {
               </div>
 
 
-              {selectedArticle && (
-                <div className="notification-preview">
-                  <h4>Preview</h4>
-                  <div className="preview-card">
-                    <div className="preview-icon">
-                      <Bell size={20} />
-                    </div>
-                    <div className="preview-content">
-                      <strong>{notification.title}</strong>
-                      <p>{notification.body}</p>
+              {selectedArticle && (() => {
+                const article = contentData.find(a => a.slug === selectedArticle);
+                return (
+                  <div className="notification-preview">
+                    <h4>Preview</h4>
+                    <div className="preview-card">
+                      <div className="preview-icon">
+                        <Bell size={20} />
+                      </div>
+                      <div className="preview-content">
+                        <strong>New Article: {article?.title}</strong>
+                        <p>{article?.description || 'Check out this new article!'}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                );
+              })()}
 
               {notificationMessage && (
                 <div className={`message ${notificationMessage.type}`}>
