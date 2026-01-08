@@ -2,8 +2,8 @@
  * Shared constants for the CrackFrontend PWA
  */
 
-// Base path for the application (GitHub Pages subdirectory)
-export const BASE_PATH = '/frontend-resources';
+// Base path for the application (empty for Vercel, '/frontend-resources' for GitHub Pages)
+export const BASE_PATH = '';
 
 // Icon paths
 export const ICON_192 = `${BASE_PATH}/android-launchericon-192-192.png`;
