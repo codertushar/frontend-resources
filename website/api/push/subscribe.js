@@ -9,14 +9,25 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const supabaseUrl = process.env.VITE_SUPABASE_URL;
+  // Try both env var names (VITE_ prefix for local dev, non-prefixed for server)
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !supabaseServiceKey) {
+    console.error('Supabase config missing:', {
+      hasUrl: !!supabaseUrl,
+      hasKey: !!supabaseServiceKey
+    });
     return res.status(500).json({ error: 'Supabase not configured' });
   }
 
   const { subscription, userId } = req.body;
+
+  console.log('Received subscription request:', {
+    hasEndpoint: !!subscription?.endpoint,
+    hasKeys: !!subscription?.keys,
+    userId
+  });
 
   if (!subscription || !subscription.endpoint || !subscription.keys) {
     return res.status(400).json({ error: 'Invalid push subscription' });
