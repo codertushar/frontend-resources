@@ -1,6 +1,4 @@
 {
-  "buildCommand": "node scripts/generate-content.js && npm run build",
-  "devCommand": "node scripts/generate-content.js --watch & vite",
   "redirects": [
     {
       "source": "/:path*",
@@ -15,9 +13,8 @@
     }
   ],
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/resource/(.*)", "destination": "/index.html" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/api/:path*", "destination": "/api/:path*" },
+    { "source": "/:path*", "destination": "/index.html" }
   ],
   "trailingSlash": false,
   "cleanUrls": true,
