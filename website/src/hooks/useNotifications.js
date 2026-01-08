@@ -21,11 +21,24 @@ const useNotifications = () => {
     };
   });
 
-  // Check push subscription status on mount
+  // Check push subscription status on mount and auto-subscribe if permission granted
   useEffect(() => {
     const checkPushStatus = async () => {
       const pushSupported = isPushSupported();
-      const subscribed = pushSupported ? await isPushSubscribed() : false;
+      let subscribed = pushSupported ? await isPushSubscribed() : false;
+
+      // Auto-subscribe if permission already granted but not yet subscribed
+      if (pushSupported && !subscribed && Notification.permission === 'granted') {
+        console.log('Permission granted but not subscribed, auto-subscribing...');
+        const result = await subscribeToPush(null);
+        if (result.success) {
+          subscribed = true;
+          console.log('Auto-subscription successful');
+        } else {
+          console.warn('Auto-subscription failed:', result.error);
+        }
+      }
+
       setState(prev => ({
         ...prev,
         isPushSupported: pushSupported,
