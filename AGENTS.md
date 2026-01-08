@@ -1,4 +1,4 @@
-# 🤖 AGENTS.md: Development Guidelines
+# 🤖 CLAUDE.md: Development Guidelines
 
 This document provides comprehensive guidance for working with the **frontend-resources** repository, covering both educational content and website codebase development. It complements the `AGENTS.md` and `copilot-instructions.md` files and ensures consistent, high-quality contributions.
 
