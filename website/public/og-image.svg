@@ -1,0 +1,66 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <rect width="1200" height="630" fill="url(#gradient)"/>
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#e0e7ff" />
+    </linearGradient>
+  </defs>
+
+  <!-- Decorative grid pattern -->
+  <g opacity="0.08">
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="300" x2="1200" y2="300" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="500" x2="1200" y2="500" stroke="white" stroke-width="1"/>
+    <line x1="200" y1="0" x2="200" y2="630" stroke="white" stroke-width="1"/>
+    <line x1="400" y1="0" x2="400" y2="630" stroke="white" stroke-width="1"/>
+    <line x1="600" y1="0" x2="600" y2="630" stroke="white" stroke-width="1"/>
+    <line x1="800" y1="0" x2="800" y2="630" stroke="white" stroke-width="1"/>
+    <line x1="1000" y1="0" x2="1000" y2="630" stroke="white" stroke-width="1"/>
+  </g>
+
+  <!-- Large decorative logo in background (right side) -->
+  <g transform="translate(850, 200)" opacity="0.15">
+    <path d="M100 4 L116 56 L156 70 L116 84 L100 136 L84 84 L44 70 L84 56 Z" fill="white" stroke="none" />
+    <circle cx="100" cy="164" r="28" fill="white" />
+  </g>
+
+  <!-- Logo icon (top left) -->
+  <g transform="translate(120, 80) scale(0.8)">
+    <path d="M50 2 L58 28 L78 35 L58 42 L50 68 L42 42 L22 35 L42 28 Z" fill="url(#logoGrad)" stroke="none" />
+    <circle cx="50" cy="82" r="14" fill="url(#logoGrad)" />
+  </g>
+
+  <!-- Main content -->
+  <g transform="translate(120, 280)">
+    <!-- Title with logo spacing -->
+    <text x="0" y="0" font-family="'Space Grotesk', 'Inter', sans-serif" font-size="72" font-weight="700" fill="white">
+      CrackFrontend
+    </text>
+
+    <!-- Subtitle -->
+    <text x="0" y="70" font-family="'Inter', sans-serif" font-size="36" fill="white" opacity="0.95">
+      Master Frontend Interviews
+    </text>
+
+    <!-- Description -->
+    <text x="0" y="130" font-family="'Inter', sans-serif" font-size="26" fill="white" opacity="0.85">
+      JavaScript • React • System Design • DSA • Machine Coding
+    </text>
+  </g>
+
+  <!-- Bottom accent with gradient -->
+  <rect x="120" y="550" width="200" height="6" fill="white" opacity="0.9" rx="3"/>
+
+  <!-- Small decorative elements -->
+  <circle cx="340" cy="553" r="3" fill="white" opacity="0.6"/>
+  <circle cx="360" cy="553" r="3" fill="white" opacity="0.4"/>
+  <circle cx="380" cy="553" r="3" fill="white" opacity="0.2"/>
+</svg>

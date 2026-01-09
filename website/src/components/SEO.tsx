@@ -58,9 +58,10 @@ const SEO = ({
       {/* Article-specific tags */}
       {article && (
         <>
+          <meta name="author" content={article.author || 'Tushar Khanna'} />
           <meta property="article:published_time" content={article.publishedTime} />
           <meta property="article:modified_time" content={article.modifiedTime} />
-          <meta property="article:author" content={article.author || 'CrackFrontend'} />
+          <meta property="article:author" content={article.author || 'Tushar Khanna'} />
           {article.tags && article.tags.map((tag, index) => (
             <meta key={index} property="article:tag" content={tag} />
           ))}
