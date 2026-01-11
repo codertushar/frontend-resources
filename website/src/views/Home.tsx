@@ -271,7 +271,7 @@ const Home = (): React.ReactElement => {
           flex-direction: column;
           align-items: center;
           text-align: center;
-          padding: 4rem 1rem;
+          padding: 2rem 1rem;
           position: relative;
           overflow: hidden;
         }

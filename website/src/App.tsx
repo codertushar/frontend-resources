@@ -4,7 +4,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { HelmetProvider } from 'react-helmet-async';
 import Layout from './components/Layout';
 import ScrollToTop from './components/ScrollToTop';
-import Home from './pages/Home';
+import Home from './views/Home';
 import { useCanonical } from './hooks/useCanonical';
 
 import { ThemeProvider } from './context/ThemeContext';
@@ -15,16 +15,16 @@ import { SubscriptionProvider } from './context/SubscriptionContext';
 type LazyPage = LazyExoticComponent<ComponentType<object>>;
 
 // Lazy load pages for better initial load performance (code splitting)
-const Library: LazyPage = lazy(() => import('./pages/LibraryRefactored'));
-const ResourceDetail: LazyPage = lazy(() => import('./pages/ResourceDetail'));
-const Pricing: LazyPage = lazy(() => import('./pages/Pricing'));
-const Admin: LazyPage = lazy(() => import('./pages/Admin'));
-const MachineCodingList: LazyPage = lazy(() => import('./pages/MachineCodingList'));
-const MachineCodingDetail: LazyPage = lazy(() => import('./pages/MachineCodingDetail'));
-const About: LazyPage = lazy(() => import('./pages/About'));
-const Contact: LazyPage = lazy(() => import('./pages/Contact'));
-const Privacy: LazyPage = lazy(() => import('./pages/Privacy'));
-const Terms: LazyPage = lazy(() => import('./pages/Terms'));
+const Library: LazyPage = lazy(() => import('./views/LibraryRefactored'));
+const ResourceDetail: LazyPage = lazy(() => import('./views/ResourceDetail'));
+const Pricing: LazyPage = lazy(() => import('./views/Pricing'));
+const Admin: LazyPage = lazy(() => import('./views/Admin'));
+const MachineCodingList: LazyPage = lazy(() => import('./views/MachineCodingList'));
+const MachineCodingDetail: LazyPage = lazy(() => import('./views/MachineCodingDetail'));
+const About: LazyPage = lazy(() => import('./views/About'));
+const Contact: LazyPage = lazy(() => import('./views/Contact'));
+const Privacy: LazyPage = lazy(() => import('./views/Privacy'));
+const Terms: LazyPage = lazy(() => import('./views/Terms'));
 
 // Loading fallback component
 const PageLoader = (): ReactElement => (

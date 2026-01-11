@@ -33,8 +33,25 @@ interface ApiErrorResponse {
   error?: string;
 }
 
+// Helper to get env var (supports both Vite and Next.js)
+const getEnvVar = (viteKey: string, nextKey: string): string | null => {
+  // Check Next.js env first
+  if (typeof process !== 'undefined' && process.env[nextKey]) {
+    return process.env[nextKey] as string;
+  }
+  // Fall back to Vite env
+  try {
+    if (typeof import.meta !== 'undefined' && import.meta.env?.[viteKey]) {
+      return import.meta.env[viteKey] as string;
+    }
+  } catch {
+    // import.meta.env not available
+  }
+  return null;
+};
+
 // Try to get VAPID key from build-time env, otherwise fetch from API
-let VAPID_PUBLIC_KEY: string | null = import.meta.env.VITE_VAPID_PUBLIC_KEY || null;
+let VAPID_PUBLIC_KEY: string | null = getEnvVar('VITE_VAPID_PUBLIC_KEY', 'NEXT_PUBLIC_VAPID_PUBLIC_KEY');
 let vapidKeyPromise: Promise<string | null> | null = null;
 
 /**

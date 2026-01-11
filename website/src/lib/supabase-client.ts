@@ -7,13 +7,8 @@ const getEnvVar = (viteKey: string, nextKey: string): string | undefined => {
     return process.env[nextKey];
   }
   // Fall back to Vite env (only works in Vite builds)
-  // Use try-catch because import.meta.env may not exist in Next.js SSR
-  try {
-    if (typeof import.meta !== 'undefined' && import.meta.env?.[viteKey]) {
-      return import.meta.env[viteKey] as string;
-    }
-  } catch {
-    // import.meta.env not available in this environment
+  if (typeof import.meta !== 'undefined' && import.meta.env?.[viteKey]) {
+    return import.meta.env[viteKey] as string;
   }
   return undefined;
 };
