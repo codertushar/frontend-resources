@@ -840,12 +840,12 @@ a.breadcrumb-item:hover {
   .sp-layout {
     flex-direction: column !important;
   }
-  
+
   .sp-preview-container {
     border-left: none !important;
     border-top: 1px solid var(--border-color) !important;
   }
-  
+
   .sp-preview-iframe {
     border-radius: 0 0 12px 12px;
   }
@@ -1031,7 +1031,7 @@ a.breadcrumb-item:hover {
   .practice-title {
     font-size: 2.5rem;
   }
-  
+
   .practice-container {
     padding: 1.5rem 1rem;
   }
@@ -1041,11 +1041,11 @@ a.breadcrumb-item:hover {
   .practice-title {
     font-size: 2rem;
   }
-  
+
   .practice-subtitle {
     font-size: 1rem;
   }
-  
+
   .question-card {
     padding: 1.5rem;
   }
