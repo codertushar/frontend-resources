@@ -76,7 +76,7 @@ export function ResourceDetailClient({
 
   // Fetch premium content if needed
   useEffect(() => {
-    if (isPremiumArticle && isPremium && !premiumContent) {
+    if (isPremiumArticle && isPremium() && !premiumContent) {
       fetchPremiumContent(article.id).then((content) => {
         if (content) {
           setPremiumContent(content);
@@ -175,7 +175,7 @@ export function ResourceDetailClient({
 
         {/* Paywall for premium content */}
         {!canAccess && (
-          <Paywall article={article} />
+          <Paywall />
         )}
 
         {/* Content */}

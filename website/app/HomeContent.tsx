@@ -82,11 +82,11 @@ export default function HomeContent() {
   const { getStats } = useProgress();
   const resourceCount: number = typedContentData.length;
   const premiumCount: number = typedContentData.filter((item: Article) => item.premium).length;
-  const progressStats: ProgressStats = getStats(resourceCount);
+  const progressStats: ProgressStats = getStats();
 
   // Map ProgressStats to HomeStats format
   const stats: HomeStats = {
-    completed: progressStats.readCount,
+    completed: progressStats.read,
     percentage: progressStats.percentage
   };
 

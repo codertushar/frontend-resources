@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BookOpen, Code, Users, Target, Heart, Zap, Github, Linkedin, Mail, LucideIcon } from 'lucide-react';
+import { BookOpen, Code, Target, Heart, Zap, Github, Linkedin, Mail, LucideIcon } from 'lucide-react';
 import { XIcon } from '../../src/components/SocialIcons';
 
 interface Stat {

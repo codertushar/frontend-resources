@@ -17,9 +17,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string[] };
+  params: Promise<{ slug: string[] }>;
 }): Promise<Metadata> {
-  const resourceId = params.slug.join('/');
+  const { slug } = await params;
+  const resourceId = slug.join('/');
   const article = articles.find((a) => a.id === resourceId);
 
   if (!article) {
@@ -56,12 +57,13 @@ export async function generateMetadata({
   };
 }
 
-export default function ResourcePage({
+export default async function ResourcePage({
   params,
 }: {
-  params: { slug: string[] };
+  params: Promise<{ slug: string[] }>;
 }) {
-  const resourceId = params.slug.join('/');
+  const { slug } = await params;
+  const resourceId = slug.join('/');
   const article = articles.find((a) => a.id === resourceId);
 
   if (!article) {
