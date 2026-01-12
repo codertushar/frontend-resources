@@ -13,6 +13,7 @@ const PUBLIC_CONTENT_DIR = path.join(WEBSITE_ROOT, 'public', 'content');
 const OUTPUT_JSON = path.join(WEBSITE_ROOT, 'src', 'data', 'content.json');
 const PUBLIC_JSON = path.join(WEBSITE_ROOT, 'public', 'content.json'); // For service worker access
 const PREMIUM_CONTENT_JSON = path.join(WEBSITE_ROOT, 'src', 'data', 'premium-content.json'); // Full premium content (server-side only)
+const STATIC_CONTENT_JSON = path.join(WEBSITE_ROOT, 'src', 'data', 'static-content.json'); // Full content for static generation (includes premium)
 
 const CONTENT_DIRS = ['js', 'dsa', 'ai', 'general', 'machine-coding', 'system-design'];
 
@@ -689,7 +690,7 @@ function extractTitleAndContent(content, filename) {
     return { title, processedContent, metadata };
 }
 
-function processDirectory(dirPath, relativePath, resources, premiumFullContent = {}, categoryDifficultyIndex = {}) {
+function processDirectory(dirPath, relativePath, resources, premiumFullContent = {}, staticFullContent = {}, categoryDifficultyIndex = {}) {
     const items = fs.readdirSync(dirPath, { withFileTypes: true });
 
     for (const item of items) {
@@ -698,7 +699,7 @@ function processDirectory(dirPath, relativePath, resources, premiumFullContent =
 
         if (item.isDirectory()) {
             if (item.name === 'node_modules' || item.name === '.git') continue;
-            processDirectory(itemPath, itemRelativePath, resources, premiumFullContent, categoryDifficultyIndex);
+            processDirectory(itemPath, itemRelativePath, resources, premiumFullContent, staticFullContent, categoryDifficultyIndex);
         } else if (item.isFile() && item.name.endsWith('.md')) {
             // Ignore README/AGENTS at root if strictly looking for resources,
             // but maybe we want them? Let's stick to CONTENT_DIRS for now.
@@ -787,6 +788,10 @@ function processDirectory(dirPath, relativePath, resources, premiumFullContent =
                 premiumFullContent[resource.id] = processedContent;
             }
 
+            // Store full content for static generation (all articles, including premium)
+            // This enables static HTML generation at build time
+            staticFullContent[resource.id] = processedContent;
+
             resources.push(resource);
         }
     }
@@ -795,12 +800,13 @@ function processDirectory(dirPath, relativePath, resources, premiumFullContent =
 function generateContent() {
     const resources = [];
     const premiumFullContent = {}; // Map of id -> full content for premium articles
+    const staticFullContent = {}; // Map of id -> full content for ALL articles (for static generation)
     const categoryDifficultyIndex = {}; // Track index within each category/difficulty combo
 
     for (const dir of CONTENT_DIRS) {
         const fullPath = path.join(PROJECT_ROOT, dir);
         if (fs.existsSync(fullPath)) {
-            processDirectory(fullPath, dir, resources, premiumFullContent, categoryDifficultyIndex);
+            processDirectory(fullPath, dir, resources, premiumFullContent, staticFullContent, categoryDifficultyIndex);
         }
     }
 
@@ -816,6 +822,11 @@ function generateContent() {
     // It will be used by API routes only
     fs.writeFileSync(PREMIUM_CONTENT_JSON, JSON.stringify(premiumFullContent, null, 2));
 
+    // Write static content with ALL full content (for static generation at build time)
+    // This file is used by the server component to pre-render all article pages
+    // Security: This file should NOT be exposed to the client - it's only used during SSG
+    fs.writeFileSync(STATIC_CONTENT_JSON, JSON.stringify(staticFullContent, null, 2));
+
     const premiumCount = resources.filter(r => r.premium).length;
     const freeCount = resources.length - premiumCount;
 
@@ -823,6 +834,7 @@ function generateContent() {
     console.log(`  → ${OUTPUT_JSON}`);
     console.log(`  → ${PUBLIC_JSON}`);
     console.log(`  → ${PREMIUM_CONTENT_JSON} (${Object.keys(premiumFullContent).length} premium articles)`);
+    console.log(`  → ${STATIC_CONTENT_JSON} (${Object.keys(staticFullContent).length} articles for static generation)`);
 }
 
 // Initial generation

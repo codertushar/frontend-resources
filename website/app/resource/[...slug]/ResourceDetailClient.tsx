@@ -46,6 +46,8 @@ interface ResourceDetailClientProps {
   categoryArticles: Article[];
   subcategoryArticles: Article[];
   currentIndex: number;
+  /** Access level determined by edge middleware: 'free' | 'premium' | 'paywall' */
+  accessLevel?: string;
 }
 
 export function ResourceDetailClient({
@@ -56,6 +58,7 @@ export function ResourceDetailClient({
   categoryArticles,
   subcategoryArticles,
   currentIndex,
+  accessLevel,
 }: ResourceDetailClientProps) {
   const router = useRouter();
   const { isRead, toggleRead, isInitialized } = useProgress();
@@ -77,7 +80,11 @@ export function ResourceDetailClient({
 
   const isReadArticle = isRead(article.id);
   const isPremiumArticle = article.premium;
-  const showPaywall = !!(isPremiumArticle && !isPremium());
+
+  // Use edge-provided access level if available, otherwise fall back to client-side check
+  // Edge middleware sets: 'free' (free article), 'premium' (user has access), 'paywall' (no access)
+  const hasAccessFromEdge = accessLevel === 'free' || accessLevel === 'premium';
+  const showPaywall = isPremiumArticle && !hasAccessFromEdge && !isPremium();
 
   // Parse quiz questions from markdown
   const quiz = parseQuizFromMarkdown(contentToDisplay);
@@ -103,9 +110,17 @@ export function ResourceDetailClient({
     }
   }, [article.id, showPaywall, isReadArticle, toggleRead]);
 
-  // Fetch premium content if needed
+  // Fetch premium content if needed (only as fallback when edge auth didn't provide it)
+  // With edge auth, content is already provided statically from the server
   useEffect(() => {
-    if (isPremiumArticle && isPremium() && !premiumContent) {
+    // Skip if we already have full content from edge auth (hasFullContent means server provided it)
+    if (article.hasFullContent) {
+      return;
+    }
+
+    // Only fetch if user has premium access but content wasn't provided by edge
+    // This is a fallback for cases where edge auth might have failed
+    if (isPremiumArticle && isPremium() && !premiumContent && !hasAccessFromEdge) {
       setPremiumContentLoading(true);
       fetchPremiumContent(article.id)
         .then((content) => {
@@ -122,7 +137,7 @@ export function ResourceDetailClient({
           setPremiumContentLoading(false);
         });
     }
-  }, [article.id, isPremiumArticle, isPremium, premiumContent, fetchPremiumContent]);
+  }, [article.id, article.hasFullContent, isPremiumArticle, isPremium, premiumContent, fetchPremiumContent, hasAccessFromEdge]);
 
   const handleNavigate = useCallback(
     (articleId: string) => {
