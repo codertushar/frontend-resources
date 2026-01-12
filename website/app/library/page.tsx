@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import contentData from '@/data/content.json';
+import ClientLayout from '../ClientLayout';
 import { LibraryClient } from './LibraryClient';
 import type { Article } from '@/types/content';
 
@@ -19,8 +20,10 @@ export default function LibraryPage() {
   const articles = contentData as Article[];
 
   return (
-    <LibraryClient
-      initialArticles={articles}
-    />
+    <ClientLayout>
+      <LibraryClient
+        initialArticles={articles}
+      />
+    </ClientLayout>
   );
 }

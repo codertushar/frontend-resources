@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import ClientLayout from '../../ClientLayout';
 import { MachineCodingDetailClient } from './MachineCodingDetailClient';
 import { getQuestions } from '../../../src/data/practice-questions/index';
 
@@ -46,5 +47,9 @@ export default function PracticeDetailPage({
     notFound();
   }
 
-  return <MachineCodingDetailClient questionId={params.questionId} />;
+  return (
+    <ClientLayout>
+      <MachineCodingDetailClient questionId={params.questionId} />
+    </ClientLayout>
+  );
 }

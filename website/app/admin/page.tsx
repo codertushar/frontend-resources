@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import ClientLayout from '../ClientLayout';
 import { AdminClient } from './AdminClient';
 
 export const metadata: Metadata = {
@@ -11,5 +12,9 @@ export const metadata: Metadata = {
 };
 
 export default function AdminPage() {
-  return <AdminClient />;
+  return (
+    <ClientLayout>
+      <AdminClient />
+    </ClientLayout>
+  );
 }

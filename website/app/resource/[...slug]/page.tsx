@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import ClientLayout from '../../ClientLayout';
 import contentData from '../../../src/data/content.json';
 import { ResourceDetailClient } from './ResourceDetailClient';
 import type { Article } from '../../../src/types/content';
@@ -81,12 +82,22 @@ export default async function ResourcePage({
   const previousArticle = currentIndex > 0 ? categoryArticles[currentIndex - 1] : null;
   const nextArticle = currentIndex < categoryArticles.length - 1 ? categoryArticles[currentIndex + 1] : null;
 
+  // Get subcategory articles for sidebar
+  const subcategoryArticles = article.subcategory
+    ? articles.filter((a) => a.category === article.category && a.subcategory === article.subcategory)
+    : categoryArticles;
+
   return (
-    <ResourceDetailClient
-      article={article}
-      previousArticle={previousArticle}
-      nextArticle={nextArticle}
-      relatedArticles={relatedArticles}
-    />
+    <ClientLayout>
+      <ResourceDetailClient
+        article={article}
+        previousArticle={previousArticle}
+        nextArticle={nextArticle}
+        relatedArticles={relatedArticles}
+        categoryArticles={categoryArticles}
+        subcategoryArticles={subcategoryArticles}
+        currentIndex={currentIndex}
+      />
+    </ClientLayout>
   );
 }

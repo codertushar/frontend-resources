@@ -86,7 +86,7 @@ export default function HomeContent() {
 
   // Map ProgressStats to HomeStats format
   const stats: HomeStats = {
-    completed: progressStats.read,
+    completed: progressStats.readCount,
     percentage: progressStats.percentage
   };
 

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import ClientLayout from '../ClientLayout';
 import { MachineCodingListClient } from './MachineCodingListClient';
 
 export const metadata: Metadata = {
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function PracticePage() {
-  return <MachineCodingListClient />;
+  return (
+    <ClientLayout>
+      <MachineCodingListClient />
+    </ClientLayout>
+  );
 }

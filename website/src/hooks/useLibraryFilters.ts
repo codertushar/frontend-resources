@@ -1,10 +1,12 @@
 /**
- * Custom Hook for Library Filtering
+ * Custom Hook for Library Filtering (Next.js App Router version)
  * Manages all filter state and applies filters to content
  */
 
-import { useMemo, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+'use client';
+
+import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import Fuse from 'fuse.js';
 import { getAllFilters, getDefaultFilterState, countActiveFilters } from '../config/filters';
 
@@ -19,7 +21,6 @@ interface FilterConfig {
   defaultValue: FilterValue;
   values?: Array<{ id: string; label: string; color?: string }>;
   placeholder?: string;
-  icon?: React.ComponentType;
   min?: number;
   max?: number;
   step?: number;
@@ -56,19 +57,16 @@ export interface ContentItem {
   readTime?: number;
   date?: string;
   createdAt?: string;
-  [key: string]: unknown;
 }
 
-export interface AdditionalContext<T extends ContentItem = ContentItem> {
-  getInterviewFrequency?: (item: T) => string | undefined;
+export interface AdditionalContext {
+  getInterviewFrequency?: (item: ContentItem) => string | undefined;
   isRead?: (id: string) => boolean;
 }
 
-type FilterUpdater = FilterState | ((prev: FilterState) => FilterState);
-
-export interface UseLibraryFiltersReturn<T extends ContentItem = ContentItem> {
+export interface UseLibraryFiltersReturn {
   filterState: FilterState;
-  filteredData: T[];
+  filteredData: ContentItem[];
   activeFilterCount: number;
   hasActiveFilters: boolean;
   updateFilter: (filterId: string, value: FilterValue) => void;
@@ -106,8 +104,8 @@ const parseUrlParams = (searchParams: URLSearchParams): FilterState => {
 /**
  * Build URL params from filter state
  */
-const buildUrlParams = (filterState: FilterState): Record<string, string> => {
-  const params: Record<string, string> = {};
+const buildUrlParams = (filterState: FilterState): URLSearchParams => {
+  const params = new URLSearchParams();
   const allFilters = getAllFilters() as unknown as Record<string, FilterConfig>;
 
   Object.entries(filterState).forEach(([key, value]) => {
@@ -115,18 +113,18 @@ const buildUrlParams = (filterState: FilterState): Record<string, string> => {
     if (!config) return;
 
     // Skip default values
-    if (value === config.defaultValue) return;
+    const defaultValue = config.defaultValue;
 
     if (config.type === 'multi' && Array.isArray(value) && value.length > 0) {
-      params[config.urlParam] = (value as string[]).join(',');
+      params.set(config.urlParam, (value as string[]).join(','));
     } else if (config.type === 'range') {
       const [min, max] = value as [number, number];
-      const [defaultMin, defaultMax] = config.defaultValue as [number, number];
+      const [defaultMin, defaultMax] = defaultValue as [number, number];
       if (min !== defaultMin || max !== defaultMax) {
-        params[config.urlParam] = `${min}-${max}`;
+        params.set(config.urlParam, `${min}-${max}`);
       }
-    } else if (value) {
-      params[config.urlParam] = value as string;
+    } else if (value && value !== defaultValue) {
+      params.set(config.urlParam, value as string);
     }
   });
 
@@ -136,12 +134,12 @@ const buildUrlParams = (filterState: FilterState): Record<string, string> => {
 /**
  * Apply all filters to content data
  */
-const applyAllFilters = <T extends ContentItem>(
-  contentData: T[],
+const applyAllFilters = (
+  contentData: ContentItem[],
   filterState: FilterState,
-  fuse: Fuse<T>,
-  additionalContext: AdditionalContext<T> = {}
-): T[] => {
+  fuse: Fuse<ContentItem>,
+  additionalContext: AdditionalContext = {}
+): ContentItem[] => {
   let result = [...contentData];
 
   // Search filter
@@ -189,10 +187,13 @@ const applyAllFilters = <T extends ContentItem>(
   // Read time filter
   if (filterState.readTime) {
     const [min, max] = filterState.readTime;
-    result = result.filter(item => {
-      const readTime = item.readTime || 5;
-      return readTime >= min && readTime <= max;
-    });
+    // Only filter if not default values
+    if (min !== 0 || max !== 60) {
+      result = result.filter(item => {
+        const readTime = item.readTime || 5;
+        return readTime >= min && readTime <= max;
+      });
+    }
   }
 
   // Date added filter
@@ -224,7 +225,7 @@ const applyAllFilters = <T extends ContentItem>(
 /**
  * Apply sorting
  */
-const applySorting = <T extends ContentItem>(data: T[], sortBy: string): T[] => {
+const applySorting = (data: ContentItem[], sortBy: string): ContentItem[] => {
   if (sortBy === 'default') {
     return [...data].sort((a, b) => {
       const dateA = a.date ? new Date(a.date) : (a.createdAt ? new Date(a.createdAt) : new Date(0));
@@ -260,53 +261,66 @@ const applySorting = <T extends ContentItem>(data: T[], sortBy: string): T[] => 
 };
 
 /**
- * Main hook
+ * Main hook - Next.js App Router version
  */
-export const useLibraryFilters = <T extends ContentItem = ContentItem>(
-  contentData: T[],
-  additionalContext: AdditionalContext<T> = {}
-): UseLibraryFiltersReturn<T> => {
-  const [searchParams, setSearchParams] = useSearchParams();
+export const useLibraryFilters = (
+  contentData: ContentItem[],
+  additionalContext: AdditionalContext = {}
+): UseLibraryFiltersReturn => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
-  // Derive filter state directly from URL - single source of truth
-  const filterState = useMemo(() => parseUrlParams(searchParams), [searchParams]);
+  // Parse filter state from URL
+  const [filterState, setFilterStateInternal] = useState<FilterState>(() =>
+    parseUrlParams(new URLSearchParams(searchParams.toString()))
+  );
+
+  // Sync with URL changes
+  useEffect(() => {
+    const newState = parseUrlParams(new URLSearchParams(searchParams.toString()));
+    setFilterStateInternal(newState);
+  }, [searchParams]);
 
   // Fuse.js for search
   const fuse = useMemo(() => {
     const fuseOptions = {
-      keys: ['title', 'category', 'subcategory', 'content', 'difficulty', 'tags'],
+      keys: ['title', 'category', 'subcategory', 'content', 'difficulty', 'tags', 'description'],
       threshold: 0.3,
     };
-    return new Fuse(contentData, fuseOptions);
+    return new Fuse(contentData as unknown as ContentItem[], fuseOptions);
   }, [contentData]);
 
-  // Helper to update URL (which will update filterState via useMemo)
-  const setFilterState = useCallback((updater: FilterUpdater) => {
-    const newState = typeof updater === 'function' ? updater(filterState) : updater;
+  // Helper to update URL
+  const updateUrl = useCallback((newState: FilterState) => {
     const params = buildUrlParams(newState);
-    setSearchParams(params, { replace: true });
-  }, [filterState, setSearchParams]);
+    const queryString = params.toString();
+    const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+    router.replace(newUrl, { scroll: false });
+  }, [pathname, router]);
 
   // Update a single filter
   const updateFilter = useCallback((filterId: string, value: FilterValue) => {
-    setFilterState((prev: FilterState): FilterState => ({
-      ...prev,
-      [filterId]: value
-    }));
-  }, [setFilterState]);
+    setFilterStateInternal(prev => {
+      const newState = { ...prev, [filterId]: value };
+      updateUrl(newState);
+      return newState;
+    });
+  }, [updateUrl]);
 
   // Update multiple filters at once
   const updateFilters = useCallback((updates: Partial<FilterState>) => {
-    setFilterState((prev: FilterState): FilterState => {
-      const merged = { ...prev };
+    setFilterStateInternal(prev => {
+      const newState = { ...prev };
       Object.entries(updates).forEach(([key, value]) => {
         if (value !== undefined) {
-          merged[key] = value;
+          newState[key] = value;
         }
       });
-      return merged;
+      updateUrl(newState);
+      return newState;
     });
-  }, [setFilterState]);
+  }, [updateUrl]);
 
   // Reset a single filter
   const resetFilter = useCallback((filterId: string) => {
@@ -319,8 +333,10 @@ export const useLibraryFilters = <T extends ContentItem = ContentItem>(
 
   // Reset all filters
   const resetAllFilters = useCallback(() => {
-    setFilterState(getDefaultFilterState() as FilterState);
-  }, [setFilterState]);
+    const defaultState = getDefaultFilterState() as FilterState;
+    setFilterStateInternal(defaultState);
+    router.replace(pathname, { scroll: false });
+  }, [pathname, router]);
 
   // Apply filters and sorting
   const filteredData = useMemo(() => {
@@ -338,13 +354,10 @@ export const useLibraryFilters = <T extends ContentItem = ContentItem>(
   const hasActiveFilters = activeFilterCount > 0;
 
   return {
-    // State
     filterState,
     filteredData,
     activeFilterCount,
     hasActiveFilters,
-
-    // Actions
     updateFilter,
     updateFilters,
     resetFilter,

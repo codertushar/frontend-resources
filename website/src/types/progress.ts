@@ -1,18 +1,20 @@
 // Progress tracking types
 
 export interface ProgressStats {
-  total: number;
-  read: number;
+  readCount: number;
+  totalArticles: number;
   percentage: number;
+  unreadCount: number;
 }
 
 export interface ProgressContextValue {
-  markedArticles: Set<string>;
+  readArticles: string[];
   isRead: (articleId: string) => boolean;
-  toggleRead: (articleId: string) => void;
-  markAsRead: (articleId: string) => void;
-  markAsUnread: (articleId: string) => void;
-  getStats: () => ProgressStats;
+  toggleRead: (articleId: string) => Promise<void>;
+  markAsRead: (articleId: string) => Promise<void>;
+  markAsUnread: (articleId: string) => Promise<void>;
+  getStats: (totalArticles?: number) => ProgressStats;
+  clearProgress: () => Promise<void>;
   isInitialized: boolean;
 }
 
