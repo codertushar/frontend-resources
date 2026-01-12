@@ -8,13 +8,13 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
 
-  // Disable ESLint during build
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-
   // Standalone output for Vercel
   output: 'standalone',
+
+  // Turbopack configuration - use absolute path to resolve workspace root warning
+  turbopack: {
+    root: process.cwd().replace(/\/website$/, ''),
+  },
 
   // Image optimization
   images: {
