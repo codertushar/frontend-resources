@@ -139,9 +139,9 @@ const Paywall = () => {
         .paywall-blur-layer {
           position: absolute;
           top: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 100vw;
+          left: 0;
+          right: 0;
+          width: 100%;
           height: 120px;
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
@@ -155,9 +155,9 @@ const Paywall = () => {
         .paywall-gradient {
           position: absolute;
           top: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 100vw;
+          left: 0;
+          right: 0;
+          width: 100%;
           height: 250px;
           background: linear-gradient(
             to bottom,
