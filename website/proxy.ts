@@ -14,6 +14,22 @@ const premiumArticleIds = new Set(
 );
 
 export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // FAST PATH: Handle free article routes without any auth checks
+  // This avoids network calls for ~40% of articles
+  if (pathname.startsWith('/resource/')) {
+    const articleId = pathname.replace('/resource/', '');
+
+    // Free article - no auth needed, instant response
+    if (!premiumArticleIds.has(articleId)) {
+      const response = NextResponse.next({ request });
+      response.headers.set('x-article-access', 'free');
+      return response;
+    }
+  }
+
+  // SLOW PATH: Only initialize Supabase for premium articles and admin routes
   let supabaseResponse = NextResponse.next({ request });
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -21,6 +37,10 @@ export async function proxy(request: NextRequest) {
 
   if (!supabaseUrl || !supabaseAnonKey) {
     console.error('Supabase environment variables not configured');
+    // For premium articles without config, show paywall
+    if (pathname.startsWith('/resource/')) {
+      supabaseResponse.headers.set('x-article-access', 'paywall');
+    }
     return supabaseResponse;
   }
 
@@ -43,22 +63,11 @@ export async function proxy(request: NextRequest) {
     }
   );
 
-  // Refresh session if expired
+  // Get session - this is the slow network call (~300-600ms)
   const { data: { session } } = await supabase.auth.getSession();
 
-  const { pathname } = request.nextUrl;
-
-  // Handle article routes - set access level header for static content serving
+  // Handle premium article routes (free articles already handled above)
   if (pathname.startsWith('/resource/')) {
-    const articleId = pathname.replace('/resource/', '');
-
-    // Check if this is a premium article
-    if (!premiumArticleIds.has(articleId)) {
-      // Free article - set header indicating free content
-      supabaseResponse.headers.set('x-article-access', 'free');
-      return supabaseResponse;
-    }
-
     // Premium article - check user's subscription
     if (!session) {
       // No session - show paywall

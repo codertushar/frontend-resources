@@ -4,13 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "bun run generate && next dev",
+    "dev": "npm run generate && next dev",
     "dev:vercel": "vercel dev",
-    "build": "bun run generate && next build",
+    "build": "npm run generate && next build",
     "start": "next start",
     "lint": "eslint . && next lint",
-    "sitemap": "bun ../scripts/generate-sitemap.js",
-    "generate": "bun scripts/generate-content.js && bun run sitemap",
+    "sitemap": "node ../scripts/generate-sitemap.js",
+    "generate": "node scripts/generate-content.js && npm run sitemap",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
