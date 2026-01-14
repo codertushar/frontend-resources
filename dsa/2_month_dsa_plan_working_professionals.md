@@ -119,20 +119,20 @@ Day 8:  Re-solve (7-day gap) ← Mastery!
 
 **📊 Problem Distribution:** 12 problems (8 Easy, 4 Medium)
 
-| # | Problem | Difficulty | Pattern | Key Concept |
-|---|---------|-----------|---------|-------------|
-| 1 | Move Zeroes | Easy | Two Pointers | In-place swap |
-| 2 | Remove Element | Easy | Two Pointers | Array modification |
-| 3 | Squares of a Sorted Array | Easy | Two Pointers | Merge from ends |
-| 4 | Two Sum | Easy | HashMap | O(1) lookup |
-| 5 | Best Time to Buy and Sell Stock | Easy | Single Pass | Track minimum |
-| 6 | Valid Palindrome | Easy | Two Pointers | Convergence |
-| 7 | Reverse String | Easy | Two Pointers | In-place |
-| 8 | Merge Sorted Array | Easy | Two Pointers | Backwards merge |
-| 9 | Remove Duplicates from Sorted Array | Easy | Two Pointers | Slow-fast |
-| 10 | Container With Most Water | Medium | Two Pointers | Greedy choice |
-| 11 | Trapping Rain Water | Medium | Two Pointers | Left-right max |
-| 12 | 3Sum | Medium | Two Pointers | Sorted + dedup |
+| # | Problem | Difficulty | Pattern | LeetCode |
+|---|---------|-----------|---------|----------|
+| 1 | Move Zeroes | Easy | Two Pointers | [LC 283](https://leetcode.com/problems/move-zeroes/) |
+| 2 | Remove Element | Easy | Two Pointers | [LC 27](https://leetcode.com/problems/remove-element/) |
+| 3 | Squares of a Sorted Array | Easy | Two Pointers | [LC 977](https://leetcode.com/problems/squares-of-a-sorted-array/) |
+| 4 | Two Sum | Easy | HashMap | [LC 1](https://leetcode.com/problems/two-sum/) |
+| 5 | Best Time to Buy and Sell Stock | Easy | Single Pass | [LC 121](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) |
+| 6 | Valid Palindrome | Easy | Two Pointers | [LC 125](https://leetcode.com/problems/valid-palindrome/) |
+| 7 | Reverse String | Easy | Two Pointers | [LC 344](https://leetcode.com/problems/reverse-string/) |
+| 8 | Merge Sorted Array | Easy | Two Pointers | [LC 88](https://leetcode.com/problems/merge-sorted-array/) |
+| 9 | Remove Duplicates from Sorted Array | Easy | Two Pointers | [LC 26](https://leetcode.com/problems/remove-duplicates-from-sorted-array/) |
+| 10 | Container With Most Water | Medium | Two Pointers | [LC 11](https://leetcode.com/problems/container-with-most-water/) |
+| 11 | Trapping Rain Water | Medium | Two Pointers | [LC 42](https://leetcode.com/problems/trapping-rain-water/) |
+| 12 | 3Sum | Medium | Two Pointers | [LC 15](https://leetcode.com/problems/3sum/) |
 
 **Weekend Tasks:**
 ```
@@ -179,20 +179,20 @@ const twoPointerSameDir = (arr) => {
 
 **📊 Problem Distribution:** 12 problems (4 Easy, 8 Medium)
 
-| # | Problem | Difficulty | Pattern | Key Concept |
-|---|---------|-----------|---------|-------------|
-| 1 | Longest Substring Without Repeating Characters | Medium | Sliding Window | Expanding + shrinking |
-| 2 | Minimum Size Subarray Sum | Medium | Sliding Window | Variable size |
-| 3 | Max Consecutive Ones III | Medium | Sliding Window | At most K |
-| 4 | Permutation in String | Medium | Sliding Window | Fixed size + freq |
-| 5 | Find All Anagrams in a String | Medium | Sliding Window | Fixed window |
-| 6 | Fruits Into Baskets | Medium | Sliding Window | At most 2 types |
-| 7 | Subarray Sum Equals K | Medium | Prefix Sum + HashMap | Sum - target |
-| 8 | Contains Duplicate | Easy | HashMap | Single pass |
-| 9 | Group Anagrams | Medium | HashMap | Sorted key |
-| 10 | Top K Frequent Elements | Medium | HashMap + Bucket | Frequency count |
-| 11 | Valid Anagram | Easy | HashMap | Character count |
-| 12 | Product of Array Except Self | Medium | Prefix/Suffix | O(1) space trick |
+| # | Problem | Difficulty | Pattern | LeetCode |
+|---|---------|-----------|---------|----------|
+| 1 | Longest Substring Without Repeating Characters | Medium | Sliding Window | [LC 3](https://leetcode.com/problems/longest-substring-without-repeating-characters/) |
+| 2 | Minimum Size Subarray Sum | Medium | Sliding Window | [LC 209](https://leetcode.com/problems/minimum-size-subarray-sum/) |
+| 3 | Max Consecutive Ones III | Medium | Sliding Window | [LC 1004](https://leetcode.com/problems/max-consecutive-ones-iii/) |
+| 4 | Permutation in String | Medium | Sliding Window | [LC 567](https://leetcode.com/problems/permutation-in-string/) |
+| 5 | Find All Anagrams in a String | Medium | Sliding Window | [LC 438](https://leetcode.com/problems/find-all-anagrams-in-a-string/) |
+| 6 | Fruits Into Baskets | Medium | Sliding Window | [LC 904](https://leetcode.com/problems/fruit-into-baskets/) |
+| 7 | Subarray Sum Equals K | Medium | Prefix Sum + HashMap | [LC 560](https://leetcode.com/problems/subarray-sum-equals-k/) |
+| 8 | Contains Duplicate | Easy | HashMap | [LC 217](https://leetcode.com/problems/contains-duplicate/) |
+| 9 | Group Anagrams | Medium | HashMap | [LC 49](https://leetcode.com/problems/group-anagrams/) |
+| 10 | Top K Frequent Elements | Medium | HashMap + Bucket | [LC 347](https://leetcode.com/problems/top-k-frequent-elements/) |
+| 11 | Valid Anagram | Easy | HashMap | [LC 242](https://leetcode.com/problems/valid-anagram/) |
+| 12 | Product of Array Except Self | Medium | Prefix/Suffix | [LC 238](https://leetcode.com/problems/product-of-array-except-self/) |
 
 **Weekend Tasks:**
 ```
@@ -255,18 +255,18 @@ const slidingWindowFixed = (arr, k) => {
 
 **📊 Problem Distribution:** 10 problems (3 Easy, 7 Medium)
 
-| # | Problem | Difficulty | Pattern | Key Concept |
-|---|---------|-----------|---------|-------------|
-| 1 | Valid Parentheses | Easy | Stack | Matching pairs |
-| 2 | Min Stack | Easy | Stack | O(1) min tracking |
-| 3 | Daily Temperatures | Medium | Monotonic Stack | Next greater |
-| 4 | Next Greater Element I | Easy | Monotonic Stack | Decreasing stack |
-| 5 | Next Greater Element II | Medium | Monotonic Stack | Circular array |
-| 6 | Evaluate Reverse Polish Notation | Medium | Stack | Operator eval |
-| 7 | Largest Rectangle in Histogram | Hard | Monotonic Stack | Area calculation |
-| 8 | Trapping Rain Water (Stack) | Medium | Monotonic Stack | Alternative approach |
-| 9 | Simplify Path | Medium | Stack | Path parsing |
-| 10 | Remove All Adjacent Duplicates II | Medium | Stack | K duplicates |
+| # | Problem | Difficulty | Pattern | LeetCode |
+|---|---------|-----------|---------|----------|
+| 1 | Valid Parentheses | Easy | Stack | [LC 20](https://leetcode.com/problems/valid-parentheses/) |
+| 2 | Min Stack | Easy | Stack | [LC 155](https://leetcode.com/problems/min-stack/) |
+| 3 | Daily Temperatures | Medium | Monotonic Stack | [LC 739](https://leetcode.com/problems/daily-temperatures/) |
+| 4 | Next Greater Element I | Easy | Monotonic Stack | [LC 496](https://leetcode.com/problems/next-greater-element-i/) |
+| 5 | Next Greater Element II | Medium | Monotonic Stack | [LC 503](https://leetcode.com/problems/next-greater-element-ii/) |
+| 6 | Evaluate Reverse Polish Notation | Medium | Stack | [LC 150](https://leetcode.com/problems/evaluate-reverse-polish-notation/) |
+| 7 | Largest Rectangle in Histogram | Hard | Monotonic Stack | [LC 84](https://leetcode.com/problems/largest-rectangle-in-histogram/) |
+| 8 | Trapping Rain Water (Stack) | Medium | Monotonic Stack | [LC 42](https://leetcode.com/problems/trapping-rain-water/) |
+| 9 | Simplify Path | Medium | Stack | [LC 71](https://leetcode.com/problems/simplify-path/) |
+| 10 | Remove All Adjacent Duplicates II | Medium | Stack | [LC 1209](https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string-ii/) |
 
 **Weekend Tasks:**
 ```
@@ -306,19 +306,19 @@ const nextGreaterElement = (arr) => {
 
 **📊 Problem Distribution:** 11 problems (5 Easy, 6 Medium)
 
-| # | Problem | Difficulty | Pattern | Key Concept |
-|---|---------|-----------|---------|-------------|
-| 1 | Binary Search | Easy | Binary Search | Basic template |
-| 2 | Search Insert Position | Easy | Binary Search | Find insertion |
-| 3 | Find First and Last Position | Medium | Binary Search | Lower/upper bound |
-| 4 | Search in Rotated Sorted Array | Medium | Binary Search | Pivot detection |
-| 5 | Find Minimum in Rotated Array | Medium | Binary Search | Modified condition |
-| 6 | Peak Index in a Mountain Array | Easy | Binary Search | Peak finding |
-| 7 | Koko Eating Bananas | Medium | Answer Binary Search | Min feasible |
-| 8 | Capacity To Ship Packages | Medium | Answer Binary Search | Min capacity |
-| 9 | Median of Two Sorted Arrays | Hard | Binary Search | Partition (optional) |
-| 10 | Square Root (Integer) | Easy | Binary Search | Answer search |
-| 11 | Search a 2D Matrix | Medium | Binary Search | Treat as 1D |
+| # | Problem | Difficulty | Pattern | LeetCode |
+|---|---------|-----------|---------|----------|
+| 1 | Binary Search | Easy | Binary Search | [LC 704](https://leetcode.com/problems/binary-search/) |
+| 2 | Search Insert Position | Easy | Binary Search | [LC 35](https://leetcode.com/problems/search-insert-position/) |
+| 3 | Find First and Last Position | Medium | Binary Search | [LC 34](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/) |
+| 4 | Search in Rotated Sorted Array | Medium | Binary Search | [LC 33](https://leetcode.com/problems/search-in-rotated-sorted-array/) |
+| 5 | Find Minimum in Rotated Array | Medium | Binary Search | [LC 153](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/) |
+| 6 | Peak Index in a Mountain Array | Easy | Binary Search | [LC 852](https://leetcode.com/problems/peak-index-in-a-mountain-array/) |
+| 7 | Koko Eating Bananas | Medium | Answer Binary Search | [LC 875](https://leetcode.com/problems/koko-eating-bananas/) |
+| 8 | Capacity To Ship Packages | Medium | Answer Binary Search | [LC 1011](https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/) |
+| 9 | Median of Two Sorted Arrays | Hard | Binary Search | [LC 4](https://leetcode.com/problems/median-of-two-sorted-arrays/) |
+| 10 | Square Root (Integer) | Easy | Binary Search | [LC 69](https://leetcode.com/problems/sqrtx/) |
+| 11 | Search a 2D Matrix | Medium | Binary Search | [LC 74](https://leetcode.com/problems/search-a-2d-matrix/) |
 
 **Weekend Tasks:**
 ```
@@ -377,18 +377,18 @@ const answerBinarySearch = (arr, condition) => {
 
 **📊 Problem Distribution:** 10 problems (6 Easy, 4 Medium)
 
-| # | Problem | Difficulty | Pattern | Key Concept |
-|---|---------|-----------|---------|-------------|
-| 1 | Reverse Linked List | Easy | Pointer Manipulation | 3-pointer reversal |
-| 2 | Merge Two Sorted Lists | Easy | Two Pointers | Dummy node |
-| 3 | Linked List Cycle | Easy | Fast/Slow Pointer | Floyd's cycle |
-| 4 | Middle of the Linked List | Easy | Fast/Slow Pointer | Speed difference |
-| 5 | Remove Nth Node From End | Medium | Two Pointers | N-step gap |
-| 6 | Reorder List | Medium | Multiple Patterns | Find mid + reverse + merge |
-| 7 | Intersection of Two Lists | Easy | Two Pointers | Length difference |
-| 8 | Add Two Numbers | Medium | Linked List | Carry handling |
-| 9 | Palindrome Linked List | Easy | Fast/Slow + Reverse | O(1) space |
-| 10 | Copy List with Random Pointer | Medium | HashMap | Deep copy (optional) |
+| # | Problem | Difficulty | Pattern | LeetCode |
+|---|---------|-----------|---------|----------|
+| 1 | Reverse Linked List | Easy | Pointer Manipulation | [LC 206](https://leetcode.com/problems/reverse-linked-list/) |
+| 2 | Merge Two Sorted Lists | Easy | Two Pointers | [LC 21](https://leetcode.com/problems/merge-two-sorted-lists/) |
+| 3 | Linked List Cycle | Easy | Fast/Slow Pointer | [LC 141](https://leetcode.com/problems/linked-list-cycle/) |
+| 4 | Middle of the Linked List | Easy | Fast/Slow Pointer | [LC 876](https://leetcode.com/problems/middle-of-the-linked-list/) |
+| 5 | Remove Nth Node From End | Medium | Two Pointers | [LC 19](https://leetcode.com/problems/remove-nth-node-from-end-of-list/) |
+| 6 | Reorder List | Medium | Multiple Patterns | [LC 143](https://leetcode.com/problems/reorder-list/) |
+| 7 | Intersection of Two Lists | Easy | Two Pointers | [LC 160](https://leetcode.com/problems/intersection-of-two-linked-lists/) |
+| 8 | Add Two Numbers | Medium | Linked List | [LC 2](https://leetcode.com/problems/add-two-numbers/) |
+| 9 | Palindrome Linked List | Easy | Fast/Slow + Reverse | [LC 234](https://leetcode.com/problems/palindrome-linked-list/) |
+| 10 | Copy List with Random Pointer | Medium | HashMap | [LC 138](https://leetcode.com/problems/copy-list-with-random-pointer/) |
 
 **Weekend Tasks:**
 ```
@@ -455,20 +455,20 @@ const mergeLists = (l1, l2) => {
 
 **📊 Problem Distribution:** 12 problems (7 Easy, 5 Medium)
 
-| # | Problem | Difficulty | Pattern | Key Concept |
-|---|---------|-----------|---------|-------------|
-| 1 | Maximum Depth of Binary Tree | Easy | DFS | Base case + recursion |
-| 2 | Invert Binary Tree | Easy | DFS | Swap children |
-| 3 | Diameter of Binary Tree | Easy | DFS | Height calculation |
-| 4 | Balanced Binary Tree | Easy | DFS | Height difference |
-| 5 | Same Tree | Easy | DFS | Simultaneous traversal |
-| 6 | Subtree of Another Tree | Easy | DFS | Tree matching |
-| 7 | Binary Tree Level Order | Medium | BFS | Queue traversal |
-| 8 | Validate Binary Search Tree | Medium | DFS | Range checking |
-| 9 | Lowest Common Ancestor BST | Easy | BST Property | Value comparison |
-| 10 | Path Sum | Easy | DFS | Backtracking |
-| 11 | Kth Smallest Element BST | Medium | In-order DFS | BST property |
-| 12 | Construct Tree from Pre+In | Medium | Recursion | Index manipulation (stretch) |
+| # | Problem | Difficulty | Pattern | LeetCode |
+|---|---------|-----------|---------|----------|
+| 1 | Maximum Depth of Binary Tree | Easy | DFS | [LC 104](https://leetcode.com/problems/maximum-depth-of-binary-tree/) |
+| 2 | Invert Binary Tree | Easy | DFS | [LC 226](https://leetcode.com/problems/invert-binary-tree/) |
+| 3 | Diameter of Binary Tree | Easy | DFS | [LC 543](https://leetcode.com/problems/diameter-of-binary-tree/) |
+| 4 | Balanced Binary Tree | Easy | DFS | [LC 110](https://leetcode.com/problems/balanced-binary-tree/) |
+| 5 | Same Tree | Easy | DFS | [LC 100](https://leetcode.com/problems/same-tree/) |
+| 6 | Subtree of Another Tree | Easy | DFS | [LC 572](https://leetcode.com/problems/subtree-of-another-tree/) |
+| 7 | Binary Tree Level Order | Medium | BFS | [LC 102](https://leetcode.com/problems/binary-tree-level-order-traversal/) |
+| 8 | Validate Binary Search Tree | Medium | DFS | [LC 98](https://leetcode.com/problems/validate-binary-search-tree/) |
+| 9 | Lowest Common Ancestor BST | Easy | BST Property | [LC 235](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/) |
+| 10 | Path Sum | Easy | DFS | [LC 112](https://leetcode.com/problems/path-sum/) |
+| 11 | Kth Smallest Element BST | Medium | In-order DFS | [LC 230](https://leetcode.com/problems/kth-smallest-element-in-a-bst/) |
+| 12 | Construct Tree from Pre+In | Medium | Recursion | [LC 105](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/) |
 
 **Weekend Tasks:**
 ```
@@ -534,22 +534,22 @@ const isValidBST = (root, min = -Infinity, max = Infinity) => {
 
 **📊 Problem Distribution:** 11 problems (2 Easy, 9 Medium)
 
-| # | Problem | Difficulty | Pattern | Key Concept |
-|---|---------|-----------|---------|-------------|
-| **Heaps** | | | | |
-| 1 | Kth Largest Element in Array | Medium | Heap/QuickSelect | Min heap of size K |
-| 2 | Top K Frequent Elements | Medium | Heap + HashMap | Frequency heap |
-| 3 | Find Median from Data Stream | Hard | Two Heaps | Max heap + min heap |
-| **Intervals** | | | | |
-| 4 | Merge Intervals | Medium | Sorting + Merge | Overlapping check |
-| 5 | Insert Interval | Medium | Linear Scan | Three phases |
-| 6 | Non-overlapping Intervals | Medium | Greedy | Earliest end time |
-| 7 | Meeting Rooms II | Medium | Heap | Min rooms needed |
-| **Greedy** | | | | |
-| 8 | Jump Game | Medium | Greedy | Farthest reachable |
-| 9 | Gas Station | Medium | Greedy | Total/current surplus |
-| 10 | Partition Labels | Medium | Greedy | Last occurrence |
-| 11 | Min Add Parentheses Valid | Medium | Greedy | Open/close count |
+| # | Problem | Difficulty | Pattern | LeetCode |
+|---|---------|-----------|---------|----------|
+| **Heaps** | | | |
+| 1 | Kth Largest Element in Array | Medium | Heap/QuickSelect | [LC 215](https://leetcode.com/problems/kth-largest-element-in-an-array/) |
+| 2 | Top K Frequent Elements | Medium | Heap + HashMap | [LC 347](https://leetcode.com/problems/top-k-frequent-elements/) |
+| 3 | Find Median from Data Stream | Hard | Two Heaps | [LC 295](https://leetcode.com/problems/find-median-from-data-stream/) |
+| **Intervals** | | | |
+| 4 | Merge Intervals | Medium | Sorting + Merge | [LC 56](https://leetcode.com/problems/merge-intervals/) |
+| 5 | Insert Interval | Medium | Linear Scan | [LC 57](https://leetcode.com/problems/insert-interval/) |
+| 6 | Non-overlapping Intervals | Medium | Greedy | [LC 435](https://leetcode.com/problems/non-overlapping-intervals/) |
+| 7 | Meeting Rooms II | Medium | Heap | [LC 253](https://leetcode.com/problems/meeting-rooms-ii/) (Premium) |
+| **Greedy** | | | |
+| 8 | Jump Game | Medium | Greedy | [LC 55](https://leetcode.com/problems/jump-game/) |
+| 9 | Gas Station | Medium | Greedy | [LC 134](https://leetcode.com/problems/gas-station/) |
+| 10 | Partition Labels | Medium | Greedy | [LC 763](https://leetcode.com/problems/partition-labels/) |
+| 11 | Min Add Parentheses Valid | Medium | Greedy | [LC 921](https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/) |
 
 **Weekend Tasks:**
 ```
@@ -666,22 +666,22 @@ class MinHeap {
 
 **📊 Problem Distribution:** 12 problems + 2 mock interviews
 
-| # | Problem | Difficulty | Pattern | Key Concept |
-|---|---------|-----------|---------|-------------|
-| **Graphs** | | | | |
-| 1 | Number of Islands | Medium | DFS/BFS | Grid traversal |
-| 2 | Flood Fill | Easy | DFS/BFS | Connected components |
-| 3 | Clone Graph | Medium | DFS + HashMap | Deep copy |
-| 4 | Course Schedule | Medium | Topological Sort | Cycle detection |
-| 5 | Pacific Atlantic Water Flow | Medium | DFS | Multi-source |
-| 6 | Rotting Oranges | Medium | BFS | Multi-source BFS |
-| **DP Intro** | | | | |
-| 7 | Climbing Stairs | Easy | DP | Fibonacci pattern |
-| 8 | House Robber | Medium | DP | Decision DP |
-| 9 | House Robber II | Medium | DP | Circular constraint |
-| 10 | Coin Change | Medium | DP | Unbounded knapsack |
-| 11 | Longest Increasing Subseq | Medium | DP | O(n log n) optimal |
-| 12 | Longest Common Subseq | Medium | DP | 2D DP (stretch) |
+| # | Problem | Difficulty | Pattern | LeetCode |
+|---|---------|-----------|---------|----------|
+| **Graphs** | | | |
+| 1 | Number of Islands | Medium | DFS/BFS | [LC 200](https://leetcode.com/problems/number-of-islands/) |
+| 2 | Flood Fill | Easy | DFS/BFS | [LC 733](https://leetcode.com/problems/flood-fill/) |
+| 3 | Clone Graph | Medium | DFS + HashMap | [LC 133](https://leetcode.com/problems/clone-graph/) |
+| 4 | Course Schedule | Medium | Topological Sort | [LC 207](https://leetcode.com/problems/course-schedule/) |
+| 5 | Pacific Atlantic Water Flow | Medium | DFS | [LC 417](https://leetcode.com/problems/pacific-atlantic-water-flow/) |
+| 6 | Rotting Oranges | Medium | BFS | [LC 994](https://leetcode.com/problems/rotting-oranges/) |
+| **DP Intro** | | | |
+| 7 | Climbing Stairs | Easy | DP | [LC 70](https://leetcode.com/problems/climbing-stairs/) |
+| 8 | House Robber | Medium | DP | [LC 198](https://leetcode.com/problems/house-robber/) |
+| 9 | House Robber II | Medium | DP | [LC 213](https://leetcode.com/problems/house-robber-ii/) |
+| 10 | Coin Change | Medium | DP | [LC 322](https://leetcode.com/problems/coin-change/) |
+| 11 | Longest Increasing Subseq | Medium | DP | [LC 300](https://leetcode.com/problems/longest-increasing-subsequence/) |
+| 12 | Longest Common Subseq | Medium | DP | [LC 1143](https://leetcode.com/problems/longest-common-subsequence/) |
 
 **Mock Interviews (Critical!):**
 ```
@@ -1519,22 +1519,113 @@ Remember:
 
 ## 📚 Further Reading & Resources
 
-### Official Documentation
-- [LeetCode Patterns](https://leetcode.com/explore/)
-- [JavaScript Array Methods - MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
-- [Big O Notation Guide](https://www.bigocheatsheet.com/)
+### 🎥 Video Resources (YouTube)
 
-### Related Articles
+**Pattern-Based Learning:**
+- [NeetCode - LeetCode Roadmap](https://www.youtube.com/c/NeetCode) - Complete playlist organized by patterns
+- [Abdul Bari - Algorithms](https://www.youtube.com/channel/UCZCFT11CWBi3MHNlGf019nw) - Deep dive into algorithm fundamentals
+- [TechDose - DSA Series](https://www.youtube.com/c/TECHDOSE4u) - Visual explanations of patterns
+- [Inside Code - DSA](https://www.youtube.com/c/insidecode) - Clean animations for complex concepts
+
+**Interview Preparation:**
+- [Clément Mihailescu - AlgoExpert](https://www.youtube.com/c/clem) - Interview tips and problem walkthroughs
+- [Back To Back SWE](https://www.youtube.com/c/BackToBackSWE) - Detailed explanations with whiteboard sessions
+- [Kevin Naughton Jr.](https://www.youtube.com/c/KevinNaughtonJr) - Live coding sessions
+
+**Specific Patterns:**
+- [Two Pointers & Sliding Window - NeetCode](https://www.youtube.com/watch?v=jM2dhDPYMQM)
+- [Binary Search Template - NeetCode](https://www.youtube.com/watch?v=U8XENwh8Oy8)
+- [Graph Algorithms - William Fiset](https://www.youtube.com/watch?v=DgXR2OWQnLc&list=PLDV1Zeh2NRsDGO4--qE8yH72HFL1Km93P)
+
+### 📖 Essential Reading
+
+**Algorithm Fundamentals:**
+- [Introduction to Algorithms (CLRS)](https://mitpress.mit.edu/books/introduction-algorithms-third-edition) - Comprehensive reference
+- [Cracking the Coding Interview](http://www.crackingthecodinginterview.com/) - Interview-focused problems
+- [Elements of Programming Interviews](https://elementsofprogramminginterviews.com/) - Advanced problem sets
+
+**Online Articles & Guides:**
+- [14 Patterns to Ace Any Coding Interview](https://hackernoon.com/14-patterns-to-ace-any-coding-interview-question-c5bb3357f6ed) - Pattern recognition
+- [LeetCode Patterns by Sean Prashad](https://seanprashad.com/leetcode-patterns/) - Curated problem lists
+- [Two Pointer Technique - GeeksforGeeks](https://www.geeksforgeeks.org/two-pointers-technique/)
+- [Sliding Window Technique - AfterAcademy](https://afteracademy.com/blog/sliding-window-algorithm-technique)
+
+**Interactive Learning:**
+- [VisuAlgo](https://visualgo.net/) - Algorithm visualizations
+- [Algorithm Visualizer](https://algorithm-visualizer.org/) - Interactive algorithm animations
+- [Big-O Cheat Sheet](https://www.bigocheatsheet.com/) - Complexity reference
+
+### 🏆 Practice Platforms
+
+**Primary Platforms:**
+- [LeetCode](https://leetcode.com/) - Main practice platform (use Explore section for patterns)
+- [NeetCode.io](https://neetcode.io/) - Curated LeetCode roadmap with video solutions
+- [AlgoExpert](https://www.algoexpert.io/) - Structured learning with video explanations (paid)
+
+**Pattern-Focused Practice:**
+- [LeetCode Patterns by Topic](https://leetcode.com/discuss/general-discussion/460599/blind-75-leetcode-questions) - Blind 75 list
+- [Grind 75](https://www.techinterviewhandbook.org/grind75) - Customizable practice plan
+- [Coding Patterns](https://designgurus.org/course/grokking-the-coding-interview) - 16 pattern-based course (Grokking)
+
+**Mock Interviews:**
+- [Pramp](https://www.pramp.com/) - Free peer-to-peer mock interviews
+- [Interviewing.io](https://interviewing.io/) - Anonymous practice with engineers
+- [LeetCode Mock Interview](https://leetcode.com/interview/) - Timed company-specific mocks
+
+### 📊 Complexity Analysis
+
+- [Big O Notation Explained](https://www.freecodecamp.org/news/big-o-notation-why-it-matters-and-why-it-doesnt-1674cfa8a23c/)
+- [Time Complexity Analysis - MIT OpenCourseWare](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-006-introduction-to-algorithms-fall-2011/)
+- [Master Theorem Calculator](https://www.wolframalpha.com/) - For recursive complexity
+
+### 🎯 Pattern-Specific Resources
+
+**Two Pointers:**
+- [Two Pointers Pattern - LeetCode Discuss](https://leetcode.com/discuss/study-guide/1688903/solved-all-two-pointers-problems-in-100-days)
+
+**Sliding Window:**
+- [Sliding Window Template - LeetCode Discuss](https://leetcode.com/problems/frequency-of-the-most-frequent-element/discuss/1175088/C%2B%2B-Maximum-Sliding-Window-Cheatsheet-Template!)
+
+**Binary Search:**
+- [Binary Search 101 - LeetCode Discuss](https://leetcode.com/discuss/general-discussion/786126/python-powerful-ultimate-binary-search-template-solved-many-problems)
+
+**Graph Algorithms:**
+- [Graph Algorithms for Coding Interviews](https://www.educative.io/blog/graph-algorithms-interview)
+
+### 📱 Mobile Apps
+
+- **LeetCode Mobile** - iOS/Android for on-the-go practice
+- **Anki** - Spaced repetition flashcards for patterns
+- **Forest** - Focus timer for Pomodoro technique
+
+### 🗓️ Study Tools
+
+**Tracking Progress:**
+- [LeetCode Progress Tracker (Notion)](https://www.notion.so/templates/leetcode-tracker) - Template for tracking
+- [Spaced Repetition Calculator](https://www.supermemo.com/en/archives1990-2015/english/ol/sm2) - SM-2 algorithm
+
+**Community:**
+- [r/leetcode](https://www.reddit.com/r/leetcode/) - Reddit community
+- [LeetCode Discuss](https://leetcode.com/discuss/) - Official discussion forum
+- [Blind](https://www.teamblind.com/) - Interview experiences
+
+### 📝 Related Articles in This Repository
+
 - [30-Day DSA Guide for Senior Frontend Engineers](./30_day_dsa_guide_senior_frontend.md)
 - [Two Pointer Technique](./two_pointer_technique.md)
 - [Sliding Window Pattern](./sliding_window.md)
 - [DFS Deep Dive](./dfs.md)
 - [BFS Complete Guide](./bfs.md)
 
-### Practice Platforms
-- LeetCode: curated problem lists
-- NeetCode: pattern-based roadmap
-- AlgoExpert: video explanations
+### 💡 Pro Tips for Using These Resources
+
+1. **Start with NeetCode roadmap** - Follow their curated list alongside this plan
+2. **Watch videos at 1.5x speed** - Save time while learning patterns
+3. **Use VisuAlgo for visualization** - Understand complex algorithms visually
+4. **Join LeetCode discussions** - Read solutions after solving
+5. **Track with Notion/Excel** - Monitor your spaced repetition schedule
+6. **Use Anki for pattern flashcards** - Reinforce pattern recognition
+7. **Practice on Pramp weekly** - Get comfortable explaining solutions
 
 ---
 
