@@ -41,6 +41,7 @@ For the best reading experience, we highly recommend visiting our **[Live Websit
 ### 🧮 dsa
 
 <pre>
+├── 📄 <a href="dsa/2_month_dsa_plan_working_professionals.md">2_month_dsa_plan_working_professionals.md</a>
 ├── 📄 <a href="dsa/30_day_dsa_guide_senior_frontend.md">30_day_dsa_guide_senior_frontend.md</a>
 ├── 📄 <a href="dsa/bfs.md">bfs.md</a>
 ├── 📄 <a href="dsa/dfs.md">dfs.md</a>
