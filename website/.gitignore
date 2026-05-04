@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 dist
+.next
 dist-ssr
 *.local
 .env
@@ -25,6 +26,7 @@ dist-ssr
 *.sw?
 src/data/content.json
 src/data/premium-content.json
+src/data/static-content.json
 .vercel
 .env*.local
 .next

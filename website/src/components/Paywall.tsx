@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Lock, Sparkles, ArrowRight, Crown } from 'lucide-react';
 import { useSubscription } from '../context/SubscriptionContext';
 import AuthModal from './AuthModal';
@@ -119,7 +119,7 @@ const Paywall = () => {
             <p className="signin-note">Already purchased? Sign in to access.</p>
           </div>
         ) : (
-          <Link to="/pricing" className="btn-primary">
+          <Link href="/pricing" className="btn-primary">
             <span>Unlock Premium Access</span>
             <ArrowRight size={18} />
           </Link>
@@ -139,9 +139,9 @@ const Paywall = () => {
         .paywall-blur-layer {
           position: absolute;
           top: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 100vw;
+          left: 0;
+          right: 0;
+          width: 100%;
           height: 120px;
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
@@ -155,9 +155,9 @@ const Paywall = () => {
         .paywall-gradient {
           position: absolute;
           top: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 100vw;
+          left: 0;
+          right: 0;
+          width: 100%;
           height: 250px;
           background: linear-gradient(
             to bottom,

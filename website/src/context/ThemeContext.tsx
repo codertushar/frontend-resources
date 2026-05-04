@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 type Theme = 'light' | 'dark';
@@ -13,23 +15,43 @@ interface ThemeProviderProps {
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
-export const ThemeProvider = ({ children }: ThemeProviderProps): React.ReactElement => {
-    const [theme, setTheme] = useState<Theme>(() => {
-        // Check local storage or system preference
+// SSR-safe function to get initial theme
+const getInitialTheme = (): Theme => {
+    // During SSR, return default
+    if (typeof window === 'undefined') {
+        return 'light';
+    }
+    // On client, check localStorage
+    try {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'light' || savedTheme === 'dark') {
             return savedTheme;
         }
-        // Default to light theme
-        return 'light';
-    });
+    } catch {
+        // localStorage might not be available
+    }
+    return 'light';
+};
+
+export const ThemeProvider = ({ children }: ThemeProviderProps): React.ReactElement => {
+    // Start with default, update after mount to prevent hydration mismatch
+    const [theme, setTheme] = useState<Theme>('light');
+    const [mounted, setMounted] = useState(false);
+
+    // Set actual theme after mount
+    useEffect(() => {
+        setTheme(getInitialTheme());
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
+        if (!mounted) return;
+
         const root = window.document.documentElement;
         root.classList.remove('light', 'dark');
         root.classList.add(theme);
         localStorage.setItem('theme', theme);
-    }, [theme]);
+    }, [theme, mounted]);
 
     const toggleTheme = (): void => {
         setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));

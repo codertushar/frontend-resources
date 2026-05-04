@@ -547,7 +547,7 @@ function extractTitleAndContent(content, filename) {
     return { title, processedContent, metadata };
 }
 
-function processDirectory(dirPath, relativePath, resources, categoryDifficultyIndex = {}) {
+function processDirectory(dirPath, relativePath, resources) {
     const items = fs.readdirSync(dirPath, { withFileTypes: true });
 
     for (const item of items) {
@@ -556,10 +556,8 @@ function processDirectory(dirPath, relativePath, resources, categoryDifficultyIn
 
         if (item.isDirectory()) {
             if (item.name === 'node_modules' || item.name === '.git') continue;
-            processDirectory(itemPath, itemRelativePath, resources, categoryDifficultyIndex);
+            processDirectory(itemPath, itemRelativePath, resources);
         } else if (item.isFile() && item.name.endsWith('.md')) {
-            // Ignore README/AGENTS at root if strictly looking for resources,
-            // but maybe we want them? Let's stick to CONTENT_DIRS for now.
             const rawContent = fs.readFileSync(itemPath, 'utf-8');
             const fileStats = fs.statSync(itemPath);
             const { title, processedContent, metadata } = extractTitleAndContent(rawContent, item.name);
@@ -635,12 +633,11 @@ function processDirectory(dirPath, relativePath, resources, categoryDifficultyIn
 
 function generateContent() {
     const resources = [];
-    const categoryDifficultyIndex = {}; // Track index within each category/difficulty combo
 
     for (const dir of CONTENT_DIRS) {
         const fullPath = path.join(PROJECT_ROOT, dir);
         if (fs.existsSync(fullPath)) {
-            processDirectory(fullPath, dir, resources, categoryDifficultyIndex);
+            processDirectory(fullPath, dir, resources);
         }
     }
 
@@ -652,7 +649,7 @@ function generateContent() {
     // Also write to public directory for service worker access
     fs.writeFileSync(PUBLIC_JSON, jsonContent);
 
-    console.log(`Generated ${resources.length} resources (all free content).`);
+    console.log(`Generated ${resources.length} resources (all free).`);
     console.log(`  → ${OUTPUT_JSON}`);
     console.log(`  → ${PUBLIC_JSON}`);
 }

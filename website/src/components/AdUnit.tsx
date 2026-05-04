@@ -1,5 +1,6 @@
+'use client';
+
 import { useEffect, useRef, useState, CSSProperties } from 'react';
-import { useSubscription } from '../context/SubscriptionContext';
 
 // Extend Window interface for AdSense
 declare global {
@@ -20,10 +21,16 @@ const AdUnit = ({
   responsive = true,
   className = "",
   style = {}
-}: AdUnitProps): JSX.Element | null => {
+}: AdUnitProps): React.JSX.Element | null => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isLoaded = useRef<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [isClient, setIsClient] = useState<boolean>(false);
+
+  // Check if we're on the client
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Check if container is visible
   useEffect(() => {
@@ -45,6 +52,7 @@ const AdUnit = ({
 
   // Load ad only when visible and container has width
   useEffect(() => {
+    if (!isClient) return;
     if (window.location.hostname === 'localhost' || !isVisible) {
       return;
     }
@@ -67,7 +75,12 @@ const AdUnit = ({
     }, 100); // A small delay to ensure layout is stable
 
     return () => clearTimeout(timer);
-  }, [isVisible]);
+  }, [isVisible, isClient]);
+
+  // Don't render during SSR
+  if (!isClient) {
+    return null;
+  }
 
   // Don't render in development (optional - can show placeholder)
   if (window.location.hostname === 'localhost') {
