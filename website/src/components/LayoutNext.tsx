@@ -880,21 +880,14 @@ const LayoutNext = ({ children }: LayoutProps) => {
                     <div className="user-dropdown">
                       <div className="dropdown-header">
                         <span className="dropdown-email">{user?.email}</span>
-                        {userIsPremium ? (
-                          <div className="premium-badge">
-                            <Crown size={12} />
-                            <span>Premium {subscription?.plan === 'lifetime' ? '(Lifetime)' : ''}</span>
-                          </div>
-                        ) : (
-                          <Link
-                            href="/pricing"
-                            className="upgrade-link"
-                            onClick={() => setIsDropdownOpen(false)}
-                          >
-                            <Sparkles size={12} />
-                            <span>Upgrade to Premium</span>
-                          </Link>
-                        )}
+                        <Link
+                          href="/donate"
+                          className="upgrade-link"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          <Sparkles size={12} />
+                          <span>Support Us</span>
+                        </Link>
                       </div>
                       <div className="dropdown-divider"></div>
                       <button className="dropdown-item" onClick={handleSignOut}>
@@ -932,7 +925,7 @@ const LayoutNext = ({ children }: LayoutProps) => {
               <h4>Resources</h4>
               <Link href="/library">Library</Link>
               <Link href="/practice">Practice</Link>
-              <Link href="/pricing">Pricing</Link>
+              <Link href="/donate">Donate</Link>
             </div>
             <div className="footer-section">
               <h4>Company</h4>

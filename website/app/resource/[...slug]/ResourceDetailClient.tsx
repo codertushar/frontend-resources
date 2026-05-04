@@ -12,9 +12,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronRight, Crown, Home, Check, Circle, ChevronLeft, ArrowRight, BookOpen, ChevronDown, ChevronUp } from 'lucide-react';
 import { useProgress } from '../../../src/context/ProgressContext';
-import { useSubscription } from '../../../src/context/SubscriptionContext';
 import { useAuth } from '../../../src/context/AuthContext';
-import Paywall from '../../../src/components/Paywall';
 import QuizSection, { parseQuizFromMarkdown, removeQuizFromContent } from '../../../src/components/QuizSection';
 import AdUnit from '../../../src/components/AdUnit';
 import type { Article } from '../../../src/types/content';
@@ -62,15 +60,11 @@ export function ResourceDetailClient({
 }: ResourceDetailClientProps) {
   const router = useRouter();
   const { isRead, toggleRead, isInitialized } = useProgress();
-  const { isPremium, fetchPremiumContent } = useSubscription();
   const { isSignedIn } = useAuth();
-  const [premiumContent, setPremiumContent] = useState<string | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [contentToDisplay, setContentToDisplay] = useState(
     article.fullContent || article.content
   );
-  const [premiumContentLoading, setPremiumContentLoading] = useState(false);
-  const [premiumContentError, setPremiumContentError] = useState<string | null>(null);
   const [showFullCategory, setShowFullCategory] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
   const activeItemRef = useRef<HTMLAnchorElement>(null);
@@ -79,12 +73,6 @@ export function ResourceDetailClient({
   const sidebarArticles = showFullCategory ? categoryArticles : subcategoryArticles;
 
   const isReadArticle = isRead(article.id);
-  const isPremiumArticle = article.premium;
-
-  // Use edge-provided access level if available, otherwise fall back to client-side check
-  // Edge middleware sets: 'free' (free article), 'premium' (user has access), 'paywall' (no access)
-  const hasAccessFromEdge = accessLevel === 'free' || accessLevel === 'premium';
-  const showPaywall = isPremiumArticle && !hasAccessFromEdge && !isPremium();
 
   // Parse quiz questions from markdown
   const quiz = parseQuizFromMarkdown(contentToDisplay);
@@ -105,39 +93,10 @@ export function ResourceDetailClient({
 
   // Mark as read on mount
   useEffect(() => {
-    if (!showPaywall && !isReadArticle) {
+    if (!isReadArticle) {
       toggleRead(article.id);
     }
-  }, [article.id, showPaywall, isReadArticle, toggleRead]);
-
-  // Fetch premium content if needed (only as fallback when edge auth didn't provide it)
-  // With edge auth, content is already provided statically from the server
-  useEffect(() => {
-    // Skip if we already have full content from edge auth (hasFullContent means server provided it)
-    if (article.hasFullContent) {
-      return;
-    }
-
-    // Only fetch if user has premium access but content wasn't provided by edge
-    // This is a fallback for cases where edge auth might have failed
-    if (isPremiumArticle && isPremium() && !premiumContent && !hasAccessFromEdge) {
-      setPremiumContentLoading(true);
-      fetchPremiumContent(article.id)
-        .then((content) => {
-          if (content) {
-            setPremiumContent(content);
-            setContentToDisplay(content);
-          }
-        })
-        .catch((error) => {
-          console.error('Error loading premium content:', error);
-          setPremiumContentError((error as Error).message);
-        })
-        .finally(() => {
-          setPremiumContentLoading(false);
-        });
-    }
-  }, [article.id, article.hasFullContent, isPremiumArticle, isPremium, premiumContent, fetchPremiumContent, hasAccessFromEdge]);
+  }, [article.id, isReadArticle, toggleRead]);
 
   const handleNavigate = useCallback(
     (articleId: string) => {
@@ -209,9 +168,6 @@ export function ResourceDetailClient({
                   <div className="sidebar-item-content">
                     <span className="sidebar-item-title">{sidebarArticle.title}</span>
                     <div className="sidebar-item-meta">
-                      {sidebarArticle.premium && (
-                        <Crown size={12} className="sidebar-premium-icon" />
-                      )}
                       {sidebarArticle.difficulty && (
                         <span className={`sidebar-difficulty ${sidebarArticle.difficulty}`}>
                           {sidebarArticle.difficulty}
@@ -286,12 +242,6 @@ export function ResourceDetailClient({
               })()}
             </h1>
             <div className="meta-tags">
-              {article.premium && (
-                <span className="meta-tag premium">
-                  <Crown size={14} />
-                  Premium
-                </span>
-              )}
               <a href={`/library?category=${article.category}`} className="meta-tag category">
                 {article.category}
               </a>
@@ -303,7 +253,7 @@ export function ResourceDetailClient({
                   {article.difficulty}
                 </span>
               )}
-              {isInitialized && isSignedIn && !showPaywall && (
+              {isInitialized && isSignedIn && (
                 <button
                   onClick={handleToggleRead}
                   className={`btn-mark-read ${isReadArticle ? 'read' : ''}`}
@@ -332,68 +282,56 @@ export function ResourceDetailClient({
           </div>
 
           <motion.div
-            className={`article-content glass-panel ${showPaywall ? 'has-paywall' : ''}`}
+            className="article-content glass-panel"
             key={`content-${article.id}`}
             initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2, delay: 0.1, ease: "easeOut" }}
           >
-            {premiumContentLoading ? (
-              <div className="loading">Loading content...</div>
-            ) : (
-              <>
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    code({ node, inline, className, children, ...props }: any) {
-                      const match = /language-(\w+)/.exec(className || '');
-                      return !inline && match ? (
-                        <SyntaxHighlighter
-                          style={vscDarkPlus}
-                          language={match[1]}
-                          PreTag="div"
-                          {...props}
-                        >
-                          {String(children).replace(/\n$/, '')}
-                        </SyntaxHighlighter>
-                      ) : (
-                        <code className={className} {...props}>
-                          {children}
-                        </code>
-                      );
-                    },
-                    table({ node, children, ...props }: any) {
-                      return (
-                        <div className="table-wrapper">
-                          <table {...props}>{children}</table>
-                        </div>
-                      );
-                    },
-                    img({ node, src, alt, ...props }: any) {
-                      return (
-                        <img
-                          src={src}
-                          alt={alt || 'Article image'}
-                          loading="lazy"
-                          {...props}
-                        />
-                      );
-                    }
-                  }}
-                >
-                  {contentWithoutQuiz}
-                </ReactMarkdown>
-                {showPaywall && <Paywall />}
-                {premiumContentError && !showPaywall && (
-                  <div className="premium-error">
-                    Failed to load full content. Showing preview instead.
-                  </div>
-                )}
-                {/* Quiz Section - only show if quiz exists and not behind paywall */}
-                {!showPaywall && quiz && quiz.length > 0 && (
-                  <QuizSection questions={quiz} />
-                )}
-              </>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                code({ node, inline, className, children, ...props }: any) {
+                  const match = /language-(\w+)/.exec(className || '');
+                  return !inline && match ? (
+                    <SyntaxHighlighter
+                      style={vscDarkPlus}
+                      language={match[1]}
+                      PreTag="div"
+                      {...props}
+                    >
+                      {String(children).replace(/\n$/, '')}
+                    </SyntaxHighlighter>
+                  ) : (
+                    <code className={className} {...props}>
+                      {children}
+                    </code>
+                  );
+                },
+                table({ node, children, ...props }: any) {
+                  return (
+                    <div className="table-wrapper">
+                      <table {...props}>{children}</table>
+                    </div>
+                  );
+                },
+                img({ node, src, alt, ...props }: any) {
+                  return (
+                    <img
+                      src={src}
+                      alt={alt || 'Article image'}
+                      loading="lazy"
+                      {...props}
+                    />
+                  );
+                }
+              }}
+            >
+              {contentWithoutQuiz}
+            </ReactMarkdown>
+            {/* Quiz Section - show if quiz exists */}
+            {quiz && quiz.length > 0 && (
+              <QuizSection questions={quiz} />
             )}
           </motion.div>
 
@@ -571,11 +509,6 @@ export function ResourceDetailClient({
           background: var(--surface-hover);
         }
 
-        .meta-tag.premium {
-          background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.15));
-          border-color: rgba(139, 92, 246, 0.3);
-          color: #a78bfa;
-        }
 
         .meta-tag.difficulty {
           text-transform: capitalize;
@@ -644,9 +577,6 @@ export function ResourceDetailClient({
           -webkit-font-smoothing: antialiased;
         }
 
-        .article-content.has-paywall {
-          padding-bottom: 0;
-        }
 
         /* Blockquote / Info Box Styling */
         .article-content blockquote {
@@ -814,21 +744,6 @@ export function ResourceDetailClient({
           background: var(--surface-hover);
         }
 
-        .loading {
-          text-align: center;
-          padding: 3rem;
-          color: var(--text-muted);
-        }
-
-        .premium-error {
-          padding: 1rem;
-          margin-top: 1rem;
-          background: rgba(239, 68, 68, 0.1);
-          border: 1px solid rgba(239, 68, 68, 0.3);
-          border-radius: 8px;
-          color: #ef4444;
-          text-align: center;
-        }
 
         .table-wrapper {
           overflow-x: auto;
@@ -1105,9 +1020,6 @@ export function ResourceDetailClient({
           gap: 0.5rem;
         }
 
-        .sidebar-premium-icon {
-          color: #a78bfa;
-        }
 
         .sidebar-difficulty {
           font-size: 0.65rem;

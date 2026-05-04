@@ -80,7 +80,6 @@ const getInterviewFrequency = (item: Article): InterviewFrequency => {
 
 export function LibraryClient({ initialArticles }: LibraryClientProps) {
   const { isRead, getStats } = useProgress();
-  const { isPremium } = useSubscription();
   const router = useRouter();
 
   // Use the library filters hook
@@ -527,7 +526,7 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
                 <div key={item.id}>
                   <Link
                     href={`/resource/${item.id}`}
-                    className={`resource-card ${item.premium && !isPremium() ? 'is-premium-locked' : ''} ${isRead(item.id) ? 'is-read' : ''}`}
+                    className={`resource-card ${isRead(item.id) ? 'is-read' : ''}`}
                     onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--surface-hover)')}
                     onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                   >
@@ -561,11 +560,6 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
                     </div>
 
                     <div className="card-header" style={{ width: '200px', flexShrink: 0, margin: 0, gap: '0.5rem', display: 'flex', justifyContent: 'flex-end' }}>
-                      {item.premium && (
-                        <span className={`badge premium ${isPremium() ? 'unlocked' : ''}`}>
-                          Premium
-                        </span>
-                      )}
                       {interviewFreq === 'critical' && (
                         <span className="badge interview-favorite" title="Frequently asked in interviews">
                           Interview Favorite
@@ -590,17 +584,12 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
             >
               <Link
                 href={`/resource/${item.id}`}
-                className={`resource-card glass-panel animated-card subtle ${item.premium && !isPremium() ? 'is-premium-locked' : ''} ${isRead(item.id) ? 'is-read' : ''}`}
+                className={`resource-card glass-panel animated-card subtle ${isRead(item.id) ? 'is-read' : ''}`}
               >
                 <div className="card-header">
                   {isRead(item.id) && (
                     <span className="read-indicator" title="Completed">
                       <CheckCircle size={16} />
-                    </span>
-                  )}
-                  {item.premium && (
-                    <span className={`badge premium ${isPremium() ? 'unlocked' : ''}`}>
-                      Premium
                     </span>
                   )}
                   {interviewFreq === 'critical' && (
