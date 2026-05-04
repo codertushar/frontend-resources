@@ -764,7 +764,6 @@ const InteractiveConstellation = () => {
 
 const Layout = ({ children }: LayoutProps) => {
   const { user, isSignedIn, isLoaded, signOut } = useAuth();
-  const { isPremium, subscription } = useSubscription();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState<boolean>(false);
@@ -773,7 +772,6 @@ const Layout = ({ children }: LayoutProps) => {
   const megaMenuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const megaMenuWrapperRef = useRef<HTMLDivElement | null>(null);
   const isMouseInMenuRef = useRef<boolean>(false);
-  const userIsPremium = isPremium();
 
   // Detect mobile
   useEffect(() => {
@@ -933,21 +931,14 @@ const Layout = ({ children }: LayoutProps) => {
                     <div className="user-dropdown">
                       <div className="dropdown-header">
                         <span className="dropdown-email">{user?.email}</span>
-                        {userIsPremium ? (
-                          <div className="premium-badge">
-                            <Crown size={12} />
-                            <span>Premium {subscription?.plan === 'lifetime' ? '(Lifetime)' : ''}</span>
-                          </div>
-                        ) : (
-                          <Link
-                            to="/donate"
-                            className="upgrade-link"
-                            onClick={() => setIsDropdownOpen(false)}
-                          >
-                            <Sparkles size={12} />
-                            <span>Support Us</span>
-                          </Link>
-                        )}
+                        <Link
+                          to="/donate"
+                          className="upgrade-link"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          <Sparkles size={12} />
+                          <span>Support Us</span>
+                        </Link>
                       </div>
                       <div className="dropdown-divider"></div>
                       <button className="dropdown-item" onClick={handleSignOut}>

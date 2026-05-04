@@ -27,3 +27,4 @@ src/data/content.json
 src/data/premium-content.json
 .vercel
 .env*.local
+.next

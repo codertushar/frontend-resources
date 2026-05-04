@@ -85,7 +85,6 @@ const getInterviewFrequency = (item: Article): InterviewFrequency => {
 
 const Library = (): JSX.Element => {
   const { isRead, getStats } = useProgress();
-  const { isPremium } = useSubscription();
   const navigate = useNavigate();
 
   // Type assertion for contentData
@@ -180,7 +179,7 @@ const Library = (): JSX.Element => {
 
   // Random article picker
   const handleSurpriseMe = useCallback((): void => {
-    const unreadArticles = typedContentData.filter(item => !isRead(item.id) && !item.premium);
+    const unreadArticles = typedContentData.filter(item => !isRead(item.id));
     if (unreadArticles.length > 0) {
       const randomArticle = unreadArticles[Math.floor(Math.random() * unreadArticles.length)];
       navigate(`/resource/${randomArticle.id}`);
@@ -293,11 +292,7 @@ const Library = (): JSX.Element => {
             <div className="quick-stats">
               <span className="stat-chip">
                 <BookOpen size={14} />
-                {typedContentData.filter(i => !i.premium).length} Free
-              </span>
-              <span className="stat-chip premium-chip">
-                <Crown size={14} />
-                {typedContentData.filter(i => i.premium).length} Premium
+                {typedContentData.length} Total
               </span>
             </div>
           </motion.div>
@@ -554,7 +549,7 @@ const Library = (): JSX.Element => {
                 <div key={item.id}>
                   <Link
                     to={`/resource/${item.id}`}
-                    className={`resource-card ${item.premium && !isPremium() ? 'is-premium-locked' : ''} ${isRead(item.id) ? 'is-read' : ''}`}
+                    className={`resource-card ${isRead(item.id) ? 'is-read' : ''}`}
                     onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--surface-hover)')}
                     onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                   >
@@ -588,11 +583,6 @@ const Library = (): JSX.Element => {
                     </div>
 
                     <div className="card-header" style={{ width: '200px', flexShrink: 0, margin: 0, gap: '0.5rem', display: 'flex', justifyContent: 'flex-end' }}>
-                      {item.premium && (
-                        <span className={`badge premium ${isPremium() ? 'unlocked' : ''}`}>
-                          Premium
-                        </span>
-                      )}
                       {interviewFreq === 'critical' && (
                         <span className="badge interview-favorite" title="Frequently asked in interviews">
                           Interview Favorite
@@ -617,17 +607,12 @@ const Library = (): JSX.Element => {
             >
               <Link
                 to={`/resource/${item.id}`}
-                className={`resource-card glass-panel animated-card subtle ${item.premium && !isPremium() ? 'is-premium-locked' : ''} ${isRead(item.id) ? 'is-read' : ''}`}
+                className={`resource-card glass-panel animated-card subtle ${isRead(item.id) ? 'is-read' : ''}`}
               >
                 <div className="card-header">
                   {isRead(item.id) && (
                     <span className="read-indicator" title="Completed">
                       <CheckCircle size={16} />
-                    </span>
-                  )}
-                  {item.premium && (
-                    <span className={`badge premium ${isPremium() ? 'unlocked' : ''}`}>
-                      Premium
                     </span>
                   )}
                   {interviewFreq === 'critical' && (

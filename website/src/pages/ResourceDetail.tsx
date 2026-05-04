@@ -839,7 +839,7 @@ const ResourceDetail = () => {
         </div>
       </motion.div>
 
-      {/* Mobile Ad - shown for all users (AdUnit handles premium check internally) */}
+      {/* Mobile Ad - shown for all users */}
       <div className="mobile-ad">
         <AdUnit slot="1909064105" responsive={true} />
       </div>

@@ -24,7 +24,6 @@ const AdUnit = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const isLoaded = useRef<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  const { isPremium } = useSubscription();
 
   // Check if container is visible
   useEffect(() => {
@@ -46,7 +45,7 @@ const AdUnit = ({
 
   // Load ad only when visible and container has width
   useEffect(() => {
-    if (isPremium() || window.location.hostname === 'localhost' || !isVisible) {
+    if (window.location.hostname === 'localhost' || !isVisible) {
       return;
     }
 
@@ -68,12 +67,7 @@ const AdUnit = ({
     }, 100); // A small delay to ensure layout is stable
 
     return () => clearTimeout(timer);
-  }, [isPremium, isVisible]);
-
-  // Don't render for premium users
-  if (isPremium()) {
-    return null;
-  }
+  }, [isVisible]);
 
   // Don't render in development (optional - can show placeholder)
   if (window.location.hostname === 'localhost') {

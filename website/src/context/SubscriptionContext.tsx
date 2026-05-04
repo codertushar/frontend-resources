@@ -82,9 +82,8 @@ declare global {
   }
 }
 
-// Context value type - simplified for donations only
+// Context value type - donation-only model
 interface SubscriptionContextValue {
-  isInitialized: boolean;
   isSignedIn: boolean;
   initiateDonation: (amount: number) => Promise<PaymentResult>;
 }
@@ -105,8 +104,7 @@ export const useSubscription = (): SubscriptionContextValue => {
 };
 
 export const SubscriptionProvider = ({ children }: SubscriptionProviderProps) => {
-  const { isSignedIn, isLoaded, getAccessToken } = useAuth() as AuthContextValue;
-  const [isInitialized] = useState(true); // Always initialized since no subscription to load
+  const { isSignedIn, getAccessToken } = useAuth() as AuthContextValue;
 
   // Create Razorpay order for donation
   const createDonationOrder = useCallback(async (amount: number): Promise<OrderResponse> => {
@@ -185,7 +183,6 @@ export const SubscriptionProvider = ({ children }: SubscriptionProviderProps) =>
   }, [createDonationOrder]);
 
   const value: SubscriptionContextValue = {
-    isInitialized,
     isSignedIn,
     initiateDonation,
   };
