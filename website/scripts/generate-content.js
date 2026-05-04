@@ -12,153 +12,10 @@ const WEBSITE_ROOT = path.resolve(__dirname, '../');
 const PUBLIC_CONTENT_DIR = path.join(WEBSITE_ROOT, 'public', 'content');
 const OUTPUT_JSON = path.join(WEBSITE_ROOT, 'src', 'data', 'content.json');
 const PUBLIC_JSON = path.join(WEBSITE_ROOT, 'public', 'content.json'); // For service worker access
-const PREMIUM_CONTENT_JSON = path.join(WEBSITE_ROOT, 'src', 'data', 'premium-content.json'); // Full premium content (server-side only)
-const STATIC_CONTENT_JSON = path.join(WEBSITE_ROOT, 'src', 'data', 'static-content.json'); // Full content for static generation (includes premium)
 
 const CONTENT_DIRS = ['js', 'dsa', 'ai', 'general', 'machine-coding', 'system-design'];
 
-// Premium content configuration
-// Strategy: ~50% premium, ~50% free with balanced conditions
-// - Each category has at least some free content
-// - Hard difficulty: mostly premium, but first 1-2 articles free
-// - Medium difficulty: 50% premium, 50% free (popular/useful ones stay free)
-// - Easy difficulty: always free
-// - System Design: 80% premium (1-2 free intro articles)
-// - Machine Coding: 80% premium (1-2 free intro articles)
-// - AI: 80% premium (1-2 free intro articles)
-// - DSA: 60% premium (easy all free, some medium free)
-// - JS/General: 40% premium (utilities/advanced concepts premium)
-const PREMIUM_CONFIG = {
-    // Categories that are mostly premium but not 100%
-    mostlyPremiumCategories: ['system-design', 'machine-coding', 'ai'],
-    // Categories that are balanced (some premium, some free)
-    balancedCategories: ['dsa', 'js', 'general'],
-    // Specific files/topics that should be premium (advanced utilities)
-    // These are moved to premium to maintain value for paying users
-    premiumTopics: [
-        'debounce',
-        'throttle',
-        'deep_clone',
-        'deep-clone',
-        'map_limit',
-        'maplimit',
-        'fire_on_push',
-        'sequential',
-    ],
-    // Specific files/topics that should ALWAYS be free (intro/guide content, popular utilities)
-    // Popular utilities and fundamental concepts should remain free for SEO and user acquisition
-    freeTopics: [
-        '30-day',
-        'guide',
-        'introduction',
-        'getting-started',
-        'prototype',  // Prototype is fundamental, keep free
-        'observable_array',  // Popular pattern, keep free
-        'event_emitter',  // Common pattern, keep free
-        'observer',  // Design pattern, keep free
-        'factory',  // Design pattern, keep free
-        'singleton',  // Design pattern, keep free
-        'module',  // Design pattern, keep free
-    ],
-};
-
-function isPremiumContent(category, difficulty, subcategory, filePath = '', contentIndex = 0) {
-    const filePathLower = filePath.toLowerCase();
-    const fileName = filePathLower.split('/').pop().replace('.md', '');
-
-    // Rule 0: Check if explicitly marked as free (intro guides and popular free topics)
-    for (const topic of PREMIUM_CONFIG.freeTopics) {
-        if (filePathLower.includes(topic)) {
-            return false;
-        }
-    }
-
-    // Rule 1: Easy difficulty = always free
-    if (difficulty === 'easy') {
-        return false;
-    }
-
-    // Rule 2: Check specific premium topics (advanced utilities)
-    for (const topic of PREMIUM_CONFIG.premiumTopics) {
-        if (fileName.includes(topic) || filePathLower.includes(topic)) {
-            return true;
-        }
-    }
-
-    // Rule 3: Hard difficulty = mostly premium, but keep first 2-3 accessible for each category
-    if (difficulty === 'hard') {
-        // Keep first 1-2 hard articles free per category for accessibility
-        // This is determined by contentIndex (position in list)
-        return contentIndex > 1; // First 2 (indices 0,1) are free, rest are premium
-    }
-
-    // Rule 4: System Design, Machine Coding, AI - mostly premium (~80%)
-    // Keep first 1-2 articles free per category
-    if (PREMIUM_CONFIG.mostlyPremiumCategories.includes(category)) {
-        return contentIndex > 1; // First 2 articles free, rest premium
-    }
-
-    // Rule 5: DSA - balanced (easy free, ~60% of medium premium, hard mostly premium)
-    if (category === 'dsa') {
-        if (difficulty === 'medium') {
-            // 50% of medium articles should be free for SEO
-            // Use contentIndex to alternate: even indices free, odd premium
-            return contentIndex % 2 === 1;
-        }
-        if (difficulty === 'hard') {
-            return contentIndex > 0; // First hard article per difficulty free
-        }
-    }
-
-    // Rule 6: JS and General categories - balanced
-    if (['js', 'general'].includes(category)) {
-        if (difficulty === 'medium') {
-            // 50% of medium articles free for SEO and popular utility retention
-            return contentIndex % 2 === 1;
-        }
-        if (difficulty === 'hard') {
-            return contentIndex > 0; // First hard article free
-        }
-    }
-
-    // Rule 7: Browser/rendering advanced topics = premium
-    if (filePathLower.includes('browser') && difficulty !== 'easy') {
-        return true;
-    }
-    if (filePathLower.includes('rendering') && difficulty !== 'easy') {
-        return true;
-    }
-
-    // Default: free (bias towards free for unknown cases)
-    return false;
-}
-
-// Generate preview content for premium articles (first ~300 words)
-function generatePreviewContent(fullContent) {
-    const lines = fullContent.split('\n');
-    let wordCount = 0;
-    let previewLines = [];
-
-    for (const line of lines) {
-        previewLines.push(line);
-        wordCount += line.split(/\s+/).filter(w => w.length > 0).length;
-
-        // Stop after ~300 words but ensure we end at a paragraph break
-        if (wordCount >= 300) {
-            // Try to end at a paragraph break
-            const nextLineIndex = lines.indexOf(line) + 1;
-            if (nextLineIndex < lines.length && lines[nextLineIndex].trim() === '') {
-                break;
-            }
-            // If next line is not empty, continue until paragraph break
-            if (wordCount >= 400) {
-                break;
-            }
-        }
-    }
-
-    return previewLines.join('\n');
-}
+// All content is now free - no premium restrictions
 
 // Smart tags based on subcategory, path, and content patterns
 const SMART_TAGS = {
@@ -690,7 +547,7 @@ function extractTitleAndContent(content, filename) {
     return { title, processedContent, metadata };
 }
 
-function processDirectory(dirPath, relativePath, resources, premiumFullContent = {}, staticFullContent = {}, categoryDifficultyIndex = {}) {
+function processDirectory(dirPath, relativePath, resources) {
     const items = fs.readdirSync(dirPath, { withFileTypes: true });
 
     for (const item of items) {
@@ -699,10 +556,8 @@ function processDirectory(dirPath, relativePath, resources, premiumFullContent =
 
         if (item.isDirectory()) {
             if (item.name === 'node_modules' || item.name === '.git') continue;
-            processDirectory(itemPath, itemRelativePath, resources, premiumFullContent, staticFullContent, categoryDifficultyIndex);
+            processDirectory(itemPath, itemRelativePath, resources);
         } else if (item.isFile() && item.name.endsWith('.md')) {
-            // Ignore README/AGENTS at root if strictly looking for resources,
-            // but maybe we want them? Let's stick to CONTENT_DIRS for now.
             const rawContent = fs.readFileSync(itemPath, 'utf-8');
             const fileStats = fs.statSync(itemPath);
             const { title, processedContent, metadata } = extractTitleAndContent(rawContent, item.name);
@@ -727,21 +582,12 @@ function processDirectory(dirPath, relativePath, resources, premiumFullContent =
                 ? parseInt(metadata.order, 10)
                 : normalizedScore;
 
-            // Track index of articles within each category/difficulty combination
-            const indexKey = `${category}:${difficulty}`;
-            categoryDifficultyIndex[indexKey] = (categoryDifficultyIndex[indexKey] || 0) + 1;
-            const contentIndex = categoryDifficultyIndex[indexKey] - 1; // 0-based index
-
-            // Determine if content is premium
-            const premium = metadata.premium !== undefined
-                ? metadata.premium === 'true' || metadata.premium === true
-                : isPremiumContent(category, difficulty, subcategory, itemRelativePath, contentIndex);
-
             // Calculate read time from full content (words / 200 wpm)
             const wordCount = rawContent.split(/\s+/).filter(w => w.length > 0).length;
             const readTime = Math.max(3, Math.min(30, Math.ceil(wordCount / 200)));
 
             // Build resource object with frontmatter metadata
+            // All content is now free - no premium restrictions
             const resource = {
                 id: itemRelativePath.replace('.md', ''),
                 title,
@@ -749,16 +595,13 @@ function processDirectory(dirPath, relativePath, resources, premiumFullContent =
                 subcategory,
                 difficulty,
                 difficultyScore, // Numeric score for granular sorting (lower = easier)
-                premium, // Whether this is premium content
+                premium: false, // All content is free now
                 readTime, // Estimated read time in minutes
                 createdAt: fileStats.birthtime.toISOString(), // File creation timestamp for sorting
                 filePath: `/content/${itemRelativePath}`,
                 content: stripMarkdown(processedContent).slice(0, 300), // Preview for search/display
-                // For premium content, only include preview in the public JSON
-                // Full content will be fetched via API for authorized users
-                fullContent: premium ? generatePreviewContent(processedContent) : processedContent,
-                // Store a flag indicating if full content is available in this JSON
-                hasFullContent: !premium
+                fullContent: processedContent, // Full content available for all articles
+                hasFullContent: true // All content has full content available
             };
 
             // Generate smart tags, merge with frontmatter tags if present
@@ -783,15 +626,6 @@ function processDirectory(dirPath, relativePath, resources, premiumFullContent =
                 resource.interviewFrequency = metadata.interviewFrequency.toLowerCase();
             }
 
-            // If premium, store full content separately for API access
-            if (premium) {
-                premiumFullContent[resource.id] = processedContent;
-            }
-
-            // Store full content for static generation (all articles, including premium)
-            // This enables static HTML generation at build time
-            staticFullContent[resource.id] = processedContent;
-
             resources.push(resource);
         }
     }
@@ -799,14 +633,11 @@ function processDirectory(dirPath, relativePath, resources, premiumFullContent =
 
 function generateContent() {
     const resources = [];
-    const premiumFullContent = {}; // Map of id -> full content for premium articles
-    const staticFullContent = {}; // Map of id -> full content for ALL articles (for static generation)
-    const categoryDifficultyIndex = {}; // Track index within each category/difficulty combo
 
     for (const dir of CONTENT_DIRS) {
         const fullPath = path.join(PROJECT_ROOT, dir);
         if (fs.existsSync(fullPath)) {
-            processDirectory(fullPath, dir, resources, premiumFullContent, staticFullContent, categoryDifficultyIndex);
+            processDirectory(fullPath, dir, resources);
         }
     }
 
@@ -818,23 +649,9 @@ function generateContent() {
     // Also write to public directory for service worker access
     fs.writeFileSync(PUBLIC_JSON, jsonContent);
 
-    // Write premium content separately (this should NOT be in public folder)
-    // It will be used by API routes only
-    fs.writeFileSync(PREMIUM_CONTENT_JSON, JSON.stringify(premiumFullContent, null, 2));
-
-    // Write static content with ALL full content (for static generation at build time)
-    // This file is used by the server component to pre-render all article pages
-    // Security: This file should NOT be exposed to the client - it's only used during SSG
-    fs.writeFileSync(STATIC_CONTENT_JSON, JSON.stringify(staticFullContent, null, 2));
-
-    const premiumCount = resources.filter(r => r.premium).length;
-    const freeCount = resources.length - premiumCount;
-
-    console.log(`Generated ${resources.length} resources (${freeCount} free, ${premiumCount} premium).`);
+    console.log(`Generated ${resources.length} resources (all free).`);
     console.log(`  → ${OUTPUT_JSON}`);
     console.log(`  → ${PUBLIC_JSON}`);
-    console.log(`  → ${PREMIUM_CONTENT_JSON} (${Object.keys(premiumFullContent).length} premium articles)`);
-    console.log(`  → ${STATIC_CONTENT_JSON} (${Object.keys(staticFullContent).length} articles for static generation)`);
 }
 
 // Initial generation
