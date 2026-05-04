@@ -20,7 +20,6 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useProgress } from '../../src/context/ProgressContext';
-import { useSubscription } from '../../src/context/SubscriptionContext';
 import { useLibraryFilters } from '../../src/hooks/useLibraryFilters';
 import {
   CATEGORIES,
