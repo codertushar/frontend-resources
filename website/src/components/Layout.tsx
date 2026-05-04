@@ -940,12 +940,12 @@ const Layout = ({ children }: LayoutProps) => {
                           </div>
                         ) : (
                           <Link
-                            to="/pricing"
+                            to="/donate"
                             className="upgrade-link"
                             onClick={() => setIsDropdownOpen(false)}
                           >
                             <Sparkles size={12} />
-                            <span>Upgrade to Premium</span>
+                            <span>Support Us</span>
                           </Link>
                         )}
                       </div>
@@ -985,7 +985,7 @@ const Layout = ({ children }: LayoutProps) => {
               <h4>Resources</h4>
               <Link to="/library">Library</Link>
               <Link to="/practice">Practice</Link>
-              <Link to="/pricing">Pricing</Link>
+              <Link to="/donate">Donate</Link>
             </div>
             <div className="footer-section">
               <h4>Company</h4>
