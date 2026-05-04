@@ -11,7 +11,6 @@ import NotificationPrompt from './NotificationPrompt';
 import AuthModal from './AuthModal';
 import MegaMenuNext from './MegaMenuNext';
 import { useAuth } from '../context/AuthContext';
-import { useSubscription } from '../context/SubscriptionContext';
 import { useMusicPlayer } from '../context/MusicContext';
 import { supabase } from '../lib/supabase';
 
@@ -706,7 +705,6 @@ const InteractiveConstellation = () => {
 
 const LayoutNext = ({ children }: LayoutProps) => {
   const { user, isSignedIn, isLoaded, signOut } = useAuth();
-  const { isPremium, subscription } = useSubscription();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState<boolean>(false);
@@ -716,7 +714,6 @@ const LayoutNext = ({ children }: LayoutProps) => {
   const megaMenuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const megaMenuWrapperRef = useRef<HTMLDivElement | null>(null);
   const isMouseInMenuRef = useRef<boolean>(false);
-  const userIsPremium = isPremium();
 
   // SSR-safe mounting check
   useEffect(() => {

@@ -16,10 +16,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { questionId: string };
+  params: Promise<{ questionId: string }>;
 }): Promise<Metadata> {
+  const { questionId } = await params;
   const questions = getQuestions();
-  const question = questions.find((q) => q.id === params.questionId);
+  const question = questions.find((q) => q.id === questionId);
 
   if (!question) {
     return {
@@ -35,13 +36,14 @@ export async function generateMetadata({
   };
 }
 
-export default function PracticeDetailPage({
+export default async function PracticeDetailPage({
   params,
 }: {
-  params: { questionId: string };
+  params: Promise<{ questionId: string }>;
 }) {
+  const { questionId } = await params;
   const questions = getQuestions();
-  const question = questions.find((q) => q.id === params.questionId);
+  const question = questions.find((q) => q.id === questionId);
 
   if (!question) {
     notFound();
@@ -49,7 +51,7 @@ export default function PracticeDetailPage({
 
   return (
     <ClientLayout>
-      <MachineCodingDetailClient questionId={params.questionId} />
+      <MachineCodingDetailClient questionId={questionId} />
     </ClientLayout>
   );
 }
