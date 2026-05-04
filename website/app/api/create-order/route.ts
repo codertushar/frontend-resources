@@ -2,24 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 import { createClient } from '@supabase/supabase-js';
 
-async function getBasePrice(supabase: any): Promise<number> {
-  const { data: setting, error } = await supabase
-    .from('settings')
-    .select('value')
-    .eq('key', 'base_price')
-    .single();
-
-  if (error) {
-    throw new Error('Failed to fetch base_price from database');
-  }
-
-  if (!setting?.value) {
-    throw new Error('base_price not found in database');
-  }
-
-  return Number.parseInt(setting.value, 10);
-}
-
 export async function POST(request: NextRequest) {
   // Check environment variables
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -53,7 +35,15 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { couponCode } = body || {};
+    const { amount } = body || {};
+
+    // Validate amount for donations
+    if (!amount || typeof amount !== 'number' || amount < 100) {
+      return NextResponse.json(
+        { error: 'Invalid donation amount (minimum ₹1)' },
+        { status: 400 }
+      );
+    }
 
     // Create Supabase client
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
@@ -71,60 +61,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get user profile to check existing subscription
+    // Get user profile for user details
     const { data: profile } = await supabase
       .from('profiles')
-      .select('subscription_status, email, full_name')
+      .select('email, full_name')
       .eq('id', user.id)
       .single();
-
-    // Check if user already has active subscription
-    if (profile?.subscription_status === 'active') {
-      return NextResponse.json(
-        {
-          error: 'Already subscribed',
-          subscription: { status: profile.subscription_status },
-        },
-        { status: 400 }
-      );
-    }
-
-    // Get base price from settings
-    const basePrice = await getBasePrice(supabase);
-
-    // Validate and apply coupon if provided
-    let finalAmount = basePrice;
-    let appliedCoupon = null;
-
-    if (couponCode) {
-      const { data: coupon, error: couponError } = await supabase
-        .from('coupons')
-        .select('id, code, discount_amount, is_active')
-        .eq('code', couponCode.toUpperCase().trim())
-        .single();
-
-      if (couponError || !coupon) {
-        return NextResponse.json(
-          { error: 'Invalid coupon code' },
-          { status: 400 }
-        );
-      }
-
-      if (!coupon.is_active) {
-        return NextResponse.json(
-          { error: 'This coupon is no longer active' },
-          { status: 400 }
-        );
-      }
-
-      // Apply discount (ensure amount doesn't go below minimum)
-      const discountedAmount = basePrice - coupon.discount_amount;
-      finalAmount = Math.max(discountedAmount, 100); // Minimum ₹1 (100 paise)
-      appliedCoupon = {
-        code: coupon.code,
-        discountAmount: coupon.discount_amount,
-      };
-    }
 
     // Initialize Razorpay
     const razorpay = new Razorpay({
@@ -132,42 +74,35 @@ export async function POST(request: NextRequest) {
       key_secret: razorpayKeySecret,
     });
 
-    // Create order with final amount
+    // Create order for donation
     const shortUserId = user.id.slice(-8);
     const timestamp = Date.now().toString().slice(-10);
     const orderResponse = (await razorpay.orders.create({
-      amount: finalAmount,
+      amount: amount,
       currency: 'INR',
-      receipt: `rcpt_${shortUserId}_${timestamp}`,
+      receipt: `donation_${shortUserId}_${timestamp}`,
       notes: {
         supabase_user_id: user.id,
         user_email: user.email || '',
-        plan: 'lifetime',
-        ...(appliedCoupon && {
-          coupon_code: appliedCoupon.code,
-          coupon_discount: appliedCoupon.discountAmount,
-          original_amount: basePrice,
-        }),
+        type: 'donation',
       },
     })) as any;
 
     return NextResponse.json({
       orderId: orderResponse.id,
       amount: orderResponse.amount,
-      originalAmount: basePrice,
       currency: orderResponse.currency,
       keyId: razorpayKeyId,
       user: {
         name: profile?.full_name || user.user_metadata?.full_name || '',
         email: user.email,
       },
-      ...(appliedCoupon && { appliedCoupon }),
     });
   } catch (error) {
-    console.error('Error creating order:', error);
+    console.error('Error creating donation order:', error);
     return NextResponse.json(
       {
-        error: 'Failed to create order',
+        error: 'Failed to create donation order',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
