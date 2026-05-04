@@ -71,15 +71,15 @@ async function checkForNewContent() {
         const content = await response.json();
         const currentCount = content.length;
         console.log('[SW] Current article count:', currentCount);
-        
+
         // Get stored count from IndexedDB or default to current
         const storedData = await getStoredContentData();
         const storedCount = storedData?.count || 0;
         console.log('[SW] Stored article count:', storedCount);
-        
+
         // Store current count
         await storeContentData({ count: currentCount, lastChecked: Date.now() });
-        
+
         // If there are new articles and this isn't the first visit
         if (currentCount > storedCount && storedCount > 0) {
             const newArticles = currentCount - storedCount;
@@ -106,8 +106,8 @@ async function showNewArticleNotification(count, latestArticle) {
     console.log('[SW] Showing notification for', count, 'new article(s)');
     try {
         await self.registration.showNotification('New Articles Published! 🎉', {
-            body: count === 1 
-                ? `Check out: ${latestArticle?.title || 'New article available'}` 
+            body: count === 1
+                ? `Check out: ${latestArticle?.title || 'New article available'}`
                 : `${count} new articles available to explore!`,
             icon: `${BASE_PATH}/android-launchericon-192-192.png`,
             badge: `${BASE_PATH}/android-launchericon-192-192.png`,
@@ -128,26 +128,26 @@ async function showNewArticleNotification(count, latestArticle) {
 async function getStoredContentData() {
     return new Promise((resolve) => {
         const request = indexedDB.open('frontend-resources-db', 1);
-        
+
         request.onerror = (err) => {
             console.error('IndexedDB error:', err);
             resolve(null);
         };
-        
+
         request.onupgradeneeded = (event) => {
             const db = event.target.result;
             if (!db.objectStoreNames.contains('metadata')) {
                 db.createObjectStore('metadata');
             }
         };
-        
+
         request.onsuccess = (event) => {
             const db = event.target.result;
             try {
                 const transaction = db.transaction(['metadata'], 'readonly');
                 const store = transaction.objectStore('metadata');
                 const getRequest = store.get('contentData');
-                
+
                 getRequest.onsuccess = () => resolve(getRequest.result);
                 getRequest.onerror = (err) => {
                     console.error('Error reading from IndexedDB:', err);
@@ -164,14 +164,14 @@ async function getStoredContentData() {
 async function storeContentData(data) {
     return new Promise((resolve) => {
         const request = indexedDB.open('frontend-resources-db', 1);
-        
+
         request.onupgradeneeded = (event) => {
             const db = event.target.result;
             if (!db.objectStoreNames.contains('metadata')) {
                 db.createObjectStore('metadata');
             }
         };
-        
+
         request.onsuccess = (event) => {
             const db = event.target.result;
             try {
@@ -188,7 +188,7 @@ async function storeContentData(data) {
                 resolve();
             }
         };
-        
+
         request.onerror = (err) => {
             console.error('IndexedDB error:', err);
             resolve();
@@ -199,9 +199,9 @@ async function storeContentData(data) {
 // Handle notification clicks
 self.addEventListener('notificationclick', (event) => {
     event.notification.close();
-    
+
     const urlToOpen = event.notification.data?.url || BASE_PATH;
-    
+
     event.waitUntil(
         self.clients.matchAll({ type: 'window', includeUncontrolled: true })
             .then((clientList) => {
@@ -262,6 +262,10 @@ self.addEventListener('fetch', (event) => {
     // Ignore non-GET requests
     if (request.method !== 'GET') return;
 
+    // Only cache http and https requests (ignore chrome-extension, data:, etc.)
+    const url = new URL(request.url);
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+
     // NEVER cache API requests - always fetch from network
     // This prevents stale data issues with auth, user progress, etc.
     const noCachePatterns = [
@@ -299,13 +303,21 @@ self.addEventListener('fetch', (event) => {
     if (request.destination === 'script' || request.destination === 'style') {
         event.respondWith(
             caches.match(request).then((cachedResponse) => {
-                const fetchPromise = fetch(request).then((networkResponse) => {
-                    if (networkResponse.ok) {
-                        const responseToCache = networkResponse.clone();
-                        caches.open(CACHE_NAME).then((cache) => cache.put(request, responseToCache));
-                    }
-                    return networkResponse;
-                }).catch(() => cachedResponse);
+                const fetchPromise = fetch(request)
+                    .then((networkResponse) => {
+                        if (networkResponse.ok) {
+                            const responseToCache = networkResponse.clone();
+                            caches.open(CACHE_NAME).then((cache) => cache.put(request, responseToCache));
+                        }
+                        return networkResponse;
+                    })
+                    .catch((error) => {
+                        console.warn('Fetch failed for JS/CSS:', request.url, error);
+                        if (cachedResponse) {
+                            return cachedResponse;
+                        }
+                        throw error; // Re-throw if no cache available
+                    });
 
                 return cachedResponse || fetchPromise;
             })
@@ -320,13 +332,22 @@ self.addEventListener('fetch', (event) => {
                 return cachedResponse;
             }
 
-            return fetch(request).then((networkResponse) => {
-                if (networkResponse.ok) {
-                    const responseToCache = networkResponse.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(request, responseToCache));
-                }
-                return networkResponse;
-            });
+            return fetch(request)
+                .then((networkResponse) => {
+                    if (networkResponse.ok) {
+                        const responseToCache = networkResponse.clone();
+                        caches.open(CACHE_NAME).then((cache) => cache.put(request, responseToCache));
+                    }
+                    return networkResponse;
+                })
+                .catch((error) => {
+                    console.warn('Fetch failed for:', request.url, error);
+                    // Return a basic error response instead of letting it fail
+                    return new Response('Network error', {
+                        status: 408,
+                        statusText: 'Request Timeout'
+                    });
+                });
         })
     );
 });
