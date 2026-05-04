@@ -76,7 +76,6 @@ export interface FilterState {
   subcategory: string;
   search: string;
   difficulty: string;
-  access: string;
   sort: string;
   tag: string[];
   interviewFrequency: string;
@@ -136,7 +135,6 @@ interface PrimaryFilters {
 
 interface SecondaryFilters {
   difficulty: SingleFilter;
-  access: SingleFilter;
   sort: SingleFilter;
 }
 
@@ -291,8 +289,8 @@ export const FILTER_PRESETS: FilterPreset[] = [
     id: 'beginner',
     label: 'Beginner Friendly',
     emoji: '🎯',
-    description: 'Easy, free resources',
-    filters: { difficulty: 'easy', access: 'free' },
+    description: 'Easy resources',
+    filters: { difficulty: 'easy' },
     color: '#22c55e'
   },
   {
@@ -318,14 +316,6 @@ export const FILTER_PRESETS: FilterPreset[] = [
     description: 'Last 30 days',
     filters: { dateAdded: 'last-30', sort: 'default' },
     color: '#8b5cf6'
-  },
-  {
-    id: 'free',
-    label: 'Free Only',
-    emoji: '🆓',
-    description: 'All free content',
-    filters: { access: 'free' },
-    color: '#10b981'
   }
 ];
 

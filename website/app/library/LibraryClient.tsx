@@ -182,10 +182,6 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
     updateFilter('difficulty', e.target.value);
   }, [updateFilter]);
 
-  const handleAccessChange = useCallback((e: ChangeEvent<HTMLSelectElement>): void => {
-    updateFilter('access', e.target.value);
-  }, [updateFilter]);
-
   const handleSortChange = useCallback((e: ChangeEvent<HTMLSelectElement>): void => {
     updateFilter('sort', e.target.value);
   }, [updateFilter]);
@@ -346,17 +342,6 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
               className={`filter-select ${filterState.difficulty !== 'all' ? 'active' : ''}`}
             >
               {FILTERS.secondary.difficulty.values?.map(opt => (
-                <option key={opt.id} value={opt.id}>{opt.label}</option>
-              ))}
-            </select>
-
-            {/* Access/Pricing */}
-            <select
-              value={filterState.access}
-              onChange={handleAccessChange}
-              className={`filter-select ${filterState.access !== 'all' ? 'active' : ''}`}
-            >
-              {FILTERS.secondary.access.values?.map(opt => (
                 <option key={opt.id} value={opt.id}>{opt.label}</option>
               ))}
             </select>
