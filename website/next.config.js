@@ -8,9 +8,6 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
 
-  // Standalone output for Vercel
-  output: 'standalone',
-
   // Turbopack configuration - use absolute path to resolve workspace root warning
   turbopack: {
     root: process.cwd().replace(/\/website$/, ''),
