@@ -2878,7 +2878,7 @@ a.breadcrumb-item:hover {
 .controls-section.is-sticky {
   position: sticky;
   top: 70px;
-  background: var(--sticky-bg, rgba(17, 24, 39, 0.95));
+  background: var(--sticky-bg, rgba(17, 24, 39, 1));
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
@@ -2887,7 +2887,7 @@ a.breadcrumb-item:hover {
 }
 
 :root.light .controls-section.is-sticky {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
@@ -3503,13 +3503,13 @@ a.breadcrumb-item:hover {
 
   .controls-section.is-sticky {
     top: 65px;
-    background: rgba(17, 24, 39, 0.98);
+    background: rgba(17, 24, 39, 1);
     backdrop-filter: blur(28px);
     -webkit-backdrop-filter: blur(28px);
   }
 
   :root.light .controls-section.is-sticky {
-    background: rgba(255, 255, 255, 0.98);
+    background: rgba(255, 255, 255, 1);
   }
 
   .header-section h1 {

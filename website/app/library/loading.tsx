@@ -1,66 +1,83 @@
+import ClientLayout from '../ClientLayout';
+
 export default function Loading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-purple-950">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header skeleton */}
-        <div className="mb-8 space-y-4">
-          <div className="h-12 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-          <div className="h-6 w-96 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-        </div>
+    <ClientLayout>
+      <div className="library-page">
+        {/* Hero Header Skeleton */}
+        <section className="hero-section">
+          <div className="container">
+            <div className="h-12 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-4" />
+            <div className="h-6 w-96 max-w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+          </div>
+        </section>
 
-        {/* Search and filters skeleton */}
-        <div className="mb-6 flex flex-col sm:flex-row gap-4">
-          <div className="flex-1 h-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-          <div className="h-12 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-        </div>
-
-        {/* Filter tabs skeleton */}
-        <div className="mb-6 flex gap-2 overflow-x-auto">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-10 w-24 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
-          ))}
-        </div>
-
-        {/* Stats cards skeleton */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-white dark:bg-gray-800 rounded-lg p-4 space-y-2">
-              <div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-              <div className="h-8 w-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-            </div>
-          ))}
-        </div>
-
-        {/* Article cards skeleton */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {[...Array(9)].map((_, i) => (
-            <div key={i} className="bg-white dark:bg-gray-800 rounded-xl p-6 space-y-4 shadow-md">
-              <div className="flex items-start justify-between">
-                <div className="h-6 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-                <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+        <div className="container">
+          {/* Search and Filters Skeleton */}
+          <div className="search-filter-section">
+            <div className="search-filter-wrapper">
+              <div className="search-container">
+                <div className="h-12 flex-1 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
               </div>
-              <div className="space-y-2">
-                <div className="h-6 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-                <div className="h-6 w-5/6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-              </div>
-              <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-              <div className="h-4 w-4/5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-              <div className="flex gap-2">
-                <div className="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
-                <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+              <div className="filter-dropdown">
+                <div className="h-12 w-40 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
               </div>
             </div>
-          ))}
-        </div>
 
-        {/* Loading text centered */}
-        <div className="mt-8 flex justify-center">
-          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-            <div className="h-5 w-5 border-2 border-purple-600 border-t-transparent rounded-full animate-spin" />
-            <span className="text-sm font-medium">Loading library...</span>
+            {/* Filter Pills */}
+            <div className="filter-pills">
+              {['All', 'JavaScript', 'DSA', 'System Design', 'Patterns', 'AI'].map((label, i) => (
+                <div key={i} className="h-10 w-24 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+              ))}
+            </div>
+          </div>
+
+          {/* Stats Cards Skeleton */}
+          <div className="stats-grid">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="stat-card glass-panel">
+                <div className="h-5 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-3" />
+                <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+              </div>
+            ))}
+          </div>
+
+          {/* Articles Grid Skeleton */}
+          <div className="articles-grid">
+            {[...Array(9)].map((_, i) => (
+              <article key={i} className="article-card glass-panel">
+                <div className="article-card-header">
+                  <div className="h-6 w-32 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+                  <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+                </div>
+
+                <div className="article-card-content">
+                  <div className="h-7 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-3" />
+                  <div className="h-7 w-5/6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-4" />
+
+                  <div className="space-y-2 mb-4">
+                    <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                    <div className="h-4 w-4/5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                  </div>
+
+                  <div className="article-tags">
+                    <div className="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+                    <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          {/* Loading indicator */}
+          <div className="flex justify-center py-12">
+            <div className="flex items-center gap-3 text-gray-500 dark:text-gray-400">
+              <div className="h-6 w-6 border-3 border-purple-600 border-t-transparent rounded-full animate-spin" />
+              <span className="text-base font-medium">Loading library...</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ClientLayout>
   );
 }
