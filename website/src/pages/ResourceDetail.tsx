@@ -8,12 +8,9 @@ import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 // @ts-expect-error - react-syntax-highlighter lacks proper TypeScript declarations
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, Check, Circle, Crown, ChevronDown, ChevronUp, Folder, FileText, Home } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, Check, Circle, ChevronDown, ChevronUp, Folder, FileText, Home } from 'lucide-react';
 import contentData from '../data/content.json';
 import { useProgress } from '../context/ProgressContext';
-import { useSubscription } from '../context/SubscriptionContext';
-import { useAuth } from '../context/AuthContext';
-import Paywall from '../components/Paywall';
 import QuizSection, { parseQuizFromMarkdown, removeQuizFromContent } from '../components/QuizSection';
 import SEO from '../components/SEO';
 import AdUnit from '../components/AdUnit';
@@ -41,16 +38,11 @@ const CATEGORY_DISPLAY_NAMES: Record<string, string> = {
 
 const ResourceDetail = () => {
   const location = useLocation();
-  const [premiumContent, setPremiumContent] = useState<string | null>(null);
   const [scrollProgress, setScrollProgress] = useState<number>(0);
-  const [premiumContentLoading, setPremiumContentLoading] = useState<boolean>(false);
-  const [premiumContentError, setPremiumContentError] = useState<string | null>(null);
   const [showFullCategory, setShowFullCategory] = useState<boolean>(false);
   const sidebarRef: RefObject<HTMLElement | null> = useRef<HTMLElement>(null);
   const activeItemRef: RefObject<HTMLAnchorElement | null> = useRef<HTMLAnchorElement>(null);
   const { isRead, toggleRead, isInitialized } = useProgress();
-  const { isPremium, fetchPremiumContent, isInitialized: subInitialized } = useSubscription();
-  const { isSignedIn } = useAuth();
 
   // Extract and decode the resource ID from the pathname
   // Remove /resource/ prefix and trailing slash
@@ -112,40 +104,18 @@ const ResourceDetail = () => {
     };
   }, [resourceId, resource]);
 
-  // Determine if we should show paywall
-  const showPaywall: boolean = !!(resource?.premium && !isPremium());
-
-  // Derive content directly - no loading state needed for initial content
-  // Free articles: full content from JSON
-  // Premium articles: preview from JSON, or fetched premium content if available
+  // All content is now free - derive content directly from resource
   const { content, quizQuestions } = useMemo((): { content: string; quizQuestions: QuizQuestion[] | null } => {
     if (!resource) return { content: '', quizQuestions: null };
 
-    let rawContent: string;
-    if (premiumContent) {
-      rawContent = premiumContent;
-    } else if (showPaywall) {
-      // Generate preview - first ~300 words
-      const fullContent = resource.fullContent || '';
-      const lines = fullContent.split('\n');
-      let wordCount = 0;
-      const previewLines: string[] = [];
-      for (const line of lines) {
-        previewLines.push(line);
-        wordCount += line.split(/\s+/).filter(w => w.length > 0).length;
-        if (wordCount >= 300) break;
-      }
-      rawContent = previewLines.join('\n');
-    } else {
-      rawContent = resource.fullContent || '';
-    }
+    const rawContent = resource.fullContent || '';
 
     // Parse quiz from content and remove quiz block for markdown rendering
     const quiz = parseQuizFromMarkdown(rawContent) as QuizQuestion[] | null;
     const cleanContent = removeQuizFromContent(rawContent);
 
     return { content: cleanContent, quizQuestions: quiz };
-  }, [resource, premiumContent, showPaywall]);
+  }, [resource]);
 
   // Derive loading state - only true when we have no content to show
   const loading: boolean = !resource;
@@ -204,38 +174,6 @@ const ResourceDetail = () => {
       }
     }
   }, [resourceId, sidebarArticles]);
-
-  // For premium users, fetch full content after auth is ready
-  useEffect(() => {
-    if (!resource || !resource.premium || !subInitialized || !isPremium()) return;
-
-    let cancelled = false;
-
-    const loadPremiumContent = async (): Promise<void> => {
-      try {
-        const fullContent = await fetchPremiumContent(resource.id);
-        if (!cancelled) {
-          setPremiumContent(fullContent);
-        }
-      } catch (error) {
-        if (!cancelled) {
-          console.error('Error loading premium content:', error);
-          setPremiumContentError((error as Error).message);
-        }
-      } finally {
-        if (!cancelled) {
-          setPremiumContentLoading(false);
-        }
-      }
-    };
-
-    setPremiumContentLoading(true);
-    loadPremiumContent();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [resource, subInitialized, isPremium, fetchPremiumContent]);
 
   useEffect(() => {
     if (resource) {
@@ -878,7 +816,7 @@ const ResourceDetail = () => {
               {resource.difficulty}
             </span>
           )}
-          {isInitialized && isSignedIn && !showPaywall && (
+          {isInitialized && isSignedIn && (
             <button
               onClick={handleToggleRead}
               className={`btn-mark-read ${isRead(resourceId) ? 'read' : ''}`}
@@ -907,13 +845,13 @@ const ResourceDetail = () => {
       </div>
 
       <motion.div
-        className={`article-content glass-panel ${showPaywall ? 'has-paywall' : ''}`}
+        className="article-content glass-panel"
         key={`content-${resourceId}`}
         initial={{ opacity: 0, y: -15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, delay: 0.1, ease: "easeOut" }}
       >
-                {loading || premiumContentLoading ? (
+                {loading ? (
           <div className="loading">Loading content...</div>
         ) : (
           <>
@@ -958,14 +896,8 @@ const ResourceDetail = () => {
             >
               {content}
             </ReactMarkdown>
-            {showPaywall && <Paywall />}
-            {premiumContentError && !showPaywall && (
-              <div className="premium-error">
-                Failed to load full content. Showing preview instead.
-              </div>
-            )}
-            {/* Quiz Section - only show if quiz exists and not behind paywall */}
-            {!showPaywall && quizQuestions && (
+            {/* Quiz Section - show quiz if it exists */}
+            {quizQuestions && (
               <QuizSection questions={quizQuestions} />
             )}
           </>
