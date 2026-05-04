@@ -162,13 +162,6 @@ const applyAllFilters = (
     result = result.filter(item => item.difficulty === filterState.difficulty);
   }
 
-  // Access filter
-  if (filterState.access !== 'all') {
-    result = result.filter(item =>
-      filterState.access === 'free' ? !item.premium : item.premium
-    );
-  }
-
   // Tag filter (multi-select)
   if (filterState.tag && filterState.tag.length > 0) {
     result = result.filter(item =>

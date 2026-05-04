@@ -4,6 +4,9 @@ import ClientLayout from '../../ClientLayout';
 import { MachineCodingDetailClient } from './MachineCodingDetailClient';
 import { getQuestions } from '../../../src/data/practice-questions/index';
 
+// Force dynamic rendering for this route (Sandpack needs client-side only)
+export const dynamic = 'force-dynamic';
+
 // Generate static params for all practice questions
 export async function generateStaticParams() {
   const questions = getQuestions();

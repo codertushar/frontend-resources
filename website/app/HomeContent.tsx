@@ -149,14 +149,6 @@ export default function HomeContent() {
             <span className="stat-label">Categories</span>
           </div>
         </div>
-        <div className="stat-divider"></div>
-        <div className="stat-item">
-          <Crown size={20} />
-          <div className="stat-content">
-            <span className="stat-value">{premiumCount}</span>
-            <span className="stat-label">Premium</span>
-          </div>
-        </div>
       </motion.div>
 
       {stats.completed > 0 && (

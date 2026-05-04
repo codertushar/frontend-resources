@@ -27,7 +27,6 @@ export interface Message {
 
 export interface Stats {
   totalArticles: number;
-  premiumArticles: number;
   freeArticles: number;
   activeCoupons: number;
   totalCoupons: number;

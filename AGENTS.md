@@ -194,70 +194,9 @@ const cache = new Map(); // Create a new Map
 
 ---
 
-## 💎 Premium Content Strategy
+## � Content Access Policy
 
-The website uses a freemium model with **~40% free, ~60% premium** content. The premium status is automatically determined by `generate-content.js` based on these rules:
-
-### Monetization Strategy - 60% Premium
-
-**Core Principle**: Maximize monetization (60% premium) while maintaining minimum free content for SEO and discoverability.
-
-| Category | Rule | Distribution |
-|----------|------|--------------|
-| **Easy difficulty** | All FREE (fundamental learning) | 100% free |
-| **Medium difficulty** | 30% free, 70% premium | First article FREE, next 2 PREMIUM, repeat |
-| **Hard difficulty** | 1 FREE per category, rest premium | ~5-10% free, ~90% premium |
-| **System Design** | Only intro articles FREE, rest premium | ~17% free (1-2), ~83% premium |
-| **Machine Coding** | Only intro articles FREE, rest premium | ~17% free (1-2), ~83% premium |
-| **AI** | Only intro articles FREE, rest premium | ~17% free (1-2), ~83% premium |
-| **Browser/Rendering** | 95% Premium (advanced topics) | Only basics free, rest premium |
-
-### What's Premium (Paywalled)
-
-- All advanced utilities: `debounce`, `throttle`, `deep_clone`, `map_limit`, `sequential`
-- Most medium difficulty articles (70% of medium articles)
-- All hard difficulty articles (except 1 per category)
-- System Design (except 1-2 intro articles)
-- Machine Coding (except 1-2 intro articles)
-- AI (except 1-2 intro articles)
-- Advanced browser/rendering topics
-- Interview prep content (hard/advanced only)
-- Advanced design patterns beyond basics
-
-### What's Always Free
-
-- **Easy difficulty articles** (100% free - foundational learning)
-- **Intro/guide articles** (`30-day`, `guide`, `introduction`, `getting-started`)
-- **Fundamental concepts**: `prototype`, `event_emitter`
-- **Basic design patterns**: `factory`, `singleton`, `observer`, `module`
-- **Observable array pattern** (foundational)
-- **Browser/rendering basics** (non-advanced only)
-
-### Medium Difficulty Articles (70% Premium Split)
-
-To maximize monetization while maintaining SEO discoverability, 70% of medium articles are premium:
-- First article in each category/medium: FREE
-- Next 2 articles in each category/medium: PREMIUM
-- Fourth article in each category/medium: FREE
-- Fifth+ articles in each category/medium: PREMIUM
-- Pattern: Free → Premium → Premium → Free → Premium → Premium...
-
-### Overriding Premium Status
-
-You can override the automatic premium detection by adding `premium: true` or `premium: false` in the markdown frontmatter:
-
-```yaml
----
-date: 2025-03-27T07:19:24+05:30
-description: Article description here
-premium: true  # Force this article to be premium
----
-```
-
-### Current Distribution Target
-
-- **Free**: ~40% (for SEO, user acquisition, demonstrating value)
-- **Premium**: ~60% (monetization, high-value interview prep content)
+**All content is completely free and open to everyone.** This repository is designed as a community resource for frontend developers to learn and grow their skills.
 
 ### Running Content Generation
 
@@ -270,7 +209,6 @@ cd website && node scripts/generate-content.js
 This regenerates:
 - `website/src/data/content.json` - Main content data
 - `website/public/content.json` - For service worker/PWA
-- `website/src/data/premium-content.json` - Full premium content (server-side only)
 
 ### Adding New Content
 1. **Determine Category**: Select the appropriate folder based on content type

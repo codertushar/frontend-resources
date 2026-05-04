@@ -198,19 +198,6 @@ export const FILTERS: FiltersConfig = {
         { id: 'hard', label: 'Hard', color: '#ef4444' },
       ]
     },
-    access: {
-      id: 'access',
-      label: 'Pricing',
-      type: 'single',
-      urlParam: 'access',
-      defaultValue: 'all',
-      icon: Crown,
-      values: [
-        { id: 'all', label: 'All Content' },
-        { id: 'free', label: 'Free' },
-        { id: 'premium', label: 'Premium' },
-      ]
-    },
     sort: {
       id: 'sort',
       label: 'Sort By',

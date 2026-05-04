@@ -207,7 +207,6 @@ export const PRIMARY_FILTERS: PrimaryFiltersType = {
 
 interface SecondaryFiltersType {
   difficulty: SingleFilterConfig;
-  access: SingleFilterConfig;
   sort: SingleFilterConfig;
 }
 
@@ -230,23 +229,6 @@ export const SECONDARY_FILTERS: SecondaryFiltersType = {
     ]
   },
 
-  access: {
-    id: 'access',
-    label: 'Pricing',
-    type: 'single',
-    section: 'secondary',
-    urlParam: 'access',
-    defaultValue: 'all',
-    displayStyle: 'dropdown',
-    icon: Crown,
-    showCount: true,
-    values: [
-      { id: 'all', label: 'All Content' },
-      { id: 'free', label: 'Free Only', emoji: '🆓' },
-      { id: 'premium', label: 'Premium', emoji: '👑' },
-    ]
-  },
-
   sort: {
     id: 'sort',
     label: 'Sort By',
@@ -256,6 +238,7 @@ export const SECONDARY_FILTERS: SecondaryFiltersType = {
     defaultValue: 'default',
     displayStyle: 'dropdown',
     icon: TrendingUp,
+    showCount: false,
     values: [
       { id: 'default', label: 'Newest First', icon: Calendar },
       { id: 'difficulty-asc', label: 'Easy → Hard', icon: Zap },
@@ -498,7 +481,6 @@ interface FilterPresetsType {
   quickWins: FilterPresetConfig;
   deepDive: FilterPresetConfig;
   newContent: FilterPresetConfig;
-  freeOnly: FilterPresetConfig;
 }
 
 export const FILTER_PRESETS: FilterPresetsType = {
@@ -507,10 +489,9 @@ export const FILTER_PRESETS: FilterPresetsType = {
     label: 'Beginner Friendly',
     icon: Target,
     emoji: '🎯',
-    description: 'Easy, free resources to get started',
+    description: 'Easy resources to get started',
     filters: {
       difficulty: 'easy',
-      access: 'free',
     },
     color: '#22c55e'
   },
@@ -566,18 +547,6 @@ export const FILTER_PRESETS: FilterPresetsType = {
       sort: 'default',
     },
     color: '#8b5cf6'
-  },
-
-  freeOnly: {
-    id: 'freeOnly',
-    label: 'Free Resources',
-    icon: BookOpen,
-    emoji: '🆓',
-    description: 'All free content',
-    filters: {
-      access: 'free',
-    },
-    color: '#10b981'
   }
 };
 

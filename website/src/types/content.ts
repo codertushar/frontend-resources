@@ -7,7 +7,6 @@ export interface Article {
   subcategory: string;
   difficulty: 'easy' | 'medium' | 'hard';
   difficultyScore: number;
-  premium: boolean;
   readTime: number;
   createdAt: string;
   filePath: string;
@@ -28,7 +27,6 @@ export interface ContentItem {
   content?: string;
   difficulty?: 'easy' | 'medium' | 'hard';
   difficultyScore?: number;
-  premium?: boolean;
   tags?: string[];
   interviewFrequency?: string;
   readTime?: number;

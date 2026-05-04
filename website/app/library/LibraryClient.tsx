@@ -157,7 +157,7 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
 
   // Random article picker
   const handleSurpriseMe = useCallback((): void => {
-    const unreadArticles = initialArticles.filter(item => !isRead(item.id) && !item.premium);
+    const unreadArticles = initialArticles.filter(item => !isRead(item.id));
     if (unreadArticles.length > 0) {
       const randomArticle = unreadArticles[Math.floor(Math.random() * unreadArticles.length)];
       router.push(`/resource/${randomArticle.id}`);
@@ -264,11 +264,7 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
             <div className="quick-stats">
               <span className="stat-chip">
                 <BookOpen size={14} />
-                {initialArticles.filter(i => !i.premium).length} Free
-              </span>
-              <span className="stat-chip premium-chip">
-                <Crown size={14} />
-                {initialArticles.filter(i => i.premium).length} Premium
+                {initialArticles.length} Resources
               </span>
             </div>
           </motion.div>

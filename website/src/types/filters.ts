@@ -61,7 +61,6 @@ export interface FilterState {
   subcategory?: string;
   difficulty?: string[];
   readTime?: [number, number];
-  premium?: string;
   search?: string;
   tags?: string[];
   interviewFrequency?: string[];
