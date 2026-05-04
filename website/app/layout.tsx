@@ -88,6 +88,12 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
           rel="stylesheet"
         />
+        {/* Google AdSense - loaded in head to avoid data-nscript warning */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6335516948550888"
+          crossOrigin="anonymous"
+        />
         {/* Theme detection script - runs before React hydration to prevent flash */}
         <Script
           id="theme-script"
@@ -114,13 +120,6 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
-        {/* Google AdSense - loads after page is interactive */}
-        <Script
-          id="google-adsense"
-          strategy="afterInteractive"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6335516948550888"
-          crossOrigin="anonymous"
-        />
         {/* Razorpay SDK - loads after page is interactive */}
         <Script
           id="razorpay-sdk"

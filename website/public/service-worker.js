@@ -287,13 +287,27 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(
             fetch(request)
                 .then((networkResponse) => {
-                    const responseClone = networkResponse.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(request, responseClone));
+                    // Only cache successful responses
+                    if (networkResponse.ok) {
+                        const responseClone = networkResponse.clone();
+                        caches.open(CACHE_NAME).then((cache) => cache.put(request, responseClone));
+                    }
                     // Check for new content on page load
                     checkForNewContent();
                     return networkResponse;
                 })
-                .catch(() => caches.match(request).then((cached) => cached || caches.match(`${BASE_PATH}/`)))
+                .catch((error) => {
+                    console.warn('[SW] Navigation fetch failed for:', request.url, error.message);
+                    // Try to serve from cache
+                    return caches.match(request).then((cached) => {
+                        if (cached) {
+                            console.log('[SW] Serving cached version of:', request.url);
+                            return cached;
+                        }
+                        // Fall back to index page for SPA routing
+                        return caches.match(`${BASE_PATH}/`);
+                    });
+                })
         );
         return;
     }
