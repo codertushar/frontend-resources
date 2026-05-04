@@ -17,7 +17,7 @@ type LazyPage = LazyExoticComponent<ComponentType<object>>;
 // Lazy load pages for better initial load performance (code splitting)
 const Library: LazyPage = lazy(() => import('./pages/LibraryRefactored'));
 const ResourceDetail: LazyPage = lazy(() => import('./pages/ResourceDetail'));
-const Pricing: LazyPage = lazy(() => import('./pages/Pricing'));
+const Donate: LazyPage = lazy(() => import('./pages/Donate'));
 const Admin: LazyPage = lazy(() => import('./pages/Admin'));
 const MachineCodingList: LazyPage = lazy(() => import('./pages/MachineCodingList'));
 const MachineCodingDetail: LazyPage = lazy(() => import('./pages/MachineCodingDetail'));
@@ -44,7 +44,7 @@ function AppContent(): ReactElement {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/library" element={<Library />} />
-            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/donate" element={<Donate />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/practice" element={<MachineCodingList />} />
             <Route path="/about" element={<About />} />
