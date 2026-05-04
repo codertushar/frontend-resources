@@ -2870,9 +2870,16 @@ a.breadcrumb-item:hover {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  transition: all 0.3s ease;
+  /* Only transition specific properties to avoid flicker */
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
   position: relative;
   z-index: 95;
+  /* GPU acceleration to prevent flickering */
+  transform: translateZ(0);
+  will-change: transform;
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .controls-section.is-sticky {
@@ -2884,6 +2891,12 @@ a.breadcrumb-item:hover {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   border-color: var(--primary);
   z-index: 95;
+  /* Force GPU acceleration for smooth sticky behavior */
+  transform: translateZ(0);
+  will-change: transform;
+  -webkit-transform: translateZ(0);
+  /* Improve paint performance */
+  contain: layout style paint;
 }
 
 :root.light .controls-section.is-sticky {
@@ -3499,6 +3512,9 @@ a.breadcrumb-item:hover {
     background: var(--glass-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    /* GPU acceleration for mobile */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
 
   .controls-section.is-sticky {
@@ -3506,6 +3522,9 @@ a.breadcrumb-item:hover {
     background: rgba(17, 24, 39, 1);
     backdrop-filter: blur(28px);
     -webkit-backdrop-filter: blur(28px);
+    /* Force GPU layer on mobile */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
 
   :root.light .controls-section.is-sticky {

@@ -3,7 +3,8 @@ import ClientLayout from '../../ClientLayout';
 export default function Loading() {
   return (
     <ClientLayout>
-      <style jsx>{`
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .skeleton {
           background: linear-gradient(
             90deg,
@@ -49,7 +50,8 @@ export default function Loading() {
         @keyframes spin {
           to { transform: rotate(360deg); }
         }
-      `}</style>
+        `
+      }} />
 
       <div className="container detail-container-wrapper">
         {/* Left Sidebar Skeleton */}
