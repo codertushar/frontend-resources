@@ -122,13 +122,13 @@ Before diving in, ask these questions to scope the problem:
 function getTilesForViewport(bounds, zoom) {
   const tileSize = 256;
   const scale = Math.pow(2, zoom);
-  
+
   // Convert lat/lng to tile coordinates
   const minTileX = Math.floor(lngToTileX(bounds.west, zoom));
   const maxTileX = Math.floor(lngToTileX(bounds.east, zoom));
   const minTileY = Math.floor(latToTileY(bounds.north, zoom));
   const maxTileY = Math.floor(latToTileY(bounds.south, zoom));
-  
+
   const tiles = [];
   for (let x = minTileX; x <= maxTileX; x++) {
     for (let y = minTileY; y <= maxTileY; y++) {
@@ -152,7 +152,7 @@ function latToTileY(lat, zoom) {
 
 **Interview Answer:**
 > "Modern maps use **Vector Tiles** (Protocol Buffers) instead of raster images because:
-> 
+>
 > **Vector Tiles:**
 > - ✅ 70% smaller file size (binary format)
 > - ✅ Client-side styling (dark mode without re-downloading)
@@ -179,7 +179,7 @@ function latToTileY(lat, zoom) {
 
 ```javascript
 // Using Zustand for this example
-import create from 'zustand';
+import { create } from 'zustand';
 
 const useMapStore = create((set, get) => ({
   // 1. Camera State (URL-synced for deep linking)
@@ -189,20 +189,20 @@ const useMapStore = create((set, get) => ({
     bearing: 0,  // rotation
     pitch: 0     // tilt for 3D
   },
-  
+
   // 2. Interaction State (ephemeral, not persisted)
   interaction: {
     isDragging: false,
     isZooming: false,
     cursor: 'grab'
   },
-  
+
   // 3. Data State (cached)
   tiles: new Map(),        // key: "z/x/y" -> TileData
   markers: [],
   searchResults: [],
   activeRoute: null,
-  
+
   // 4. UI State
   ui: {
     sidebarOpen: false,
@@ -213,10 +213,10 @@ const useMapStore = create((set, get) => ({
       satellite: false
     }
   },
-  
+
   // Actions
   setCamera: (camera) => set({ camera }),
-  
+
   panTo: (center, options = {}) => {
     const { animate = true } = options;
     if (animate) {
@@ -225,7 +225,7 @@ const useMapStore = create((set, get) => ({
     }
     set({ camera: { ...get().camera, center } });
   },
-  
+
   addTile: (key, data) => {
     set(state => ({
       tiles: new Map(state.tiles).set(key, data)
@@ -277,33 +277,33 @@ function parseCameraFromURL() {
 // main.js
 class TileWorkerPool {
   constructor(size = 4) {
-    this.workers = Array.from({ length: size }, () => 
+    this.workers = Array.from({ length: size }, () =>
       new Worker('/tile-worker.js')
     );
     this.nextWorker = 0;
     this.pending = new Map(); // requestId -> { resolve, reject }
   }
-  
+
   async parseTile(tileBuffer, tileKey) {
     const worker = this.workers[this.nextWorker];
     this.nextWorker = (this.nextWorker + 1) % this.workers.length;
-    
+
     const requestId = Math.random().toString(36);
-    
+
     return new Promise((resolve, reject) => {
       this.pending.set(requestId, { resolve, reject });
-      
+
       worker.postMessage({
         type: 'PARSE_TILE',
         requestId,
         tileKey,
         buffer: tileBuffer
       }, [tileBuffer]); // Transfer ownership (zero-copy)
-      
+
       worker.onmessage = (e) => {
         const { requestId, result, error } = e.data;
         const pending = this.pending.get(requestId);
-        
+
         if (error) {
           pending.reject(error);
         } else {
@@ -318,15 +318,15 @@ class TileWorkerPool {
 // tile-worker.js
 self.onmessage = async (e) => {
   const { type, requestId, tileKey, buffer } = e.data;
-  
+
   if (type === 'PARSE_TILE') {
     try {
       // 1. Decode Protobuf
       const tile = decodePBF(buffer);
-      
+
       // 2. Tessellate polygons (convert to triangles for WebGL)
       const geometry = tessellate(tile);
-      
+
       // 3. Return as transferable
       self.postMessage({
         requestId,
@@ -400,40 +400,40 @@ class LRUCache {
     this.cache = new Map();
     this.maxSize = maxSize;
   }
-  
+
   get(key) {
     if (!this.cache.has(key)) return null;
-    
+
     // Move to end (most recently used)
     const value = this.cache.get(key);
     this.cache.delete(key);
     this.cache.set(key, value);
-    
+
     return value;
   }
-  
+
   set(key, value) {
     // Remove if exists (to re-insert at end)
     if (this.cache.has(key)) {
       this.cache.delete(key);
     }
-    
+
     // Evict oldest if at capacity
     if (this.cache.size >= this.maxSize) {
       const firstKey = this.cache.keys().next().value;
       const evicted = this.cache.get(firstKey);
-      
+
       // Clean up GPU resources
       if (evicted.texture) {
         evicted.texture.delete();
       }
-      
+
       this.cache.delete(firstKey);
     }
-    
+
     this.cache.set(key, value);
   }
-  
+
   clear() {
     // Clean up all GPU resources
     for (const tile of this.cache.values()) {
@@ -450,25 +450,25 @@ const tileCache = new LRUCache(256);
 
 async function loadTile(x, y, z) {
   const key = `${z}/${x}/${y}`;
-  
+
   // Check cache first
   let tile = tileCache.get(key);
   if (tile) return tile;
-  
+
   // Fetch from network
   const response = await fetch(`/tiles/${key}.pbf`);
   const buffer = await response.arrayBuffer();
-  
+
   // Parse in worker
   const parsed = await workerPool.parseTile(buffer, key);
-  
+
   // Upload to GPU
   const texture = uploadToGPU(parsed.geometry);
-  
+
   // Cache it
   tile = { geometry: parsed.geometry, texture };
   tileCache.set(key, tile);
-  
+
   return tile;
 }
 ```
@@ -488,81 +488,81 @@ class MapGestureHandler {
     this.canvas = canvas;
     this.onPan = onPan;
     this.onZoom = onZoom;
-    
+
     this.pointers = new Map(); // pointerId -> { x, y }
     this.lastPinchDistance = null;
-    
+
     canvas.addEventListener('pointerdown', this.handlePointerDown.bind(this));
     canvas.addEventListener('pointermove', this.handlePointerMove.bind(this));
     canvas.addEventListener('pointerup', this.handlePointerUp.bind(this));
     canvas.addEventListener('pointercancel', this.handlePointerUp.bind(this));
-    
+
     // Prevent default touch behaviors
     canvas.addEventListener('touchstart', (e) => e.preventDefault());
   }
-  
+
   handlePointerDown(e) {
     this.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     this.canvas.setPointerCapture(e.pointerId);
-    
+
     if (this.pointers.size === 2) {
       // Start pinch gesture
       const points = Array.from(this.pointers.values());
       this.lastPinchDistance = this.getDistance(points[0], points[1]);
     }
   }
-  
+
   handlePointerMove(e) {
     if (!this.pointers.has(e.pointerId)) return;
-    
+
     const oldPos = this.pointers.get(e.pointerId);
     const newPos = { x: e.clientX, y: e.clientY };
     this.pointers.set(e.pointerId, newPos);
-    
+
     if (this.pointers.size === 1) {
       // Single pointer = Pan
       const dx = newPos.x - oldPos.x;
       const dy = newPos.y - oldPos.y;
       this.onPan(dx, dy);
-      
+
     } else if (this.pointers.size === 2) {
       // Two pointers = Pinch zoom
       const points = Array.from(this.pointers.values());
       const distance = this.getDistance(points[0], points[1]);
-      
+
       if (this.lastPinchDistance) {
         const scale = distance / this.lastPinchDistance;
         const center = this.getCenter(points);
         this.onZoom(scale, center);
       }
-      
+
       this.lastPinchDistance = distance;
     }
   }
-  
+
   handlePointerUp(e) {
     this.pointers.delete(e.pointerId);
     this.canvas.releasePointerCapture(e.pointerId);
-    
+
     if (this.pointers.size < 2) {
       this.lastPinchDistance = null;
     }
   }
-  
+
   getDistance(p1, p2) {
     const dx = p2.x - p1.x;
     const dy = p2.y - p1.y;
     return Math.sqrt(dx * dx + dy * dy);
   }
-  
+
   getCenter(points) {
-    const sum = points.reduce((acc, p) => ({ 
-      x: acc.x + p.x, 
-      y: acc.y + p.y 
+    const sum = points.reduce((acc, p) => ({
+      x: acc.x + p.x,
+      y: acc.y + p.y
     }), { x: 0, y: 0 });
-    return { 
-      x: sum.x / points.length, 
-      y: sum.y / points.length 
+    return {
+      x: sum.x / points.length,
+      y: sum.y / points.length
     };
   }
 }
@@ -595,10 +595,10 @@ class InertiaHandler {
     this.onUpdate = onUpdate;
     this.animationId = null;
   }
-  
+
   onDragMove(x, y) {
     const now = performance.now();
-    
+
     if (this.lastPos && this.lastTime) {
       const dt = now - this.lastTime;
       // Calculate velocity (pixels per millisecond)
@@ -607,42 +607,42 @@ class InertiaHandler {
         y: (y - this.lastPos.y) / dt
       };
     }
-    
+
     this.lastPos = { x, y };
     this.lastTime = now;
   }
-  
+
   onDragEnd() {
     this.lastPos = null;
     this.lastTime = null;
     this.startInertia();
   }
-  
+
   startInertia() {
     const friction = 0.92; // Deceleration factor (0-1)
     const threshold = 0.01; // Stop when velocity is very small
-    
+
     const animate = () => {
       // Apply friction
       this.velocity.x *= friction;
       this.velocity.y *= friction;
-      
+
       // Continue if velocity is significant
-      if (Math.abs(this.velocity.x) > threshold || 
+      if (Math.abs(this.velocity.x) > threshold ||
           Math.abs(this.velocity.y) > threshold) {
-        
+
         // Update position
         this.onUpdate(this.velocity.x * 16, this.velocity.y * 16); // Scale to ~60fps
-        
+
         this.animationId = requestAnimationFrame(animate);
       } else {
         this.velocity = { x: 0, y: 0 };
       }
     };
-    
+
     animate();
   }
-  
+
   stop() {
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
@@ -672,36 +672,36 @@ class SearchManager {
     this.abortController = null;
     this.cache = new Map();
   }
-  
+
   async search(query) {
     // Cancel previous request
     if (this.abortController) {
       this.abortController.abort();
     }
-    
+
     // Check cache
     if (this.cache.has(query)) {
       return this.cache.get(query);
     }
-    
+
     // Create new abort controller
     this.abortController = new AbortController();
-    
+
     try {
       const response = await fetch(
         `${this.apiEndpoint}?q=${encodeURIComponent(query)}`,
         { signal: this.abortController.signal }
       );
-      
+
       if (!response.ok) throw new Error('Search failed');
-      
+
       const results = await response.json();
-      
+
       // Cache results
       this.cache.set(query, results);
-      
+
       return results;
-      
+
     } catch (error) {
       if (error.name === 'AbortError') {
         console.log('Search cancelled');
@@ -720,7 +720,7 @@ function SearchBox() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const searchManager = useRef(new SearchManager('/api/geocode'));
-  
+
   // Debounced search function
   const debouncedSearch = useMemo(
     () => debounce(async (searchQuery) => {
@@ -728,7 +728,7 @@ function SearchBox() {
         setResults([]);
         return;
       }
-      
+
       setLoading(true);
       try {
         const data = await searchManager.current.search(searchQuery);
@@ -741,11 +741,11 @@ function SearchBox() {
     }, 300),
     []
   );
-  
+
   useEffect(() => {
     debouncedSearch(query);
   }, [query, debouncedSearch]);
-  
+
   return (
     <div className="search-box">
       <input
@@ -800,7 +800,7 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
-  
+
   // Handle tile requests specially
   if (url.pathname.startsWith('/tiles/')) {
     event.respondWith(handleTileRequest(event.request));
@@ -816,11 +816,11 @@ self.addEventListener('fetch', (event) => {
 
 async function handleTileRequest(request) {
   const cache = await caches.open(TILE_CACHE);
-  
+
   // Try cache first
   const cached = await cache.match(request);
   if (cached) return cached;
-  
+
   // If online, fetch and cache
   try {
     const response = await fetch(request);
@@ -842,17 +842,17 @@ class OfflineMapManager {
   constructor() {
     this.db = null;
   }
-  
+
   async init() {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open('MapTiles', 1);
-      
+
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
         this.db = request.result;
         resolve();
       };
-      
+
       request.onupgradeneeded = (event) => {
         const db = event.target.result;
         if (!db.objectStoreNames.contains('tiles')) {
@@ -861,34 +861,34 @@ class OfflineMapManager {
       };
     });
   }
-  
+
   async downloadArea(bounds, minZoom, maxZoom, onProgress) {
     const tiles = [];
-    
+
     // Calculate all tiles needed
     for (let z = minZoom; z <= maxZoom; z++) {
       const tilesAtZoom = getTilesForViewport(bounds, z);
       tiles.push(...tilesAtZoom.map(t => ({ ...t, z })));
     }
-    
+
     let downloaded = 0;
     const total = tiles.length;
-    
+
     // Download in batches to avoid overwhelming the browser
     const batchSize = 10;
     for (let i = 0; i < tiles.length; i += batchSize) {
       const batch = tiles.slice(i, i + batchSize);
-      
+
       await Promise.all(batch.map(async (tile) => {
         const key = `${tile.z}/${tile.x}/${tile.y}`;
-        
+
         try {
           const response = await fetch(`/tiles/${key}.pbf`);
           const buffer = await response.arrayBuffer();
-          
+
           // Store in IndexedDB
           await this.storeTile(key, buffer);
-          
+
           downloaded++;
           onProgress(downloaded, total);
         } catch (error) {
@@ -897,23 +897,23 @@ class OfflineMapManager {
       }));
     }
   }
-  
+
   async storeTile(key, buffer) {
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(['tiles'], 'readwrite');
       const store = transaction.objectStore('tiles');
-      
+
       const request = store.put({ key, data: buffer });
       request.onsuccess = () => resolve();
       request.onerror = () => reject(request.error);
     });
   }
-  
+
   async getTile(key) {
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(['tiles'], 'readonly');
       const store = transaction.objectStore('tiles');
-      
+
       const request = store.get(key);
       request.onsuccess = () => resolve(request.result?.data);
       request.onerror = () => reject(request.error);
@@ -930,7 +930,7 @@ class OfflineMapManager {
 
 **Answer:**
 > "Canvas is a 'black box' to screen readers. We need to create a parallel accessible structure:
-> 
+>
 > 1. **Shadow DOM:** Maintain hidden focusable elements for each interactive map feature
 > 2. **ARIA Live Regions:** Announce map state changes
 > 3. **Keyboard Navigation:** Arrow keys to pan, +/- to zoom
@@ -944,25 +944,25 @@ class AccessibilityLayer {
     this.a11yContainer.className = 'map-a11y';
     this.a11yContainer.setAttribute('role', 'application');
     this.a11yContainer.setAttribute('aria-label', 'Interactive map');
-    
+
     // Live region for announcements
     this.liveRegion = document.createElement('div');
     this.liveRegion.setAttribute('aria-live', 'polite');
     this.liveRegion.setAttribute('aria-atomic', 'true');
     this.liveRegion.className = 'sr-only'; // Visually hidden
-    
+
     this.container.appendChild(this.a11yContainer);
     this.container.appendChild(this.liveRegion);
-    
+
     this.setupKeyboardNav();
   }
-  
+
   setupKeyboardNav() {
     this.a11yContainer.tabIndex = 0;
-    
+
     this.a11yContainer.addEventListener('keydown', (e) => {
       const panAmount = 50; // pixels
-      
+
       switch(e.key) {
         case 'ArrowUp':
           map.panBy(0, -panAmount);
@@ -998,26 +998,26 @@ class AccessibilityLayer {
       }
     });
   }
-  
+
   announce(message) {
     this.liveRegion.textContent = message;
   }
-  
+
   addMarker(marker) {
     const button = document.createElement('button');
     button.textContent = marker.label;
     button.setAttribute('aria-label', `${marker.label}, ${marker.category}`);
-    
+
     button.addEventListener('click', () => {
       map.flyTo(marker.position);
       this.announce(`Navigated to ${marker.label}`);
     });
-    
+
     button.addEventListener('focus', () => {
       // Draw focus ring on canvas at marker position
       drawFocusRing(marker.position);
     });
-    
+
     this.a11yContainer.appendChild(button);
   }
 }
@@ -1043,58 +1043,58 @@ class PerformanceMonitor {
       tileLoadTimes: [],
       droppedFrames: 0
     };
-    
+
     this.lastFrameTime = performance.now();
     this.frameCount = 0;
     this.lastFPSUpdate = performance.now();
   }
-  
+
   recordFrame() {
     const now = performance.now();
     const frameTime = now - this.lastFrameTime;
-    
+
     this.metrics.frameTimes.push(frameTime);
-    
+
     // Keep only last 60 frames
     if (this.metrics.frameTimes.length > 60) {
       this.metrics.frameTimes.shift();
     }
-    
+
     // Detect dropped frames (> 33ms = < 30fps)
     if (frameTime > 33) {
       this.metrics.droppedFrames++;
       console.warn(`Dropped frame: ${frameTime.toFixed(2)}ms`);
     }
-    
+
     // Update FPS counter every second
     this.frameCount++;
     if (now - this.lastFPSUpdate >= 1000) {
       this.metrics.fps = this.frameCount;
       this.frameCount = 0;
       this.lastFPSUpdate = now;
-      
+
       // Report to analytics
       this.reportMetrics();
     }
-    
+
     this.lastFrameTime = now;
   }
-  
+
   recordTileLoad(duration) {
     this.metrics.tileLoadTimes.push(duration);
-    
+
     // Calculate P99
     if (this.metrics.tileLoadTimes.length >= 100) {
       const sorted = [...this.metrics.tileLoadTimes].sort((a, b) => a - b);
       const p99Index = Math.floor(sorted.length * 0.99);
       const p99 = sorted[p99Index];
-      
+
       if (p99 > 200) {
         console.warn(`Tile load P99 exceeded target: ${p99.toFixed(2)}ms`);
       }
     }
   }
-  
+
   getMemoryUsage() {
     if (performance.memory) {
       return {
@@ -1105,18 +1105,18 @@ class PerformanceMonitor {
     }
     return null;
   }
-  
+
   reportMetrics() {
-    const avgFrameTime = this.metrics.frameTimes.reduce((a, b) => a + b, 0) / 
+    const avgFrameTime = this.metrics.frameTimes.reduce((a, b) => a + b, 0) /
                          this.metrics.frameTimes.length;
-    
+
     console.log('Performance Metrics:', {
       fps: this.metrics.fps,
       avgFrameTime: avgFrameTime.toFixed(2) + 'ms',
       droppedFrames: this.metrics.droppedFrames,
       memory: this.getMemoryUsage()
     });
-    
+
     // Send to analytics service
     // analytics.track('map_performance', this.metrics);
   }
@@ -1127,10 +1127,10 @@ const perfMonitor = new PerformanceMonitor();
 
 function renderLoop() {
   perfMonitor.recordFrame();
-  
+
   // Render map
   renderMap();
-  
+
   requestAnimationFrame(renderLoop);
 }
 ```
@@ -1143,7 +1143,7 @@ function renderLoop() {
 
 **Answer:**
 > "I'd use Server-Sent Events (SSE) or WebSockets for real-time data:
-> 
+>
 > 1. **Subscribe to viewport:** Send current bounds to server
 > 2. **Receive updates:** Server streams traffic data for that area
 > 3. **Render as overlay:** Draw colored segments on roads
@@ -1157,33 +1157,33 @@ class TrafficLayer {
     this.eventSource = null;
     this.trafficData = new Map();
   }
-  
+
   enable() {
     const bounds = this.map.getBounds();
-    const url = `/api/traffic/stream?` + 
+    const url = `/api/traffic/stream?` +
                 `north=${bounds.north}&south=${bounds.south}&` +
                 `east=${bounds.east}&west=${bounds.west}`;
-    
+
     this.eventSource = new EventSource(url);
-    
+
     this.eventSource.onmessage = (event) => {
       const update = JSON.parse(event.data);
-      
+
       // Update traffic data
       update.segments.forEach(segment => {
         this.trafficData.set(segment.id, segment);
       });
-      
+
       // Trigger re-render (throttled)
       this.scheduleRender();
     };
-    
+
     this.eventSource.onerror = () => {
       console.error('Traffic stream error');
       this.disable();
     };
   }
-  
+
   disable() {
     if (this.eventSource) {
       this.eventSource.close();
@@ -1191,7 +1191,7 @@ class TrafficLayer {
     }
     this.trafficData.clear();
   }
-  
+
   scheduleRender = throttle(() => {
     this.map.renderTrafficLayer(this.trafficData);
   }, 1000);
@@ -1202,7 +1202,7 @@ class TrafficLayer {
 
 **Answer:**
 > "Several strategies:
-> 
+>
 > 1. **Feature detection:** Check GPU capabilities, reduce quality if needed
 > 2. **Adaptive tile resolution:** Load 256px tiles instead of 512px on slow devices
 > 3. **Reduce draw calls:** Merge geometries, use instancing
@@ -1214,7 +1214,7 @@ class TrafficLayer {
 
 **Answer:**
 > "At high zoom levels, floating-point precision errors cause 'jittering'. Solutions:
-> 
+>
 > 1. **Relative to Center (RTC):** Store coordinates relative to viewport center, not world origin
 > 2. **Double precision emulation:** Use two float32s to represent one float64 in shaders
 > 3. **Tile-local coordinates:** Keep coordinates within tile bounds (0-4096), not world space"
