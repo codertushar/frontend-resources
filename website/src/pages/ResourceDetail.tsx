@@ -11,6 +11,7 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, Check, Circle, ChevronDown, ChevronUp, Folder, FileText, Home } from 'lucide-react';
 import contentData from '../data/content.json';
 import { useProgress } from '../context/ProgressContext';
+import { useAuth } from '../context/AuthContext';
 import QuizSection, { parseQuizFromMarkdown, removeQuizFromContent } from '../components/QuizSection';
 import SEO from '../components/SEO';
 import AdUnit from '../components/AdUnit';
@@ -43,6 +44,7 @@ const ResourceDetail = () => {
   const sidebarRef: RefObject<HTMLElement | null> = useRef<HTMLElement>(null);
   const activeItemRef: RefObject<HTMLAnchorElement | null> = useRef<HTMLAnchorElement>(null);
   const { isRead, toggleRead, isInitialized } = useProgress();
+  const { isSignedIn } = useAuth();
 
   // Extract and decode the resource ID from the pathname
   // Remove /resource/ prefix and trailing slash
@@ -153,10 +155,8 @@ const ResourceDetail = () => {
       .slice(0, 3);
   }, [resource, resourceId]);
 
-  // Reset premium content and sidebar state when resource changes
+  // Reset sidebar state when resource changes
   useEffect(() => {
-    setPremiumContent(null);
-    setPremiumContentError(null);
     setShowFullCategory(false);
   }, [resourceId]);
 
@@ -350,12 +350,6 @@ const ResourceDetail = () => {
                     className="article-card glass-panel"
                   >
                     <div className="article-card-header">
-                      {article.premium && (
-                        <span className="article-premium">
-                          <Crown size={12} />
-                          Premium
-                        </span>
-                      )}
                       {article.difficulty && (
                         <span className={`article-difficulty ${article.difficulty}`}>
                           {article.difficulty}
@@ -642,10 +636,10 @@ const ResourceDetail = () => {
     <>
       <SEO
         title={resource.title}
-        description={resource.description || `Learn about ${resource.title} in our comprehensive guide. ${resource.premium ? 'Premium content' : 'Free resource'} for frontend developers.`}
+        description={resource.description || `Learn about ${resource.title} in our comprehensive guide. Free resource for frontend developers.`}
         url={location.pathname}
         type="article"
-        keywords={`${resource.title}, ${resource.category}, frontend interview, ${resource.difficulty} level, ${resource.premium ? 'premium tutorial' : 'free tutorial'}`}
+        keywords={`${resource.title}, ${resource.category}, frontend interview, ${resource.difficulty} level, free tutorial`}
         article={{
           publishedTime: resource.date,
           modifiedTime: resource.date,
@@ -661,7 +655,7 @@ const ResourceDetail = () => {
         modifiedDate={resource.date}
         category={CATEGORY_DISPLAY_NAMES[resource.category] || resource.category}
         difficulty={resource.difficulty}
-        isPremium={resource.premium}
+        isPremium={false}
       />
 
       <BreadcrumbStructuredData items={breadcrumbItems} />
@@ -722,9 +716,6 @@ const ResourceDetail = () => {
                   <div className="sidebar-item-content">
                     <span className="sidebar-item-title">{article.title}</span>
                     <div className="sidebar-item-meta">
-                      {article.premium && (
-                        <Crown size={12} className="sidebar-premium-icon" />
-                      )}
                       {article.difficulty && (
                         <span className={`sidebar-difficulty ${article.difficulty}`}>
                           {article.difficulty}
@@ -799,12 +790,6 @@ const ResourceDetail = () => {
           })()}
         </h1>
         <div className="meta-tags">
-          {resource.premium && (
-            <span className="meta-tag premium">
-              <Crown size={14} />
-              Premium
-            </span>
-          )}
           <Link to={`/library?category=${resource.category}`} className="meta-tag category">
             {resource.category}
           </Link>
