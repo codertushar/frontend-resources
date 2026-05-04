@@ -29,3 +29,4 @@ src/data/premium-content.json
 src/data/static-content.json
 .vercel
 .env*.local
+.next
