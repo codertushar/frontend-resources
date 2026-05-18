@@ -161,6 +161,7 @@ For the best reading experience, we highly recommend visiting our **[Live Websit
 ├── 📄 <a href="system-design/dynamic_ecommerce_ui.md">dynamic_ecommerce_ui.md</a>
 ├── 📄 <a href="system-design/google_docs.md">google_docs.md</a>
 ├── 📄 <a href="system-design/google-maps.md">google-maps.md</a>
+├── 📄 <a href="system-design/grafana_like_analytics_dashboard.md">grafana_like_analytics_dashboard.md</a>
 ├── 📄 <a href="system-design/interview_preparation_guide.md">interview_preparation_guide.md</a>
 ├── 📄 <a href="system-design/netflix_design_system.md">netflix_design_system.md</a>
 └── 📄 <a href="system-design/scalable_design_system_2026.md">scalable_design_system_2026.md</a>
