@@ -1,8 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BookOpen, Code, Target, Heart, Zap, Github, Linkedin, Mail, LucideIcon } from 'lucide-react';
-import { XIcon } from '../../src/components/SocialIcons';
+import { BookOpen, Code, Target, Heart, Zap, Mail, LucideIcon } from 'lucide-react';
+import { XIcon, LinkedInIcon, GitHubIcon } from '../../src/components/SocialIcons';
 
 interface Stat {
   label: string;
@@ -145,10 +145,10 @@ export default function AboutContent() {
                 <XIcon size={16} />
               </a>
               <a href="https://www.linkedin.com/in/khannatushar/" target="_blank" rel="noopener noreferrer" className="creator-link" title="LinkedIn">
-                <Linkedin size={18} />
+                <LinkedInIcon size={18} />
               </a>
               <a href="https://github.com/codertushar" target="_blank" rel="noopener noreferrer" className="creator-link" title="GitHub">
-                <Github size={18} />
+                <GitHubIcon size={18} />
               </a>
             </div>
           </div>

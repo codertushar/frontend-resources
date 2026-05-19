@@ -8,7 +8,7 @@
     "dev:vercel": "vercel dev",
     "build": "npm run generate && next build",
     "start": "next start",
-    "lint": "eslint . && next lint",
+    "lint": "eslint .",
     "sitemap": "node ../scripts/generate-sitemap.js",
     "generate": "node scripts/generate-content.js && npm run sitemap",
     "type-check": "tsc --noEmit"

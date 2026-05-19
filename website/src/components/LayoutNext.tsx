@@ -3,8 +3,8 @@
 import { useState, useRef, useEffect, useCallback, ReactNode, CSSProperties, ChangeEvent } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, Mail, Github, Linkedin, LogOut, User, Crown, Sparkles, Music, Play, Pause, Volume2, VolumeX, RotateCcw, Flame, Code2, ChevronDown } from 'lucide-react';
-import { XIcon } from './SocialIcons';
+import { BookOpen, Mail, LogOut, User, Crown, Sparkles, Music, Play, Pause, Volume2, VolumeX, RotateCcw, Flame, Code2, ChevronDown } from 'lucide-react';
+import { XIcon, LinkedInIcon, GitHubIcon } from './SocialIcons';
 
 import ThemeToggle from './ThemeToggle';
 import NotificationPrompt from './NotificationPrompt';
@@ -945,10 +945,10 @@ const LayoutNext = ({ children }: LayoutProps) => {
                 <XIcon size={18} />
               </a>
               <a href="https://www.linkedin.com/in/khannatushar/" target="_blank" rel="noopener noreferrer" className="social-link" title="LinkedIn">
-                <Linkedin size={20} />
+                <LinkedInIcon size={20} />
               </a>
               <a href="https://github.com/codertushar/frontend-resources" target="_blank" rel="noopener noreferrer" className="social-link" title="GitHub">
-                <Github size={20} />
+                <GitHubIcon size={20} />
               </a>
             </div>
           </div>
