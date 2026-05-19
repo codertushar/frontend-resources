@@ -2,8 +2,8 @@
 
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, MessageSquare, Send, Linkedin, Clock, LucideIcon } from 'lucide-react';
-import { XIcon } from '../../src/components/SocialIcons';
+import { Mail, MessageSquare, Send, Clock, LucideIcon } from 'lucide-react';
+import { XIcon, LinkedInIcon } from '../../src/components/SocialIcons';
 
 interface FormData {
   name: string;
@@ -13,7 +13,7 @@ interface FormData {
 }
 
 interface ContactMethod {
-  icon: LucideIcon | typeof XIcon;
+  icon: LucideIcon | typeof XIcon | typeof LinkedInIcon;
   title: string;
   value: string;
   link: string;
@@ -76,7 +76,7 @@ export default function ContactContent() {
       description: 'Quick questions & updates',
     },
     {
-      icon: Linkedin,
+      icon: LinkedInIcon,
       title: 'LinkedIn',
       value: 'Tushar Khanna',
       link: 'https://www.linkedin.com/in/khannatushar/',

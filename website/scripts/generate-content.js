@@ -417,7 +417,7 @@ function generateDescription(content, title, maxLength = 160) {
         // Ends with incomplete markers
         if (/\s*[:=]\s*$/.test(trimmed)) return false;
         // Contains too many special formatting chars (likely a list or code)
-        if ((trimmed.match(/[→←↑↓✅❌⚠️]/g) || []).length > 3) return false;
+        if ((trimmed.match(/(?:→|←|↑|↓|✅|❌|⚠️)/g) || []).length > 3) return false;
         return true;
     }
 

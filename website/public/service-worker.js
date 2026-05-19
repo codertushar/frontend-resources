@@ -223,7 +223,7 @@ self.addEventListener('notificationclick', (event) => {
 self.addEventListener('push', (event) => {
     console.log('[SW] Push notification received');
 
-    let data = {};
+    let data;
     try {
         data = event.data?.json() || {};
     } catch (e) {
