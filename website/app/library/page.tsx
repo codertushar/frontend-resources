@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     title: 'Library - All Frontend Resources',
     description: 'Browse our complete collection of frontend development resources, tutorials, and interview prep materials.',
     type: 'website',
-    url: 'https://crackfrontend.dev/library',
+    url: 'https://crackfrontend.in/library',
   },
 };
 

@@ -32,7 +32,7 @@ export async function generateMetadata({
     };
   }
 
-  const baseUrl = 'https://crackfrontend.dev';
+  const baseUrl = 'https://crackfrontend.in';
   const url = `${baseUrl}/resource/${article.id}`;
 
   return {

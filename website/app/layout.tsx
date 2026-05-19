@@ -6,7 +6,7 @@ import { Providers } from './providers';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://crackfrontend.dev'),
+  metadataBase: new URL('https://crackfrontend.in'),
   title: {
     default: 'CrackFrontend - Master Frontend Interviews',
     template: '%s | CrackFrontend',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://crackfrontend.dev',
+    url: 'https://crackfrontend.in',
     siteName: 'CrackFrontend',
     title: 'CrackFrontend - Master Frontend Interviews',
     description: 'A curated collection of in-depth resources, real-world patterns, and interview-focused guides to land your dream frontend role.',
