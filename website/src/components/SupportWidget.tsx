@@ -41,8 +41,7 @@ export const SupportWidget = (): JSX.Element => {
 
       <style jsx>{`
         .support-widget {
-          padding: 1.5rem;
-          margin-top: 2rem;
+          padding: 1.25rem;
           border: 1px solid var(--border-color);
           background: var(--surface-color);
           border-radius: 12px;
@@ -76,17 +75,17 @@ export const SupportWidget = (): JSX.Element => {
         }
 
         .support-header h3 {
-          font-size: 1.1rem;
+          font-size: 1rem;
           font-weight: 600;
           color: var(--text-main);
           margin: 0;
         }
 
         .support-description {
-          font-size: 0.9rem;
+          font-size: 0.85rem;
           color: var(--text-muted);
           line-height: 1.5;
-          margin-bottom: 1.25rem;
+          margin: 0 0 1rem 0;
         }
 
         .support-description strong {
@@ -97,14 +96,14 @@ export const SupportWidget = (): JSX.Element => {
         .support-actions {
           display: flex;
           flex-direction: column;
-          gap: 0.75rem;
+          gap: 0.65rem;
         }
 
         .support-action {
           display: flex;
           align-items: center;
-          gap: 0.875rem;
-          padding: 1rem;
+          gap: 0.75rem;
+          padding: 0.875rem;
           background: var(--surface-hover);
           border: 1px solid var(--border-color);
           border-radius: 10px;
@@ -143,17 +142,17 @@ export const SupportWidget = (): JSX.Element => {
         .action-text {
           display: flex;
           flex-direction: column;
-          gap: 0.2rem;
+          gap: 0.15rem;
         }
 
         .action-title {
-          font-size: 0.95rem;
+          font-size: 0.9rem;
           font-weight: 600;
           color: var(--text-main);
         }
 
         .action-subtitle {
-          font-size: 0.8rem;
+          font-size: 0.75rem;
           color: var(--text-muted);
         }
 

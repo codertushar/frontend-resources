@@ -329,8 +329,6 @@ export function ResourceDetailClient({
             {quiz && quiz.length > 0 && (
               <QuizSection questions={quiz} />
             )}
-            {/* Support Widget - encourage donations and feedback */}
-            <SupportWidget />
           </motion.div>
 
           {/* Prev/Next Navigation */}
@@ -390,6 +388,11 @@ export function ResourceDetailClient({
             </div>
           )}
         </div>
+
+        {/* Right Sidebar - Support Widget */}
+        <aside className="support-sidebar">
+          <SupportWidget />
+        </aside>
 
       </div>
 
@@ -1078,7 +1081,23 @@ export function ResourceDetailClient({
           background: var(--text-muted);
         }
 
+        /* Right Support Sidebar */
+        .support-sidebar {
+          position: sticky;
+          top: 100px;
+          width: 320px;
+          max-height: calc(100vh - 120px);
+          flex-shrink: 0;
+          align-self: start;
+        }
+
         /* Responsive */
+        @media (max-width: 1400px) {
+          .support-sidebar {
+            display: none;
+          }
+        }
+
         @media (max-width: 1200px) {
           .article-sidebar {
             display: none;
