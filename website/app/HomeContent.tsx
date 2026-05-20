@@ -81,7 +81,7 @@ interface HomeStats {
 export default function HomeContent() {
   const { getStats } = useProgress();
   const resourceCount: number = typedContentData.length;
-  const progressStats: ProgressStats = getStats();
+  const progressStats: ProgressStats = getStats(resourceCount);
 
   // Map ProgressStats to HomeStats format
   const stats: HomeStats = {
@@ -459,6 +459,7 @@ export default function HomeContent() {
         font-weight: 700;
         color: var(--primary);
         min-width: 50px;
+        margin-right: 1rem;
       }
 
       .progress-cta {
@@ -688,7 +689,7 @@ export default function HomeContent() {
 
         .progress-banner {
           flex-direction: column;
-          gap: 1rem;
+          gap: 1.25rem;
           padding: 1rem;
           margin-bottom: 2.5rem;
         }
