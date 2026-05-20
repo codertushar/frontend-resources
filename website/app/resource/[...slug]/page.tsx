@@ -1,10 +1,16 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { headers } from 'next/headers';
+import Script from 'next/script';
 import ClientLayout from '../../ClientLayout';
 import contentData from '../../../src/data/content.json';
 import { ResourceDetailClient } from './ResourceDetailClient';
 import type { Article } from '../../../src/types/content';
+import {
+  generateArticleSchema,
+  generateBreadcrumbSchema,
+  jsonLdScriptProps,
+} from '../../../src/lib/structured-data';
 
 const articles = contentData as Article[];
 
@@ -106,18 +112,54 @@ export default async function ResourcePage({
     ? articles.filter((a) => a.category === article.category && a.subcategory === article.subcategory)
     : categoryArticles;
 
+  // Generate structured data for SEO
+  const baseUrl = 'https://crackfrontend.in';
+  const articleUrl = `${baseUrl}/resource/${article.id}`;
+
+  // Breadcrumbs for navigation
+  const breadcrumbs = [
+    { name: 'Home', url: baseUrl },
+    { name: 'Library', url: `${baseUrl}/library` },
+    { name: article.category.toUpperCase(), url: `${baseUrl}/resource/${article.category}` },
+  ];
+
+  if (article.subcategory) {
+    breadcrumbs.push({
+      name: article.subcategory.replace(/-/g, ' '),
+      url: `${baseUrl}/resource/${article.category}/${article.subcategory}`,
+    });
+  }
+
+  breadcrumbs.push({ name: article.title, url: articleUrl });
+
+  const articleSchema = generateArticleSchema(article, articleUrl);
+  const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs);
+
   return (
-    <ClientLayout>
-      <ResourceDetailClient
-        article={articleWithContent}
-        previousArticle={previousArticle}
-        nextArticle={nextArticle}
-        relatedArticles={relatedArticles}
-        categoryArticles={categoryArticles}
-        subcategoryArticles={subcategoryArticles}
-        currentIndex={currentIndex}
-        accessLevel={articleAccess}
+    <>
+      {/* Structured data for Google rich snippets */}
+      <Script
+        id="article-schema"
+        strategy="beforeInteractive"
+        {...jsonLdScriptProps(articleSchema)}
       />
-    </ClientLayout>
+      <Script
+        id="breadcrumb-schema"
+        strategy="beforeInteractive"
+        {...jsonLdScriptProps(breadcrumbSchema)}
+      />
+      <ClientLayout>
+        <ResourceDetailClient
+          article={articleWithContent}
+          previousArticle={previousArticle}
+          nextArticle={nextArticle}
+          relatedArticles={relatedArticles}
+          categoryArticles={categoryArticles}
+          subcategoryArticles={subcategoryArticles}
+          currentIndex={currentIndex}
+          accessLevel={articleAccess}
+        />
+      </ClientLayout>
+    </>
   );
 }
