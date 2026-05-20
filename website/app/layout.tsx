@@ -8,19 +8,35 @@ import './globals.css';
 export const metadata: Metadata = {
   metadataBase: new URL('https://crackfrontend.in'),
   title: {
-    default: 'CrackFrontend - Master Frontend Interviews',
+    default: 'CrackFrontend - Ace Frontend Interviews | JavaScript, React, DSA',
     template: '%s | CrackFrontend',
   },
-  description: 'A curated collection of in-depth resources, real-world patterns, and interview-focused guides to land your dream frontend role. Learn JavaScript, React, System Design, and more.',
+  description: 'Master frontend interviews with 100+ free, in-depth guides on JavaScript, React, System Design, DSA, and coding patterns. Crack frontend interviews at top tech companies with real interview questions and expert solutions.',
   keywords: [
     'frontend interview',
+    'crack frontend interview',
+    'frontend interview questions',
     'javascript interview',
+    'javascript interview questions',
     'react interview',
-    'system design',
+    'react interview questions',
+    'frontend system design',
+    'system design interview',
+    'frontend coding interview',
     'coding interview prep',
     'javascript polyfills',
-    'design patterns',
+    'react hooks interview',
+    'design patterns javascript',
     'DSA for frontend',
+    'frontend developer interview',
+    'crack frontend',
+    'ace frontend interview',
+    'frontend interview preparation',
+    'web development interview',
+    'frontend algorithms',
+    'javascript concepts',
+    'react patterns',
+    'frontend best practices',
   ],
   authors: [{ name: 'Tushar Khanna' }],
   creator: 'CrackFrontend',
@@ -31,7 +47,7 @@ export const metadata: Metadata = {
     url: 'https://crackfrontend.in',
     siteName: 'CrackFrontend',
     title: 'CrackFrontend - Master Frontend Interviews',
-    description: 'A curated collection of in-depth resources, real-world patterns, and interview-focused guides to land your dream frontend role.',
+    description: 'Free, comprehensive resources to crack frontend interviews: JavaScript, React, System Design, DSA, and real interview questions from top tech companies.',
     images: [
       {
         url: '/og-image.png',
@@ -43,8 +59,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CrackFrontend - Master Frontend Interviews',
-    description: 'A curated collection of in-depth resources, real-world patterns, and interview-focused guides.',
+    title: 'CrackFrontend - Ace Frontend Interviews',
+    description: 'Master frontend interviews with 100+ free guides. JavaScript, React, DSA, System Design, and real interview questions.',
     creator: '@iamtusharkhanna',
     images: ['/og-image.png'],
   },
@@ -58,6 +74,12 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
+  },
+  verification: {
+    google: 'your-google-verification-code-here', // TODO: Add Google Search Console verification
+  },
+  alternates: {
+    canonical: 'https://crackfrontend.in',
   },
   manifest: '/manifest.json',
   icons: {
