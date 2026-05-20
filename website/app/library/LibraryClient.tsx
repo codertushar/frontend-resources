@@ -120,12 +120,27 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
 
   // Handle sticky filter bar
   useEffect(() => {
+    let filterTop: number | null = null;
+
     const handleScroll = (): void => {
       if (filterRef.current) {
-        const rect = filterRef.current.getBoundingClientRect();
-        setIsFilterSticky(rect.top <= 60);
+        // Store the initial position on first scroll
+        if (filterTop === null) {
+          filterTop = filterRef.current.offsetTop;
+        }
+
+        // Check if we've scrolled past the filter's original position
+        // Account for the sticky offset (70px from CSS)
+        const scrollPosition = window.scrollY;
+        const stickyThreshold = filterTop - 70;
+
+        setIsFilterSticky(scrollPosition >= stickyThreshold);
       }
     };
+
+    // Call once to set initial position
+    handleScroll();
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);

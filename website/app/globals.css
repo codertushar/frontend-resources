@@ -2870,37 +2870,32 @@ a.breadcrumb-item:hover {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  /* Only transition specific properties to avoid flicker */
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
-  position: relative;
+  /* Always use sticky positioning to prevent layout shifts */
+  position: sticky;
+  top: 70px;
   z-index: 95;
+  /* Only transition specific properties to avoid flicker */
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease, backdrop-filter 0.3s ease;
   /* GPU acceleration to prevent flickering */
   transform: translateZ(0);
   will-change: transform;
   -webkit-transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-}
-
-.controls-section.is-sticky {
-  position: sticky;
-  top: 70px;
-  background: var(--sticky-bg, rgba(17, 24, 39, 1));
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  border-color: var(--primary);
-  z-index: 95;
-  /* Force GPU acceleration for smooth sticky behavior */
-  transform: translateZ(0);
-  will-change: transform;
-  -webkit-transform: translateZ(0);
   /* Improve paint performance */
   contain: layout style paint;
 }
 
+.controls-section.is-sticky {
+  background: var(--sticky-bg, rgba(17, 24, 39, 0.95));
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border-color: var(--primary);
+}
+
 :root.light .controls-section.is-sticky {
-  background: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
@@ -3508,23 +3503,14 @@ a.breadcrumb-item:hover {
     padding-top: 1rem;
   }
 
-  .controls-section.glass-panel {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    /* GPU acceleration for mobile */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
+  .controls-section {
+    top: 65px;
   }
 
   .controls-section.is-sticky {
-    top: 65px;
-    background: rgba(17, 24, 39, 1);
+    background: rgba(17, 24, 39, 0.95);
     backdrop-filter: blur(28px);
     -webkit-backdrop-filter: blur(28px);
-    /* Force GPU layer on mobile */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
   }
 
   :root.light .controls-section.is-sticky {
