@@ -15,6 +15,7 @@ import { useProgress } from '../../../src/context/ProgressContext';
 import { useAuth } from '../../../src/context/AuthContext';
 import QuizSection, { parseQuizFromMarkdown, removeQuizFromContent } from '../../../src/components/QuizSection';
 import AdUnit from '../../../src/components/AdUnit';
+import { SupportWidget } from '../../../src/components/SupportWidget';
 import type { Article } from '../../../src/types/content';
 
 const CATEGORY_DISPLAY_NAMES: Record<string, string> = {
@@ -328,6 +329,8 @@ export function ResourceDetailClient({
             {quiz && quiz.length > 0 && (
               <QuizSection questions={quiz} />
             )}
+            {/* Support Widget - encourage donations and feedback */}
+            <SupportWidget />
           </motion.div>
 
           {/* Prev/Next Navigation */}
