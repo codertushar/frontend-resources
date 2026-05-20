@@ -91,12 +91,7 @@ export function ResourceDetailClient({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Mark as read on mount
-  useEffect(() => {
-    if (!isReadArticle) {
-      toggleRead(article.id);
-    }
-  }, [article.id, isReadArticle, toggleRead]);
+  // Removed automatic mark as read on mount - users should manually mark articles as read
 
   const handleNavigate = useCallback(
     (articleId: string) => {
