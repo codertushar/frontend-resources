@@ -1,6 +1,6 @@
 // Service Worker for CrackFrontend PWA
 // Cache version is auto-updated during build via generate-sw-version.js
-const CACHE_NAME = 'frontend-resources-v1767897993572';
+const CACHE_NAME = 'frontend-resources-v1780487503336';
 const BASE_PATH = '';
 const CORE_ASSETS = [
     `${BASE_PATH}/`,
@@ -280,6 +280,12 @@ self.addEventListener('fetch', (event) => {
 
     if (noCachePatterns.some(pattern => request.url.includes(pattern))) {
         return; // Let the browser handle it normally without SW intervention
+    }
+
+    // NEVER intercept static HTML files (Google verification, etc.)
+    // Let these be served directly by the server without service worker
+    if (request.url.endsWith('.html') && !request.url.includes('index.html')) {
+        return; // Let the browser handle it normally
     }
 
     // For navigation requests (HTML pages) - network first with cache fallback
