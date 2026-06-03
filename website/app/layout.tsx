@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code-here', // TODO: Add Google Search Console verification
+    google: 'googlea0eeb32e8b967aa2',
   },
   alternates: {
     canonical: 'https://crackfrontend.in',
