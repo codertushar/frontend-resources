@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://crackfrontend.in/library',
   },
+  alternates: {
+    canonical: 'https://crackfrontend.in/library',
+  },
 };
 
 // Loading fallback for LibraryClient

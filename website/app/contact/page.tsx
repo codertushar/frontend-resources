@@ -9,6 +9,10 @@ export const metadata: Metadata = {
     title: 'Contact Us | CrackFrontend',
     description: 'Get in touch with CrackFrontend. We\'d love to hear from you.',
     type: 'website',
+    url: 'https://crackfrontend.in/contact',
+  },
+  alternates: {
+    canonical: 'https://crackfrontend.in/contact',
   },
 };
 

@@ -9,6 +9,10 @@ export const metadata: Metadata = {
     title: 'Privacy Policy | CrackFrontend',
     description: 'Learn how CrackFrontend collects, uses, and protects your personal information.',
     type: 'website',
+    url: 'https://crackfrontend.in/privacy',
+  },
+  alternates: {
+    canonical: 'https://crackfrontend.in/privacy',
   },
 };
 

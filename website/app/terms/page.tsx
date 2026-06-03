@@ -9,6 +9,10 @@ export const metadata: Metadata = {
     title: 'Terms of Service | CrackFrontend',
     description: 'Read the terms of service for using CrackFrontend.',
     type: 'website',
+    url: 'https://crackfrontend.in/terms',
+  },
+  alternates: {
+    canonical: 'https://crackfrontend.in/terms',
   },
 };
 
