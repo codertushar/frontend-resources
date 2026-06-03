@@ -97,15 +97,8 @@ function generateSitemap() {
     fs.writeFileSync(sitemapPath, sitemapContent, 'utf-8');
     console.log('✅ sitemap.xml generated with', urls.length, 'entries');
 
-    // Also generate robots.txt with correct sitemap URL
-    const robotsTxtPath = path.join(publicDir, 'robots.txt');
-    const robotsTxtContent = `User-agent: *
-Allow: /
-
-Sitemap: ${BASE_URL}/sitemap.xml
-`;
-    fs.writeFileSync(robotsTxtPath, robotsTxtContent, 'utf-8');
-    console.log('✅ robots.txt generated with sitemap URL:', BASE_URL);
+    // Note: robots.txt is now handled by Next.js dynamic route (website/app/robots.ts)
+    // We no longer generate a static robots.txt file to avoid shadowing the dynamic route
 
     // Generate manifest.json
     const manifestPath = path.join(publicDir, 'manifest.json');
