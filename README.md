@@ -22,7 +22,7 @@
 
 This repository contains a curated collection of resources for frontend developers, covering topics from **Data Structures & Algorithms** to **System Design** and **Machine Coding** challenges.
 
-For the best reading experience, we highly recommend visiting our **[Live Website](https://crackfrontend.vercel.app/)**.
+For the best reading experience, we highly recommend visiting our **[Live Website](https://crackfrontend.in/)**.
 
 ---
 
