@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://crackfrontend.vercel.app/"><strong>Explore the Documentation »</strong></a>
+  <a href="https://crackfrontend.in/"><strong>Explore the Documentation »</strong></a>
 </p>
 
 </div>
