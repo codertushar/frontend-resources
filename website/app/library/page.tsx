@@ -37,6 +37,21 @@ export default function LibraryPage() {
 
   return (
     <ClientLayout>
+      {/* Server-rendered article list for SEO - visible to crawlers without JavaScript */}
+      <div className="sr-only-seo" aria-hidden="true">
+        <h1>Frontend Interview Resources Library</h1>
+        <p>Browse {articles.length}+ free, in-depth frontend interview preparation resources.</p>
+        <ul>
+          {articles.slice(0, 100).map((article) => (
+            <li key={article.id}>
+              <a href={`/resource/${article.id}`}>
+                {article.title}
+              </a>
+              {article.description && <span> - {article.description}</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
       <Suspense fallback={<LibraryLoading />}>
         <LibraryClient
           initialArticles={articles}

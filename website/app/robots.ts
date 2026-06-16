@@ -2,22 +2,20 @@ import { MetadataRoute } from 'next';
 
 /**
  * Dynamic robots.txt generation for Next.js
- * This ensures search engines can always find our sitemap
+ * This ensures search engines can always find our sitemap and properly render pages
  */
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
-        disallow: ['/api/', '/admin/', '/_next/'],
+        allow: ['/', '/_next/static/'],
+        disallow: ['/api/', '/admin/', '/_next/data/'],
       },
       {
         userAgent: 'Googlebot',
-        allow: '/',
+        allow: ['/', '/_next/static/'],
         disallow: ['/api/', '/admin/'],
-        // Allow Google to crawl JavaScript and CSS
-        crawlDelay: 0,
       },
     ],
     sitemap: 'https://crackfrontend.in/sitemap.xml',

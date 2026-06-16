@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { headers } from 'next/headers';
 import Script from 'next/script';
 import ClientLayout from '../../ClientLayout';
 import contentData from '../../../src/data/content.json';
@@ -78,15 +77,7 @@ export default async function ResourcePage({
     notFound();
   }
 
-  // Get the article access level from middleware headers
-  // This is set by the edge middleware based on user's subscription status
-  const headersList = await headers();
-  const articleAccess = headersList.get('x-article-access') || 'paywall';
-
-  // All content is now free, always serve full content
-  const shouldServeFullContent = true;
-
-  // Get the full content from the article object
+  // All content is free - serve full content (no dynamic headers() needed)
   const fullContentForArticle = article.fullContent;
 
   // Create article with appropriate content
@@ -135,6 +126,24 @@ export default async function ResourcePage({
   const articleSchema = generateArticleSchema(article, articleUrl);
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs);
 
+  // Extract plain text from markdown for server-rendered SEO content
+  // This ensures Googlebot can read article content without JavaScript
+  const plainTextContent = (fullContentForArticle || article.content || '')
+    .replace(/```[\s\S]*?```/g, '') // Remove code blocks
+    .replace(/`[^`]*`/g, '') // Remove inline code
+    .replace(/#{1,6}\s/g, '') // Remove heading markers
+    .replace(/\*\*([^*]+)\*\*/g, '$1') // Remove bold markers
+    .replace(/\*([^*]+)\*/g, '$1') // Remove italic markers
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Extract link text
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, '') // Remove images
+    .replace(/[-*+]\s/g, '') // Remove list markers
+    .replace(/>\s/g, '') // Remove blockquote markers
+    .replace(/\|[^|]*\|/g, '') // Remove table content
+    .replace(/---+/g, '') // Remove horizontal rules
+    .replace(/\n{3,}/g, '\n\n') // Collapse multiple newlines
+    .trim()
+    .slice(0, 5000); // Limit to 5000 chars for SEO snippet
+
   return (
     <>
       {/* Structured data for Google rich snippets */}
@@ -149,6 +158,16 @@ export default async function ResourcePage({
         {...jsonLdScriptProps(breadcrumbSchema)}
       />
       <ClientLayout>
+        {/* Server-rendered article content for SEO - visible to crawlers */}
+        <article
+          className="sr-only-seo"
+          aria-hidden="true"
+          data-nosnippet={undefined}
+        >
+          <h1>{article.title}</h1>
+          {article.description && <p>{article.description}</p>}
+          <div>{plainTextContent}</div>
+        </article>
         <ResourceDetailClient
           article={articleWithContent}
           previousArticle={previousArticle}
@@ -157,7 +176,7 @@ export default async function ResourcePage({
           categoryArticles={categoryArticles}
           subcategoryArticles={subcategoryArticles}
           currentIndex={currentIndex}
-          accessLevel={articleAccess}
+          accessLevel="free"
         />
       </ClientLayout>
     </>
