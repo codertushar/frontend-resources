@@ -266,6 +266,13 @@ self.addEventListener('fetch', (event) => {
     const url = new URL(request.url);
     if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
 
+    // NEVER intercept requests from search engine bots
+    // Bots should always get fresh server responses for proper indexing
+    const userAgent = request.headers.get('user-agent') || '';
+    if (/googlebot|bingbot|yandexbot|baiduspider|duckduckbot|slurp|ia_archiver/i.test(userAgent)) {
+        return; // Let search engine bots bypass service worker entirely
+    }
+
     // NEVER cache API requests - always fetch from network
     // This prevents stale data issues with auth, user progress, etc.
     const noCachePatterns = [
@@ -288,7 +295,13 @@ self.addEventListener('fetch', (event) => {
         return; // Let the browser handle it normally
     }
 
-    // For navigation requests (HTML pages) - network first with cache fallback
+    // NEVER intercept sitemap.xml or robots.txt - critical for SEO
+    if (request.url.includes('sitemap.xml') || request.url.includes('robots.txt')) {
+        return; // Let the server handle these directly
+    }
+
+    // For navigation requests (HTML pages) - network first, NO cache fallback to index
+    // This prevents serving wrong pages to crawlers
     if (request.mode === 'navigate' || request.destination === 'document') {
         event.respondWith(
             fetch(request)
@@ -304,14 +317,17 @@ self.addEventListener('fetch', (event) => {
                 })
                 .catch((error) => {
                     console.warn('[SW] Navigation fetch failed for:', request.url, error.message);
-                    // Try to serve from cache
+                    // Try to serve the EXACT cached page (not a fallback to index)
                     return caches.match(request).then((cached) => {
                         if (cached) {
                             console.log('[SW] Serving cached version of:', request.url);
                             return cached;
                         }
-                        // Fall back to index page for SPA routing
-                        return caches.match(`${BASE_PATH}/`);
+                        // Return a proper offline page instead of a different page
+                        return new Response(
+                            '<!DOCTYPE html><html><head><title>Offline</title></head><body><h1>You are offline</h1><p>Please check your connection and try again.</p></body></html>',
+                            { headers: { 'Content-Type': 'text/html' }, status: 503 }
+                        );
                     });
                 })
         );
