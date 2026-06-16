@@ -121,16 +121,17 @@ export default function RootLayout({
             `,
           }}
         />
-        {/* Google Fonts */}
+        {/* Google Fonts - use display=swap for fast initial render */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
           rel="stylesheet"
         />
-        {/* Google AdSense - loaded in head to avoid data-nscript warning */}
-        <script
-          async
+        {/* Google AdSense - loaded after page is interactive to not block rendering */}
+        <Script
+          id="google-adsense"
+          strategy="afterInteractive"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6335516948550888"
           crossOrigin="anonymous"
         />

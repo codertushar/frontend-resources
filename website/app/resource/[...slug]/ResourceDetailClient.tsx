@@ -215,8 +215,8 @@ export function ResourceDetailClient({
           <motion.div
             className="article-header"
             key={article.id}
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
             <h1 className="article-title">
@@ -280,8 +280,8 @@ export function ResourceDetailClient({
           <motion.div
             className="article-content glass-panel"
             key={`content-${article.id}`}
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.2, delay: 0.1, ease: "easeOut" }}
           >
             <ReactMarkdown

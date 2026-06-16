@@ -131,7 +131,7 @@ export default async function ResourcePage({
   const plainTextContent = (fullContentForArticle || article.content || '')
     .replace(/```[\s\S]*?```/g, '') // Remove code blocks
     .replace(/`[^`]*`/g, '') // Remove inline code
-    .replace(/#{1,6}\s/g, '') // Remove heading markers
+    .replace(/#{1,6}\s(.+)/g, '$1') // Keep heading text, remove markers
     .replace(/\*\*([^*]+)\*\*/g, '$1') // Remove bold markers
     .replace(/\*([^*]+)\*/g, '$1') // Remove italic markers
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Extract link text
@@ -140,9 +140,10 @@ export default async function ResourcePage({
     .replace(/>\s/g, '') // Remove blockquote markers
     .replace(/\|[^|]*\|/g, '') // Remove table content
     .replace(/---+/g, '') // Remove horizontal rules
+    .replace(/<!--[\s\S]*?-->/g, '') // Remove HTML comments
     .replace(/\n{3,}/g, '\n\n') // Collapse multiple newlines
     .trim()
-    .slice(0, 5000); // Limit to 5000 chars for SEO snippet
+    .slice(0, 10000); // Serve more text for better text-to-code ratio
 
   return (
     <>
@@ -164,7 +165,7 @@ export default async function ResourcePage({
           aria-hidden="true"
           data-nosnippet={undefined}
         >
-          <h1>{article.title}</h1>
+          <h2>{article.title}</h2>
           {article.description && <p>{article.description}</p>}
           <div>{plainTextContent}</div>
         </article>
