@@ -510,6 +510,9 @@ const InteractiveConstellation = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Skip animation on mobile to save battery and improve performance
+    if (window.innerWidth < 768) return;
+
     let width = window.innerWidth;
     let height = window.innerHeight;
 
@@ -673,7 +676,11 @@ const InteractiveConstellation = () => {
     window.addEventListener('touchend', handleTouchEnd);
     window.addEventListener('resize', handleResize);
 
-    animate();
+    // Defer animation start to avoid blocking initial render
+    const startAnimation = () => { animate(); };
+    const idleId = 'requestIdleCallback' in window
+      ? (window as unknown as { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(startAnimation)
+      : setTimeout(startAnimation, 200) as unknown as number;
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
@@ -681,6 +688,11 @@ const InteractiveConstellation = () => {
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
       window.removeEventListener('resize', handleResize);
+      if ('requestIdleCallback' in window) {
+        (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleId);
+      } else {
+        clearTimeout(idleId);
+      }
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }

@@ -73,9 +73,31 @@ const nextConfig = {
     ];
   },
 
-  // Redirects for backward compatibility
+  // Redirects for backward compatibility and SEO
   async redirects() {
-    return [];
+    return [
+      // Redirect .html and .php index pages to clean URLs
+      {
+        source: '/:path*/index.html',
+        destination: '/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:path*/index.php',
+        destination: '/:path*',
+        permanent: true,
+      },
+      {
+        source: '/index.html',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/index.php',
+        destination: '/',
+        permanent: true,
+      },
+    ];
   },
 
   // Rewrites if needed
