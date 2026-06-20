@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "eslint .",
     "sitemap": "node ../scripts/generate-sitemap.js",
-    "generate": "node scripts/generate-content.js",
+    "generate": "node scripts/generate-content.js && node scripts/generate-llms-txt.js",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {

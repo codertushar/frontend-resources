@@ -27,6 +27,8 @@ dist-ssr
 src/data/content.json
 src/data/premium-content.json
 src/data/static-content.json
+public/llms.txt
+public/llms-full.txt
 .vercel
 .env*.local
 .next
