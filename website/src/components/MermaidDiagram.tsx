@@ -239,6 +239,7 @@ function MermaidDiagramInner({ chart }: MermaidDiagramProps) {
           overflow: 'auto',
           textAlign: 'center',
           display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
           cursor: 'zoom-in',
@@ -280,7 +281,7 @@ function MermaidDiagramInner({ chart }: MermaidDiagramProps) {
         </div>
 
         <div
-          style={{ width: '100%', minWidth: '300px' }}
+          style={{ width: '100%', minWidth: '300px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           dangerouslySetInnerHTML={{ __html: svg }}
         />
       </div>
