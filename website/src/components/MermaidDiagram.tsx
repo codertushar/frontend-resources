@@ -1,17 +1,29 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, memo } from 'react';
 
 interface MermaidDiagramProps {
   chart: string;
 }
 
-export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
+// Module-level cache so re-mounts don't re-render the same chart
+const svgCache = new Map<string, string>();
+
+let mermaidIdCounter = 0;
+
+function MermaidDiagramInner({ chart }: MermaidDiagramProps) {
+  const trimmedChart = chart.trim();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [svg, setSvg] = useState<string>('');
+  const [svg, setSvg] = useState<string>(() => svgCache.get(trimmedChart) || '');
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
+    // Already have cached SVG — skip rendering
+    if (svgCache.has(trimmedChart)) {
+      setSvg(svgCache.get(trimmedChart)!);
+      return;
+    }
+
     let cancelled = false;
 
     const renderChart = async () => {
@@ -27,9 +39,12 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
           sequence: { useMaxWidth: true },
         });
 
-        const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
-        const { svg: renderedSvg } = await mermaid.render(id, chart.trim());
-        if (!cancelled) setSvg(renderedSvg);
+        const id = `mermaid-${++mermaidIdCounter}`;
+        const { svg: renderedSvg } = await mermaid.render(id, trimmedChart);
+        if (!cancelled) {
+          svgCache.set(trimmedChart, renderedSvg);
+          setSvg(renderedSvg);
+        }
       } catch (err) {
         if (!cancelled) setError(String(err));
       }
@@ -37,7 +52,7 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
 
     renderChart();
     return () => { cancelled = true; };
-  }, [chart]);
+  }, [trimmedChart]);
 
   if (error) {
     return (
@@ -71,3 +86,9 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
     />
   );
 }
+
+const MermaidDiagram = memo(MermaidDiagramInner, (prev, next) => {
+  return prev.chart.trim() === next.chart.trim();
+});
+
+export default MermaidDiagram;
