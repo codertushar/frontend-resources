@@ -15,7 +15,6 @@ import MermaidDiagram from '../../../src/components/MermaidDiagram';
 import { useProgress } from '../../../src/context/ProgressContext';
 import { useAuth } from '../../../src/context/AuthContext';
 import QuizSection, { parseQuizFromMarkdown, removeQuizFromContent } from '../../../src/components/QuizSection';
-import AdUnit from '../../../src/components/AdUnit';
 import type { Article } from '../../../src/types/content';
 
 const CATEGORY_DISPLAY_NAMES: Record<string, string> = {
@@ -271,11 +270,6 @@ export function ResourceDetailClient({
               )}
             </div>
           </motion.div>
-
-          {/* Mobile Ad - shown for all users (AdUnit handles premium check internally) */}
-          <div className="mobile-ad">
-            <AdUnit slot="1909064105" responsive={true} />
-          </div>
 
           <motion.div
             className="article-content glass-panel"

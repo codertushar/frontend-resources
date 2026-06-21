@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { Zap, Code, Database, Brain, Layout, Sparkles, BookOpen, Crown, Trophy, Terminal, Lightbulb, ArrowRight } from 'lucide-react';
 import contentData from '../src/data/content.json';
 import { useProgress, ProgressStats } from '../src/context/ProgressContext';
-import AdUnit from '../src/components/AdUnit';
 import type { Article } from '../src/types';
 
 // Type the content data
@@ -184,9 +183,6 @@ export default function HomeContent() {
         <Link href="/library?tags=algorithms" className="topic-tag">Algorithms</Link>
         <Link href="/library?tags=dom" className="topic-tag">DOM Manipulation</Link>
       </motion.div>
-
-      {/* Ad Unit */}
-      <AdUnit style={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
       <motion.div variants={item} className="section-header" style={{ marginTop: '4rem' }}>
         <h2>Browse by Category</h2>
