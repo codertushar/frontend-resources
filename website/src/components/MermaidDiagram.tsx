@@ -19,17 +19,28 @@ function FullscreenOverlay({ svg, onClose, isDark }: { svg: string; onClose: () 
   const [isPanning, setIsPanning] = useState(false);
   const panStart = useRef({ x: 0, y: 0 });
   const positionRef = useRef({ x: 0, y: 0 });
-  const contentRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const diagramRef = useRef<HTMLDivElement>(null);
 
   const MIN_SCALE = 0.5;
-  const MAX_SCALE = 4;
+  const MAX_SCALE = 10;
+
+  // Make SVG fill available space on mount
+  useEffect(() => {
+    if (diagramRef.current) {
+      const svgEl = diagramRef.current.querySelector('svg');
+      if (svgEl) {
+        svgEl.style.width = '100%';
+        svgEl.style.height = '100%';
+        svgEl.style.maxWidth = 'none';
+        svgEl.style.maxHeight = 'none';
+      }
+    }
+  }, [svg]);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
-      if (e.key === '+' || e.key === '=') setScale((s) => Math.min(MAX_SCALE, s + 0.25));
-      if (e.key === '-') setScale((s) => Math.max(MIN_SCALE, s - 0.25));
-      if (e.key === '0') { setScale(1); setPosition({ x: 0, y: 0 }); positionRef.current = { x: 0, y: 0 }; }
     };
     document.addEventListener('keydown', handleKey);
     document.body.style.overflow = 'hidden';
@@ -39,10 +50,20 @@ function FullscreenOverlay({ svg, onClose, isDark }: { svg: string; onClose: () 
     };
   }, [onClose]);
 
-  const handleWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault();
-    const delta = e.deltaY > 0 ? -0.15 : 0.15;
-    setScale((s) => Math.min(MAX_SCALE, Math.max(MIN_SCALE, s + delta)));
+  // Native wheel listener with passive:false so we can preventDefault for pinch zoom
+  useEffect(() => {
+    const el = canvasRef.current;
+    if (!el) return;
+    const handler = (e: WheelEvent) => {
+      e.preventDefault();
+      // Trackpad pinch fires as wheel with ctrlKey
+      const isPinch = e.ctrlKey;
+      const sensitivity = isPinch ? 0.01 : 0.002;
+      const delta = -e.deltaY * sensitivity;
+      setScale((s) => Math.min(MAX_SCALE, Math.max(MIN_SCALE, s * (1 + delta))));
+    };
+    el.addEventListener('wheel', handler, { passive: false });
+    return () => el.removeEventListener('wheel', handler);
   }, []);
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
@@ -62,27 +83,6 @@ function FullscreenOverlay({ svg, onClose, isDark }: { svg: string; onClose: () 
     setIsPanning(false);
   }, []);
 
-  const resetView = useCallback(() => {
-    setScale(1);
-    setPosition({ x: 0, y: 0 });
-    positionRef.current = { x: 0, y: 0 };
-  }, []);
-
-  const btnStyle: React.CSSProperties = {
-    background: isDark ? '#333' : '#e5e7eb',
-    border: 'none',
-    borderRadius: '6px',
-    width: '32px',
-    height: '32px',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: isDark ? '#ccc' : '#374151',
-    fontSize: '1rem',
-    fontWeight: 'bold',
-  };
-
   return createPortal(
     <div
       onClick={onClose}
@@ -90,87 +90,67 @@ function FullscreenOverlay({ svg, onClose, isDark }: { svg: string; onClose: () 
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: isDark ? 'rgba(0,0,0,0.85)' : 'rgba(0,0,0,0.7)',
+        background: isDark ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.75)',
         backdropFilter: 'blur(4px)',
-        cursor: isPanning ? 'grabbing' : 'default',
-        padding: '2rem',
       }}
     >
       <div
+        ref={canvasRef}
         onClick={(e) => e.stopPropagation()}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
         style={{
-          background: isDark ? '#1e1e1e' : '#ffffff',
-          borderRadius: '12px',
-          padding: '0',
-          width: '95vw',
-          height: '90vh',
+          position: 'absolute',
+          inset: 0,
           overflow: 'hidden',
-          boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
           cursor: isPanning ? 'grabbing' : 'grab',
-          position: 'relative',
           display: 'flex',
-          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        {/* Toolbar */}
         <div
+          ref={diagramRef}
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '0.5rem 0.75rem',
-            borderBottom: isDark ? '1px solid #333' : '1px solid #e5e7eb',
-            cursor: 'default',
-          }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <button onClick={() => setScale((s) => Math.max(MIN_SCALE, s - 0.25))} style={btnStyle} title="Zoom out (-)">−</button>
-            <span style={{ color: isDark ? '#aaa' : '#555', fontSize: '0.8rem', minWidth: '3.5rem', textAlign: 'center' }}>
-              {Math.round(scale * 100)}%
-            </span>
-            <button onClick={() => setScale((s) => Math.min(MAX_SCALE, s + 0.25))} style={btnStyle} title="Zoom in (+)">+</button>
-            <button onClick={resetView} style={{ ...btnStyle, width: 'auto', padding: '0 8px', fontSize: '0.75rem' }} title="Reset view (0)">Reset</button>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ color: isDark ? '#666' : '#999', fontSize: '0.7rem' }}>
-              Scroll to zoom · Drag to pan · Esc to close
-            </span>
-            <button onClick={onClose} aria-label="Close fullscreen" style={{ ...btnStyle, borderRadius: '50%' }}>✕</button>
-          </div>
-        </div>
-
-        {/* Zoomable/pannable canvas */}
-        <div
-          ref={contentRef}
-          onWheel={handleWheel}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-          style={{
-            flex: 1,
-            overflow: 'hidden',
+            transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
+            transformOrigin: 'center center',
+            transition: isPanning ? 'none' : 'transform 0.1s ease-out',
+            width: '80vw',
+            height: '80vh',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            position: 'relative',
+            background: '#ffffff',
+            borderRadius: '12px',
+            padding: '2rem',
           }}
-        >
-          <div
-            style={{
-              transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
-              transformOrigin: 'center center',
-              transition: isPanning ? 'none' : 'transform 0.15s ease',
-              textAlign: 'center',
-              padding: '2rem',
-            }}
-            dangerouslySetInnerHTML={{ __html: svg }}
-          />
-        </div>
+          dangerouslySetInnerHTML={{ __html: svg }}
+        />
+      </div>
+
+      {/* Minimal close hint - top right */}
+      <div
+        onClick={onClose}
+        style={{
+          position: 'absolute',
+          top: '1rem',
+          right: '1rem',
+          background: isDark ? 'rgba(50,50,50,0.8)' : 'rgba(255,255,255,0.8)',
+          borderRadius: '50%',
+          width: '36px',
+          height: '36px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          color: isDark ? '#ccc' : '#333',
+          fontSize: '1.2rem',
+          zIndex: 10000,
+        }}
+      >
+        ✕
       </div>
     </div>,
     document.body
@@ -262,6 +242,7 @@ function MermaidDiagramInner({ chart }: MermaidDiagramProps) {
           overflow: 'auto',
           textAlign: 'center',
           display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
           cursor: 'zoom-in',
@@ -303,7 +284,7 @@ function MermaidDiagramInner({ chart }: MermaidDiagramProps) {
         </div>
 
         <div
-          style={{ width: '100%', minWidth: '300px' }}
+          style={{ width: '100%', minWidth: '300px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           dangerouslySetInnerHTML={{ __html: svg }}
         />
       </div>
