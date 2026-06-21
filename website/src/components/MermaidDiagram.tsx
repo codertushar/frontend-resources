@@ -14,9 +14,22 @@ const svgCache = new Map<string, string>();
 let mermaidIdCounter = 0;
 
 function FullscreenOverlay({ svg, onClose, isDark }: { svg: string; onClose: () => void; isDark: boolean }) {
+  const [scale, setScale] = useState(1);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
+  const panStart = useRef({ x: 0, y: 0 });
+  const positionRef = useRef({ x: 0, y: 0 });
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const MIN_SCALE = 0.5;
+  const MAX_SCALE = 4;
+
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
+      if (e.key === '+' || e.key === '=') setScale((s) => Math.min(MAX_SCALE, s + 0.25));
+      if (e.key === '-') setScale((s) => Math.max(MIN_SCALE, s - 0.25));
+      if (e.key === '0') { setScale(1); setPosition({ x: 0, y: 0 }); positionRef.current = { x: 0, y: 0 }; }
     };
     document.addEventListener('keydown', handleKey);
     document.body.style.overflow = 'hidden';
@@ -25,6 +38,50 @@ function FullscreenOverlay({ svg, onClose, isDark }: { svg: string; onClose: () 
       document.body.style.overflow = '';
     };
   }, [onClose]);
+
+  const handleWheel = useCallback((e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.15 : 0.15;
+    setScale((s) => Math.min(MAX_SCALE, Math.max(MIN_SCALE, s + delta)));
+  }, []);
+
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    if (e.button !== 0) return;
+    setIsPanning(true);
+    panStart.current = { x: e.clientX - positionRef.current.x, y: e.clientY - positionRef.current.y };
+  }, []);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!isPanning) return;
+    const newPos = { x: e.clientX - panStart.current.x, y: e.clientY - panStart.current.y };
+    positionRef.current = newPos;
+    setPosition(newPos);
+  }, [isPanning]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsPanning(false);
+  }, []);
+
+  const resetView = useCallback(() => {
+    setScale(1);
+    setPosition({ x: 0, y: 0 });
+    positionRef.current = { x: 0, y: 0 };
+  }, []);
+
+  const btnStyle: React.CSSProperties = {
+    background: isDark ? '#333' : '#e5e7eb',
+    border: 'none',
+    borderRadius: '6px',
+    width: '32px',
+    height: '32px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: isDark ? '#ccc' : '#374151',
+    fontSize: '1rem',
+    fontWeight: 'bold',
+  };
 
   return createPortal(
     <div
@@ -38,7 +95,7 @@ function FullscreenOverlay({ svg, onClose, isDark }: { svg: string; onClose: () 
         justifyContent: 'center',
         background: isDark ? 'rgba(0,0,0,0.85)' : 'rgba(0,0,0,0.7)',
         backdropFilter: 'blur(4px)',
-        cursor: 'zoom-out',
+        cursor: isPanning ? 'grabbing' : 'default',
         padding: '2rem',
       }}
     >
@@ -47,43 +104,73 @@ function FullscreenOverlay({ svg, onClose, isDark }: { svg: string; onClose: () 
         style={{
           background: isDark ? '#1e1e1e' : '#ffffff',
           borderRadius: '12px',
-          padding: '2rem',
-          maxWidth: '95vw',
-          maxHeight: '90vh',
-          overflow: 'auto',
+          padding: '0',
+          width: '95vw',
+          height: '90vh',
+          overflow: 'hidden',
           boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
-          cursor: 'default',
+          cursor: isPanning ? 'grabbing' : 'grab',
           position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
-        <button
-          onClick={onClose}
-          aria-label="Close fullscreen"
+        {/* Toolbar */}
+        <div
           style={{
-            position: 'absolute',
-            top: '0.75rem',
-            right: '0.75rem',
-            background: isDark ? '#333' : '#e5e7eb',
-            border: 'none',
-            borderRadius: '50%',
-            width: '32px',
-            height: '32px',
-            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '0.5rem 0.75rem',
+            borderBottom: isDark ? '1px solid #333' : '1px solid #e5e7eb',
+            cursor: 'default',
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <button onClick={() => setScale((s) => Math.max(MIN_SCALE, s - 0.25))} style={btnStyle} title="Zoom out (-)">−</button>
+            <span style={{ color: isDark ? '#aaa' : '#555', fontSize: '0.8rem', minWidth: '3.5rem', textAlign: 'center' }}>
+              {Math.round(scale * 100)}%
+            </span>
+            <button onClick={() => setScale((s) => Math.min(MAX_SCALE, s + 0.25))} style={btnStyle} title="Zoom in (+)">+</button>
+            <button onClick={resetView} style={{ ...btnStyle, width: 'auto', padding: '0 8px', fontSize: '0.75rem' }} title="Reset view (0)">Reset</button>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span style={{ color: isDark ? '#666' : '#999', fontSize: '0.7rem' }}>
+              Scroll to zoom · Drag to pan · Esc to close
+            </span>
+            <button onClick={onClose} aria-label="Close fullscreen" style={{ ...btnStyle, borderRadius: '50%' }}>✕</button>
+          </div>
+        </div>
+
+        {/* Zoomable/pannable canvas */}
+        <div
+          ref={contentRef}
+          onWheel={handleWheel}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          style={{
+            flex: 1,
+            overflow: 'hidden',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: isDark ? '#ccc' : '#374151',
-            fontSize: '1.1rem',
-            fontWeight: 'bold',
-            zIndex: 1,
+            position: 'relative',
           }}
         >
-          ✕
-        </button>
-        <div
-          style={{ textAlign: 'center', minWidth: '60vw', minHeight: '50vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          dangerouslySetInnerHTML={{ __html: svg }}
-        />
+          <div
+            style={{
+              transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
+              transformOrigin: 'center center',
+              transition: isPanning ? 'none' : 'transform 0.15s ease',
+              textAlign: 'center',
+              padding: '2rem',
+            }}
+            dangerouslySetInnerHTML={{ __html: svg }}
+          />
+        </div>
       </div>
     </div>,
     document.body
