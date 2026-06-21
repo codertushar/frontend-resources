@@ -28,7 +28,6 @@ import {
   CATEGORY_DISPLAY_NAMES,
   SUBCATEGORY_DISPLAY_NAMES
 } from '../../src/config/filters';
-import AdUnit from '../../src/components/AdUnit';
 import type { Article } from '../../src/types/content';
 import type { FilterState, FilterPreset, CategoryValue } from '../../src/config/filters';
 
@@ -635,8 +634,6 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
         )}
       </div>
 
-      {/* Ad Unit - shown below results */}
-      {filteredData.length > 0 && <AdUnit />}
     </div>
   );
 }

@@ -15,8 +15,6 @@ import MermaidDiagram from '../../../src/components/MermaidDiagram';
 import { useProgress } from '../../../src/context/ProgressContext';
 import { useAuth } from '../../../src/context/AuthContext';
 import QuizSection, { parseQuizFromMarkdown, removeQuizFromContent } from '../../../src/components/QuizSection';
-import AdUnit from '../../../src/components/AdUnit';
-import { SupportWidget } from '../../../src/components/SupportWidget';
 import type { Article } from '../../../src/types/content';
 
 const CATEGORY_DISPLAY_NAMES: Record<string, string> = {
@@ -273,11 +271,6 @@ export function ResourceDetailClient({
             </div>
           </motion.div>
 
-          {/* Mobile Ad - shown for all users (AdUnit handles premium check internally) */}
-          <div className="mobile-ad">
-            <AdUnit slot="1909064105" responsive={true} />
-          </div>
-
           <motion.div
             className="article-content glass-panel"
             key={`content-${article.id}`}
@@ -393,10 +386,6 @@ export function ResourceDetailClient({
           )}
         </div>
 
-        {/* Right Sidebar - Support Widget */}
-        <aside className="support-sidebar">
-          <SupportWidget />
-        </aside>
 
       </div>
 
@@ -433,7 +422,7 @@ export function ResourceDetailClient({
 
         .detail-main {
           flex: 1;
-          max-width: 900px;
+          max-width: 1000px;
           min-width: 0;
         }
 
@@ -1085,22 +1074,7 @@ export function ResourceDetailClient({
           background: var(--text-muted);
         }
 
-        /* Right Support Sidebar */
-        .support-sidebar {
-          position: sticky;
-          top: 100px;
-          width: 320px;
-          max-height: calc(100vh - 120px);
-          flex-shrink: 0;
-          align-self: start;
-        }
-
         /* Responsive */
-        @media (max-width: 1400px) {
-          .support-sidebar {
-            display: none;
-          }
-        }
 
         @media (max-width: 1200px) {
           .article-sidebar {
@@ -1109,7 +1083,7 @@ export function ResourceDetailClient({
 
           .detail-main {
             margin-left: 0;
-            max-width: 900px;
+            max-width: 1000px;
           }
         }
 
