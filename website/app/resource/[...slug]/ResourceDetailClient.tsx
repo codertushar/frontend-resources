@@ -11,6 +11,7 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronRight, Crown, Home, Check, Circle, ChevronLeft, ArrowRight, BookOpen, ChevronDown, ChevronUp } from 'lucide-react';
+import MermaidDiagram from '../../../src/components/MermaidDiagram';
 import { useProgress } from '../../../src/context/ProgressContext';
 import { useAuth } from '../../../src/context/AuthContext';
 import QuizSection, { parseQuizFromMarkdown, removeQuizFromContent } from '../../../src/components/QuizSection';
@@ -289,6 +290,9 @@ export function ResourceDetailClient({
               components={{
                 code({ node, inline, className, children, ...props }: any) {
                   const match = /language-(\w+)/.exec(className || '');
+                  if (!inline && match && match[1] === 'mermaid') {
+                    return <MermaidDiagram chart={String(children).replace(/\n$/, '')} />;
+                  }
                   return !inline && match ? (
                     <SyntaxHighlighter
                       style={vscDarkPlus}
