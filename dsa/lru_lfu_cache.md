@@ -413,7 +413,7 @@ const memoizedRender = (componentKey, props) => {
 
 | Application | Cache Type | Why |
 |-------------|-----------|-----|
-| **Redis** | LRU (default) | General-purpose key eviction |
+| **Redis** | Approximate LRU/LFU (sampling) | Fast eviction without global recency bookkeeping |
 | **Database query cache** | LRU | Recent queries likely repeated |
 | **CDN edge servers** | LFU | Popular assets should persist |
 | **DNS resolvers** | LFU | Frequently queried domains stay cached |
@@ -704,6 +704,53 @@ class DistributedLRUNode {
 
 ## 8️⃣ Advanced Variants & Hybrid Policies
 
+### How Industry Actually Does It: "Relaxed" LRU Is the Default
+
+In production, strict textbook LRU is often too expensive. Most high-scale caches use **approximate/relaxed** policies that are "good enough" for hit ratio but much cheaper operationally.
+
+### Redis Approximate LRU (Sampling-Based Eviction)
+
+Redis does not maintain a perfectly sorted global recency list of every key.
+
+When eviction is needed:
+
+1. Redis samples a small set of candidate keys.
+2. It picks the least recently used (or least frequently used) among those sampled keys.
+3. It evicts that key.
+
+This is intentionally approximate, but very fast and memory-efficient.
+
+### Why Relaxed Policies Win at Scale
+
+| Concern | Strict LRU | Relaxed/Approximate LRU |
+|---------|------------|--------------------------|
+| **CPU cost on reads** | High: global recency updates on every hit | Low: avoids hot global coordination |
+| **Contention/locking** | Higher under very high QPS | Lower, better parallelism |
+| **Memory overhead** | More metadata for exact ordering | Smaller metadata footprint |
+| **Real-world hit ratio** | Theoretical optimum for recency-only model | Usually close enough with much better throughput |
+
+The key idea: approximate policies still **converge** toward protecting hot keys and evicting cold keys over time.
+
+### Multi-Queue (MQ) / Segmented Policies
+
+Large systems often use multiple queues to separate one-hit noise from genuinely hot items:
+
+- **New/Probation queue** for recently seen keys
+- **Frequent/Protected queue** for promoted hot keys
+- Optional **Stale/Demotion path** to age out no-longer-hot keys
+
+This avoids a common LRU issue where a one-time scan pollutes the cache.
+
+### Read Path Write-Penalty: Buffered Hit Updates
+
+At very high throughput, even "touching metadata" per hit can be expensive. Some systems decouple hit recording:
+
+1. A cache hit occurs.
+2. Instead of synchronously updating recency/frequency structures, the system appends a lightweight event to a local buffer.
+3. A background worker drains the buffer and applies batched metadata updates.
+
+Trade-off: metadata is briefly stale, but the critical read path stays much faster.
+
 ### W-TinyLFU (Used by Caffeine / Google Guava)
 
 The state-of-the-art cache policy used in production systems:
@@ -769,6 +816,9 @@ Old popular items accumulate high frequency counts and never get evicted, even w
 
 **Q6: What is a cache stampede and how do you prevent it?**
 When a popular cache key expires, hundreds of concurrent requests all miss the cache and hit the database simultaneously. Prevention: (1) **Mutex/lock** — only one request fetches, others wait. (2) **Stale-while-revalidate** — serve expired data while refreshing async. (3) **Jittered TTL** — randomize expiry to avoid synchronized expiration. (4) **Early refresh** — refresh before actual expiry (probabilistic early expiration).
+
+**Q7: Does Redis implement perfect LRU?**
+No. Redis uses **approximate eviction** via sampling. During eviction it samples a small candidate set and evicts the worst candidate (least recently used / least frequently used in that set). This avoids expensive global ordering updates on every access while retaining strong practical hit ratio.
 
 ---
 
@@ -914,6 +964,7 @@ put(key, value) {
 - **Choose LRU** when access patterns have temporal locality; **choose LFU** when some items are genuinely more popular
 - **Distributed caches** use consistent hashing for partitioning and async replication for availability
 - **Cache stampede** is a real production problem — use jittered TTL, mutex locks, or stale-while-revalidate
+- **Industry caches are usually relaxed, not perfect** — Redis-style sampling and segmented queues are the practical default at scale
 - **W-TinyLFU** (used by Caffeine/Guava) is the gold standard for production cache policies
 
 ---
@@ -941,9 +992,9 @@ put(key, value) {
 - [x] The one that was least recently used (LRU tiebreaker)
 - [ ] The one that was inserted first (FIFO)
 
-### Q3: What technique does distributed caching use to minimize key redistribution when nodes join or leave?
-- [ ] Round-robin hashing
-- [ ] Modular hashing
-- [x] Consistent hashing with virtual nodes
-- [ ] Random assignment
+### Q3: How does Redis-style approximate LRU choose what to evict?
+- [ ] It keeps a perfectly sorted global list and always evicts the oldest key
+- [x] It samples a small candidate set and evicts the worst key in that sample
+- [ ] It evicts keys in insertion order (FIFO)
+- [ ] It picks a random key every time
 <!-- quiz-end -->
