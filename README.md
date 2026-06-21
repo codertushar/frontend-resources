@@ -45,6 +45,7 @@ For the best reading experience, we highly recommend visiting our **[Live Websit
 ├── 📄 <a href="dsa/30_day_dsa_guide_senior_frontend.md">30_day_dsa_guide_senior_frontend.md</a>
 ├── 📄 <a href="dsa/bfs.md">bfs.md</a>
 ├── 📄 <a href="dsa/dfs.md">dfs.md</a>
+├── 📄 <a href="dsa/lru_lfu_cache.md">lru_lfu_cache.md</a>
 ├── 📊 <a href="dsa/merge_two_sorted_arrays.md">merge_two_sorted_arrays.md</a>
 ├── 📄 <a href="dsa/prefix_sum.md">prefix_sum.md</a>
 ├── 📄 <a href="dsa/sliding_window.md">sliding_window.md</a>
