@@ -165,6 +165,7 @@ For the best reading experience, we highly recommend visiting our **[Live Websit
 ├── 📄 <a href="system-design/interview_preparation_guide.md">interview_preparation_guide.md</a>
 ├── 📄 <a href="system-design/netflix_design_system.md">netflix_design_system.md</a>
 ├── 📄 <a href="system-design/ride_hailing_app.md">ride_hailing_app.md</a>
-└── 📄 <a href="system-design/scalable_design_system_2026.md">scalable_design_system_2026.md</a>
+├── 📄 <a href="system-design/scalable_design_system_2026.md">scalable_design_system_2026.md</a>
+└── 📄 <a href="system-design/url_shortener.md">url_shortener.md</a>
 </pre>
 
