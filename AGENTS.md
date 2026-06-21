@@ -47,44 +47,80 @@ AI agents should help maintain, enhance, and extend this repository while adheri
 
 Every educational resource in this repository should follow this structure:
 
-### 1. **Title with Emoji**
+### 1. **Title with Emoji + Metadata**
 ```markdown
 # 🎯 Feature Name: Clear Description
+
+**Target Level:** Junior → Senior → Staff Engineer (if applicable)
+**Duration:** 45-60 minutes (for interview-style articles)
+**Interview Focus:** Key areas covered
 
 Brief one-liner explaining what this is.
 ```
 
-### 2. **Introduction**
+> **Interview Importance:** 🔴 Critical / 🟡 Important / 🟢 Good-to-know — One line explaining why this matters in interviews
+
+### 2. **Introduction / Clarifying Questions**
 - What is this concept?
 - Why should developers care?
 - Quick relevance statement
+- For system design articles: include clarifying questions and back-of-envelope estimation
 
-### 3. **Core Concepts & Technical Details**
-- Fundamental principles
-- How it works internally
-- Key characteristics or behavior
+### 3. **Progressive Complexity (Recommended)**
+Structure content in layers so readers at different levels get value:
+- **🟢 Junior:** Core concept, basic implementation, fundamental trade-offs
+- **🟡 Senior:** Scaling concerns, caching, replication, production hardening
+- **🔴 Staff:** Distributed systems, global architecture, advanced trade-offs, capacity planning
 
-### 4. **Code Examples**
-- Basic implementation
+### 4. **Architecture & Visual Diagrams**
+- **Prefer mermaid diagrams** (` ```mermaid `) over ASCII art for architecture, sequence diagrams, and flow charts — the website renders them as interactive SVGs
+- Use mermaid `graph`, `sequenceDiagram`, `flowchart` for system architecture
+- Use comparison tables for trade-off analysis
+- ASCII diagrams are acceptable for inline bit layouts or simple structures
+
+```mermaid
+graph TD
+    Client([Client]) --> LB[Load Balancer]
+    LB --> API[API Server]
+    API --> Cache[(Redis Cache)]
+    API --> DB[(Database)]
+```
+
+### 5. **Code Examples with Dry Runs**
+- Basic implementation with detailed comments
 - Practical, real-world use cases
 - Edge cases and error handling
 - Variations and alternatives
+- **🔍 Dry Run** for key algorithms showing step-by-step state
 
-### 5. **Limitations & Considerations**
-- When NOT to use this
-- Performance implications
-- Browser/environment compatibility
+### 6. **Trade-offs & Decision Tables**
+- Use tables to compare alternatives (e.g., 301 vs 302, cache strategies)
+- Document WHY you chose one approach over another
+- Include what breaks if you make the wrong choice
 
-### 6. **Summary & Key Takeaways**
-- Bullet-point recap of main ideas
+### 7. **Common Interview Questions**
+- 5-6 Q&A pairs with detailed answers
+- Include tricky questions interviewers actually ask
+- Code snippets in answers where needed
+
+### 8. **Common Pitfalls**
+- 3-4 pitfalls with ❌ BAD and ✅ GOOD code examples
+- Explanation of what goes wrong and why
+
+### 9. **Complexity / Capacity Summary**
+- Time & space complexity table for key operations
+- For system design: capacity estimation, QPS, storage projections
+
+### 10. **Summary & Key Takeaways**
+- Quick reference table mapping concepts to their level
+- 5 key takeaways as bullet points
 - Best practices
 
-### 7. **Final Thoughts (Optional)**
-- Broader implications
-- Related concepts worth exploring
-- Links to other resources
+### 11. **Further Reading**
+- 2-3 authoritative links (MDN, official docs, seminal papers)
+- Cross-references to related articles in this repo
 
-### 8. **Quick Quiz (Required)**
+### 12. **Quick Quiz (Required)**
 Every article MUST include a quick quiz at the end to test reader understanding. Add 2-3 multiple choice questions using this format:
 
 ```markdown
@@ -405,65 +441,180 @@ Use this template as a starting point for new educational resources:
 ```markdown
 # 🎯 Feature Name: One-liner Description
 
-Relevant introductory sentence.
+**Target Level:** Junior → Senior → Staff Engineer
+**Duration:** 45-60 minutes
+**Interview Focus:** Key areas
+
+> **Interview Importance:** 🔴 Critical — Why this matters in interviews.
 
 ---
 
-## 💡 What is X?
+## 1️⃣ Clarifying Questions
 
-Brief explanation of the concept and why it matters.
+Scope the problem before designing:
+- Functional requirements (what does it do?)
+- Non-functional requirements (scale, latency, availability)
+- Constraints (tech stack, regulatory, budget)
+
+### Back-of-Envelope Estimation
+
+| Metric | Value |
+|--------|-------|
+| Reads/sec | X QPS |
+| Writes/sec | Y QPS |
+| Storage/year | Z TB |
 
 ---
 
-## 🧠 Core Concepts
+## 2️⃣ Stage 1: Junior Level — Basic Design
 
-### Key Point 1
-Explanation.
+What we're building at the simplest level.
 
-### Key Point 2
-Explanation.
-
----
-
-## ✅ Implementation
-
-### Basic Example
-\`\`\`javascript
-// Code here
+\`\`\`mermaid
+graph TD
+    Client([Client]) --> API[API Server]
+    API --> DB[(Database)]
 \`\`\`
 
-### Use Case 1
+### Core Implementation
 \`\`\`javascript
-// Code here
+// Basic implementation with comments explaining WHY, not WHAT
 \`\`\`
 
-### Use Case 2
-\`\`\`javascript
-// Code here
+### Key Trade-offs
+
+| Decision | Option A | Option B | Recommendation |
+|----------|----------|----------|----------------|
+| Example  | Choice 1 | Choice 2 | Why this one   |
+
+---
+
+## 3️⃣ Stage 2: Senior Level — Scaling for Production
+
+What breaks at scale and how to fix it.
+
+\`\`\`mermaid
+graph TD
+    Client([Clients]) --> LB[Load Balancer]
+    LB --> API1[API Server 1]
+    LB --> API2[API Server N]
+    API1 --> Cache[(Redis Cache)]
+    API1 --> DB[(Primary DB)]
+    DB --> Replica[(Read Replica)]
+\`\`\`
+
+### Caching Strategy
+### Rate Limiting
+### Database Scaling
+
+---
+
+## 4️⃣ Stage 3: Staff Level — Distributed System
+
+Global architecture, analytics pipelines, abuse prevention.
+
+\`\`\`mermaid
+graph TB
+    subgraph "Region 1"
+        LB1[LB] --> API1[API Cluster]
+        API1 --> DB1[(Primary DB)]
+    end
+    subgraph "Region 2"
+        LB2[LB] --> API2[API Cluster]
+        API2 --> DB2[(Replica)]
+    end
+    DB1 -->|"Async Replication"| DB2
 \`\`\`
 
 ---
 
-## ⚠️ Limitations & Considerations
+## 5️⃣ Data Flow: Complete Request Lifecycle
 
-- Point 1
-- Point 2
-- Point 3
+\`\`\`mermaid
+sequenceDiagram
+    participant C as Client
+    participant API as API Server
+    participant Cache as Redis
+    participant DB as Database
+
+    C->>API: Request
+    API->>Cache: Check cache
+    Cache-->>API: Hit/Miss
+    API->>DB: Query (on miss)
+    DB-->>API: Result
+    API-->>C: Response
+\`\`\`
+
+---
+
+## 6️⃣ Key Trade-offs Summary
+
+| Decision | Option A | Option B | Recommendation |
+|----------|----------|----------|----------------|
+| Trade-off 1 | ... | ... | ... |
+
+---
+
+## 7️⃣ Common Interview Questions
+
+**Q1: Question here?**
+Detailed answer with code if needed.
+
+---
+
+## 8️⃣ Common Pitfalls
+
+### ❌ Pitfall 1: Description
+\`\`\`javascript
+// ❌ BAD: Why this is wrong
+\`\`\`
+\`\`\`javascript
+// ✅ GOOD: Why this is right
+\`\`\`
+
+---
+
+## 🔟 Complexity Summary
+
+| Component | Time | Space |
+|-----------|------|-------|
+| Operation 1 | O(1) | O(n) |
 
 ---
 
 ## 🔍 Summary
 
-- Key takeaway 1
-- Key takeaway 2
-- Key takeaway 3
+| Level | What You Add | Key Concepts |
+|-------|-------------|--------------|
+| 🟢 Junior | ... | ... |
+| 🟡 Senior | ... | ... |
+| 🔴 Staff | ... | ... |
+
+### Key Takeaways
+- Takeaway 1
+- Takeaway 2
+- Takeaway 3
 
 ---
 
-## 🌐 Related Resources
+## 📚 Further Reading
 
-- [Related Topic](./path/to/file.md)
-- [Another Topic](./path/to/file.md)
+- [Resource 1](url) — Description
+- [Resource 2](url) — Description
+
+---
+
+<!-- quiz-start -->
+### Q1: Question?
+- [ ] Wrong
+- [x] Correct
+- [ ] Wrong
+
+### Q2: Question?
+- [x] Correct
+- [ ] Wrong
+- [ ] Wrong
+<!-- quiz-end -->
 ```
 
 ---
@@ -586,22 +737,23 @@ When generating educational articles for interview preparation, use the followin
 
 - Use GitHub-flavored markdown
 - Use emoji headers (1️⃣, 2️⃣, etc.) for main sections
-- Use tables for comparisons and structured data
+- Use tables for comparisons, trade-offs, and structured data
 - Use code blocks with `javascript` syntax highlighting
-- Use ASCII diagrams for visual concepts:
+- **Prefer mermaid diagrams** over ASCII art for architecture and flows:
+```mermaid
+graph TD
+    A[Component A] --> B[Component B]
+    B --> C[(Database)]
 ```
-┌─────────────┐
-│    Box      │
-└──────┬──────┘
-       │
-       ▼
-```
-- Include both ❌ BAD and ✅ GOOD examples
+- ASCII diagrams are still acceptable for inline bit layouts or simple inline visuals
+- Include both ❌ BAD and ✅ GOOD examples for pitfalls
 - Every implementation MUST have a dry run
 - Dry runs should show variable state at each step
 - Use horizontal rules (---) to separate major sections
 - Keep explanations concise but thorough
 - Focus on the "WHAT, WHY, HOW" framework
+- **Progressive complexity:** Structure articles from Junior → Senior → Staff when the topic supports it
+- **Trade-off tables:** Always explain WHY you chose one approach, not just WHAT you chose
 
 ### Dry Run Format Example
 ```
