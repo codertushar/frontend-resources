@@ -122,6 +122,9 @@ function FullscreenOverlay({ svg, onClose, isDark }: { svg: string; onClose: () 
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            background: '#ffffff',
+            borderRadius: '12px',
+            padding: '2rem',
           }}
           dangerouslySetInnerHTML={{ __html: svg }}
         />
