@@ -59,23 +59,14 @@ Two client apps (often separate codebases) plus an admin/ops console:
 
 ### Visual Model
 
-```text
------------------------------+        +------------------------------+
-         Rider App           |        |          Driver App          |
------------------------------+        +------------------------------+
- Map + pickup/drop           |        | Online/offline + offers      |
- Price estimate + request    |        | Accept/decline + navigation  |
- Track driver + trip state   |        | High-frequency GPS updates   |
- Payments + receipts         |        | Earnings + trip history      |
---------------+--------------+        +---------------+--------------+
-              |                               |
-              | REST/GraphQL + WS             | REST + WS/MQTT
-              |                               |
-              v                               v
-------------------------------- Platform Services ----------------------------+
- Auth | Rider | Driver | Dispatch/Matching | Pricing | ETA | Maps | Payments  |
- Notifications | Support | Fraud/Risk | Observability | Data/Storage           |
-----------------------------------------------------------------------------+
+```mermaid
+flowchart TD
+    Rider[Rider App
+Pickup/Drop • Pricing • Tracking • Payments] -->|REST / GraphQL + WebSocket| Platform[Platform Services]
+    Driver[Driver App
+Online/Offline • Offers • Navigation • Earnings] -->|REST + WebSocket / MQTT| Platform
+    Platform --> Core[Auth • Rider • Driver • Dispatch • Pricing • ETA • Maps]
+    Platform --> Ops[Notifications • Support • Fraud/Risk • Observability • Storage]
 ```
 
 ---
@@ -99,37 +90,27 @@ Two client apps (often separate codebases) plus an admin/ops console:
 
 ## 4️⃣ High-Level Architecture (Draw This)
 
-```text
- ┌───────────────────────────┐          ┌───────────────────────────┐
- │         Rider App         │          │         Driver App         │
- │  Map UI + State Machine   │          │  GPS + Offer UI + Nav      │
- └─────────────┬─────────────┘          └─────────────┬─────────────┘
-               │ REST (commands)                      │ REST (commands)
-               │ WS (events)                          │ WS/MQTT (events)
-               v                                      v
- ┌────────────────────────────────────────────────────────────────────┐
- │ API Gateway                                                        │
- │ Auth • Rate Limits • Idempotency Keys • Device Fingerprinting      │
- └─────────────┬───────────────────────────────┬──────────────────────┘
-               │                               │
-               v                               v
- ┌───────────────────────┐           ┌───────────────────────────────┐
- │ Trip Service          │           │ Realtime Service               │
- │ trip state machine    │<--------->│ fanout: trip/driver channels   │
- │ persistence + audit   │  events   │ presence + reconnection tokens │
- └───────────┬───────────┘           └──────────────┬────────────────┘
-             │                                      │
-             v                                      v
- ┌───────────────────────┐           ┌───────────────────────────────┐
- │ Dispatch/Matching      │           │ Location Store + Geo Index     │
- │ offers + assignment    │<--------->│ H3/Geohash + TTL + streams     │
- └───────────┬───────────┘           └──────────────┬────────────────┘
-             │                                      │
-             v                                      v
- ┌───────────────────────┐           ┌───────────────────────────────┐
- │ Pricing + ETA          │           │ Payments + Ledger             │
- │ surge, tolls, promos   │           │ capture, refunds, disputes    │
- └───────────────────────┘           └───────────────────────────────┘
+```mermaid
+flowchart TD
+    Rider[Rider App
+Map UI • Trip State] -->|REST commands / WS events| Gateway[API Gateway
+Auth • Rate Limits • Idempotency • Device Fingerprinting]
+    Driver[Driver App
+GPS • Offer UI • Navigation] -->|REST commands / WS-MQTT events| Gateway
+    Gateway --> Trip[Trip Service
+State machine • Persistence • Audit]
+    Gateway --> Realtime[Realtime Service
+Fanout • Presence • Reconnection Tokens]
+    Trip <--> Realtime
+    Trip --> Dispatch[Dispatch / Matching
+Offers • Assignment]
+    Realtime --> Location[Location Store + Geo Index
+H3 / Geohash • TTL • Streams]
+    Dispatch <--> Location
+    Dispatch --> Pricing[Pricing + ETA
+Surge • Tolls • Promos]
+    Location --> Payments[Payments + Ledger
+Capture • Refunds • Disputes]
 ```
 
 **Key idea:** Treat the system as **commands + events**.
@@ -148,11 +129,18 @@ Two client apps (often separate codebases) plus an admin/ops console:
 
 **Trip state machine (must be strict)**
 
-```text
-REQUESTED -> SEARCHING -> OFFERED -> ASSIGNED -> ARRIVING -> IN_TRIP -> COMPLETED
-                                     |                     |
-                                     v                     v
-                                  CANCELED              DISPUTED
+```mermaid
+stateDiagram-v2
+    [*] --> REQUESTED
+    REQUESTED --> SEARCHING
+    SEARCHING --> OFFERED
+    OFFERED --> ASSIGNED
+    ASSIGNED --> ARRIVING
+    ARRIVING --> IN_TRIP
+    IN_TRIP --> COMPLETED
+    OFFERED --> CANCELED
+    ARRIVING --> CANCELED
+    IN_TRIP --> DISPUTED
 ```
 
 ---
@@ -327,6 +315,22 @@ Network updates arrive discretely, but you render smoothly by interpolating betw
 
 ---
 
+## 🔟 Common Interview Questions
+
+### Q1: How do you prevent two drivers from being assigned to the same rider?
+
+**Answer:** Put trip assignment behind a strict state transition with idempotency keys and a compare-and-set style write. The first valid acceptance moves the trip to `ASSIGNED`, and every later acceptance is rejected or converted into a revoke event.
+
+### Q2: Why not stream every GPS point directly into the UI at raw frequency?
+
+**Answer:** Raw GPS streams create battery, bandwidth, and rendering pressure. A better design is to sample network updates at a practical cadence, smooth them with interpolation, and isolate map rendering from the rest of the UI state.
+
+### Q3: What is the right fallback when realtime channels fail mid-trip?
+
+**Answer:** Degrade gracefully to polling plus cached trip state, keep commands idempotent, and resume the socket when connectivity returns. Riders should still see trip status even if high-frequency location updates become less precise.
+
+---
+
 ## 1️⃣1️⃣ Common Pitfalls (What Interviewers Love)
 
 1. ❌ Treating location updates as “best effort” without a state machine and fallbacks.
@@ -358,8 +362,11 @@ Network updates arrive discretely, but you render smoothly by interpolating betw
 
 ---
 
-## 🌐 Related Resources
+## 📚 Further Reading
 
+- [Uber Engineering: H3](https://www.uber.com/blog/h3/) — Why hex grids are useful for geospatial indexing at scale
+- [MDN: WebSocket API](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) — Browser realtime transport fundamentals
+- [Mapbox Docs](https://docs.mapbox.com/) — Practical guidance for maps UX, tiles, and performance
 - Maps frontend design: [google-maps.md](./google-maps.md)
 - Caching and API patterns: [api_integration_caching.md](./api_integration_caching.md)
 - Reliability mindset for event delivery: [analytics_sdk.md](../machine-coding/analytics_sdk.md)

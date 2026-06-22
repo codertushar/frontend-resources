@@ -10,6 +10,8 @@ premium: true
 **Duration:** 45-60 minutes  
 **Interview Focus:** Component Architecture, Design Tokens, Theming, Scalability, Performance
 
+> **Interview Importance:** 🔴 Critical — Design system questions reveal whether you can balance developer experience, accessibility, performance, and multi-platform consistency in a single architecture.
+
 ---
 
 ## Interview Approach & What Interviewers Look For
@@ -27,7 +29,7 @@ When asked to design Netflix's design system in a frontend interview, interviewe
 
 ---
 
-## 1. Clarifying Questions (First 5 minutes)
+## 1️⃣ Clarifying Questions (First 5 minutes)
 
 Before diving in, ask these questions to scope the problem:
 
@@ -51,63 +53,31 @@ Before diving in, ask these questions to scope the problem:
 
 ---
 
-## 2. High-Level Architecture (Draw This!)
+## 📈 Progressive Complexity Path
 
-```
-+-----------------------------------------------------------------+
-|                     Netflix Design System                        |
-|                        (Hawkins UI)                              |
-+-----------------------------------------------------------------+
+- **🟢 Junior:** Explain tokens, primitives, and why teams need shared building blocks instead of ad-hoc UI.
+- **🟡 Senior:** Add theming, platform adapters, documentation, and performance-aware packaging.
+- **🔴 Staff:** Cover governance, rollout strategy, metrics for adoption, and how to keep dozens of teams aligned without blocking product velocity.
 
-+-----------------------------------------------------------------+
-|                    Design Token Layer                            |
-|  +------------+------------+------------+------------+         |
-|  |   Colors   | Typography |  Spacing   |  Shadows   |         |
-|  |  Palette   |   Scale    |   Scale    |   Depths   |         |
-|  +------------+------------+------------+------------+         |
-|                          v                                       |
-|              Theme Provider (Context API)                        |
-|         • Light/Dark Mode  • Regional Variants                  |
-|         • Platform Tokens (Web, TV, Mobile)                     |
-+-----------------------------------------------------------------+
-                          v
-+-----------------------------------------------------------------+
-|                   Component Library                              |
-|  +----------------------------------------------------------+  |
-|  |         Primitive Components (Atoms)                      |  |
-|  |  Button  Input  Text  Icon  Badge  Spinner  Tooltip      |  |
-|  +----------------------------------------------------------+  |
-|                          v                                       |
-|  +----------------------------------------------------------+  |
-|  |      Composite Components (Molecules)                     |  |
-|  |  Card  Modal  Dropdown  Tabs  Navigation  Form           |  |
-|  +----------------------------------------------------------+  |
-|                          v                                       |
-|  +----------------------------------------------------------+  |
-|  |       Pattern Components (Organisms)                      |  |
-|  |  VideoPlayer  ContentRow  Billboard  SearchBar  Header   |  |
-|  +----------------------------------------------------------+  |
-+-----------------------------------------------------------------+
-                          v
-+-----------------------------------------------------------------+
-|                   Platform Adapters                              |
-|  +----------+----------+----------+----------+                 |
-|  |   Web    |    TV    |  Mobile  |  React   |                 |
-|  |  (DOM)   |  (React  |   Web    |  Native  |                 |
-|  |          |   TV)    |          |          |                 |
-|  +----------+----------+----------+----------+                 |
-+-----------------------------------------------------------------+
-                          v
-+-----------------------------------------------------------------+
-|              Build & Distribution Layer                          |
-|  +--------------------------------------------------------+    |
-|  |  • Tree-shakeable ESM modules                          |    |
-|  |  • CommonJS for legacy support                         |    |
-|  |  • TypeScript definitions                              |    |
-|  |  • CSS extraction (for performance)                    |    |
-|  |  • Component documentation (Storybook/Docsite)         |    |
-|  +--------------------------------------------------------+    |
-+-----------------------------------------------------------------+
+---
+
+## 2️⃣ High-Level Architecture (Draw This!)
+
+```mermaid
+flowchart TD
+    Tokens[Design Token Layer
+Colors • Typography • Spacing • Shadows] --> Theme[Theme Provider
+Light/Dark • Regional • Platform Tokens]
+    Theme --> Primitive[Primitive Components
+Button • Input • Text • Icon]
+    Primitive --> Composite[Composite Components
+Card • Modal • Dropdown • Navigation]
+    Composite --> Pattern[Pattern Components
+Video Player • Content Row • Billboard]
+    Pattern --> Adapters[Platform Adapters
+Web • TV • Mobile Web • React Native]
+    Adapters --> Build[Build & Distribution
+ESM • CJS • TypeScript • CSS Extraction • Storybook]
 ```
 
 **Key Talking Points:**
@@ -118,7 +88,7 @@ Before diving in, ask these questions to scope the problem:
 
 ---
 
-## 3. Core Technical Decisions
+## 3️⃣ Core Technical Decisions
 
 ### 3.1 Design Tokens: The Foundation
 
@@ -687,7 +657,7 @@ export const Modal = ({
 
 ---
 
-## 4. Real-World Implementation Example
+## 4️⃣ Real-World Implementation Example
 
 **Complete Netflix-Style Video Card with Hover Effect**
 
@@ -913,7 +883,7 @@ export const VideoCard = ({
 
 ---
 
-## 5. Platform-Specific Adaptations
+## 5️⃣ Platform-Specific Adaptations
 
 ### 5.1 TV Interface (React TV)
 
@@ -1010,7 +980,7 @@ export const MobileCard = ({ thumbnail, title, onVisible }) => {
 
 ---
 
-## 6. Developer Experience (DX)
+## 6️⃣ Developer Experience (DX)
 
 ### 6.1 TypeScript Definitions
 
@@ -1086,7 +1056,7 @@ export const AllVariants = () => (
 
 ---
 
-## 7. Common Interview Questions
+## 7️⃣ Common Interview Questions
 
 ### Q1: How would you handle theming for different regions (e.g., Netflix vs Netflix India)?
 
@@ -1301,7 +1271,7 @@ const spacing = createSpacingUtility();
 
 ---
 
-## 8. Common Pitfalls & Anti-Patterns
+## 8️⃣ Common Pitfalls & Anti-Patterns
 
 ### ❌ Pitfall 1: Hardcoding Values Instead of Using Tokens
 
@@ -1431,7 +1401,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
 
 ---
 
-## 9. Time & Space Complexity
+## 9️⃣ Time & Space Complexity
 
 | Operation | Time Complexity | Space Complexity | Notes |
 |-----------|----------------|------------------|-------|
@@ -1443,7 +1413,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
 
 ---
 
-## 10. Summary & Key Takeaways
+## 🔟 Summary & Key Takeaways
 
 | Aspect | Implementation | Benefits |
 |--------|---------------|----------|

@@ -10,6 +10,8 @@ premium: true
 **Duration:** 45-60 minutes
 **Interview Focus:** Distributed Systems, Cache Strategies, API Design, Performance, Observability
 
+> **Interview Importance:** 🔴 Critical — This topic tests whether you can reason about data freshness, concurrency, and resilience across multiple APIs, which is a core expectation for senior and staff frontend system design rounds.
+
 ---
 
 ## Interview Approach & What Interviewers Look For
@@ -27,7 +29,7 @@ When asked to architect data fetching and caching for a complex application with
 
 ---
 
-## 1. Clarifying Questions (First 5 minutes)
+## 1️⃣ Clarifying Questions (First 5 minutes)
 
 Before diving in, ask these questions to scope the problem:
 
@@ -56,67 +58,59 @@ Before diving in, ask these questions to scope the problem:
 
 ---
 
-## 2. High-Level Architecture (Draw This!)
+## 📈 Progressive Complexity Path
 
-```
-+-----------------------------------------------------------------+
-|                     Frontend Application                         |
-|                                                                  |
-|  +------------------------------------------------------------+ |
-|  |                   UI Components Layer                       | |
-|  |  • Product List  • User Profile  • Cart  • Reviews        | |
-|  +------------------------------------------------------------+ |
-|                           ↕                                      |
-|  +------------------------------------------------------------+ |
-|  |              Data Orchestration Layer                       | |
-|  |  +------------------------------------------------------+  | |
-|  |  |    Query Manager (React Query / SWR / Relay)        |  | |
-|  |  |  • Query Deduplication  • Request Batching          |  | |
-|  |  |  • Parallel Fetching    • Waterfall Prevention      |  | |
-|  |  +------------------------------------------------------+  | |
-|  |                           ↕                                 | |
-|  |  +------------------------------------------------------+  | |
-|  |  |           Cache Layer (Multi-Level)                  |  | |
-|  |  |  +-----------+-----------+------------+             |  | |
-|  |  |  |  Memory   | IndexedDB |  Service   |             |  | |
-|  |  |  |  Cache    |   Cache   |  Worker    |             |  | |
-|  |  |  |  (L1)     |   (L2)    |  (L3)      |             |  | |
-|  |  |  +-----------+-----------+------------+             |  | |
-|  |  |  • TTL-based Expiration  • LRU Eviction             |  | |
-|  |  |  • Tag-based Invalidation                           |  | |
-|  |  +------------------------------------------------------+  | |
-|  +------------------------------------------------------------+ |
-|                           ↕                                      |
-|  +------------------------------------------------------------+ |
-|  |              API Client Layer                               | |
-|  |  +------------------------------------------------------+  | |
-|  |  |    Request Interceptor                               |  | |
-|  |  |  • Authentication  • Rate Limiting  • Retry Logic   |  | |
-|  |  +------------------------------------------------------+  | |
-|  |                           ↕                                 | |
-|  |  +------------------------------------------------------+  | |
-|  |  |    Response Interceptor                              |  | |
-|  |  |  • Error Handling  • Logging  • Metrics             |  | |
-|  |  +------------------------------------------------------+  | |
-|  +------------------------------------------------------------+ |
-|                           ↕                                      |
-|  +------------------------------------------------------------+ |
-|  |          Observability Layer                                | |
-|  |  • Error Tracking (Sentry)  • Metrics (DataDog)           | |
-|  |  • Logging (Structured)     • Tracing (OpenTelemetry)     | |
-|  +------------------------------------------------------------+ |
-+-----------------------------------------------------------------+
-                           ↕
-        +--------------------------------------+
-        |         Backend Services              |
-        |  +------------+-----------------+   |
-        |  |  User API  |  Product API    |   |
-        |  +------------+-----------------+   |
-        |  |  Cart API  |  Inventory API  |   |
-        |  +------------+-----------------+   |
-        |  |  Order API |  Review API     |   |
-        |  +------------+-----------------+   |
-        +--------------------------------------+
+- **🟢 Junior:** Explain TTL caching, stale-while-revalidate, and how to avoid obvious request waterfalls.
+- **🟡 Senior:** Add multi-level caching, tag-based invalidation, optimistic updates, and partial-failure handling.
+- **🔴 Staff:** Cover correctness under distributed conditions, observability, retry budgets, and cross-domain data orchestration.
+
+---
+
+## 2️⃣ High-Level Architecture (Draw This!)
+
+```mermaid
+flowchart TD
+    subgraph FE[Frontend Application]
+        UI[UI Components Layer
+Product List • User Profile • Cart • Reviews]
+        subgraph ORCH[Data Orchestration Layer]
+            QM[Query Manager
+React Query / SWR / Relay
+Deduplication • Batching • Parallel Fetching]
+            CACHE[Multi-Level Cache
+Memory L1 • IndexedDB L2 • Service Worker L3
+TTL • LRU • Tag Invalidation]
+        end
+        subgraph API[API Client Layer]
+            REQ[Request Interceptor
+Auth • Rate Limiting • Retry Logic]
+            RES[Response Interceptor
+Error Handling • Logging • Metrics]
+        end
+        OBS[Observability Layer
+Sentry • DataDog • Structured Logs • OpenTelemetry]
+    end
+
+    subgraph BE[Backend Services]
+        USER[User API]
+        PRODUCT[Product API]
+        CART[Cart API]
+        INVENTORY[Inventory API]
+        ORDER[Order API]
+        REVIEW[Review API]
+    end
+
+    UI <--> QM
+    QM <--> CACHE
+    QM <--> REQ
+    REQ <--> RES
+    RES <--> OBS
+    REQ --> USER
+    REQ --> PRODUCT
+    REQ --> CART
+    REQ --> INVENTORY
+    REQ --> ORDER
+    REQ --> REVIEW
 ```
 
 **Key Talking Points:**
@@ -128,7 +122,7 @@ Before diving in, ask these questions to scope the problem:
 
 ---
 
-## 3. Core Technical Decisions
+## 3️⃣ Core Technical Decisions
 
 ### 3.1 Staleness Policy — When is Data "Fresh"?
 
@@ -401,20 +395,37 @@ const likePost = async (postId) => {
 
 **The Problem:** Sequential API calls create waterfalls that increase latency.
 
-```
-❌ BAD: Sequential Waterfall
------------------------------
-GET /user          ----------►  200ms
-                              GET /cart  ----------►  200ms
-                                                    GET /products  ----------►  200ms
-Total: 600ms
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Client
+    participant UserAPI as User API
+    participant CartAPI as Cart API
+    participant ProductAPI as Product API
 
-✅ GOOD: Parallel Fetching
------------------------------
-GET /user      ----------►  200ms
-GET /cart      ----------►  200ms
-GET /products  ----------►  200ms
-Total: 200ms (3x faster!)
+    rect rgb(255, 235, 238)
+        Client->>UserAPI: GET /user (200ms)
+        UserAPI-->>Client: user
+        Client->>CartAPI: GET /cart (200ms)
+        CartAPI-->>Client: cart
+        Client->>ProductAPI: GET /products (200ms)
+        ProductAPI-->>Client: products
+        Note over Client,ProductAPI: Sequential waterfall ≈ 600ms
+    end
+
+    rect rgb(232, 245, 233)
+        par Parallel fetch
+            Client->>UserAPI: GET /user
+        and
+            Client->>CartAPI: GET /cart
+        and
+            Client->>ProductAPI: GET /products
+        end
+        UserAPI-->>Client: user
+        CartAPI-->>Client: cart
+        ProductAPI-->>Client: products
+        Note over Client,ProductAPI: Parallel fetch ≈ 200ms
+    end
 ```
 
 **Solution 1: Parallel Fetching with Promise.all**
@@ -923,7 +934,7 @@ const fetchWithCircuitBreaker = async (url) => {
 
 ---
 
-## 4. Real-World Implementation with React Query
+## 4️⃣ Real-World Implementation with React Query
 
 **Complete example using React Query for data orchestration:**
 
@@ -1071,7 +1082,7 @@ const App = () => (
 
 ---
 
-## 5. Platform Adaptations
+## 5️⃣ Platform Adaptations
 
 ### Mobile Web Considerations
 
@@ -1138,7 +1149,7 @@ self.addEventListener('fetch', (event) => {
 
 ---
 
-## 6. Common Interview Questions
+## 6️⃣ Common Interview Questions
 
 ### Q1: How would you handle cache invalidation when data is updated on the server?
 
@@ -1339,7 +1350,7 @@ Target hit rates:
 
 ---
 
-## 7. Common Pitfalls
+## 7️⃣ Common Pitfalls
 
 ### ❌ Pitfall 1: Caching Authentication Tokens
 
@@ -1492,7 +1503,7 @@ class LRUCache {
 
 ---
 
-## 8. Time & Space Complexity
+## 8️⃣ Time & Space Complexity
 
 | Operation | Time Complexity | Space Complexity | Notes |
 |-----------|----------------|------------------|-------|
@@ -1512,7 +1523,7 @@ class LRUCache {
 
 ---
 
-## 9. Summary
+## 🔍 Summary & Key Takeaways
 
 ### Quick Reference Table
 
