@@ -13,6 +13,17 @@ const svgCache = new Map<string, string>();
 
 let mermaidIdCounter = 0;
 
+// Serialize all mermaid renders to prevent concurrent initialize/render calls
+// corrupting Mermaid's internal state (causes "Syntax error in text" on mobile)
+let renderQueue: Promise<void> = Promise.resolve();
+const enqueueRender = (fn: () => Promise<void>): Promise<void> => {
+  renderQueue = renderQueue.then(fn, fn);
+  return renderQueue;
+};
+
+// Track the last theme mermaid was initialized with so we only re-initialize on change
+let initializedTheme: string | null = null;
+
 function FullscreenOverlay({ svg, onClose, isDark }: { svg: string; onClose: () => void; isDark: boolean }) {
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -178,27 +189,34 @@ function MermaidDiagramInner({ chart }: MermaidDiagramProps) {
     setSvg(''); // Reset while re-rendering for new theme
 
     const renderChart = async () => {
-      try {
-        const mermaid = (await import('mermaid')).default;
+      await enqueueRender(async () => {
+        if (cancelled) return;
+        try {
+          const mermaid = (await import('mermaid')).default;
 
-        mermaid.initialize({
-          startOnLoad: false,
-          theme: isDark ? 'dark' : 'default',
-          securityLevel: 'loose',
-          fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace',
-          flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
-          sequence: { useMaxWidth: true },
-        });
+          const mermaidTheme = isDark ? 'dark' : 'default';
+          if (initializedTheme !== mermaidTheme) {
+            mermaid.initialize({
+              startOnLoad: false,
+              theme: mermaidTheme,
+              securityLevel: 'loose',
+              fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace',
+              flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
+              sequence: { useMaxWidth: true },
+            });
+            initializedTheme = mermaidTheme;
+          }
 
-        const id = `mermaid-${++mermaidIdCounter}`;
-        const { svg: renderedSvg } = await mermaid.render(id, trimmedChart);
-        if (!cancelled) {
-          svgCache.set(cacheKey, renderedSvg);
-          setSvg(renderedSvg);
+          const id = `mermaid-${++mermaidIdCounter}`;
+          const { svg: renderedSvg } = await mermaid.render(id, trimmedChart);
+          if (!cancelled) {
+            svgCache.set(cacheKey, renderedSvg);
+            setSvg(renderedSvg);
+          }
+        } catch (err) {
+          if (!cancelled) setError(String(err));
         }
-      } catch (err) {
-        if (!cancelled) setError(String(err));
-      }
+      });
     };
 
     renderChart();
