@@ -29,6 +29,18 @@ When asked to design a dynamic eCommerce UI system that adapts based on festival
 
 ---
 
+## 🧭 Clarifying Questions First
+
+Before jumping into architecture, align on scope:
+
+- Are we changing homepage layouts only, or checkout, search, and account flows too?
+- Which experiences must be configurable by non-engineers versus gated behind deployments?
+- How much personalization is required: segment-level, user-level, or experiment-level?
+- What is the rollback expectation during peak events like Diwali or Black Friday?
+- Do configs need offline defaults, edge caching, or country-specific compliance rules?
+
+---
+
 ## 1️⃣ What are Dynamic eCommerce UIs?
 
 Dynamic eCommerce UIs are interfaces that **automatically adapt** their appearance, layout, content, and behavior based on:
@@ -40,41 +52,16 @@ Dynamic eCommerce UIs are interfaces that **automatically adapt** their appearan
 
 ### Visual Example
 
-```
-+-----------------------------------------------------------------+
-|              Same eCommerce Site - Different Views               |
-+-----------------------------------------------------------------+
-
-October 15 (Normal Day):
-+--------------------------------------+
-|  🛍️ ShopMax                          |
-|  +------------+  +------------+     |
-|  |  Product   |  |  Product   |     |  <-- Standard blue theme
-|  |   Card     |  |   Card     |     |  <-- Simple layout
-|  +------------+  +------------+     |  <-- Generic CTAs
-+--------------------------------------+
-
-October 20 (Diwali Festival):
-+--------------------------------------+
-|  🪔 ShopMax DIWALI DHAMAKA 🎆       |
-|  +------------+  +------------+     |
-|  | 🎁 50% OFF |  | 💥 FLASH   |     |  <-- Orange/gold theme
-|  |  Product   |  |  DEAL      |     |  <-- Festival banners
-|  |   Card     |  |  Product   |     |  <-- Urgency timers
-|  +------------+  +------------+     |  <-- Hindi translations
-|                                      |
-|  🎊 FREE Gift Wrapping Available    |
-+--------------------------------------+
-
-December 25 (Christmas):
-+--------------------------------------+
-|  🎄 ShopMax Holiday Special ❄️       |
-|  +------------+  +------------+     |
-|  | 🎅 Gift    |  | ⛄ Winter  |     |  <-- Red/green theme
-|  |  Bundles   |  |  Sale      |     |  <-- Holiday imagery
-|  |  Product   |  |  Product   |     |  <-- Gift recommendations
-|  +------------+  +------------+     |  <-- Christmas messaging
-+--------------------------------------+
+```mermaid
+flowchart LR
+    A[October 15
+Normal Day
+Blue theme • Standard cards • Generic CTAs] --> B[October 20
+Diwali Festival
+Orange/gold theme • Festival banners • Gift wrapping]
+    B --> C[December 25
+Christmas
+Red/green theme • Gift bundles • Holiday messaging]
 ```
 
 **Real-World Analogy:** Think of your favorite streaming app's homepage. Netflix shows different content based on your viewing history. Similarly, eCommerce sites show different products, themes, and layouts based on who you are and when you visit.
@@ -104,47 +91,24 @@ December 25 (Christmas):
 
 ### High-Level System Design
 
-```
-+-----------------------------------------------------------------+
-|                        Client (Browser/App)                      |
-|  +------------------------------------------------------------+ |
-|  |              React App (Config-Driven)                      | |
-|  |  • Renders UI based on configuration                       | |
-|  |  • No hardcoded themes/layouts                             | |
-|  +------------------------------------------------------------+ |
-+-----------------------------------------------------------------+
-                              v HTTPS
-+-----------------------------------------------------------------+
-|                   Backend for Frontend (BFF)                     |
-|                     (Node.js / Next.js)                          |
-|  +------------------------------------------------------------+ |
-|  |            API Orchestration Layer                          | |
-|  |  GET /api/page-config?page=home&userId=123                | |
-|  |  • Aggregates data from multiple microservices            | |
-|  |  • Personalizes response based on user context            | |
-|  |  • Reduces client-side API calls (N+1 problem)            | |
-|  +------------------------------------------------------------+ |
-|                              v                                   |
-|  +------------------------------------------------------------+ |
-|  |          Response Transformation Layer                      | |
-|  |  {                                                          | |
-|  |    theme: { colors, fonts, layout },                       | |
-|  |    components: [ Banner, ProductGrid, Carousel ],          | |
-|  |    content: { headline, cta, images },                     | |
-|  |    forms: { checkoutForm: {...} }                          | |
-|  |  }                                                          | |
-|  +------------------------------------------------------------+ |
-+-----------------------------------------------------------------+
-                   v                v                v
-    +------------------+  +------------------+  +------------------+
-    |  Config Service  |  |  User Service    |  | Product Service  |
-    |  (Theme/Layout)  |  | (Personalization)|  |   (Inventory)    |
-    +------------------+  +------------------+  +------------------+
-                   v                v                v
-    +------------------+  +------------------+  +------------------+
-    |  Feature Flags   |  |  A/B Test        |  |   CDN Cache      |
-    |  (LaunchDarkly)  |  |  (Optimizely)    |  |  (CloudFlare)    |
-    +------------------+  +------------------+  +------------------+
+```mermaid
+flowchart TD
+    Client[Client Browser / App
+Config-driven React UI] -->|HTTPS| BFF[Backend for Frontend
+Node.js / Next.js]
+    BFF --> Orch[API Orchestration
+Aggregate • Personalize • Reduce waterfalls]
+    Orch --> Transform[Response Transformation
+Theme • Components • Content • Forms]
+    Transform --> Config[Config Service
+Theme / Layout]
+    Transform --> User[User Service
+Personalization]
+    Transform --> Product[Product Service
+Inventory / Catalog]
+    Config --> Flags[Feature Flags]
+    User --> Experiments[A/B Testing]
+    Product --> CDN[CDN Cache]
 ```
 
 ### Why Use BFF for Dynamic UIs?
@@ -822,50 +786,35 @@ const FlashSaleProduct = ({ productId }) => {
 
 ### Complete Request-Response Flow
 
-```
-User Opens Homepage
-        v
-+-------------------------------------------------------+
-|  1. Browser Request                                   |
-|  GET /api/bff/page-config?page=home&userId=abc123    |
-+-------------------------------------------------------+
-        v
-+-------------------------------------------------------+
-|  2. BFF Orchestration (Parallel Calls)                |
-|  +-------------------------------------------------+ |
-|  | Promise.all([                                   | |
-|  |   configService.getTheme(),    // 50ms         | |
-|  |   userService.getProfile(),    // 80ms         | |
-|  |   productService.getFeatured(), // 120ms       | |
-|  |   cmsService.getBanners()      // 60ms         | |
-|  | ])                                              | |
-|  +-------------------------------------------------+ |
-|  Total Time: 120ms (longest request)                 |
-+-------------------------------------------------------+
-        v
-+-------------------------------------------------------+
-|  3. BFF Response (Single JSON)                        |
-|  {                                                    |
-|    "theme": {                                         |
-|      "name": "diwali",                                |
-|      "colors": { "primary": "#FF6600" }              |
-|    },                                                 |
-|    "components": [                                    |
-|      { "type": "Banner", "data": {...} },            |
-|      { "type": "ProductGrid", "data": {...} }        |
-|    ],                                                 |
-|    "forms": {                                         |
-|      "checkout": { "fields": [...] }                 |
-|    }                                                  |
-|  }                                                    |
-+-------------------------------------------------------+
-        v
-+-------------------------------------------------------+
-|  4. Client Renders Dynamic UI                         |
-|  • Apply theme (colors, fonts)                        |
-|  • Render components from registry                    |
-|  • Store form schema for checkout later               |
-+-------------------------------------------------------+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant User
+    participant Client as Browser
+    participant BFF as BFF API
+    participant Config as Config Service
+    participant Profile as User Service
+    participant Product as Product Service
+    participant CMS
+
+    User->>Client: Open homepage
+    Client->>BFF: GET /api/bff/page-config?page=home&userId=abc123
+    par Parallel orchestration
+        BFF->>Config: getTheme() (50ms)
+    and
+        BFF->>Profile: getProfile() (80ms)
+    and
+        BFF->>Product: getFeatured() (120ms)
+    and
+        BFF->>CMS: getBanners() (60ms)
+    end
+    Config-->>BFF: theme
+    Profile-->>BFF: profile
+    Product-->>BFF: featured products
+    CMS-->>BFF: banners
+    Note over BFF: Total time ≈ longest request (120ms)
+    BFF-->>Client: Single JSON response
+    Client-->>User: Apply theme and render dynamic components
 ```
 
 ### API Contract Example
@@ -962,32 +911,27 @@ interface FormSchema {
 ### Q1: Why use BFF instead of calling microservices directly from the client?
 
 **Answer:**
-```
-Calling microservices directly has several problems:
+```mermaid
+flowchart TD
+    subgraph Direct[Without BFF]
+        C1[Client] --> A1[Service A]
+        A1 --> B1[Service B]
+        B1 --> C2[Service C]
+        C2 --> D1[Slow UI
+Waterfalls • Over-fetching • Client complexity]
+    end
 
-1. **Network Waterfalls:** Client makes 5 sequential requests (1 second total)
-   Client -> Service A (200ms) -> Service B (200ms) -> Service C (200ms)
-
-   With BFF: Client -> BFF -> [A, B, C in parallel] (200ms total)
-   BFF reduces round trips by 5x!
-
-2. **Over-fetching:** Product API returns 50 fields, UI needs 5
-   Without BFF: Transfer 100KB, parse all fields
-   With BFF: Transfer 10KB (90% reduction)
-
-3. **Client Complexity:** Client must know:
-   - Which APIs to call and in what order
-   - Authentication tokens for each service
-   - Error handling for each API
-   - Data transformation logic
-
-   With BFF: Client makes 1 simple request, BFF handles complexity
-
-4. **Security:** Exposing internal microservice URLs to client is risky
-   With BFF: Client only knows BFF endpoint, internal services hidden
-
-5. **Versioning:** If Product API changes, all clients break
-   With BFF: BFF adapts to API changes, clients unaffected
+    subgraph WithBFF[With BFF]
+        C3[Client] --> BFF[BFF]
+        BFF --> A2[Service A]
+        BFF --> B2[Service B]
+        BFF --> C4[Service C]
+        A2 --> R1[Single optimized response]
+        B2 --> R1
+        C4 --> R1
+        R1 --> F1[Faster UI
+Hidden internal APIs • Smaller payloads]
+    end
 ```
 
 ---

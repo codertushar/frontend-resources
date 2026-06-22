@@ -117,69 +117,17 @@ Before designing anything, clarify requirements with your interviewer:
 
 ### Layer-Based Design System Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    DESIGN SYSTEM LAYERS                          │
-└─────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────┐
-│  LAYER 1: DESIGN TOKENS (Single Source of Truth)                │
-│  ┌───────────────────────────────────────────────────────────┐ │
-│  │  Colors (OKLCH color space for perceptual uniformity)     │ │
-│  │  • --color-primary: oklch(0.65 0.25 260)                  │ │
-│  │  • --color-neutral-50: oklch(0.98 0 0)                    │ │
-│  │                                                             │ │
-│  │  Typography (Type scale + font families)                  │ │
-│  │  • --font-size-sm: 0.875rem (14px)                        │ │
-│  │  • --line-height-tight: 1.25                              │ │
-│  │                                                             │ │
-│  │  Spacing (8px base grid)                                  │ │
-│  │  • --space-1: 0.25rem (4px)                               │ │
-│  │  • --space-4: 1rem (16px)                                 │ │
-│  │                                                             │ │
-│  │  Shadows, Radii, Z-index, Animations                      │ │
-│  └───────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────────┐
-│  LAYER 2: PRIMITIVE COMPONENTS (Atoms)                          │
-│  ┌───────────────────────────────────────────────────────────┐ │
-│  │  Button, Input, Text, Icon, Badge, Spinner, Avatar       │ │
-│  │  • Directly consume design tokens                         │ │
-│  │  • No business logic                                      │ │
-│  │  • Fully accessible (ARIA attributes)                     │ │
-│  └───────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────────┐
-│  LAYER 3: COMPOSITE COMPONENTS (Molecules)                      │
-│  ┌───────────────────────────────────────────────────────────┐ │
-│  │  Card, Modal, Dropdown, Tabs, Tooltip, Alert             │ │
-│  │  • Combine multiple primitives                            │ │
-│  │  • Stateful logic (open/close, selection)                │ │
-│  │  • Composable patterns                                    │ │
-│  └───────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────────┐
-│  LAYER 4: PATTERN COMPONENTS (Organisms)                        │
-│  ┌───────────────────────────────────────────────────────────┐ │
-│  │  DataTable, Form, Navigation, SearchBar, FileUploader    │ │
-│  │  • Complex business logic                                 │ │
-│  │  • Domain-specific features                               │ │
-│  │  • Highly configurable                                    │ │
-│  └───────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────────┐
-│  LAYER 5: INFRASTRUCTURE                                        │
-│  ┌───────────────────────────────────────────────────────────┐ │
-│  │  • Theme Provider (CSS variables injection)              │ │
-│  │  • i18n Provider (Translation context)                    │ │
-│  │  • A11y Provider (Focus management, announcements)        │ │
-│  │  • Performance (Code-splitting, tree-shaking)             │ │
-│  └───────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    Tokens[Layer 1: Design Tokens
+Colors • Typography • Spacing • Shadows • Motion] --> Primitive[Layer 2: Primitive Components
+Button • Input • Text • Icon • Badge]
+    Primitive --> Composite[Layer 3: Composite Components
+Card • Modal • Dropdown • Tabs • Tooltip]
+    Composite --> Pattern[Layer 4: Pattern Components
+DataTable • Form • Navigation • SearchBar]
+    Pattern --> Infra[Layer 5: Infrastructure
+Theme Provider • i18n • A11y • Performance]
 ```
 
 ### Technology Stack for 2026

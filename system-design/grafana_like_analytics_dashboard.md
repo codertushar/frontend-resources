@@ -43,20 +43,15 @@ Typical user actions:
 
 ### Visual Model
 
-```text
-┌─────────────────────────────────────────────────────────────────────┐
-│ Dashboard Toolbar                                                  │
-│ Time Range | Refresh | Variables | Search | Fullscreen            │
-├─────────────────────────────────────────────────────────────────────┤
-│ Panel A        │ Panel B            │ Panel C                     │
-│ Line Chart     │ Stat Summary       │ Error Table                 │
-├─────────────────────────────────────────────────────────────────────┤
-│ Panel D                     │ Panel E                             │
-│ Heatmap                     │ Logs Stream                         │
-├─────────────────────────────────────────────────────────────────────┤
-│ Panel F                     │ Panel G                             │
-│ Service Map                 │ Alert History                       │
-└─────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    Toolbar[Dashboard Toolbar
+Time Range • Refresh • Variables • Search • Fullscreen] --> Row1[Panel Row 1
+Line Chart • Stat Summary • Error Table]
+    Row1 --> Row2[Panel Row 2
+Heatmap • Logs Stream]
+    Row2 --> Row3[Panel Row 3
+Service Map • Alert History]
 ```
 
 ### Real-World Analogy
@@ -117,40 +112,29 @@ Before designing, ask:
 
 ## 4️⃣ High-Level Frontend Architecture
 
-```text
-┌──────────────────────────────── Browser ────────────────────────────────┐
-│                                                                         │
-│  ┌──────────────── Dashboard Shell ────────────────┐                    │
-│  │ Toolbar • Variables • Layout • Saved Views      │                    │
-│  └──────────────────────────────────────────────────┘                    │
-│                      │                                                  │
-│  ┌──────────────── Query Orchestrator ─────────────┐                    │
-│  │ Dedup • Batch • Cancel • Priority • Retry       │                    │
-│  └──────────────────────────────────────────────────┘                    │
-│           │                       │                    │                 │
-│  ┌──────────────┐       ┌────────────────┐   ┌──────────────────────┐   │
-│  │ Cache Layer  │       │ Stream Manager │   │ Worker / Scheduler   │   │
-│  │ Memory + SWR │       │ WS / SSE       │   │ Parse + Transform    │   │
-│  └──────────────┘       └────────────────┘   └──────────────────────┘   │
-│           │                       │                    │                 │
-│  ┌──────────────── Panel Runtime ────────────────────────────────────┐   │
-│  │ Panel Registry • Error Boundaries • Visibility Tracking           │   │
-│  └───────────────────────────────────────────────────────────────────┘   │
-│           │                                                             │
-│  ┌──────────────── Rendering Layer ──────────────────────────────────┐   │
-│  │ DOM/SVG for light widgets • Canvas/WebGL for dense charts         │   │
-│  └───────────────────────────────────────────────────────────────────┘   │
-│                                                                         │
-└─────────────────────────────────────────────────────────────────────────┘
-                                   │
-                    ┌──────────────────────────────────┐
-                    │ API Gateway / Query Service      │
-                    │ Aggregation • Auth • Rate Limits │
-                    └──────────────────────────────────┘
-                                   │
-             ┌─────────────────────┼─────────────────────┐
-             │                     │                     │
-      Metrics Store         Logs Store           Alerting Service
+```mermaid
+flowchart TD
+    Shell[Dashboard Shell
+Toolbar • Variables • Layout • Saved Views] --> Orchestrator[Query Orchestrator
+Dedup • Batch • Cancel • Priority • Retry]
+    Orchestrator --> Cache[Cache Layer
+Memory + SWR]
+    Orchestrator --> Stream[Stream Manager
+WebSocket / SSE]
+    Orchestrator --> Worker[Worker / Scheduler
+Parse + Transform]
+    Cache --> Runtime[Panel Runtime
+Registry • Error Boundaries • Visibility Tracking]
+    Stream --> Runtime
+    Worker --> Runtime
+    Runtime --> Render[Rendering Layer
+DOM/SVG for light widgets
+Canvas/WebGL for dense charts]
+    Render --> Gateway[API Gateway / Query Service
+Aggregation • Auth • Rate Limits]
+    Gateway --> Metrics[Metrics Store]
+    Gateway --> Logs[Logs Store]
+    Gateway --> Alerts[Alerting Service]
 ```
 
 ### Core Idea
