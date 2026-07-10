@@ -3731,3 +3731,84 @@ a.breadcrumb-item:hover {
   white-space: nowrap;
   border-width: 0;
 }
+
+/* ==========================================================================
+   Shared loading skeletons — theme-aware (light + dark) and responsive.
+   Used by app/library/loading.tsx and app/resource/[...slug]/loading.tsx.
+   ========================================================================== */
+.skeleton-block {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-hover);
+  border-radius: 8px;
+}
+
+/* Shimmer overlay uses a translucent sweep so it adapts to either theme
+   instead of the previous hardcoded gray that looked off in light mode. */
+.skeleton-block::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--surface-card) 50%,
+    transparent 100%
+  );
+  opacity: 0.55;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-block::after {
+    animation: none;
+  }
+}
+
+.skeleton-line {
+  height: 0.85rem;
+  border-radius: 6px;
+}
+
+.skeleton-pill {
+  height: 1.5rem;
+  width: 5rem;
+  border-radius: 9999px;
+}
+
+/* Instant click feedback while Next.js transitions to an article route. */
+.resource-card.is-navigating {
+  opacity: 0.6;
+  transform: scale(0.99);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+}
+
+/* Plain fallback shown before the syntax highlighter chunk loads. Matches the
+   eventual vsc-dark-plus dark surface so the swap is visually seamless. */
+.code-block-fallback {
+  margin: 0;
+  padding: 1em;
+  overflow-x: auto;
+  background: #1e1e1e;
+  border-radius: 8px;
+  color: #d4d4d4;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  line-height: 1.5;
+  tab-size: 2;
+}
+
+.code-block-fallback code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}

@@ -4,14 +4,11 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-// @ts-expect-error - react-syntax-highlighter lacks proper TypeScript declarations
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-// @ts-expect-error - react-syntax-highlighter lacks proper TypeScript declarations
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronRight, Crown, Home, Check, Circle, ChevronLeft, ArrowRight, BookOpen, ChevronDown, ChevronUp } from 'lucide-react';
 import MermaidDiagram from '../../../src/components/MermaidDiagram';
+import CodeBlock from '../../../src/components/CodeBlock';
 import { useProgress } from '../../../src/context/ProgressContext';
 import { useAuth } from '../../../src/context/AuthContext';
 import QuizSection, { parseQuizFromMarkdown, removeQuizFromContent } from '../../../src/components/QuizSection';
@@ -287,14 +284,9 @@ export function ResourceDetailClient({
                     return <MermaidDiagram chart={String(children).replace(/\n$/, '')} />;
                   }
                   return !inline && match ? (
-                    <SyntaxHighlighter
-                      style={vscDarkPlus}
-                      language={match[1]}
-                      PreTag="div"
-                      {...props}
-                    >
+                    <CodeBlock language={match[1]}>
                       {String(children).replace(/\n$/, '')}
-                    </SyntaxHighlighter>
+                    </CodeBlock>
                   ) : (
                     <code className={className} {...props}>
                       {children}

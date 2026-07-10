@@ -33,7 +33,20 @@ function LibraryLoading() {
 
 // Server Component - handles initial data setup
 export default function LibraryPage() {
-  const articles = contentData as Article[];
+  const allArticles = contentData as Article[];
+
+  // The library only needs list metadata, not the full article body.
+  // Stripping `fullContent` and truncating `content` shrinks the hydration
+  // payload from ~1.6MB to a fraction of that, which dramatically speeds up
+  // hydration, filtering and (crucially) the click-to-navigate responsiveness.
+  const articles = allArticles.map((article) => ({
+    ...article,
+    fullContent: undefined,
+    hasFullContent: false,
+    // Keep a short snippet so fuzzy search still matches on body text and
+    // cards have a description fallback, without shipping the whole article.
+    content: (article.description || article.content || '').slice(0, 300),
+  })) as Article[];
 
   return (
     <ClientLayout>

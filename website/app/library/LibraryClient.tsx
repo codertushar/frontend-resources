@@ -100,6 +100,9 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
   // UI state
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  // Tracks which article the user just clicked so we can show an instant
+  // pressed/loading affordance while Next.js transitions to the route.
+  const [navigatingId, setNavigatingId] = useState<string | null>(null);
   const [showMoreFilters, setShowMoreFilters] = useState<boolean>(false);
   const [isFilterSticky, setIsFilterSticky] = useState<boolean>(false);
   const filterRef = useRef<HTMLDivElement>(null);
@@ -520,7 +523,9 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
                 <div key={item.id}>
                   <Link
                     href={`/resource/${item.id}`}
-                    className={`resource-card ${isRead(item.id) ? 'is-read' : ''}`}
+                    prefetch={false}
+                    onClick={() => setNavigatingId(item.id)}
+                    className={`resource-card ${isRead(item.id) ? 'is-read' : ''} ${navigatingId === item.id ? 'is-navigating' : ''}`}
                     onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--surface-hover)')}
                     onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                   >
@@ -578,7 +583,9 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
             >
               <Link
                 href={`/resource/${item.id}`}
-                className={`resource-card glass-panel animated-card subtle ${isRead(item.id) ? 'is-read' : ''}`}
+                prefetch={false}
+                onClick={() => setNavigatingId(item.id)}
+                className={`resource-card glass-panel animated-card subtle ${isRead(item.id) ? 'is-read' : ''} ${navigatingId === item.id ? 'is-navigating' : ''}`}
               >
                 <div className="card-header">
                   {isRead(item.id) && (
