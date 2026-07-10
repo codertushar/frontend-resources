@@ -32,7 +32,7 @@ export default function HomePage() {
       />
       <ClientLayout>
         {/* Server-rendered SEO content - visible to crawlers without JavaScript */}
-        <div className="sr-only-seo" aria-hidden="true">
+        <div className="sr-only-seo" inert>
           <h1>CrackFrontend - Ace Your Frontend Interviews</h1>
           <p>
             A curated collection of {articles.length}+ in-depth resources, real-world patterns,

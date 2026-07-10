@@ -125,7 +125,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
           rel="stylesheet"
         />
         {/* Google AdSense - loaded after page is interactive to not block rendering */}
@@ -161,12 +161,7 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
-        {/* Razorpay SDK - loads after page is interactive */}
-        <Script
-          id="razorpay-sdk"
-          strategy="afterInteractive"
-          src="https://checkout.razorpay.com/v1/checkout.js"
-        />
+        {/* Razorpay SDK is loaded on-demand from the donation flow (see SubscriptionContext) */}
         <Analytics />
         <SpeedInsights />
       </body>
