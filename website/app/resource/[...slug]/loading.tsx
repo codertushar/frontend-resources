@@ -1,136 +1,117 @@
 import ClientLayout from '../../ClientLayout';
 
+// Article loading skeleton. Mirrors the real ResourceDetail layout (left nav,
+// centered article, right rail) and collapses to a single column on tablet/
+// mobile. Uses the shared, theme-aware `.skeleton-block` styles from globals.css.
 export default function Loading() {
   return (
     <ClientLayout>
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        .skeleton {
-          background: linear-gradient(
-            90deg,
-            rgba(156, 163, 175, 0.2) 25%,
-            rgba(156, 163, 175, 0.3) 50%,
-            rgba(156, 163, 175, 0.2) 75%
-          );
-          background-size: 200% 100%;
-          animation: shimmer 1.5s infinite;
-          border-radius: 0.375rem;
-        }
-
-        @keyframes shimmer {
-          0% { background-position: 200% 0; }
-          100% { background-position: -200% 0; }
-        }
-
-        .skeleton-text {
-          height: 1rem;
-          margin-bottom: 0.5rem;
-        }
-
-        .skeleton-title {
-          height: 2rem;
-          margin-bottom: 1rem;
-        }
-
-        .skeleton-header {
-          height: 1.5rem;
-          width: 60%;
-          margin-bottom: 1.5rem;
-        }
-
-        .loading-spinner {
-          width: 24px;
-          height: 24px;
-          border: 3px solid #e5e7eb;
-          border-top-color: #8b5cf6;
-          border-radius: 50%;
-          animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-        `
-      }} />
-
-      <div className="container detail-container-wrapper">
-        {/* Left Sidebar Skeleton */}
-        <aside className="article-sidebar glass-panel">
-          <div className="sidebar-header">
-            <div className="skeleton" style={{ height: '1.5rem', width: '8rem' }}></div>
-          </div>
-          <nav className="sidebar-nav">
-            {[...Array(10)].map((_, i) => (
-              <div key={i} className="sidebar-item">
-                <div className="skeleton skeleton-text" style={{ width: '100%' }}></div>
-              </div>
-            ))}
-          </nav>
+      <div className="article-skeleton">
+        {/* Left sidebar — category navigation (hidden on smaller screens) */}
+        <aside className="article-skeleton__rail article-skeleton__rail--left glass-panel">
+          <div className="skeleton-block" style={{ height: '1.25rem', width: '60%', marginBottom: '1.25rem' }} />
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div
+              key={i}
+              className="skeleton-block skeleton-line"
+              style={{ width: `${90 - (i % 3) * 12}%`, marginBottom: '0.9rem' }}
+            />
+          ))}
         </aside>
 
-        {/* Main Content */}
-        <main className="article-content-wrapper">
-          {/* Breadcrumb skeleton */}
-          <nav className="breadcrumb" style={{ marginBottom: '1.5rem' }}>
-            <div className="skeleton" style={{ height: '1rem', width: '4rem', display: 'inline-block' }}></div>
-            <span style={{ margin: '0 0.5rem' }}>/</span>
-            <div className="skeleton" style={{ height: '1rem', width: '6rem', display: 'inline-block' }}></div>
-            <span style={{ margin: '0 0.5rem' }}>/</span>
-            <div className="skeleton" style={{ height: '1rem', width: '8rem', display: 'inline-block' }}></div>
-          </nav>
-
-          {/* Article Header Skeleton */}
-          <div className="article-header" style={{ marginBottom: '2rem' }}>
-            <div className="article-meta" style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-              <div className="skeleton" style={{ height: '1.5rem', width: '6rem', borderRadius: '9999px' }}></div>
-              <div className="skeleton" style={{ height: '1.5rem', width: '5rem', borderRadius: '9999px' }}></div>
-            </div>
-            <div className="skeleton skeleton-title" style={{ width: '80%' }}></div>
-            <div className="skeleton skeleton-text" style={{ width: '100%' }}></div>
-            <div className="skeleton skeleton-text" style={{ width: '70%' }}></div>
+        {/* Main article column */}
+        <main className="article-skeleton__main">
+          {/* Breadcrumb */}
+          <div className="article-skeleton__breadcrumb">
+            <div className="skeleton-block skeleton-line" style={{ width: '3.5rem' }} />
+            <div className="skeleton-block skeleton-line" style={{ width: '5rem' }} />
+            <div className="skeleton-block skeleton-line" style={{ width: '7rem' }} />
           </div>
 
-          {/* Main Content Skeleton */}
-          <article className="markdown-content glass-panel">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} style={{ marginBottom: '1.5rem' }}>
-                <div className="skeleton skeleton-text" style={{ width: '100%' }}></div>
-                <div className="skeleton skeleton-text" style={{ width: '95%' }}></div>
-                <div className="skeleton skeleton-text" style={{ width: '90%' }}></div>
+          {/* Meta pills */}
+          <div className="article-skeleton__meta">
+            <div className="skeleton-block skeleton-pill" />
+            <div className="skeleton-block skeleton-pill" style={{ width: '4rem' }} />
+            <div className="skeleton-block skeleton-pill" style={{ width: '6rem' }} />
+          </div>
+
+          {/* Title */}
+          <div className="skeleton-block" style={{ height: '2.5rem', width: '85%', marginBottom: '0.75rem', borderRadius: '10px' }} />
+          <div className="skeleton-block" style={{ height: '2.5rem', width: '55%', marginBottom: '2rem', borderRadius: '10px' }} />
+
+          {/* Body paragraphs */}
+          <div className="article-skeleton__body glass-panel">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="article-skeleton__para">
+                <div className="skeleton-block skeleton-line" style={{ width: '100%' }} />
+                <div className="skeleton-block skeleton-line" style={{ width: '96%' }} />
+                <div className="skeleton-block skeleton-line" style={{ width: '88%' }} />
               </div>
             ))}
-
-            {/* Code block skeleton */}
-            <div className="skeleton" style={{ height: '12rem', marginBottom: '2rem', background: 'rgba(55, 65, 81, 0.3)' }}></div>
-
-            {[...Array(4)].map((_, i) => (
-              <div key={`p-${i}`} style={{ marginBottom: '1.5rem' }}>
-                <div className="skeleton skeleton-text" style={{ width: '100%' }}></div>
-                <div className="skeleton skeleton-text" style={{ width: '92%' }}></div>
-              </div>
-            ))}
-
-            {/* Loading indicator */}
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.75rem', marginTop: '3rem', color: '#9ca3af' }}>
-              <div className="loading-spinner"></div>
-              <span style={{ fontSize: '1rem', fontWeight: '500' }}>Loading article...</span>
-            </div>
-          </article>
+          </div>
         </main>
 
-        {/* Right Sidebar Skeleton */}
-        <aside className="related-sidebar glass-panel">
-          <div className="sidebar-section">
-            <div className="skeleton skeleton-header"></div>
-            {[...Array(3)].map((_, i) => (
-              <div key={i} style={{ marginBottom: '1rem' }}>
-                <div className="skeleton skeleton-text" style={{ width: '100%' }}></div>
-                <div className="skeleton skeleton-text" style={{ width: '80%' }}></div>
-              </div>
-            ))}
-          </div>
+        {/* Right rail — related (hidden on smaller screens) */}
+        <aside className="article-skeleton__rail article-skeleton__rail--right glass-panel">
+          <div className="skeleton-block" style={{ height: '1.1rem', width: '50%', marginBottom: '1.25rem' }} />
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} style={{ marginBottom: '1.1rem' }}>
+              <div className="skeleton-block skeleton-line" style={{ width: '100%', marginBottom: '0.5rem' }} />
+              <div className="skeleton-block skeleton-line" style={{ width: '75%' }} />
+            </div>
+          ))}
         </aside>
       </div>
+
+      <style>{`
+        .article-skeleton {
+          display: grid;
+          grid-template-columns: 240px minmax(0, 1fr) 260px;
+          gap: 2rem;
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 2rem 1.25rem;
+          align-items: flex-start;
+        }
+        .article-skeleton__rail {
+          padding: 1.25rem;
+          position: sticky;
+          top: 90px;
+        }
+        .article-skeleton__main { min-width: 0; }
+        .article-skeleton__breadcrumb {
+          display: flex;
+          gap: 0.75rem;
+          margin-bottom: 1.5rem;
+        }
+        .article-skeleton__meta {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-bottom: 1.25rem;
+        }
+        .article-skeleton__body {
+          padding: 1.75rem;
+        }
+        .article-skeleton__para { margin-bottom: 1.5rem; }
+        .article-skeleton__para .skeleton-line { margin-bottom: 0.6rem; }
+
+        /* Tablet: drop the right rail */
+        @media (max-width: 1100px) {
+          .article-skeleton { grid-template-columns: 220px minmax(0, 1fr); }
+          .article-skeleton__rail--right { display: none; }
+        }
+        /* Mobile: single column, no rails, tighter spacing */
+        @media (max-width: 768px) {
+          .article-skeleton {
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+            padding: 1.25rem 1rem;
+          }
+          .article-skeleton__rail { display: none; }
+          .article-skeleton__body { padding: 1.25rem; }
+        }
+      `}</style>
     </ClientLayout>
   );
 }
