@@ -58,13 +58,13 @@ export function ResourceDetailClient({
   const router = useRouter();
   const { isRead, toggleRead, isInitialized } = useProgress();
   const { isSignedIn } = useAuth();
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [contentToDisplay, setContentToDisplay] = useState(
     article.fullContent || article.content
   );
   const [showFullCategory, setShowFullCategory] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
   const activeItemRef = useRef<HTMLAnchorElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
 
   // Determine which articles to show in sidebar
   const sidebarArticles = showFullCategory ? categoryArticles : subcategoryArticles;
@@ -75,17 +75,34 @@ export function ResourceDetailClient({
   const quiz = parseQuizFromMarkdown(contentToDisplay);
   const contentWithoutQuiz = removeQuizFromContent(contentToDisplay);
 
-  // Handle scroll progress
+  // Drive the reading-progress bar by writing directly to the DOM via a ref
+  // instead of React state. Scroll fires at a high frequency; using state here
+  // would re-render the whole component (including the ReactMarkdown tree) on
+  // every scroll tick, which is wasteful and can amplify layout jitter. rAF
+  // throttling coalesces bursts of scroll events into one write per frame.
   useEffect(() => {
-    const handleScroll = () => {
+    let frame = 0;
+    const updateProgress = () => {
+      frame = 0;
+      const bar = progressBarRef.current;
+      if (!bar) return;
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      setScrollProgress(scrollPercent);
+      bar.style.width = `${scrollPercent}%`;
+    };
+
+    const handleScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(updateProgress);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    updateProgress();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   // Removed automatic mark as read on mount - users should manually mark articles as read
@@ -107,8 +124,9 @@ export function ResourceDetailClient({
       {/* Reading Progress Bar */}
       <div className="reading-progress-container">
         <div
+          ref={progressBarRef}
           className="reading-progress-bar"
-          style={{ width: `${scrollProgress}%` }}
+          style={{ width: '0%' }}
         />
       </div>
 
