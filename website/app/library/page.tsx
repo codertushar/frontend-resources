@@ -38,7 +38,7 @@ export default function LibraryPage() {
   return (
     <ClientLayout>
       {/* Server-rendered article list for SEO - visible to crawlers without JavaScript */}
-      <div className="sr-only-seo" aria-hidden="true">
+      <div className="sr-only-seo" inert>
         <h1>Frontend Interview Resources Library</h1>
         <p>Browse {articles.length}+ free, in-depth frontend interview preparation resources.</p>
         <ul>
