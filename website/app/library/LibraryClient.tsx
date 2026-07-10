@@ -80,6 +80,23 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
   const { isRead, getStats } = useProgress();
   const router = useRouter();
 
+  // Warm the target route on intent (hover/focus) so the eventual click
+  // navigates quickly, without eagerly prefetching all 101 links up front.
+  const prefetchedRef = useRef<Set<string>>(new Set());
+  const warmRoute = useCallback((id: string): void => {
+    if (prefetchedRef.current.has(id)) return;
+    prefetchedRef.current.add(id);
+    router.prefetch(`/resource/${id}`);
+  }, [router]);
+
+  // Fires the instant navigation affordance. Setting state here paints an
+  // immediate overlay/progress bar (library JS is already loaded) so the user
+  // sees feedback right away, even before the article bundle finishes loading.
+  const beginNavigation = useCallback((id: string): void => {
+    warmRoute(id);
+    setNavigatingId(id);
+  }, [warmRoute]);
+
   // Use the library filters hook
   const {
     filterState,
@@ -119,6 +136,15 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
 
   // Always use grid view on mobile
   const effectiveViewMode: ViewMode = isMobile ? 'grid' : viewMode;
+
+  // Clear the navigating affordance if the user returns to the library via the
+  // back button (bfcache restore) so the progress bar never sticks around.
+  useEffect(() => {
+    if (!navigatingId) return;
+    const clear = (): void => setNavigatingId(null);
+    window.addEventListener('pageshow', clear);
+    return () => window.removeEventListener('pageshow', clear);
+  }, [navigatingId]);
 
   // Handle sticky filter bar
   useEffect(() => {
@@ -225,6 +251,15 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
 
   return (
     <div className="container page-container">
+      {/* Instant navigation feedback: a top progress bar that appears the moment
+          a card is clicked. It renders immediately from already-loaded library
+          JS, so the user always sees a response even while the article route
+          bundle is still downloading. */}
+      {navigatingId && (
+        <div className="nav-progress" role="status" aria-live="polite" aria-label="Loading article">
+          <div className="nav-progress__bar" />
+        </div>
+      )}
       {/* Header Section */}
       <motion.div
         className="header-section"
@@ -524,9 +559,13 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
                   <Link
                     href={`/resource/${item.id}`}
                     prefetch={false}
-                    onClick={() => setNavigatingId(item.id)}
+                    onClick={() => beginNavigation(item.id)}
+                    onMouseEnter={(e) => {
+                      warmRoute(item.id);
+                      e.currentTarget.style.background = 'var(--surface-hover)';
+                    }}
+                    onFocus={() => warmRoute(item.id)}
                     className={`resource-card ${isRead(item.id) ? 'is-read' : ''} ${navigatingId === item.id ? 'is-navigating' : ''}`}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--surface-hover)')}
                     onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flex: 1, minWidth: 0 }}>
@@ -584,7 +623,9 @@ export function LibraryClient({ initialArticles }: LibraryClientProps) {
               <Link
                 href={`/resource/${item.id}`}
                 prefetch={false}
-                onClick={() => setNavigatingId(item.id)}
+                onClick={() => beginNavigation(item.id)}
+                onMouseEnter={() => warmRoute(item.id)}
+                onFocus={() => warmRoute(item.id)}
                 className={`resource-card glass-panel animated-card subtle ${isRead(item.id) ? 'is-read' : ''} ${navigatingId === item.id ? 'is-navigating' : ''}`}
               >
                 <div className="card-header">

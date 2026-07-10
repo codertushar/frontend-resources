@@ -3812,3 +3812,41 @@ a.breadcrumb-item:hover {
   color: inherit;
   font-size: inherit;
 }
+
+/* Top-of-viewport navigation progress bar. Shown instantly on article click so
+   the user always gets feedback, even before the target route bundle loads. */
+.nav-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 2000;
+  background: transparent;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.nav-progress__bar {
+  height: 100%;
+  width: 100%;
+  transform-origin: 0 50%;
+  background: var(--gradient-brand, var(--primary, #8b5cf6));
+  animation: nav-progress-grow 2.2s ease-out forwards;
+}
+
+/* Ease toward ~90% while the route loads, mimicking real progress. The route
+   swap unmounts this element, so it never needs to reach 100% itself. */
+@keyframes nav-progress-grow {
+  0% { transform: scaleX(0.05); }
+  40% { transform: scaleX(0.55); }
+  80% { transform: scaleX(0.82); }
+  100% { transform: scaleX(0.9); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-progress__bar {
+    animation: none;
+    transform: scaleX(0.6);
+  }
+}
